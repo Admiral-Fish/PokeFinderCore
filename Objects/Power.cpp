@@ -1,5 +1,5 @@
 /*
- * This file is part of PokéFinder
+ * This file is part of libPokéFinder
  * Copyright (C) 2017 by Admiral_Fish and bumba
  *
  * This program is free software; you can redistribute it and/or
