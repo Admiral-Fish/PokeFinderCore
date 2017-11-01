@@ -38,11 +38,11 @@ SearcherGen3::SearcherGen3(uint32_t tid, uint32_t sid)
 }
 
 // Returns vector of frames for Channel Method
-std::vector<FrameGen3> SearcherGen3::searchMethodChannel(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
+vector<FrameGen3> SearcherGen3::searchMethodChannel(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
 
-    std::vector<uint32_t> seeds = euclidean.RecoverLower27BitsChannel(hp, atk, def, spa, spd, spe);
+    vector<uint32_t> seeds = euclidean.RecoverLower27BitsChannel(hp, atk, def, spa, spd, spe);
     int size = seeds.size();
 
     for (int i = 0; i < size; i++)
@@ -70,13 +70,13 @@ std::vector<FrameGen3> SearcherGen3::searchMethodChannel(uint32_t hp, uint32_t a
 }
 
 // Returns vector of frames for Method Colo Shadows
-std::vector<FrameGen3> SearcherGen3::searchMethodColo(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
+vector<FrameGen3> SearcherGen3::searchMethodColo(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
 
     uint32_t first = (hp | (atk << 5) | (def << 10)) << 16;
     uint32_t second = (spe | (spa << 5) | (spd << 10)) << 16;
-    std::vector<uint32_t> seeds = euclidean.RecoverLower16BitsIV(first, second);
+    vector<uint32_t> seeds = euclidean.RecoverLower16BitsIV(first, second);
     int size = seeds.size();
 
     // Need to eventually add Naturelock checking
@@ -104,13 +104,13 @@ std::vector<FrameGen3> SearcherGen3::searchMethodColo(uint32_t hp, uint32_t atk,
 }
 
 // Returns vector of frames for Method H1
-std::vector<FrameGen3> SearcherGen3::searchMethodH1(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
+vector<FrameGen3> SearcherGen3::searchMethodH1(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
 
     uint32_t first = (hp | (atk << 5) | (def << 10)) << 16;
     uint32_t second = (spe | (spa << 5) | (spd << 10)) << 16;
-    std::vector<uint32_t> seeds = cache.RecoverLower16BitsIV(first, second);
+    vector<uint32_t> seeds = cache.RecoverLower16BitsIV(first, second);
     int size = seeds.size();
     uint32_t seed;
 
@@ -194,13 +194,13 @@ std::vector<FrameGen3> SearcherGen3::searchMethodH1(uint32_t hp, uint32_t atk, u
 }
 
 // Returns vector of frames for Method H2
-std::vector<FrameGen3> SearcherGen3::searchMethodH2(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
+vector<FrameGen3> SearcherGen3::searchMethodH2(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
 
     uint32_t first = (hp | (atk << 5) | (def << 10)) << 16;
     uint32_t second = (spe | (spa << 5) | (spd << 10)) << 16;
-    std::vector<uint32_t> seeds = cache.RecoverLower16BitsIV(first, second);
+    vector<uint32_t> seeds = cache.RecoverLower16BitsIV(first, second);
     int size = seeds.size();
     uint32_t seed;
 
@@ -285,13 +285,13 @@ std::vector<FrameGen3> SearcherGen3::searchMethodH2(uint32_t hp, uint32_t atk, u
 }
 
 // Returns vector of frames for Method H4
-std::vector<FrameGen3> SearcherGen3::searchMethodH4(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
+vector<FrameGen3> SearcherGen3::searchMethodH4(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
 
     uint32_t first = (hp | (atk << 5) | (def << 10)) << 16;
     uint32_t second = (spe | (spa << 5) | (spd << 10)) << 16;
-    std::vector<uint32_t> seeds = cache.RecoverLower16BitsIV(first, second);
+    vector<uint32_t> seeds = cache.RecoverLower16BitsIV(first, second);
     int size = seeds.size();
     uint32_t seed;
 
@@ -376,13 +376,13 @@ std::vector<FrameGen3> SearcherGen3::searchMethodH4(uint32_t hp, uint32_t atk, u
 }
 
 // Returns vector of frames for Method Gales Shadows
-std::vector<FrameGen3> SearcherGen3::searchMethodXD(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
+vector<FrameGen3> SearcherGen3::searchMethodXD(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
 
     uint32_t first = (hp | (atk << 5) | (def << 10)) << 16;
     uint32_t second = (spe | (spa << 5) | (spd << 10)) << 16;
-    std::vector<uint32_t> seeds = euclidean.RecoverLower16BitsIV(first, second);
+    vector<uint32_t> seeds = euclidean.RecoverLower16BitsIV(first, second);
     int size = seeds.size();
 
     // Need to setup Naturelock checking
@@ -409,13 +409,13 @@ std::vector<FrameGen3> SearcherGen3::searchMethodXD(uint32_t hp, uint32_t atk, u
 }
 
 // Return vector of frames for Method XDColo
-std::vector<FrameGen3> SearcherGen3::searchMethodXDColo(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
+vector<FrameGen3> SearcherGen3::searchMethodXDColo(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
 
     uint32_t first = (hp | (atk << 5) | (def << 10)) << 16;
     uint32_t second = (spe | (spa << 5) | (spd << 10)) << 16;
-    std::vector<uint32_t> seeds = euclidean.RecoverLower16BitsIV(first, second);
+    vector<uint32_t> seeds = euclidean.RecoverLower16BitsIV(first, second);
     int size = seeds.size();
 
     for (int i = 0; i < size; i += 2)
@@ -441,13 +441,13 @@ std::vector<FrameGen3> SearcherGen3::searchMethodXDColo(uint32_t hp, uint32_t at
 }
 
 // Returns vector of frames for Method 1
-std::vector<FrameGen3> SearcherGen3::searchMethod1(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
+vector<FrameGen3> SearcherGen3::searchMethod1(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
 
     uint32_t first = (hp | (atk << 5) | (def << 10)) << 16;
     uint32_t second = (spe | (spa << 5) | (spd << 10)) << 16;
-    std::vector<uint32_t> seeds = cache.RecoverLower16BitsIV(first, second);
+    vector<uint32_t> seeds = cache.RecoverLower16BitsIV(first, second);
     int size = seeds.size();
 
     for (int i = 0; i < size; i++)
@@ -473,13 +473,13 @@ std::vector<FrameGen3> SearcherGen3::searchMethod1(uint32_t hp, uint32_t atk, ui
 }
 
 // Returns vector of frames for Method 2
-std::vector<FrameGen3> SearcherGen3::searchMethod2(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
+vector<FrameGen3> SearcherGen3::searchMethod2(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
 
     uint32_t first = (hp | (atk << 5) | (def << 10)) << 16;
     uint32_t second = (spe | (spa << 5) | (spd << 10)) << 16;
-    std::vector<uint32_t> seeds = cache.RecoverLower16BitsIV(first, second);
+    vector<uint32_t> seeds = cache.RecoverLower16BitsIV(first, second);
     int size = seeds.size();
 
     for (int i = 0; i < size; i++)
@@ -506,13 +506,13 @@ std::vector<FrameGen3> SearcherGen3::searchMethod2(uint32_t hp, uint32_t atk, ui
 }
 
 // Returns vector of frames for Method 4
-std::vector<FrameGen3> SearcherGen3::searchMethod4(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
+vector<FrameGen3> SearcherGen3::searchMethod4(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
 
     uint32_t first = (hp | (atk << 5) | (def << 10)) << 16;
     uint32_t second = (spe | (spa << 5) | (spd << 10)) << 16;
-    std::vector<uint32_t> seeds = cache.RecoverLower16BitsIV(first, second);
+    vector<uint32_t> seeds = cache.RecoverLower16BitsIV(first, second);
     int size = seeds.size();
 
     for (int i = 0; i < size; i++)
@@ -538,7 +538,7 @@ std::vector<FrameGen3> SearcherGen3::searchMethod4(uint32_t hp, uint32_t atk, ui
 }
 
 // Determines which generational method to return
-std::vector<FrameGen3> SearcherGen3::Search(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
+vector<FrameGen3> SearcherGen3::Search(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare)
 {
     if (frameType == XDColo || frameType == Channel || frameType == XD || frameType == Colo)
         rng = XDRNG(0);

@@ -302,9 +302,9 @@ ProfileGen3& ProfileGen3::loadProfile(QString profileName)
 
 }
 
-std::vector<QList<QStandardItem *>>& ProfileGen3::loadProfiles()
+vector<QList<QStandardItem *>>& ProfileGen3::loadProfiles()
 {
-    static std::vector<QList<QStandardItem *>> profileList;
+    static vector<QList<QStandardItem *>> profileList;
 
     profileList.clear();
 
@@ -400,9 +400,9 @@ std::vector<QList<QStandardItem *>>& ProfileGen3::loadProfiles()
     return profileList;
 }
 
-std::vector<ProfileGen3>& ProfileGen3::loadProfileList()
+vector<ProfileGen3>& ProfileGen3::loadProfileList()
 {
-    static std::vector<ProfileGen3> profileList;
+    static vector<ProfileGen3> profileList;
     profileList.clear();
 
     bool pass;

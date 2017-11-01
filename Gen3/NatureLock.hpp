@@ -23,6 +23,8 @@
 #include <cstdint>
 #include <vector>
 
+using namespace std;
+
 // Defines the different types of shadows
 enum ShadowType
 {
@@ -62,7 +64,7 @@ private:
     uint32_t gender;
     uint32_t genderLower;
     uint32_t genderUpper;
-    std::vector<LockInfo> lockInfo;
+    vector<LockInfo> lockInfo;
     uint32_t nature;
     uint32_t pid;
     uint32_t pidOriginal;

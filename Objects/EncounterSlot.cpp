@@ -46,7 +46,7 @@ uint32_t Range::GetMin()
 // Encounter slot calculations
 
 // Runs through ranges and compare value to get the encounter slot
-int EncounterSlot::calcSlot(unsigned int compare, std::vector<Range> ranges)
+int EncounterSlot::calcSlot(unsigned int compare, vector<Range> ranges)
 {
     for (unsigned int i = 0; i < ranges.size(); i++)
         if (compare >= ranges[i].GetMin() && compare <= ranges[i].GetMax())
@@ -58,7 +58,7 @@ int EncounterSlot::calcSlot(unsigned int compare, std::vector<Range> ranges)
 int EncounterSlot::HSlot(uint32_t result, Encounter encounterType)
 {
     int compare = result % 100;
-    std::vector<Range> ranges;
+    vector<Range> ranges;
     switch(encounterType)
     {
         case OldRod:
@@ -85,7 +85,7 @@ int EncounterSlot::HSlot(uint32_t result, Encounter encounterType)
 int EncounterSlot::JSlot(uint32_t result, Encounter encounterType)
 {
     int compare = (result >> 16) / 656;
-    std::vector<Range> ranges;
+    vector<Range> ranges;
     switch (encounterType)
     {
         case GoodRod:
@@ -108,7 +108,7 @@ int EncounterSlot::JSlot(uint32_t result, Encounter encounterType)
 int EncounterSlot::KSlot(uint32_t result, Encounter encounterType)
 {
     int compare = (result >> 16) % 100;
-    std::vector<Range> ranges;
+    vector<Range> ranges;
     switch(encounterType)
     {
         case OldRod:

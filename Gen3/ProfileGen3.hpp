@@ -35,9 +35,9 @@ public:
 
     static ProfileGen3& loadProfile(QString profileName);
 
-    static std::vector<QList<QStandardItem *>>& loadProfiles();
+    static vector<QList<QStandardItem *>>& loadProfiles();
 
-    static std::vector<ProfileGen3>& loadProfileList();
+    static vector<ProfileGen3>& loadProfileList();
 
     static QString getVersion(int i);
 

@@ -43,9 +43,9 @@ GeneratorGen3::GeneratorGen3(uint32_t maxResults, uint32_t initialFrame, uint32_
 }
 
 // Returns vector of frames for Method Channel
-std::vector<FrameGen3> GeneratorGen3::generateMethodChannel(FrameCompare compare)
+vector<FrameGen3> GeneratorGen3::generateMethodChannel(FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
     FrameGen3 frame = FrameGen3(tid, sid, psv);
 
     for (int i = 0; i < 12; i++)
@@ -76,9 +76,9 @@ std::vector<FrameGen3> GeneratorGen3::generateMethodChannel(FrameCompare compare
 }
 
 // Returns vector of frames for Method H 1, 2, or 4
-std::vector<FrameGen3> GeneratorGen3::generateMethodH124(FrameCompare compare)
+vector<FrameGen3> GeneratorGen3::generateMethodH124(FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
     FrameGen3 frame = FrameGen3(tid, sid, psv);
 
     for (int i = 0; i < 1100; i++)
@@ -122,9 +122,9 @@ std::vector<FrameGen3> GeneratorGen3::generateMethodH124(FrameCompare compare)
 }
 
 // Returns vector of frames for Method H 1, 2, or 4 given synch lead
-std::vector<FrameGen3> GeneratorGen3::generateMethodH124Synch(FrameCompare compare)
+vector<FrameGen3> GeneratorGen3::generateMethodH124Synch(FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
     FrameGen3 frame = FrameGen3(tid, sid, psv);
 
     for (int i = 0; i < 1200; i++)
@@ -226,9 +226,9 @@ bool cuteCharm25M(uint32_t pid)
 }
 
 // Returns vector of frames for Method H 1, 2, or 4 given cute charm lead
-std::vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare compare)
+vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
     FrameGen3 frame = FrameGen3(tid, sid, psv);
 
     for (int i = 0; i < 2500; i++)
@@ -323,9 +323,9 @@ std::vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare c
 }
 
 // Returns vector of frames for Method XD/Colo
-std::vector<FrameGen3> GeneratorGen3::generateMethodXDColo(FrameCompare compare)
+vector<FrameGen3> GeneratorGen3::generateMethodXDColo(FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
     FrameGen3 frame = FrameGen3(tid, sid, psv);
 
     for (int i = 0; i < 5; i++)
@@ -352,9 +352,9 @@ std::vector<FrameGen3> GeneratorGen3::generateMethodXDColo(FrameCompare compare)
 }
 
 // Returns vector of frames for Method 1, 2, or 4
-std::vector<FrameGen3> GeneratorGen3::generateMethod124(FrameCompare compare)
+vector<FrameGen3> GeneratorGen3::generateMethod124(FrameCompare compare)
 {
-    std::vector<FrameGen3> frames;
+    vector<FrameGen3> frames;
     FrameGen3 frame = FrameGen3(tid, sid, psv);
 
     for (int i = 0; i < 5; i++)
@@ -383,7 +383,7 @@ std::vector<FrameGen3> GeneratorGen3::generateMethod124(FrameCompare compare)
 }
 
 // Determines what generational method to return
-std::vector<FrameGen3> GeneratorGen3::Generate(FrameCompare compare)
+vector<FrameGen3> GeneratorGen3::Generate(FrameCompare compare)
 {
     if (frameType == XDColo || frameType == Channel)
         rng = XDRNG(0);

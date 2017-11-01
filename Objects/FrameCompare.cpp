@@ -166,7 +166,7 @@ bool FrameCompare::CompareFramePID(Frame frame)
     if(ability != 0 && ability - 1 != frame.ability)
         return false;
 
-    if(natures.size() != 0 && std::find(natures.begin(), natures.end(), frame.nature) == natures.end())
+    if(natures.size() != 0 && find(natures.begin(), natures.end(), frame.nature) == natures.end())
         return false;
 
     return true;
@@ -177,7 +177,7 @@ bool FrameCompare::CompareFrameIVs(Frame frame)
     if (skip)
         return true;
 
-    if(powers.size() != 0 && std::find(powers.begin(), powers.end(), frame.hidden) == powers.end())
+    if(powers.size() != 0 && find(powers.begin(), powers.end(), frame.hidden) == powers.end())
         return false;
 
     switch(hp[0])

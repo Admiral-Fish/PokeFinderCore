@@ -28,12 +28,14 @@
 #include <cstdint>
 #include <vector>
 
+using namespace std;
+
 class Frame
 {
 protected:
-    std::vector<QString> natures = Nature::GetFrameNatures();
+    vector<QString> natures = Nature::GetFrameNatures();
 
-    std::vector<QString> powers = Power::GetPowers();
+    vector<QString> powers = Power::GetPowers();
 
 public:
 

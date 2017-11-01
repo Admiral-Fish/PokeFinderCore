@@ -26,6 +26,8 @@
 #include <QFile>
 #include <QTextStream>
 
+using namespace std;
+
 class Profile
 {
 public:

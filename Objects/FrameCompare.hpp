@@ -27,6 +27,8 @@
 #include <vector>
 #include <libPokeFinder/Objects/Frame.hpp>
 
+using namespace std;
+
 class FrameCompare
 {
 private:
@@ -41,8 +43,8 @@ private:
     uint gender;
     uint genderRatio;
     uint ability;
-    std::vector<uint> natures;
-    std::vector<uint> powers;
+    vector<uint> natures;
+    vector<uint> powers;
 
     bool shiny;
     bool skip;

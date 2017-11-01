@@ -22,6 +22,9 @@
 #include <libPokeFinder/Objects/Method.hpp>
 #include <cstdint>
 #include <vector>
+#include <unordered_map>
+
+using namespace std;
 
 
 class RNGCache
@@ -29,12 +32,11 @@ class RNGCache
 
 private:
     uint32_t add;
-    bool flags[0x10000];
     uint32_t k;
-    uint8_t low8[0x10000];
     uint32_t mult;
+    unordered_map<uint32_t, uint32_t> keys;
 
-    void populateArrays();
+    void populateMap();
 
     void setupCache(Method MethodType);
 
@@ -42,9 +44,9 @@ public:
 
     RNGCache(Method MethodType);
 
-    std::vector<uint32_t> RecoverLower16BitsIV(uint32_t first, uint32_t second);
+    vector<uint32_t> RecoverLower16BitsIV(uint32_t first, uint32_t second);
 
-    std::vector<uint32_t> RecoverLower16BitsPID(uint32_t first, uint32_t second);
+    vector<uint32_t> RecoverLower16BitsPID(uint32_t first, uint32_t second);
 
     void SwitchCache(Method MethodType);
 

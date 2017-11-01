@@ -31,17 +31,17 @@ private:
     int iv2;
     LCRNG rng = PokeRNG(0);
 
-    std::vector<FrameGen3> generateMethodChannel(FrameCompare compare);
+    vector<FrameGen3> generateMethodChannel(FrameCompare compare);
 
-    std::vector<FrameGen3> generateMethodH124(FrameCompare compare);
+    vector<FrameGen3> generateMethodH124(FrameCompare compare);
 
-    std::vector<FrameGen3> generateMethodH124Synch(FrameCompare compare);
+    vector<FrameGen3> generateMethodH124Synch(FrameCompare compare);
 
-    std::vector<FrameGen3> generateMethodH124CuteCharm(FrameCompare compare);
+    vector<FrameGen3> generateMethodH124CuteCharm(FrameCompare compare);
 
-    std::vector<FrameGen3> generateMethodXDColo(FrameCompare compare);
+    vector<FrameGen3> generateMethodXDColo(FrameCompare compare);
 
-    std::vector<FrameGen3> generateMethod124(FrameCompare compare);
+    vector<FrameGen3> generateMethod124(FrameCompare compare);
 
 public:
 
@@ -49,7 +49,7 @@ public:
 
     GeneratorGen3(uint32_t maxResults, uint32_t initialFrame, uint32_t initialSeed, uint32_t tid, uint32_t sid, uint32_t offset);
 
-    std::vector<FrameGen3> Generate(FrameCompare compare);
+    vector<FrameGen3> Generate(FrameCompare compare);
 
 };
 

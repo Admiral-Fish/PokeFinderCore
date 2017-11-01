@@ -24,14 +24,16 @@
 #include <vector>
 #include<cstdint>
 
+using namespace std;
+
 class Nature
 {
 
 public:
 
-    static std::vector<QString> GetNatures();
+    static vector<QString> GetNatures();
 
-    static std::vector<QString> GetFrameNatures();
+    static vector<QString> GetFrameNatures();
 
     static uint32_t GetAdjustedNature(uint32_t nature);
 

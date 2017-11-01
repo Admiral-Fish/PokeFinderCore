@@ -23,12 +23,14 @@
 #include <QTranslator>
 #include <vector>
 
+using namespace std;
+
 class Power
 {
 
 public:
 
-    static std::vector<QString> GetPowers();
+    static vector<QString> GetPowers();
 
 };
 

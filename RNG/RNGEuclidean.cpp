@@ -54,9 +54,9 @@ void RNGEuclidean::setupEuclidean(Method FrameType)
 }
 
 // Recovers origin seeds for two 16 bit calls(15 bits known)
-std::vector<uint32_t> RNGEuclidean::RecoverLower16BitsIV(uint32_t first, uint32_t second)
+vector<uint32_t> RNGEuclidean::RecoverLower16BitsIV(uint32_t first, uint32_t second)
 {
-    std::vector<uint32_t> origin;
+    vector<uint32_t> origin;
     int64_t t, kmax;
     uint32_t fullFirst, fullSecond;
 
@@ -77,9 +77,9 @@ std::vector<uint32_t> RNGEuclidean::RecoverLower16BitsIV(uint32_t first, uint32_
 }
 
 // Recovers origin seeds for two 16 bit calls
-std::vector<uint32_t> RNGEuclidean::RecoverLower16BitsPID(uint32_t first, uint32_t second)
+vector<uint32_t> RNGEuclidean::RecoverLower16BitsPID(uint32_t first, uint32_t second)
 {
-    std::vector<uint32_t> origin;
+    vector<uint32_t> origin;
     int64_t t, kmax;
     uint32_t fullFirst, fullSecond;
 
@@ -100,9 +100,9 @@ std::vector<uint32_t> RNGEuclidean::RecoverLower16BitsPID(uint32_t first, uint32
 }
 
 // Recovers origin seeds for six 5 bit calls
-std::vector<uint32_t> RNGEuclidean::RecoverLower27BitsChannel(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe)
+vector<uint32_t> RNGEuclidean::RecoverLower27BitsChannel(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe)
 {
-    std::vector<uint32_t> origin;
+    vector<uint32_t> origin;
     uint32_t first = hp << 27, fullFirst;
     int64_t kmax, t;
 

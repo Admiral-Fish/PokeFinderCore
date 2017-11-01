@@ -35,7 +35,7 @@ public:
     uint32_t inh1;
     uint32_t inh2;
     uint32_t inh3;
-    std::string lockReason;
+    string lockReason;
     uint32_t occidentary;
     uint32_t par1;
     uint32_t par2;

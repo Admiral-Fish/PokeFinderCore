@@ -28,12 +28,14 @@
 #include <cstdint>
 #include <vector>
 
+using namespace std;
+
 class Generator
 {
 
 protected:
     uint32_t psv;
-    std::vector<uint32_t> rngList;
+    vector<uint32_t> rngList;
     uint32_t sid;
     uint32_t tid;
     uint32_t offset;

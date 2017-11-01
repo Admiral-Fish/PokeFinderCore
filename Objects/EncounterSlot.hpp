@@ -23,6 +23,8 @@
 #include <cstdint>
 #include <vector>
 
+using namespace std;
+
 class Range
 {
     
@@ -45,7 +47,7 @@ class EncounterSlot
 {
     
 private:
-    static int calcSlot(unsigned int compare, std::vector<Range> ranges);
+    static int calcSlot(unsigned int compare, vector<Range> ranges);
     
 public:
 
