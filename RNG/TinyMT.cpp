@@ -1,13 +1,13 @@
 #include "TinyMT.hpp"
 
 // Constructor
-TinyMT::TinyMT(uint32_t seed)
+TinyMT::TinyMT(u32 seed)
 {
     init(seed);
 }
 
 // Constructor given Tiny states
-TinyMT::TinyMT(uint32_t st[])
+TinyMT::TinyMT(u32 st[])
 {
     for (int i = 0; i < 4; i++)
         state[i] = st[i];
@@ -15,7 +15,7 @@ TinyMT::TinyMT(uint32_t st[])
 }
 
 // Creates Tiny state given seed
-void TinyMT::init(uint32_t seed)
+void TinyMT::init(u32 seed)
 {
     state[0] = seed;
     state[1] = MAT1;
@@ -47,8 +47,8 @@ void TinyMT::periodCertification()
 // Generates the next Tiny state
 void TinyMT::NextState()
 {
-    uint32_t y = state[3];
-    uint32_t x = (state[0] & TINYMT32MASK) ^ state[1] ^ state[2];
+    u32 y = state[3];
+    u32 x = (state[0] & TINYMT32MASK) ^ state[1] ^ state[2];
     x ^= (x << TINYMT32SH0);
     y ^= (y >> TINYMT32SH0) ^ x;
     state[0] = state[1];
@@ -64,20 +64,26 @@ void TinyMT::NextState()
 }
 
 // Calls the next state and next psuedo random number
-uint32_t TinyMT::NextUint()
+u32 TinyMT::Nextuint()
 {
     NextState();
     return Temper();
 }
 
 // Generates the psuedo random number from the Tiny state
-uint32_t TinyMT::Temper()
+u32 TinyMT::Temper()
 {
-    uint32_t t0 = state[3];
-    uint32_t t1 = state[0] + (state[2] >> TINYMT32SH8);
+    u32 t0 = state[3];
+    u32 t1 = state[0] + (state[2] >> TINYMT32SH8);
 
     t0 ^= t1;
     if ((t1 & 1) == 1)
         t0 ^= TMAT;
     return t0;
+}
+
+// IRNG Memeber
+void TinyMT::Reseed(u32 seed)
+{
+    init(seed);
 }

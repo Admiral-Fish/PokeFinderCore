@@ -31,10 +31,10 @@ RNGCache::RNGCache(Method MethodType)
 // Populates cache to use for brute forcing
 void RNGCache::populateMap()
 {
-    for (uint16_t i = 0; i < 256; i++)
+    for (u32 i = 0; i < 256; i++)
     {
-        uint32_t right = mult * i + add;
-        uint32_t val = right >> 16;
+        u32 right = mult * i + add;
+        u32 val = right >> 16;
 
         keys[val] = i;
         keys[val - 1] = i;
@@ -62,21 +62,21 @@ void RNGCache::setupCache(Method MethodType)
 }
 
 // Recovers origin seeds for two 16 bit calls(15 bits known) with or without gap based on the cache
-vector<uint32_t> RNGCache::RecoverLower16BitsIV(uint32_t first, uint32_t second)
+vector<u32> RNGCache::RecoverLower16BitsIV(u32 first, u32 second)
 {
-    vector<uint32_t> origin;
+    vector<u32> origin;
 
     // Check with the top bit of the first call both
     // flipped and unflipped to account for only knowing 15 bits
-    uint32_t search1 = second - first * mult;
-    uint32_t search2 = second - (first ^ 0x80000000) * mult;
-    unordered_map<uint32_t, uint32_t>::const_iterator locate;
-    for (uint16_t i = 0; i < 256; i++, search1 -= k, search2 -= k)
+    u32 search1 = second - first * mult;
+    u32 search2 = second - (first ^ 0x80000000) * mult;
+    unordered_map<u32, u32>::const_iterator locate;
+    for (u32 i = 0; i < 256; i++, search1 -= k, search2 -= k)
     {
         locate = keys.find(search1 >> 16);
         if (locate != keys.end())
         {
-            uint32_t test = first | (i << 8) | locate->second;
+            u32 test = first | (i << 8) | locate->second;
             // Verify IV calls line up
             if (((test * mult + add) & 0x7fff0000) == second)
                 origin.push_back(test);
@@ -85,7 +85,7 @@ vector<uint32_t> RNGCache::RecoverLower16BitsIV(uint32_t first, uint32_t second)
         locate = keys.find(search2 >> 16);
         if (locate != keys.end())
         {
-            uint32_t test = first | (i << 8) | locate->second;
+            u32 test = first | (i << 8) | locate->second;
             // Verify IV calls line up
             if (((test * mult + add) & 0x7fff0000) == second)
                 origin.push_back(test);
@@ -96,17 +96,17 @@ vector<uint32_t> RNGCache::RecoverLower16BitsIV(uint32_t first, uint32_t second)
 }
 
 // Recovers origin seeds for two 16 bit calls based on the cache
-vector<uint32_t> RNGCache::RecoverLower16BitsPID(uint32_t first, uint32_t second)
+vector<u32> RNGCache::RecoverLower16BitsPID(u32 first, u32 second)
 {
-    vector<uint32_t> origin;
-    uint32_t search = second - first * mult;
-    unordered_map<uint32_t, uint32_t>::const_iterator locate;
-    for (uint16_t i = 0; i < 256; i++, search -= k)
+    vector<u32> origin;
+    u32 search = second - first * mult;
+    unordered_map<u32, u32>::const_iterator locate;
+    for (u32 i = 0; i < 256; i++, search -= k)
     {
         locate = keys.find(search >> 16);
         if (locate != keys.end())
         {
-            uint32_t test = first | (i << 8) | locate->second;
+            u32 test = first | (i << 8) | locate->second;
             // Verify PID calls line up
             if (((test * mult + add) & 0xffff0000) == second)
                 origin.push_back(test);

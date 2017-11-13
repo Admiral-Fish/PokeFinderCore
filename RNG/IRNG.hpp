@@ -17,20 +17,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef UTILITIES_HPP
-#define UTILITIES_HPP
-#include <QDateTime>
+#ifndef IRNG_HPP
+#define IRNG_HPP
+
 #include <cstdint>
+#include <vector>
 
 typedef uint32_t u32;
 
-class Utilities
+class IRNG
 {
-    
+
 public:
-    
-    static u32 CalcGen3Seed(QDate time, u32 h, u32 m);
+
+    virtual u32 Nextuint() = 0;
+
+    virtual void Reseed(u32 seed) = 0;
 
 };
 
-#endif // UTILITIES_HPP
+#endif // IRNG_HPP

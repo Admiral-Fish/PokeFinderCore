@@ -43,7 +43,7 @@ vector<QString> Nature::GetFrameNatures()
     return natures;
 }
 
-uint32_t Nature::GetAdjustedNature(uint32_t nature)
+u32 Nature::GetAdjustedNature(u32 nature)
 {
     switch (nature)
     {
@@ -102,7 +102,7 @@ uint32_t Nature::GetAdjustedNature(uint32_t nature)
     }
 }
 
-uint32_t Nature::GetReversedNature(uint32_t nature)
+u32 Nature::GetReversedNature(u32 nature)
 {
     switch (nature)
     {

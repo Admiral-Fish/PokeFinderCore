@@ -19,7 +19,7 @@
 
 #include "FrameGen3.hpp"
 
-FrameGen3::FrameGen3(uint32_t tid, uint32_t sid, uint32_t psv)
+FrameGen3::FrameGen3(u32 tid, u32 sid, u32 psv)
 {
     this->tid = tid;
     this->sid = sid;
@@ -46,7 +46,7 @@ QString FrameGen3::GetTime()
 }
 
 // Change the tid/sid (mostly used for Channel)
-void FrameGen3::SetIDs(uint32_t tid, uint32_t sid, uint32_t psv)
+void FrameGen3::SetIDs(u32 tid, u32 sid, u32 psv)
 {
     this->tid = tid;
     this->sid = sid;
@@ -54,16 +54,16 @@ void FrameGen3::SetIDs(uint32_t tid, uint32_t sid, uint32_t psv)
 }
 
 // Sets IVs for either Channel method or manual input and calculates characteristics based on IVs
-void FrameGen3::SetIVsManual(uint32_t iv1, uint32_t iv2, uint32_t iv3, uint32_t iv4, uint32_t iv5, uint32_t iv6)
+void FrameGen3::SetIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6)
 {
-    hp = iv1;
-    atk = iv2;
-    def = iv3;
-    spa = iv4;
-    spd = iv5;
-    spe = iv6;
-    hidden = ((((hp & 1) + 2 * (atk & 1) + 4 * (def & 1) + 8 * (spe & 1) + 16 * (spa & 1) + 32 * (spd & 1)) * 15) / 63);
-    power = (30 + ((((hp >> 1) & 1) + 2 * ((atk >> 1) & 1) + 4 * ((def >> 1) & 1) + 8 * ((spe >> 1) & 1) + 16 * ((spa >> 1) & 1) + 32 * ((spd >> 1) & 1)) * 40 / 63));
+    ivs[0] = iv1;
+    ivs[1] = iv2;
+    ivs[2] = iv3;
+    ivs[3] = iv4;
+    ivs[4] = iv5;
+    ivs[5] = iv6;
+    hidden = ((((ivs[0] & 1) + 2 * (ivs[1] & 1) + 4 * (ivs[2] & 1) + 8 * (ivs[5] & 1) + 16 * (ivs[3] & 1) + 32 * (ivs[4] & 1)) * 15) / 63);
+    power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
 }
 
 QList<QStandardItem *> FrameGen3::GetTableRow(int genderRatioIndex)
@@ -74,12 +74,12 @@ QList<QStandardItem *> FrameGen3::GetTableRow(int genderRatioIndex)
     row.append(new QStandardItem(GetShiny()));
     row.append(new QStandardItem(GetNature()));
     row.append(new QStandardItem(QString::number(ability)));
-    row.append(new QStandardItem(QString::number(hp)));
-    row.append(new QStandardItem(QString::number(atk)));
-    row.append(new QStandardItem(QString::number(def)));
-    row.append(new QStandardItem(QString::number(spa)));
-    row.append(new QStandardItem(QString::number(spd)));
-    row.append(new QStandardItem(QString::number(spe)));
+    row.append(new QStandardItem(QString::number(ivs[0])));
+    row.append(new QStandardItem(QString::number(ivs[1])));
+    row.append(new QStandardItem(QString::number(ivs[2])));
+    row.append(new QStandardItem(QString::number(ivs[3])));
+    row.append(new QStandardItem(QString::number(ivs[4])));
+    row.append(new QStandardItem(QString::number(ivs[5])));
     row.append(new QStandardItem(GetPower()));
     row.append(new QStandardItem(QString::number(power)));
     switch(genderRatioIndex)

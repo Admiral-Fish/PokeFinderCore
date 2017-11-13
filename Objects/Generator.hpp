@@ -24,31 +24,32 @@
 #include <libPokeFinder/Objects/EncounterSlot.hpp>
 #include <libPokeFinder/Objects/Lead.hpp>
 #include <libPokeFinder/Objects/Method.hpp>
-#include <libPokeFinder/RNG/LCRNG.hpp>
+#include <libPokeFinder/RNG/IRNG.hpp>
 #include <cstdint>
 #include <vector>
 
 using namespace std;
+typedef uint32_t u32;
 
 class Generator
 {
 
 protected:
-    uint32_t psv;
-    vector<uint32_t> rngList;
-    uint32_t sid;
-    uint32_t tid;
-    uint32_t offset;
+    u32 psv;
+    vector<u32> rngList;
+    u32 sid;
+    u32 tid;
+    u32 offset;
 
 public:
     Method frameType = Method1;
     Encounter encounterType = Stationary;
     Lead leadType = None;
-    uint32_t initialSeed;
-    uint32_t initialFrame;
-    uint32_t maxResults;
-    uint32_t synchNature;
-    uint32_t cuteCharm;
+    u32 initialSeed;
+    u32 initialFrame;
+    u32 maxResults;
+    u32 synchNature;
+    u32 cuteCharm;
 
 };
 

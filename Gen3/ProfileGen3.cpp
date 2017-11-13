@@ -19,7 +19,7 @@
 
 #include "ProfileGen3.hpp"
 
-ProfileGen3::ProfileGen3(QString profileName, int version, uint32_t tid, uint32_t sid, int language, bool deadBattery, bool valid)
+ProfileGen3::ProfileGen3(QString profileName, int version, u32 tid, u32 sid, int language, bool deadBattery, bool valid)
 {
     this->profileName = profileName;
     this->version = version;
@@ -220,8 +220,8 @@ ProfileGen3& ProfileGen3::loadProfile(QString profileName)
 {
     int version;
     int language;
-    uint32_t tid;
-    uint32_t sid;
+    u32 tid;
+    u32 sid;
     bool deadBattery;
 
     bool exists;

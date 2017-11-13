@@ -19,37 +19,44 @@
 
 #ifndef LCRNG64_HPP
 #define LCRNG64_HPP
-#include <cstdint>
 
-class LCRNG64
+#include <libPokeFinder/RNG/IRNG64.hpp>
+
+class LCRNG64 : IRNG64
 {
 
 private:
-    uint64_t add;
-    uint64_t addr;
-    uint64_t mult;
-    uint64_t multr;
+    u64 add;
+    u64 addr;
+    u64 mult;
+    u64 multr;
 
 public:
-    uint64_t seed;
+    u64 seed;
 
-    LCRNG64(uint64_t add, uint64_t addr, uint64_t mult, uint64_t multr, uint64_t seed);
+    LCRNG64(u64 add, u64 addr, u64 mult, u64 multr, u64 seed);
 
     void AdvanceFrames(int frames);
 
-    uint32_t Next32Bit();
+    u32 Next32Bit();
 
-    uint32_t Next32Bit(uint32_t max);
+    u32 Next32Bit(u32 max);
 
-    uint64_t Next64Bit();
+    u64 Next64Bit();
 
-    uint32_t Prev32Bit();
+    u32 Prev32Bit();
 
-    uint32_t Prev32Bit(uint32_t max);
+    u32 Prev32Bit(u32 max);
 
-    uint64_t Prev64Bit();
+    u64 Prev64Bit();
 
     void ReverseFrames(int frames);
+
+    virtual u64 Nextulong();
+
+    virtual u32 Nextuint();
+
+    virtual void Reseed(u64 seed);
 
 };
 
@@ -58,7 +65,9 @@ class BWRNG : public LCRNG64
 
 public:
 
-    BWRNG(uint64_t seed);
+    BWRNG(u64 seed) : LCRNG64(0x269ec3, 0x9b1ae6e9a384e6f9, 0x5d588b656c078965, 0xdedcedae9638806d, seed)
+    {
+    }
 
 };
 

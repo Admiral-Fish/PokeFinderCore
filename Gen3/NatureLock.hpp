@@ -24,6 +24,7 @@
 #include <vector>
 
 using namespace std;
+typedef uint32_t u32;
 
 // Defines the different types of shadows
 enum ShadowType
@@ -39,19 +40,19 @@ class LockInfo
 {
     
 private:
-    uint32_t genderUpper;
-    uint32_t genderLower;
-    uint32_t nature;
+    u32 genderUpper;
+    u32 genderLower;
+    u32 nature;
     
 public:
     
-    LockInfo(uint32_t nature, uint32_t genderLower, uint32_t genderUpper);
+    LockInfo(u32 nature, u32 genderLower, u32 genderUpper);
 
-    uint32_t GetGenderLower();
+    u32 GetGenderLower();
 
-    uint32_t GetGenderUpper();
+    u32 GetGenderUpper();
     
-    uint32_t GetNature();
+    u32 GetNature();
     
 };
 
@@ -61,13 +62,13 @@ class NatureLock
 private:
     int backCount;
     int frontCount;
-    uint32_t gender;
-    uint32_t genderLower;
-    uint32_t genderUpper;
+    u32 gender;
+    u32 genderLower;
+    u32 genderUpper;
     vector<LockInfo> lockInfo;
-    uint32_t nature;
-    uint32_t pid;
-    uint32_t pidOriginal;
+    u32 nature;
+    u32 pid;
+    u32 pidOriginal;
     LCRNG rng = XDRNG(0);
     ShadowType type;
     int x;
@@ -78,11 +79,11 @@ private:
 
     void getCurrLock();
 
-    uint32_t getPIDForward();
+    u32 getPIDForward();
 
-    uint32_t getPIDReverse();
+    u32 getPIDReverse();
 
-    uint32_t getPSVReverse();
+    u32 getPSVReverse();
 
     void natureLockSetupColo(int lockNum);
     
@@ -94,21 +95,21 @@ public:
 
     ShadowType GetType();
 
-    bool IVMethodFirstShadow(uint32_t seed);
+    bool IVMethodFirstShadow(u32 seed);
 
-    bool IVMethodFirstShadowSet(uint32_t seed);
+    bool IVMethodFirstShadowSet(u32 seed);
 
-    bool IVMethodFirstShadowShinySkip(uint32_t seed);
+    bool IVMethodFirstShadowShinySkip(u32 seed);
 
-    bool IVMethodFirstShadowUnset(uint32_t seed);
+    bool IVMethodFirstShadowUnset(u32 seed);
 
-    bool IVMethodSalamenceSet(uint32_t seed);
+    bool IVMethodSalamenceSet(u32 seed);
 
-    bool IVMethodSalamenceShinySkip(uint32_t seed);
+    bool IVMethodSalamenceShinySkip(u32 seed);
 
-    bool IVMethodSalamenceUnset(uint32_t seed);
+    bool IVMethodSalamenceUnset(u32 seed);
 
-    bool IVMethodSingleNL(uint32_t seed);
+    bool IVMethodSingleNL(u32 seed);
 
     void SwitchLockColo(int lockNum);
     

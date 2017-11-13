@@ -17,20 +17,47 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef UTILITIES_HPP
-#define UTILITIES_HPP
-#include <QDateTime>
-#include <cstdint>
+#ifndef SFMT_HPP
+#define SFMT_HPP
 
-typedef uint32_t u32;
+#include <libPokeFinder/RNG/IRNG64.hpp>
 
-class Utilities
+class SFMT : public IRNG64
 {
-    
+
+private:
+    u32 const CMSK1 = 0xdfffffef;
+    u32 const CMSK2 = 0xddfecb7f;
+    u32 const CMSK3 = 0xbffaffff;
+    u32 const CMSK4 = 0xbffffff6;
+    int const CSL1 = 18;
+    int const CSR1 = 11;
+    int const N32 = 624;
+    int index;
+    u32 parity[4] = { 0x1, 0x0, 0x0, 0x13c9e684 };
+    u32 sfmt[624];
+
+    void init(u32 seed);
+
+    void periodCertificaion();
+
+    inline u32 getRand() { return sfmt[index++]; }
+
+
 public:
-    
-    static u32 CalcGen3Seed(QDate time, u32 h, u32 m);
+
+    SFMT(u32 seed);
+
+    void AdvanceFrames(int n);
+
+    virtual u32 Nextuint();
+
+    virtual u64 Nextulong();
+
+    virtual void Reseed(u32 seed);
+
+    void Shuffle();
 
 };
 
-#endif // UTILITIES_HPP
+#endif // SFMT_HPP

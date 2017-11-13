@@ -27,6 +27,7 @@
 #include <QTextStream>
 
 using namespace std;
+typedef uint32_t u32;
 
 class Profile
 {

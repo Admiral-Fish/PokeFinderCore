@@ -27,7 +27,7 @@
 class ProfileGen3 : public Profile
 {
 public:
-    ProfileGen3(QString profileName, int version, uint32_t tid, uint32_t sid, int language = 0, bool deadBattery = false, bool valid = false);
+    ProfileGen3(QString profileName, int version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);
 
     void saveProfile();
 
@@ -47,8 +47,8 @@ public:
 
     static int getLanguageIndex(QString s);
 
-    uint32_t tid;
-    uint32_t sid;
+    u32 tid;
+    u32 sid;
     bool deadBattery;
 
 };

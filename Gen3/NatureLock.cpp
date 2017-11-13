@@ -65,19 +65,19 @@ void NatureLock::getCurrLock()
 }
 
 // Generates the next PID forwards
-uint32_t NatureLock::getPIDForward()
+u32 NatureLock::getPIDForward()
 {
     return (rng.Next32Bit() & 0xFFFF0000) | rng.Next16Bit();
 }
 
 // Generates the next PID backwards
-uint32_t NatureLock::getPIDReverse()
+u32 NatureLock::getPIDReverse()
 {
     return rng.Prev16Bit() | (rng.Prev32Bit() & 0xFFFF0000);
 }
 
 // Generates the PSV of the next PID backwards
-uint32_t NatureLock::getPSVReverse()
+u32 NatureLock::getPSVReverse()
 {
     return (rng.Prev16Bit() ^ rng.Prev16Bit()) >> 3;
 }
@@ -432,7 +432,7 @@ ShadowType NatureLock::GetType()
 }
 
 // Checks if seed is valid for single shadow case
-bool NatureLock::IVMethodFirstShadow(uint32_t seed)
+bool NatureLock::IVMethodFirstShadow(u32 seed)
 {
     rng.seed = seed;
     rng.ReverseFrames(1);
@@ -480,7 +480,7 @@ bool NatureLock::IVMethodFirstShadow(uint32_t seed)
 }
 
 // Checks if seed is valid for second shadow with first shadow set
-bool NatureLock::IVMethodFirstShadowSet(uint32_t seed)
+bool NatureLock::IVMethodFirstShadowSet(u32 seed)
 {
     rng.seed = seed;
     rng.ReverseFrames(6);
@@ -528,12 +528,12 @@ bool NatureLock::IVMethodFirstShadowSet(uint32_t seed)
 }
 
 // Checks if seed is valid for second shadow with first shadow unset and antishiny(aka Shiny Skip)
-bool NatureLock::IVMethodFirstShadowShinySkip(uint32_t seed)
+bool NatureLock::IVMethodFirstShadowShinySkip(u32 seed)
 {
     rng.seed = seed;
     rng.ReverseFrames(1);
 
-    uint32_t psv, psvtemp;
+    u32 psv, psvtemp;
 
     // Check how many advances from shiny skip and build initial pid for first nl
     psv = getPSVReverse();
@@ -587,7 +587,7 @@ bool NatureLock::IVMethodFirstShadowShinySkip(uint32_t seed)
 }
 
 // Checks if seed is valid for second shadow with first shadow unset
-bool NatureLock::IVMethodFirstShadowUnset(uint32_t seed)
+bool NatureLock::IVMethodFirstShadowUnset(u32 seed)
 {
     rng.seed = seed;
     rng.ReverseFrames(8);
@@ -635,7 +635,7 @@ bool NatureLock::IVMethodFirstShadowUnset(uint32_t seed)
 }
 
 // Checks if seed is valid for 1st shadow set for Salamence
-bool NatureLock::IVMethodSalamenceSet(uint32_t seed)
+bool NatureLock::IVMethodSalamenceSet(u32 seed)
 {
     rng.seed = seed;
     rng.ReverseFrames(6);
@@ -649,12 +649,12 @@ bool NatureLock::IVMethodSalamenceSet(uint32_t seed)
 }
 
 // Checks if seed is valid for 1st shadow unset and antishiny(aka Shiny Skip) for Salamence
-bool NatureLock::IVMethodSalamenceShinySkip(uint32_t seed)
+bool NatureLock::IVMethodSalamenceShinySkip(u32 seed)
 {
     rng.seed = seed;
     rng.ReverseFrames(1);
 
-    uint32_t psv, psvtemp;
+    u32 psv, psvtemp;
 
     // Check how many advances from shiny skip and build PID
     psv = getPSVReverse();
@@ -676,7 +676,7 @@ bool NatureLock::IVMethodSalamenceShinySkip(uint32_t seed)
 
 // Salamence is a special case of single nature lock and second shadow
 // Checks if seed is valid for 1st shadow unset for Salamence
-bool NatureLock::IVMethodSalamenceUnset(uint32_t seed)
+bool NatureLock::IVMethodSalamenceUnset(u32 seed)
 {
     rng.seed = seed;
     rng.ReverseFrames(8);
@@ -690,7 +690,7 @@ bool NatureLock::IVMethodSalamenceUnset(uint32_t seed)
 }
 
 // Checks if seed is valid for single nature lock
-bool NatureLock::IVMethodSingleNL(uint32_t seed)
+bool NatureLock::IVMethodSingleNL(u32 seed)
 {
     rng.seed = seed;
     rng.ReverseFrames(1);
@@ -729,7 +729,7 @@ void NatureLock::SwitchLockGales(int lockNum)
 // LockInfo
 
 // Constructor for LockInfo
-LockInfo::LockInfo(uint32_t nature, uint32_t genderLower, uint32_t genderUpper)
+LockInfo::LockInfo(u32 nature, u32 genderLower, u32 genderUpper)
 {
     this->nature = nature;
     this->genderLower = genderLower;
@@ -737,19 +737,19 @@ LockInfo::LockInfo(uint32_t nature, uint32_t genderLower, uint32_t genderUpper)
 }
 
 // Gets lower gender thresh value
-uint32_t LockInfo::GetGenderLower()
+u32 LockInfo::GetGenderLower()
 {
     return genderLower;
 }
 
 // Gets upper gender thresh value
-uint32_t LockInfo::GetGenderUpper()
+u32 LockInfo::GetGenderUpper()
 {
     return genderUpper;
 }
 
 // Gets nature value
-uint32_t LockInfo::GetNature()
+u32 LockInfo::GetNature()
 {
     return nature;
 }

@@ -22,9 +22,10 @@
 #include <QString>
 #include <QTranslator>
 #include <vector>
-#include<cstdint>
+#include <cstdint>
 
 using namespace std;
+typedef uint32_t u32;
 
 class Nature
 {
@@ -35,9 +36,9 @@ public:
 
     static vector<QString> GetFrameNatures();
 
-    static uint32_t GetAdjustedNature(uint32_t nature);
+    static u32 GetAdjustedNature(u32 nature);
 
-    static uint32_t GetReversedNature(uint32_t nature);
+    static u32 GetReversedNature(u32 nature);
 
 };
 

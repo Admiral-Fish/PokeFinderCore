@@ -24,21 +24,22 @@
 #include <vector>
 
 using namespace std;
+typedef uint32_t u32;
 
 class Range
 {
     
 private:
-    uint32_t max;
-    uint32_t min;
+    u32 max;
+    u32 min;
     
 public:
 
-    Range(uint32_t min, uint32_t max);
+    Range(u32 min, u32 max);
 
-    uint32_t GetMax();
+    u32 GetMax();
     
-    uint32_t GetMin();
+    u32 GetMin();
     
 
 };
@@ -51,11 +52,11 @@ private:
     
 public:
 
-    static int HSlot(uint32_t result, Encounter encounterType);
+    static int HSlot(u32 result, Encounter encounterType);
 
-    static int JSlot(uint32_t result, Encounter encounterType);
+    static int JSlot(u32 result, Encounter encounterType);
     
-    static int KSlot(uint32_t result, Encounter encounterType);
+    static int KSlot(u32 result, Encounter encounterType);
 };
 
 #endif // ENCOUNTERSLOT_HPP

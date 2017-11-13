@@ -20,7 +20,7 @@
 #include "LCRNG64.hpp"
 
 // LCRNG64 constructor that sets a given seed
-LCRNG64::LCRNG64(uint64_t add, uint64_t addr, uint64_t mult, uint64_t multr, uint64_t seed)
+LCRNG64::LCRNG64(u64 add, u64 addr, u64 mult, u64 multr, u64 seed)
 {
     this->add = add;
     this->addr = addr;
@@ -37,38 +37,38 @@ void LCRNG64::AdvanceFrames(int frames)
 }
 
 // Method for finding next 32 bit seed
-uint32_t LCRNG64::Next32Bit()
+u32 LCRNG64::Next32Bit()
 {
-    return (uint32_t) (Next64Bit() >> 32);
+    return (u32) (Next64Bit() >> 32);
 }
 
 // Method for finding next modified 32 bit seed
-uint32_t LCRNG64::Next32Bit(uint32_t max)
+u32 LCRNG64::Next32Bit(u32 max)
 {
-    return (uint32_t) (((Next64Bit() >> 32) * max) >> 32);
+    return (u32) (((Next64Bit() >> 32) * max) >> 32);
 }
 
 // Method for finding next 64 bit seed
-uint64_t LCRNG64::Next64Bit()
+u64 LCRNG64::Next64Bit()
 {
     seed = seed * mult + add;
     return seed;
 }
 
 // Method for finding previous 32 bit seed
-uint32_t LCRNG64::Prev32Bit()
+u32 LCRNG64::Prev32Bit()
 {
-    return (uint32_t) (Prev64Bit() >> 32);
+    return (u32) (Prev64Bit() >> 32);
 }
 
 // Method for finding previous modified 32 bit seed
-uint32_t LCRNG64::Prev32Bit(uint32_t max)
+u32 LCRNG64::Prev32Bit(u32 max)
 {
-    return (uint32_t) (((Prev64Bit() >> 32) * max) >> 32);
+    return (u32) (((Prev64Bit() >> 32) * max) >> 32);
 }
 
 // Method for finding previous 64 bit seed
-uint64_t LCRNG64::Prev64Bit()
+u64 LCRNG64::Prev64Bit()
 {
     seed = seed * multr + addr;
     return seed;
@@ -81,10 +81,20 @@ void LCRNG64::ReverseFrames(int frames)
         seed = seed * multr + addr;
 }
 
-
-// Sub classes
-
-BWRNG::BWRNG(uint64_t seed)
-    : LCRNG64(0x269ec3, 0x9b1ae6e9a384e6f9, 0x5d588b656c078965, 0xdedcedae9638806d, seed)
+// IRNG64 Member
+u64 LCRNG64::Nextulong()
 {
+    return Next64Bit();
+}
+
+// IRNG64 Memeber
+u32 LCRNG64::Nextuint()
+{
+    return Next32Bit();
+}
+
+// IRNG64 Member
+void LCRNG64::Reseed(u64 seed)
+{
+    this->seed = seed;
 }

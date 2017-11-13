@@ -19,6 +19,7 @@
 
 #ifndef FRAME_HPP
 #define FRAME_HPP
+
 #include <libPokeFinder/Objects/Encounter.hpp>
 #include <libPokeFinder/Objects/Lead.hpp>
 #include <libPokeFinder/Objects/Method.hpp>
@@ -29,6 +30,7 @@
 #include <vector>
 
 using namespace std;
+typedef uint32_t u32;
 
 class Frame
 {
@@ -38,32 +40,26 @@ protected:
     vector<QString> powers = Power::GetPowers();
 
 public:
-
-    uint32_t ability;
-    uint32_t atk;
-    uint32_t def;
-    uint32_t dv1;
-    uint32_t dv2;
-    uint32_t encounterSlot;
+    u32 ivs[6];
+    u32 ability;
+    u32 dv1;
+    u32 dv2;
+    u32 encounterSlot;
     Encounter encounterType;
-    uint32_t frame;
-    uint32_t gender;
-    uint32_t hidden;
-    uint32_t hp;
+    u32 frame;
+    u32 gender;
+    u32 hidden;
     Lead leadType;
     Method methodType;
-    uint32_t nature;
-    uint32_t pid;
-    uint32_t power;
-    uint32_t psv;
-    uint32_t seed;
+    u32 nature;
+    u32 pid;
+    u32 power;
+    u32 psv;
+    u32 seed;
     bool shiny;
-    uint32_t sid;
-    uint32_t spa;
-    uint32_t spd;
-    uint32_t spe;
+    u32 sid;
     bool synchable;
-    uint32_t tid;
+    u32 tid;
 
     QString GetFemale125();
 
@@ -79,11 +75,11 @@ public:
 
     QString GetShiny();
 
-    void SetIVs(uint32_t iv1, uint32_t iv2);
+    void SetIVs(u32 iv1, u32 iv2);
 
-    void SetPID(uint32_t pid1, uint32_t pid2);
+    void SetPID(u32 pid1, u32 pid2);
 
-    void SetPID(uint32_t pid, uint32_t pid1, uint32_t pid2);
+    void SetPID(u32 pid, u32 pid1, u32 pid2);
 
 };
 

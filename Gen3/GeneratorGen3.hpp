@@ -22,6 +22,7 @@
 #include <libPokeFinder/Gen3/FrameGen3.hpp>
 #include <libPokeFinder/Objects/Generator.hpp>
 #include <libPokeFinder/Objects/FrameCompare.hpp>
+#include <libPokeFinder/RNG/LCRNG.hpp>
 
 class GeneratorGen3: public Generator
 {
@@ -47,7 +48,7 @@ public:
 
     GeneratorGen3();
 
-    GeneratorGen3(uint32_t maxResults, uint32_t initialFrame, uint32_t initialSeed, uint32_t tid, uint32_t sid, uint32_t offset);
+    GeneratorGen3(u32 maxResults, u32 initialFrame, u32 initialSeed, u32 tid, u32 sid, u32 offset);
 
     vector<FrameGen3> Generate(FrameCompare compare);
 

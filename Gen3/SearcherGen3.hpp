@@ -35,25 +35,25 @@ private:
     LCRNG rng = PokeRNG(0);
     NatureLock natureLock = NatureLock();
 
-    vector<FrameGen3> searchMethodChannel(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare);
+    vector<FrameGen3> searchMethodChannel(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
 
-    vector<FrameGen3> searchMethodColo(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare);
+    vector<FrameGen3> searchMethodColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
 
-    vector<FrameGen3> searchMethodH1(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare);
+    vector<FrameGen3> searchMethodH1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
 
-    vector<FrameGen3> searchMethodH2(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare);
+    vector<FrameGen3> searchMethodH2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
 
-    vector<FrameGen3> searchMethodH4(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare);
+    vector<FrameGen3> searchMethodH4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
 
-    vector<FrameGen3> searchMethodXD(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare);
+    vector<FrameGen3> searchMethodXD(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
 
-    vector<FrameGen3> searchMethodXDColo(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare);
+    vector<FrameGen3> searchMethodXDColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
 
-    vector<FrameGen3> searchMethod1(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare);
+    vector<FrameGen3> searchMethod1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
 
-    vector<FrameGen3> searchMethod2(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare);
+    vector<FrameGen3> searchMethod2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
 
-    vector<FrameGen3> searchMethod4(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare);
+    vector<FrameGen3> searchMethod4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
 
 
 
@@ -61,9 +61,9 @@ public:
 
     SearcherGen3();
 
-    SearcherGen3(uint32_t tid, uint32_t sid);
+    SearcherGen3(uint tid, uint sid);
 
-    vector<FrameGen3> Search(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe, FrameCompare compare);
+    vector<FrameGen3> Search(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
 
     void SetMethod(Method frameType);
 };

@@ -25,16 +25,16 @@
 #include <unordered_map>
 
 using namespace std;
-
+typedef uint32_t u32;
 
 class RNGCache
 {
 
 private:
-    uint32_t add;
-    uint32_t k;
-    uint32_t mult;
-    unordered_map<uint32_t, uint32_t> keys;
+    u32 add;
+    u32 k;
+    u32 mult;
+    unordered_map<u32, u32> keys;
 
     void populateMap();
 
@@ -44,9 +44,9 @@ public:
 
     RNGCache(Method MethodType);
 
-    vector<uint32_t> RecoverLower16BitsIV(uint32_t first, uint32_t second);
+    vector<u32> RecoverLower16BitsIV(u32 first, u32 second);
 
-    vector<uint32_t> RecoverLower16BitsPID(uint32_t first, uint32_t second);
+    vector<u32> RecoverLower16BitsPID(u32 first, u32 second);
 
     void SwitchCache(Method MethodType);
 

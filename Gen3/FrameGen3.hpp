@@ -27,27 +27,27 @@ class FrameGen3: public Frame
 {
 
 private:
-    uint32_t ABCDS[5] = { 1, 2, 5, 3, 4 };
-    uint32_t ACDS[4] = { 1, 5, 3, 4 };
-    uint32_t HABCDS[6] = { 0, 1, 2, 5, 3, 4 };
+    u32 ABCDS[5] = { 1, 2, 5, 3, 4 };
+    u32 ACDS[4] = { 1, 5, 3, 4 };
+    u32 HABCDS[6] = { 0, 1, 2, 5, 3, 4 };
 
 public:
-    uint32_t inh1;
-    uint32_t inh2;
-    uint32_t inh3;
+    u32 inh1;
+    u32 inh2;
+    u32 inh3;
     string lockReason;
-    uint32_t occidentary;
-    uint32_t par1;
-    uint32_t par2;
-    uint32_t par3;
+    u32 occidentary;
+    u32 par1;
+    u32 par2;
+    u32 par3;
 
-    FrameGen3(uint32_t tid, uint32_t sid, uint32_t psv);
+    FrameGen3(u32 tid, u32 sid, u32 psv);
 
     QString GetTime();
 
-    void SetIDs(uint32_t tid, uint32_t sid, uint32_t psv);
+    void SetIDs(u32 tid, u32 sid, u32 psv);
 
-    void SetIVsManual(uint32_t iv1, uint32_t iv2, uint32_t iv3, uint32_t iv4, uint32_t iv5, uint32_t iv6);
+    void SetIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6);
 
     QList<QStandardItem *> GetTableRow(int genderRatioIndex);
 

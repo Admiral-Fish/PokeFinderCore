@@ -1,146 +1,101 @@
 #ifndef MTRNG_HPP
 #define MTRNG_HPP
-#include <cstdint>
 
-class MTRNG
-{
+#include <libPokeFinder/RNG/IRNG.hpp>
 
-public:
-
-    virtual void Reseed(uint32_t seed) = 0;
-
-    virtual uint32_t Nextuint() = 0;
-
-};
-
-class MersenneTwister : public MTRNG
+class MersenneTwister : public IRNG
 {
 
 private:
-    uint32_t const LOWERMASK = 0x7FFFFFFF;
+    u32 const LOWERMASK = 0x7FFFFFFF;
     int const M = 397;
-    uint32_t const MATRIXA = 0x9908B0DF;
+    u32 const MATRIXA = 0x9908B0DF;
     int const N = 624;
-    uint32_t const UPPERMASK = 0x80000000;
-    uint32_t const TEMPERINGMASKB = 0x9D2C5680;
-    uint32_t const TEMPERINGMASKC = 0xEFC60000;
-    uint32_t mag01[2] = { 0x0, MATRIXA };
-    uint32_t mt[624];
+    u32 const UPPERMASK = 0x80000000;
+    u32 const TEMPERINGMASKB = 0x9D2C5680;
+    u32 const TEMPERINGMASKC = 0xEFC60000;
+    u32 mag01[2] = { 0x0, MATRIXA };
+    u32 mt[624];
     int index;
 
-    void init(uint32_t seed);
+    void init(u32 seed);
 
-    uint32_t temperingShiftL(uint32_t y);
+    u32 temperingShiftL(u32 y);
 
-    uint32_t temperingShiftS(uint32_t y);
+    u32 temperingShiftS(u32 y);
 
-    uint32_t temperingShiftT(uint32_t y);
+    u32 temperingShiftT(u32 y);
 
-    uint32_t temperingShiftU(uint32_t y);
+    u32 temperingShiftU(u32 y);
 
 public:
 
-    MersenneTwister(uint32_t seed);
+    MersenneTwister(u32 seed);
 
-    virtual uint32_t Nextuint();
+    virtual u32 Nextuint();
 
-    virtual void Reseed(uint32_t seed);
+    virtual void Reseed(u32 seed);
     
 };
 
-class MersenneTwisterUntempered : public MTRNG
+class MersenneTwisterUntempered : public IRNG
 {
     
 private:
     int const M = 397;
     int const N = 624;
-    uint32_t const MATRIXA = 0x9908B0DF;
-    uint32_t const LOWERMASK = 0x7FFFFFFF;
-    uint32_t const UPPERMASK = 0x80000000;
-    uint32_t mt[624];
-    uint32_t mag01[2] = { 0x0, MATRIXA };
+    u32 const MATRIXA = 0x9908B0DF;
+    u32 const LOWERMASK = 0x7FFFFFFF;
+    u32 const UPPERMASK = 0x80000000;
+    u32 mt[624];
+    u32 mag01[2] = { 0x0, MATRIXA };
     int index;
 
-    void init(uint32_t seed);
+    void init(u32 seed);
 
 public:
 
-    MersenneTwisterUntempered(uint32_t seed);
+    MersenneTwisterUntempered(u32 seed);
 
-    virtual void Reseed(uint32_t seed);
+    virtual void Reseed(u32 seed);
 
-    virtual uint32_t Nextuint();
+    virtual u32 Nextuint();
     
 };
 
-class MersenneTwisterFast : public MTRNG
+class MersenneTwisterFast : public IRNG
 {
     
 private:
     int const M = 397;
     int const N = 624;
-    uint32_t const LOWERMASK = 0x7FFFFFFF;
-    uint32_t const MATRIXA = 0x9908B0DF;
-    uint32_t const TEMPERINGMASKB = 0x9D2C5680;
-    uint32_t const TEMPERINGMASKC2 = 0xEFC00000;
-    uint32_t const UPPERMASK = 0x80000000;
-    uint32_t mag01[2] = { 0x0, MATRIXA };
+    u32 const LOWERMASK = 0x7FFFFFFF;
+    u32 const MATRIXA = 0x9908B0DF;
+    u32 const TEMPERINGMASKB = 0x9D2C5680;
+    u32 const TEMPERINGMASKC2 = 0xEFC00000;
+    u32 const UPPERMASK = 0x80000000;
+    u32 mag01[2] = { 0x0, MATRIXA };
     int max;
     int maxCalls;
-    uint32_t mt[624];
+    u32 mt[624];
     int index;
 
-    void init(uint32_t seed);
+    void init(u32 seed);
 
-    uint32_t temperingShiftS(uint32_t y);
+    u32 temperingShiftS(u32 y);
 
-    uint32_t temperingShiftT(uint32_t y);
+    u32 temperingShiftT(u32 y);
 
-    uint32_t temperingShiftU(uint32_t y);
+    u32 temperingShiftU(u32 y);
 
 public:
 
-    MersenneTwisterFast(uint32_t seed, int calls);
+    MersenneTwisterFast(u32 seed, int calls);
 
-    virtual uint32_t Nextuint();
+    virtual u32 Nextuint();
 
-    virtual void Reseed(uint32_t seed);
+    virtual void Reseed(u32 seed);
     
-};
-
-class SFMT : public MTRNG
-{
-
-private:
-    uint32_t const CMSK1 = 0xdfffffef;
-    uint32_t const CMSK2 = 0xddfecb7f;
-    uint32_t const CMSK3 = 0xbffaffff;
-    uint32_t const CMSK4 = 0xbffffff6;
-    int const CSL1 = 18;
-    int const CSR1 = 11;
-    int const N32 = 624;
-    int index;
-    uint32_t parity[4] = { 0x1, 0x0, 0x0, 0x13c9e684 };
-    uint32_t sfmt[624];
-
-    void init(uint32_t seed);
-
-    void periodCertificaion();
-
-public:
-
-    SFMT(uint32_t seed);
-
-    void AdvanceFrames(int n);
-
-    virtual uint32_t Nextuint();
-
-    uint64_t Nextulong();
-
-    virtual void Reseed(uint32_t seed);
-
-    void Shuffle();
-
 };
 
 #endif //MTRNG_HPP

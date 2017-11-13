@@ -24,16 +24,18 @@
 #include <vector>
 
 using namespace std;
+typedef uint64_t u64;
+typedef uint32_t u32;
 
 class RNGEuclidean
 {
 
 private:
-    const uint32_t ADD = 0x269EC3;
-    const uint32_t MULT = 0x343FD;
-    uint64_t base;
-    uint64_t sub1;
-    uint64_t sub2;
+    const u32 ADD = 0x269EC3;
+    const u32 MULT = 0x343FD;
+    u64 base;
+    u64 sub1;
+    u64 sub2;
 
     void setupEuclidean(Method FrameType);
 
@@ -41,11 +43,11 @@ public:
 
     RNGEuclidean(Method FrameType);
 
-    vector<uint32_t> RecoverLower16BitsIV(uint32_t first, uint32_t second);
+    vector<u32> RecoverLower16BitsIV(u32 first, u32 second);
 
-    vector<uint32_t> RecoverLower16BitsPID(uint32_t first, uint32_t second);
+    vector<u32> RecoverLower16BitsPID(u32 first, u32 second);
 
-    vector<uint32_t> RecoverLower27BitsChannel(uint32_t hp, uint32_t atk, uint32_t def, uint32_t spa, uint32_t spd, uint32_t spe);
+    vector<u32> RecoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
 
     void SwitchEuclidean(Method FrameType);
 

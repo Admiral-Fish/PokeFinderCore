@@ -24,20 +24,20 @@
  */
  
 // Constructor for Range
-Range::Range(uint32_t min, uint32_t max)
+Range::Range(u32 min, u32 max)
 {
     this->min = min;
     this->max = max;
 }
 
 // Gets current value of the max
-uint32_t Range::GetMax()
+u32 Range::GetMax()
 {
     return max;
 }
 
 // Gets current value of the min
-uint32_t Range::GetMin()
+u32 Range::GetMin()
 {
     return min;
 }
@@ -55,7 +55,7 @@ int EncounterSlot::calcSlot(unsigned int compare, vector<Range> ranges)
 }
 
 // Calcs the encounter slot for Method H 1/2/4 (Emerald, FRLG, RS)
-int EncounterSlot::HSlot(uint32_t result, Encounter encounterType)
+int EncounterSlot::HSlot(u32 result, Encounter encounterType)
 {
     int compare = result % 100;
     vector<Range> ranges;
@@ -82,7 +82,7 @@ int EncounterSlot::HSlot(uint32_t result, Encounter encounterType)
 }
 
 // Calcs the encounter slot for Method J (DPPt)
-int EncounterSlot::JSlot(uint32_t result, Encounter encounterType)
+int EncounterSlot::JSlot(u32 result, Encounter encounterType)
 {
     int compare = (result >> 16) / 656;
     vector<Range> ranges;
@@ -105,7 +105,7 @@ int EncounterSlot::JSlot(uint32_t result, Encounter encounterType)
 }
 
 // Calcs the encounter slot for Method K (HGSS)
-int EncounterSlot::KSlot(uint32_t result, Encounter encounterType)
+int EncounterSlot::KSlot(u32 result, Encounter encounterType)
 {
     int compare = (result >> 16) % 100;
     vector<Range> ranges;

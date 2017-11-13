@@ -31,7 +31,7 @@ GeneratorGen3::GeneratorGen3()
 }
 
 // Constructor given user defined parameters
-GeneratorGen3::GeneratorGen3(uint32_t maxResults, uint32_t initialFrame, uint32_t initialSeed, uint32_t tid, uint32_t sid, uint32_t offset)
+GeneratorGen3::GeneratorGen3(u32 maxResults, u32 initialFrame, u32 initialSeed, u32 tid, u32 sid, u32 offset)
 {
     this->maxResults = maxResults;
     this->initialFrame = initialFrame;
@@ -53,8 +53,8 @@ vector<FrameGen3> GeneratorGen3::generateMethodChannel(FrameCompare compare)
 
     // Method Channel [SEED] [SID] [PID] [PID] [BERRY] [GAME ORIGIN] [OT GENDER] [IV] [IV] [IV] [IV] [IV] [IV]
 
-    uint32_t max = initialFrame + maxResults;
-    for (uint32_t cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
+    u32 max = initialFrame + maxResults;
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
     {
         frame.SetIDs(40122, rngList[0], 40122 ^ rngList[0]);
         if ((rngList[2] > 7 ? 0 : 1) != (rngList[1] ^ 40122 ^ rngList[0]))
@@ -72,6 +72,7 @@ vector<FrameGen3> GeneratorGen3::generateMethodChannel(FrameCompare compare)
         frames.push_back(frame);
     }
     rngList.clear();
+
     return frames;
 }
 
@@ -84,9 +85,9 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124(FrameCompare compare)
     for (int i = 0; i < 1100; i++)
         rngList.push_back(rng.Next16Bit());
 
-    uint32_t max = initialFrame + maxResults;
-    uint32_t pid, pid1, pid2, hunt;
-    for (uint32_t cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
+    u32 max = initialFrame + maxResults;
+    u32 pid, pid1, pid2, hunt;
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
     {
         hunt = 0;
         frame.encounterSlot = EncounterSlot::HSlot(rngList[hunt++], encounterType);
@@ -118,6 +119,7 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124(FrameCompare compare)
         frames.push_back(frame);
     }
     rngList.clear();
+
     return frames;
 }
 
@@ -130,9 +132,9 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124Synch(FrameCompare compare)
     for (int i = 0; i < 1200; i++)
         rngList.push_back(rng.Next16Bit());
 
-    uint32_t max = initialFrame + maxResults;
-    uint32_t pid, pid1, pid2, hunt, first;
-    for (uint32_t cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
+    u32 max = initialFrame + maxResults;
+    u32 pid, pid1, pid2, hunt, first;
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
     {
         hunt = 0;
         frame.encounterSlot = EncounterSlot::HSlot(rngList[hunt++], encounterType);
@@ -174,53 +176,54 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124Synch(FrameCompare compare)
         frames.push_back(frame);
     }
     rngList.clear();
+
     return frames;
 }
 
 // Checks if PID fits constraints of 12.5% female target
-bool cuteCharm125F(uint32_t pid)
+bool cuteCharm125F(u32 pid)
 {
     return (pid & 0xff) < 31;
 }
 
 // Checks if PID fits constraints of 87.5% male target
-bool cuteCharm875M(uint32_t pid)
+bool cuteCharm875M(u32 pid)
 {
     return (pid & 0xff) >= 31;
 }
 
 // Checks if PID fits constraints of 25% female target
-bool cuteCharm25F(uint32_t pid)
+bool cuteCharm25F(u32 pid)
 {
     return (pid & 0xff) < 63;
 }
 
 // Checks if PID fits constraints of 75% male target
-bool cuteCharm75M(uint32_t pid)
+bool cuteCharm75M(u32 pid)
 {
     return (pid & 0xff) >= 63;
 }
 
 // Checks if PID fits constraints of 50% female target
-bool cuteCharm50F(uint32_t pid)
+bool cuteCharm50F(u32 pid)
 {
     return (pid & 0xff) < 127;
 }
 
 // Checks if PID fits constraints of 50% male target
-bool cuteCharm50M(uint32_t pid)
+bool cuteCharm50M(u32 pid)
 {
     return (pid & 0xff) >= 127;
 }
 
 // Checks if PID fits constraints of 75% female target
-bool cuteCharm75F(uint32_t pid)
+bool cuteCharm75F(u32 pid)
 {
     return (pid & 0xff) < 191;
 }
 
 // Checks if PID fits constraints of 25% male target
-bool cuteCharm25M(uint32_t pid)
+bool cuteCharm25M(u32 pid)
 {
     return (pid & 0xff) >= 191;
 }
@@ -234,10 +237,10 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare compar
     for (int i = 0; i < 2500; i++)
         rngList.push_back(rng.Next16Bit());
 
-    uint32_t max = initialFrame + maxResults;
-    uint32_t pid, pid1, pid2, hunt, first;
+    u32 max = initialFrame + maxResults;
+    u32 pid, pid1, pid2, hunt, first;
 
-    bool (*cuteCharm)(uint32_t);
+    bool (*cuteCharm)(u32);
     switch (leadType)
     {
         case CuteCharm125F:
@@ -268,7 +271,7 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare compar
             break;
     }
 
-    for (uint32_t cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
     {
         hunt = 0;
         frame.encounterSlot = EncounterSlot::HSlot(rngList[hunt++], encounterType);
@@ -319,6 +322,7 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare compar
         frames.push_back(frame);
     }
     rngList.clear();
+
     return frames;
 }
 
@@ -333,8 +337,8 @@ vector<FrameGen3> GeneratorGen3::generateMethodXDColo(FrameCompare compare)
 
     // Method XD/Colo [SEED] [IVS] [IVS] [BLANK] [PID] [PID]
 
-    uint32_t max = initialFrame + maxResults;
-    for (uint32_t cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
+    u32 max = initialFrame + maxResults;
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
     {
         frame.SetPID(rngList[3], rngList[4]);
         if (!compare.CompareFramePID(frame))
@@ -364,8 +368,8 @@ vector<FrameGen3> GeneratorGen3::generateMethod124(FrameCompare compare)
     // Method 2 [SEED] [PID] [PID] [BLANK] [IVS] [IVS]
     // Method 4 [SEED] [PID] [PID] [IVS] [BLANK] [IVS]
 
-    uint32_t max = initialFrame + maxResults;
-    for (uint32_t cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
+    u32 max = initialFrame + maxResults;
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
     {
         frame.SetPID(rngList[1], rngList[0]);
         if (!compare.CompareFramePID(frame))
@@ -379,6 +383,7 @@ vector<FrameGen3> GeneratorGen3::generateMethod124(FrameCompare compare)
         frames.push_back(frame);
     }
     rngList.clear();
+
     return frames;
 }
 
@@ -386,10 +391,10 @@ vector<FrameGen3> GeneratorGen3::generateMethod124(FrameCompare compare)
 vector<FrameGen3> GeneratorGen3::Generate(FrameCompare compare)
 {
     if (frameType == XDColo || frameType == Channel)
-        rng = XDRNG(0);
+        rng = XDRNG(initialSeed);
     else
-        rng = PokeRNG(0);
-    rng.seed = initialSeed;
+        rng = PokeRNG(initialSeed);
+
     rng.AdvanceFrames(initialFrame - 1 + offset);
 
     if (frameType == Method1 || frameType == MethodH1)

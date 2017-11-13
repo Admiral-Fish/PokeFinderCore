@@ -29,21 +29,22 @@
 #include <vector>
 
 using namespace std;
+typedef uint32_t u32;
 
 class Searcher
 {
 
 protected:
-    uint32_t psv;
-    uint32_t sid;
-    uint32_t tid;
+    u32 psv;
+    u32 sid;
+    u32 tid;
 
 public:
-    uint32_t cuteCharm;
+    u32 cuteCharm;
     Encounter encounterType = Stationary;
     Method frameType = Method1;
     Lead leadType = None;
-    uint32_t synchNature;
+    u32 synchNature;
 
 };
 

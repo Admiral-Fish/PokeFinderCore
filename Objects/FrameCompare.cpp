@@ -34,28 +34,28 @@ FrameCompare::FrameCompare( int hpEvalIndex,    int hpNum,
                             bool skipCompare
                           )
 {
-    hp[0] = (uint)hpEvalIndex;
-    hp[1] = (uint)hpNum;
-    atk[0] = (uint)atkEvalIndex;
-    atk[1] = (uint)atkNum;
-    def[0] = (uint)defEvalIndex;
-    def[1] = (uint)defNum;
-    spa[0] = (uint)spaEvalIndex;
-    spa[1] = (uint)spaNum;
-    spd[0] = (uint)spdEvalIndex;
-    spd[1] = (uint)spdNum;
-    spe[0] = (uint)speEvalIndex;
-    spe[1] = (uint)speNum;
+    hp[0] = (u32)hpEvalIndex;
+    hp[1] = (u32)hpNum;
+    atk[0] = (u32)atkEvalIndex;
+    atk[1] = (u32)atkNum;
+    def[0] = (u32)defEvalIndex;
+    def[1] = (u32)defNum;
+    spa[0] = (u32)spaEvalIndex;
+    spa[1] = (u32)spaNum;
+    spd[0] = (u32)spdEvalIndex;
+    spd[1] = (u32)spdNum;
+    spe[0] = (u32)speEvalIndex;
+    spe[1] = (u32)speNum;
 
-    gender = (uint)genderIndex;
-    genderRatio = (uint)genderRatioIndex;
-    ability = (uint)abilityIndex;
+    gender = (u32)genderIndex;
+    genderRatio = (u32)genderRatioIndex;
+    ability = (u32)abilityIndex;
 
-    for(uint i = 1; i < 26; i++)
+    for(u32 i = 1; i < 26; i++)
         if(natureBox->model()->data(natureBox->model()->index(i, 0), Qt::CheckStateRole).toBool())
             natures.push_back(Nature::GetAdjustedNature(i - 1));
 
-    for(uint i = 1; i < 17; i++)
+    for(u32 i = 1; i < 17; i++)
         if(hiddenPowerBox->model()->data(hiddenPowerBox->model()->index(i, 0), Qt::CheckStateRole).toBool())
             powers.push_back(i - 1);
 
@@ -183,19 +183,19 @@ bool FrameCompare::CompareFrameIVs(Frame frame)
     switch(hp[0])
     {
         case 1:
-            if(frame.hp != hp[1])
+            if(frame.ivs[0] != hp[1])
                 return false;
             break;
         case 2:
-            if(frame.hp < hp[1])
+            if(frame.ivs[0] < hp[1])
                 return false;
             break;
         case 3:
-            if(frame.hp > hp[1])
+            if(frame.ivs[0] > hp[1])
                 return false;
             break;
         case 4:
-            if(frame.hp == hp[1])
+            if(frame.ivs[0] == hp[1])
                 return false;
             break;
         default:
@@ -205,19 +205,19 @@ bool FrameCompare::CompareFrameIVs(Frame frame)
     switch(atk[0])
     {
         case 1:
-            if(frame.atk != atk[1])
+            if(frame.ivs[1] != atk[1])
                 return false;
             break;
         case 2:
-            if(frame.atk < atk[1])
+            if(frame.ivs[1] < atk[1])
                 return false;
             break;
         case 3:
-            if(frame.atk > atk[1])
+            if(frame.ivs[1] > atk[1])
                 return false;
             break;
         case 4:
-            if(frame.atk == atk[1])
+            if(frame.ivs[1] == atk[1])
                 return false;
             break;
         default:
@@ -227,19 +227,19 @@ bool FrameCompare::CompareFrameIVs(Frame frame)
     switch(def[0])
     {
         case 1:
-            if(frame.def != def[1])
+            if(frame.ivs[2] != def[1])
                 return false;
             break;
         case 2:
-            if(frame.def < def[1])
+            if(frame.ivs[2] < def[1])
                 return false;
             break;
         case 3:
-            if(frame.def > def[1])
+            if(frame.ivs[2] > def[1])
                 return false;
             break;
         case 4:
-            if(frame.def == def[1])
+            if(frame.ivs[2] == def[1])
                 return false;
             break;
         default:
@@ -249,19 +249,19 @@ bool FrameCompare::CompareFrameIVs(Frame frame)
     switch(spa[0])
     {
         case 1:
-            if(frame.spa != spa[1])
+            if(frame.ivs[3] != spa[1])
                 return false;
             break;
         case 2:
-            if(frame.spa < spa[1])
+            if(frame.ivs[3] < spa[1])
                 return false;
             break;
         case 3:
-            if(frame.spa > spa[1])
+            if(frame.ivs[3] > spa[1])
                 return false;
             break;
         case 4:
-            if(frame.spa == spa[1])
+            if(frame.ivs[3] == spa[1])
                 return false;
             break;
         default:
@@ -271,19 +271,19 @@ bool FrameCompare::CompareFrameIVs(Frame frame)
     switch(spd[0])
     {
         case 1:
-            if(frame.spd != spd[1])
+            if(frame.ivs[4] != spd[1])
                 return false;
             break;
         case 2:
-            if(frame.spd < spd[1])
+            if(frame.ivs[4] < spd[1])
                 return false;
             break;
         case 3:
-            if(frame.spd > spd[1])
+            if(frame.ivs[4] > spd[1])
                 return false;
             break;
         case 4:
-            if(frame.spd == spd[1])
+            if(frame.ivs[4] == spd[1])
                 return false;
             break;
         default:
@@ -293,19 +293,19 @@ bool FrameCompare::CompareFrameIVs(Frame frame)
     switch(spe[0])
     {
         case 1:
-            if(frame.spe != spe[1])
+            if(frame.ivs[5] != spe[1])
                 return false;
             break;
         case 2:
-            if(frame.spe < spe[1])
+            if(frame.ivs[5] < spe[1])
                 return false;
             break;
         case 3:
-            if(frame.spe > spe[1])
+            if(frame.ivs[5] > spe[1])
                 return false;
             break;
         case 4:
-            if(frame.spe == spe[1])
+            if(frame.ivs[5] == spe[1])
                 return false;
             break;
         default:

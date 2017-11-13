@@ -28,23 +28,24 @@
 #include <libPokeFinder/Objects/Frame.hpp>
 
 using namespace std;
+typedef uint32_t u32;
 
 class FrameCompare
 {
 private:
 
     uint hp[2];
-    uint atk[2];
-    uint def[2];
-    uint spa[2];
-    uint spd[2];
-    uint spe[2];
+    u32 atk[2];
+    u32 def[2];
+    u32 spa[2];
+    u32 spd[2];
+    u32 spe[2];
 
-    uint gender;
-    uint genderRatio;
-    uint ability;
-    vector<uint> natures;
-    vector<uint> powers;
+    u32 gender;
+    u32 genderRatio;
+    u32 ability;
+    vector<u32> natures;
+    vector<u32> powers;
 
     bool shiny;
     bool skip;
