@@ -67,19 +67,19 @@ void NatureLock::getCurrLock()
 // Generates the next PID forwards
 u32 NatureLock::getPIDForward()
 {
-    return (rng.Next32Bit() & 0xFFFF0000) | rng.Next16Bit();
+    return (forward.Next32Bit() & 0xFFFF0000) | forward.Next16Bit();
 }
 
 // Generates the next PID backwards
 u32 NatureLock::getPIDReverse()
 {
-    return rng.Prev16Bit() | (rng.Prev32Bit() & 0xFFFF0000);
+    return backward.Next16Bit() | (backward.Next32Bit() & 0xFFFF0000);
 }
 
 // Generates the PSV of the next PID backwards
 u32 NatureLock::getPSVReverse()
 {
-    return (rng.Prev16Bit() ^ rng.Prev16Bit()) >> 3;
+    return (backward.Next16Bit() ^ backward.Next16Bit()) >> 3;
 }
 
 // Sets up rest of nature lock data for Colo
@@ -434,8 +434,8 @@ ShadowType NatureLock::GetType()
 // Checks if seed is valid for single shadow case
 bool NatureLock::IVMethodFirstShadow(u32 seed)
 {
-    rng.seed = seed;
-    rng.ReverseFrames(1);
+    backward.seed = seed;
+    backward.AdvanceFrames(1);
 
     // Build temp pid first to not waste time looping if first backwards nl fails
     pidOriginal = getPIDReverse();
@@ -448,7 +448,7 @@ bool NatureLock::IVMethodFirstShadow(u32 seed)
     // Backwards nature lock check loop
     for (x = 1; x < backCount; x++)
     {
-        rng.ReverseFrames(3);
+        backward.AdvanceFrames(3);
         pid = getPIDReverse();
         getCurrLock();
         if (nature != 500)
@@ -459,12 +459,13 @@ bool NatureLock::IVMethodFirstShadow(u32 seed)
         }
     }
 
-    rng.AdvanceFrames(1);
+    forward.seed = backward.seed;
+    forward.AdvanceFrames(1);
 
     // Forwards nature lock check loop
     for (x = frontCount; x >= 0; x--)
     {
-        rng.AdvanceFrames(3);
+        forward.AdvanceFrames(3);
         pid = getPIDForward();
         getCurrLock();
         if (nature != 500)
@@ -482,8 +483,8 @@ bool NatureLock::IVMethodFirstShadow(u32 seed)
 // Checks if seed is valid for second shadow with first shadow set
 bool NatureLock::IVMethodFirstShadowSet(u32 seed)
 {
-    rng.seed = seed;
-    rng.ReverseFrames(6);
+    backward.seed = seed;
+    backward.AdvanceFrames(6);
 
     // Build temp pid first to not waste time looping if first nl fails
     pidOriginal = getPIDReverse();
@@ -496,7 +497,7 @@ bool NatureLock::IVMethodFirstShadowSet(u32 seed)
     // Backwards nature lock check loop
     for (x = 1; x < backCount; x++)
     {
-        rng.ReverseFrames(3);
+        backward.AdvanceFrames(3);
         pid = getPIDReverse();
         getCurrLock();
         if (nature != 500)
@@ -507,12 +508,13 @@ bool NatureLock::IVMethodFirstShadowSet(u32 seed)
         }
     }
 
-    rng.AdvanceFrames(1);
+    forward.seed = backward.seed;
+    forward.AdvanceFrames(1);
 
     // Forwards nature lock check
     for (x = frontCount; x >= 0; x--)
     {
-        rng.AdvanceFrames(3);
+        forward.AdvanceFrames(3);
         pid = getPIDForward();
         getCurrLock();
         if (nature != 500)
@@ -530,8 +532,8 @@ bool NatureLock::IVMethodFirstShadowSet(u32 seed)
 // Checks if seed is valid for second shadow with first shadow unset and antishiny(aka Shiny Skip)
 bool NatureLock::IVMethodFirstShadowShinySkip(u32 seed)
 {
-    rng.seed = seed;
-    rng.ReverseFrames(1);
+    backward.seed = seed;
+    backward.AdvanceFrames(1);
 
     u32 psv, psvtemp;
 
@@ -544,7 +546,7 @@ bool NatureLock::IVMethodFirstShadowShinySkip(u32 seed)
         psv = getPSVReverse();
     }
 
-    rng.ReverseFrames(5);
+    backward.AdvanceFrames(5);
     pidOriginal = getPIDReverse();
 
     // Backwards nature lock check
@@ -555,7 +557,7 @@ bool NatureLock::IVMethodFirstShadowShinySkip(u32 seed)
     // Backwards nature lock check loop
     for (x = 1; x < backCount; x++)
     {
-        rng.ReverseFrames(3);
+        backward.AdvanceFrames(3);
         pid = getPIDReverse();
         getCurrLock();
         if (nature != 500)
@@ -566,12 +568,13 @@ bool NatureLock::IVMethodFirstShadowShinySkip(u32 seed)
         }
     }
 
-    rng.AdvanceFrames(1);
+    forward.seed = backward.seed;
+    forward.AdvanceFrames(1);
 
     // Forwards nature lock check loop
     for (x = frontCount; x >= 0; x--)
     {
-        rng.AdvanceFrames(3);
+        forward.AdvanceFrames(3);
         pid = getPIDForward();
         getCurrLock();
         if (nature != 500)
@@ -589,8 +592,8 @@ bool NatureLock::IVMethodFirstShadowShinySkip(u32 seed)
 // Checks if seed is valid for second shadow with first shadow unset
 bool NatureLock::IVMethodFirstShadowUnset(u32 seed)
 {
-    rng.seed = seed;
-    rng.ReverseFrames(8);
+    backward.seed = seed;
+    backward.AdvanceFrames(8);
 
     // Build temp pid first to not waste time looping if first nl fails
     pidOriginal = getPIDReverse();
@@ -603,7 +606,7 @@ bool NatureLock::IVMethodFirstShadowUnset(u32 seed)
     // Backwards nature lock check loop
     for (x = 1; x < backCount; x++)
     {
-        rng.ReverseFrames(3);
+        backward.AdvanceFrames(3);
         pid = getPIDReverse();
         getCurrLock();
         if (nature != 500)
@@ -614,12 +617,13 @@ bool NatureLock::IVMethodFirstShadowUnset(u32 seed)
         }
     }
 
-    rng.AdvanceFrames(1);
+    forward.seed = backward.seed;
+    forward.AdvanceFrames(1);
 
     // Forwards nature lock check loop
     for (x = frontCount; x >= 0; x--)
     {
-        rng.AdvanceFrames(3);
+        forward.AdvanceFrames(3);
         pid = getPIDForward();
         getCurrLock();
         if (nature != 500)
@@ -637,8 +641,8 @@ bool NatureLock::IVMethodFirstShadowUnset(u32 seed)
 // Checks if seed is valid for 1st shadow set for Salamence
 bool NatureLock::IVMethodSalamenceSet(u32 seed)
 {
-    rng.seed = seed;
-    rng.ReverseFrames(6);
+    backward.seed = seed;
+    backward.AdvanceFrames(6);
 
     // Build PID
     pid = getPIDReverse();
@@ -651,8 +655,8 @@ bool NatureLock::IVMethodSalamenceSet(u32 seed)
 // Checks if seed is valid for 1st shadow unset and antishiny(aka Shiny Skip) for Salamence
 bool NatureLock::IVMethodSalamenceShinySkip(u32 seed)
 {
-    rng.seed = seed;
-    rng.ReverseFrames(1);
+    backward.seed = seed;
+    backward.AdvanceFrames(1);
 
     u32 psv, psvtemp;
 
@@ -666,7 +670,7 @@ bool NatureLock::IVMethodSalamenceShinySkip(u32 seed)
         psv = getPSVReverse();
     }
 
-    rng.ReverseFrames(5);
+    backward.AdvanceFrames(5);
     pid = getPIDReverse();
 
     // Backwards nature lock check
@@ -678,8 +682,8 @@ bool NatureLock::IVMethodSalamenceShinySkip(u32 seed)
 // Checks if seed is valid for 1st shadow unset for Salamence
 bool NatureLock::IVMethodSalamenceUnset(u32 seed)
 {
-    rng.seed = seed;
-    rng.ReverseFrames(8);
+    backward.seed = seed;
+    backward.AdvanceFrames(8);
 
     // Build PID
     pid = getPIDReverse();
@@ -692,8 +696,8 @@ bool NatureLock::IVMethodSalamenceUnset(u32 seed)
 // Checks if seed is valid for single nature lock
 bool NatureLock::IVMethodSingleNL(u32 seed)
 {
-    rng.seed = seed;
-    rng.ReverseFrames(1);
+    backward.seed = seed;
+    backward.AdvanceFrames(1);
 
     // Build PID
     pid = getPIDReverse();

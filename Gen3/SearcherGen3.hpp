@@ -32,7 +32,8 @@ private:
     RNGCache cache = RNGCache(Method1);
     RNGEuclidean euclidean = RNGEuclidean(XDColo);
     FrameGen3 frame = FrameGen3(0, 0, 0);
-    LCRNG rng = PokeRNG(0);
+    LCRNG forward = PokeRNG(0);
+    LCRNG backward = PokeRNGR(0);
     NatureLock natureLock = NatureLock();
 
     vector<FrameGen3> searchMethodChannel(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);

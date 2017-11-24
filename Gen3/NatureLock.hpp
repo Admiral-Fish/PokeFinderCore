@@ -69,7 +69,8 @@ private:
     u32 nature;
     u32 pid;
     u32 pidOriginal;
-    LCRNG rng = XDRNG(0);
+    LCRNG forward = XDRNG(0);
+    LCRNG backward = XDRNGR(0);
     ShadowType type;
     int x;
 

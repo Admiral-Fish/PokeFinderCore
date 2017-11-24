@@ -48,21 +48,21 @@ vector<FrameGen3> SearcherGen3::searchMethodChannel(uint hp, uint atk, uint def,
     for (int i = 0; i < size; i++)
     {
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
-        rng.seed = seeds[i];
+        backward.seed = seeds[i];
 
         // Calculate PID
-        rng.ReverseFrames(3);
-        uint pid2 = rng.Prev16Bit();
-        uint pid1 = rng.Prev16Bit();
+        backward.AdvanceFrames(3);
+        uint pid2 = backward.Next16Bit();
+        uint pid1 = backward.Next16Bit();
 
         // Determine if PID needs to be XORed
-        if ((pid2 > 7 ? 0 : 1) != (pid1 ^ rng.Prev16Bit() ^ 40122))
+        if ((pid2 > 7 ? 0 : 1) != (pid1 ^ backward.Next16Bit() ^ 40122))
             pid1 ^= 0x8000;
         frame.SetPID(pid1, pid2);
 
         if (compare.CompareFramePID(frame))
         {
-            frame.seed = rng.Prev32Bit();
+            frame.seed = backward.Next32Bit();
             frames.push_back(frame);
         }
     }
@@ -84,9 +84,9 @@ vector<FrameGen3> SearcherGen3::searchMethodColo(uint hp, uint atk, uint def, ui
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
-        rng.seed = seeds[i + 1];
-        rng.AdvanceFrames(1);
-        frame.SetPID(rng.Next16Bit(), rng.Next16Bit());
+        forward.seed = seeds[i + 1];
+        forward.AdvanceFrames(1);
+        frame.SetPID(forward.Next16Bit(), forward.Next16Bit());
         frame.seed = seeds[i] * 0xB9B33155 + 0xA170F641;
         if (compare.CompareFramePID(frame))
             frames.push_back(frame);
@@ -118,9 +118,9 @@ vector<FrameGen3> SearcherGen3::searchMethodH1(uint hp, uint atk, uint def, uint
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
-        rng.seed = seeds[i];
-        frame.SetPID(rng.Prev16Bit(), rng.Prev16Bit());
-        seed = rng.Prev32Bit();
+        backward.seed = seeds[i];
+        frame.SetPID(backward.Next16Bit(), backward.Next16Bit());
+        seed = backward.Next32Bit();
 
         // Use for loop to check both normal and sister spread
         for (int i = 0; i < 2; i++)
@@ -135,10 +135,10 @@ vector<FrameGen3> SearcherGen3::searchMethodH1(uint hp, uint atk, uint def, uint
             if (!compare.CompareFramePID(frame))
                 continue;
 
-            LCRNG testRNG = PokeRNG(seed);
+            LCRNG testRNG = PokeRNGR(seed);
             uint testPID, slot, testSeed;
             uint nextRNG = seed >> 16;
-            uint nextRNG2 = testRNG.Prev16Bit();
+            uint nextRNG2 = testRNG.Next16Bit();
 
             do
             {
@@ -184,8 +184,8 @@ vector<FrameGen3> SearcherGen3::searchMethodH1(uint hp, uint atk, uint def, uint
                 }
 
                 testPID = (nextRNG << 16) | nextRNG2;
-                nextRNG = testRNG.Prev16Bit();
-                nextRNG2 = testRNG.Prev16Bit();
+                nextRNG = testRNG.Next16Bit();
+                nextRNG2 = testRNG.Next16Bit();
             }
             while ((testPID % 25) != frame.nature);
         }
@@ -208,10 +208,10 @@ vector<FrameGen3> SearcherGen3::searchMethodH2(uint hp, uint atk, uint def, uint
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
-        rng.seed = seeds[i];
-        rng.ReverseFrames(1);
-        frame.SetPID(rng.Prev16Bit(), rng.Prev16Bit());
-        seed = rng.Prev32Bit();
+        backward.seed = seeds[i];
+        backward.AdvanceFrames(1);
+        frame.SetPID(backward.Next16Bit(), backward.Next16Bit());
+        seed = backward.Next16Bit();
 
         // Use for loop to check both normal and sister spread
         for (int i = 0; i < 2; i++)
@@ -226,10 +226,10 @@ vector<FrameGen3> SearcherGen3::searchMethodH2(uint hp, uint atk, uint def, uint
             if (!compare.CompareFramePID(frame))
                 continue;
 
-            LCRNG testRNG = PokeRNG(seed);
+            LCRNG testRNG = PokeRNGR(seed);
             uint testPID, slot, testSeed;
             uint nextRNG = seed >> 16;
-            uint nextRNG2 = testRNG.Prev16Bit();
+            uint nextRNG2 = testRNG.Next16Bit();
 
             do
             {
@@ -275,8 +275,8 @@ vector<FrameGen3> SearcherGen3::searchMethodH2(uint hp, uint atk, uint def, uint
                 }
 
                 testPID = (nextRNG << 16) | nextRNG2;
-                nextRNG = testRNG.Prev16Bit();
-                nextRNG2 = testRNG.Prev16Bit();
+                nextRNG = testRNG.Next16Bit();
+                nextRNG2 = testRNG.Next16Bit();
             }
             while ((testPID % 25) != frame.nature);
         }
@@ -299,9 +299,9 @@ vector<FrameGen3> SearcherGen3::searchMethodH4(uint hp, uint atk, uint def, uint
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
-        rng.seed = seeds[i];
-        frame.SetPID(rng.Prev16Bit(), rng.Prev16Bit());
-        seed = rng.Prev32Bit();
+        backward.seed = seeds[i];
+        frame.SetPID(backward.Next16Bit(), backward.Next16Bit());
+        seed = backward.Next32Bit();
 
         // Use for loop to check both normal and sister spread
         for (int i = 0; i < 2; i++)
@@ -316,10 +316,10 @@ vector<FrameGen3> SearcherGen3::searchMethodH4(uint hp, uint atk, uint def, uint
             if (!compare.CompareFramePID(frame))
                 continue;
 
-            LCRNG testRNG = PokeRNG(seed);
+            LCRNG testRNG = PokeRNGR(seed);
             uint testPID, slot, testSeed;
             uint nextRNG = seed >> 16;
-            uint nextRNG2 = testRNG.Prev16Bit();
+            uint nextRNG2 = testRNG.Next16Bit();
 
             do
             {
@@ -366,8 +366,8 @@ vector<FrameGen3> SearcherGen3::searchMethodH4(uint hp, uint atk, uint def, uint
                 }
 
                 testPID = (nextRNG << 16) | nextRNG2;
-                nextRNG = testRNG.Prev16Bit();
-                nextRNG2 = testRNG.Prev16Bit();
+                nextRNG = testRNG.Next16Bit();
+                nextRNG2 = testRNG.Next16Bit();
             }
             while ((testPID % 25) != frame.nature);
         }
@@ -390,8 +390,8 @@ vector<FrameGen3> SearcherGen3::searchMethodXD(uint hp, uint atk, uint def, uint
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
-        rng.seed = seeds[i + 1];
-        frame.SetPID(rng.Next16Bit(), rng.Next16Bit());
+        forward.seed = seeds[i + 1];
+        frame.SetPID(forward.Next16Bit(), forward.Next16Bit());
         frame.seed = seeds[i] * 0xB9B33155 + 0xA170F641;
         if (compare.CompareFramePID(frame))
             frames.push_back(frame);
@@ -422,8 +422,8 @@ vector<FrameGen3> SearcherGen3::searchMethodXDColo(uint hp, uint atk, uint def, 
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
-        rng.seed = seeds[i + 1];
-        frame.SetPID(rng.Next16Bit(), rng.Next16Bit());
+        forward.seed = seeds[i + 1];
+        frame.SetPID(forward.Next16Bit(), forward.Next16Bit());
         frame.seed = seeds[i] * 0xB9B33155 + 0xA170F641;
         if (compare.CompareFramePID(frame))
             frames.push_back(frame);
@@ -454,9 +454,9 @@ vector<FrameGen3> SearcherGen3::searchMethod1(uint hp, uint atk, uint def, uint 
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
-        rng.seed = seeds[i];
-        frame.SetPID(rng.Prev16Bit(), rng.Prev16Bit());
-        frame.seed = rng.Prev32Bit();
+        backward.seed = seeds[i];
+        frame.SetPID(backward.Next16Bit(), backward.Next16Bit());
+        frame.seed = backward.Next32Bit();
         if (compare.CompareFramePID(frame))
             frames.push_back(frame);
 
@@ -486,10 +486,10 @@ vector<FrameGen3> SearcherGen3::searchMethod2(uint hp, uint atk, uint def, uint 
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
-        rng.seed = seeds[i];
-        rng.ReverseFrames(1);
-        frame.SetPID(rng.Prev16Bit(), rng.Prev16Bit());
-        frame.seed = rng.Prev32Bit();
+        backward.seed = seeds[i];
+        backward.AdvanceFrames(1);
+        frame.SetPID(backward.Next16Bit(), backward.Next16Bit());
+        frame.seed = backward.Next32Bit();
         if (compare.CompareFramePID(frame))
             frames.push_back(frame);
 
@@ -519,9 +519,9 @@ vector<FrameGen3> SearcherGen3::searchMethod4(uint hp, uint atk, uint def, uint 
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
-        rng.seed = seeds[i];
-        frame.SetPID(rng.Prev16Bit(), rng.Prev16Bit());
-        frame.seed = rng.Prev32Bit();
+        backward.seed = seeds[i];
+        frame.SetPID(backward.Next16Bit(), backward.Next16Bit());
+        frame.seed = backward.Next32Bit();
         if (compare.CompareFramePID(frame))
             frames.push_back(frame);
 
@@ -541,9 +541,15 @@ vector<FrameGen3> SearcherGen3::searchMethod4(uint hp, uint atk, uint def, uint 
 vector<FrameGen3> SearcherGen3::Search(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
     if (frameType == XDColo || frameType == Channel || frameType == XD || frameType == Colo)
-        rng = XDRNG(0);
+    {
+        forward = XDRNG(0);
+        backward = XDRNGR(0);
+    }
     else
-        rng = PokeRNG(0);
+    {
+        forward = PokeRNG(0);
+        backward = PokeRNGR(0);
+    }
 
     switch (frameType)
     {

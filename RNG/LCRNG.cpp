@@ -22,12 +22,10 @@
 // LCRNG is used for Gen 3 and 4
 
 // Default constructor for LCRNG
-LCRNG::LCRNG(u32 add, u32 addr, u32 mult, u32 multr, u32 seed)
+LCRNG::LCRNG(u32 add, u32 mult, u32 seed)
 {
     this->add = add;
-    this->addr = addr;
     this->mult = mult;
-    this->multr = multr;
     this->seed = seed;
 }
 
@@ -49,26 +47,6 @@ u32 LCRNG::Next32Bit()
 {
     seed = seed * mult + add;
     return seed;
-}
-
-// Method for finding previous 16 bit seed
-u32 LCRNG::Prev16Bit()
-{
-    return (Prev32Bit() >> 16);
-}
-
-// Method for finding previous 32 bit seed
-u32 LCRNG::Prev32Bit()
-{
-    seed = seed * multr + addr;
-    return seed;
-}
-
-// Method for reversing seed by a given number of frames
-void LCRNG::ReverseFrames(int frames)
-{
-    for(int i = 0; i < frames; i++)
-        seed = seed * multr + addr;
 }
 
 // IRNG Member
