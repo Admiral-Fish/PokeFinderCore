@@ -54,7 +54,7 @@ public:
 
     virtual u64 Nextulong();
 
-    virtual void Reseed(u32 seed);
+    virtual void Reseed(u64 seed);
 
     void Shuffle();
 

@@ -20,12 +20,10 @@
 #include "LCRNG64.hpp"
 
 // LCRNG64 constructor that sets a given seed
-LCRNG64::LCRNG64(u64 add, u64 addr, u64 mult, u64 multr, u64 seed)
+LCRNG64::LCRNG64(u64 add, u64 mult,u64 seed)
 {
     this->add = add;
-    this->addr = addr;
     this->mult = mult;
-    this->multr = multr;
     this->seed = seed;
 }
 
@@ -53,32 +51,6 @@ u64 LCRNG64::Next64Bit()
 {
     seed = seed * mult + add;
     return seed;
-}
-
-// Method for finding previous 32 bit seed
-u32 LCRNG64::Prev32Bit()
-{
-    return (u32) (Prev64Bit() >> 32);
-}
-
-// Method for finding previous modified 32 bit seed
-u32 LCRNG64::Prev32Bit(u32 max)
-{
-    return (u32) (((Prev64Bit() >> 32) * max) >> 32);
-}
-
-// Method for finding previous 64 bit seed
-u64 LCRNG64::Prev64Bit()
-{
-    seed = seed * multr + addr;
-    return seed;
-}
-
-// Method for reversing seed by a given number of frames
-void LCRNG64::ReverseFrames(int frames)
-{
-    for (int i = 0; i < frames; i++)
-        seed = seed * multr + addr;
 }
 
 // IRNG64 Member

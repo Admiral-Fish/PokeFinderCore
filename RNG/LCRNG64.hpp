@@ -22,7 +22,7 @@
 
 #include <libPokeFinder/RNG/IRNG64.hpp>
 
-class LCRNG64 : IRNG64
+class LCRNG64 : public IRNG64
 {
 
 private:
@@ -34,7 +34,7 @@ private:
 public:
     u64 seed;
 
-    LCRNG64(u64 add, u64 addr, u64 mult, u64 multr, u64 seed);
+    LCRNG64(u64 add,u64 mult, u64 seed);
 
     void AdvanceFrames(int frames);
 
@@ -43,14 +43,6 @@ public:
     u32 Next32Bit(u32 max);
 
     u64 Next64Bit();
-
-    u32 Prev32Bit();
-
-    u32 Prev32Bit(u32 max);
-
-    u64 Prev64Bit();
-
-    void ReverseFrames(int frames);
 
     virtual u64 Nextulong();
 
@@ -65,7 +57,18 @@ class BWRNG : public LCRNG64
 
 public:
 
-    BWRNG(u64 seed) : LCRNG64(0x269ec3, 0x9b1ae6e9a384e6f9, 0x5d588b656c078965, 0xdedcedae9638806d, seed)
+    BWRNG(u64 seed) : LCRNG64(0x269ec3, 0x5d588b656c078965, seed)
+    {
+    }
+
+};
+
+class BWRNGR : public LCRNG64
+{
+
+public:
+
+    BWRNGR(u64 seed) : LCRNG64(0x9b1ae6e9a384e6f9, 0xdedcedae9638806d, seed)
     {
     }
 

@@ -21,7 +21,6 @@
 #define IRNG_HPP
 
 #include <cstdint>
-#include <vector>
 
 typedef uint32_t u32;
 
@@ -33,6 +32,8 @@ public:
     virtual u32 Nextuint() = 0;
 
     virtual void Reseed(u32 seed) = 0;
+
+    virtual ~IRNG() { }
 
 };
 

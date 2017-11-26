@@ -99,9 +99,9 @@ u64 SFMT::Nextulong()
 }
 
 // Recreates the SFMT with a new seed
-void SFMT::Reseed(u32 seed)
+void SFMT::Reseed(u64 seed)
 {
-    init(seed);
+    init((u32)seed);
 }
 
 // Shuffles the array once all 624 states have been used
