@@ -27,9 +27,7 @@ class LCRNG64 : public IRNG64
 
 private:
     u64 add;
-    u64 addr;
     u64 mult;
-    u64 multr;
 
 public:
     u64 seed;
