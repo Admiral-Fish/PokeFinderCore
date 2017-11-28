@@ -14,6 +14,12 @@ TinyMT::TinyMT(u32 st[])
     periodCertification();
 }
 
+void TinyMT::AdvanceFrames(int frames)
+{
+    for (int i = 0; i < frames; i++)
+        NextState();
+}
+
 // Creates Tiny state given seed
 void TinyMT::init(u32 seed)
 {

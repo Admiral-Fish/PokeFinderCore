@@ -29,6 +29,8 @@ public:
 
     TinyMT(u32 st[]);
 
+    virtual void AdvanceFrames(int frames);
+
     void NextState();
 
     virtual u32 Nextuint();

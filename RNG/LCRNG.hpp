@@ -35,7 +35,7 @@ public:
 
     LCRNG(u32 add, u32 mult, u32 seed);
 
-    void AdvanceFrames(int frames);
+    virtual void AdvanceFrames(int frames);
 
     u32 Next16Bit();
 

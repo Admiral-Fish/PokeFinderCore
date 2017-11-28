@@ -36,6 +36,8 @@ public:
 
     virtual void Reseed(u64 seed) = 0;
 
+    virtual void AdvanceFrames(int frames) = 0;
+
     virtual ~IRNG64() { }
 
 };

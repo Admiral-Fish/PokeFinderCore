@@ -33,6 +33,8 @@ public:
 
     virtual void Reseed(u32 seed) = 0;
 
+    virtual void AdvanceFrames(int frames) = 0;
+
     virtual ~IRNG() { }
 
 };

@@ -20,6 +20,8 @@ private:
 
     void init(u32 seed);
 
+    void Shuffle();
+
     u32 temperingShiftL(u32 y);
 
     u32 temperingShiftS(u32 y);
@@ -31,6 +33,8 @@ private:
 public:
 
     MersenneTwister(u32 seed);
+
+    virtual void AdvanceFrames(int frames);
 
     virtual u32 Nextuint();
 
@@ -53,9 +57,13 @@ private:
 
     void init(u32 seed);
 
+    void Shuffle();
+
 public:
 
     MersenneTwisterUntempered(u32 seed);
+
+    virtual void AdvanceFrames(int frames);
 
     virtual void Reseed(u32 seed);
 
@@ -82,6 +90,8 @@ private:
 
     void init(u32 seed);
 
+    void Shuffle();
+
     u32 temperingShiftS(u32 y);
 
     u32 temperingShiftT(u32 y);
@@ -91,6 +101,8 @@ private:
 public:
 
     MersenneTwisterFast(u32 seed, int calls);
+
+    virtual void AdvanceFrames(int frames);
 
     virtual u32 Nextuint();
 

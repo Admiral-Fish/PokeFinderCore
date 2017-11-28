@@ -48,7 +48,7 @@ public:
 
     SFMT(u32 seed);
 
-    void AdvanceFrames(int n);
+    virtual void AdvanceFrames(int frames);
 
     virtual u32 Nextuint();
 

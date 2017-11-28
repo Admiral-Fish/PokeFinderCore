@@ -32,9 +32,9 @@ private:
 public:
     u64 seed;
 
-    LCRNG64(u64 add,u64 mult, u64 seed);
+    LCRNG64(u64 add, u64 mult, u64 seed);
 
-    void AdvanceFrames(int frames);
+    virtual void AdvanceFrames(int frames);
 
     u32 Next32Bit();
 

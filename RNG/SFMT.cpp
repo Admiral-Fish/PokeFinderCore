@@ -68,9 +68,9 @@ void SFMT::periodCertificaion()
 }
 
 // Advances by n frames shuffling the correct amount of times
-void SFMT::AdvanceFrames(int n)
+void SFMT::AdvanceFrames(int frames)
 {
-    int temp = index + (n * 2);
+    int temp = index + (frames * 2);
     while (temp >= 624)
     {
         temp -= 624;
@@ -84,7 +84,10 @@ u32 SFMT::Nextuint()
 {
     // Array reshuffle check
     if (index >= N32)
+    {
         Shuffle();
+        index = 0;
+    }
     ++index;
     return getRand();
 }
@@ -94,7 +97,10 @@ u64 SFMT::Nextulong()
 {
     // Array reshuffle check
     if (index >= N32)
+    {
         Shuffle();
+        index = 0;
+    }
     return getRand() | ((u64)getRand() << 32);
 }
 
@@ -125,5 +131,4 @@ void SFMT::Shuffle()
             b = 0;
     }
     while (a < N32);
-    index = 0;
 }

@@ -8,6 +8,16 @@ MersenneTwister::MersenneTwister(u32 seed)
     init(seed);
 }
 
+void MersenneTwister::AdvanceFrames(int frames)
+{
+    index += frames;
+    while (index >= 624)
+    {
+        index -= 624;
+        Shuffle();
+    }
+}
+
 // Initializes
 void MersenneTwister::init(u32 seed)
 {
@@ -15,6 +25,27 @@ void MersenneTwister::init(u32 seed)
 
     for (index = 1; index < N; index++)
         mt[index] = (0x6C078965*(mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
+}
+
+void MersenneTwister::Shuffle()
+{
+    u32 y;
+    int kk = 0;
+
+    for (; kk < 227; ++kk)
+    {
+        y = (mt[kk] & UPPERMASK) | (mt[kk + 1] & LOWERMASK);
+        mt[kk] = mt[kk + M] ^ (y >> 1) ^ mag01[y & 0x1];
+    }
+
+    for (; kk < 623; ++kk)
+    {
+        y = (mt[kk] & UPPERMASK) | (mt[kk + 1] & LOWERMASK);
+        mt[kk] = mt[kk - 227] ^ (y >> 1) ^ mag01[y & 0x1];
+    }
+
+    y = (mt[623] & UPPERMASK) | (mt[0] & LOWERMASK);
+    mt[623] = mt[396] ^ (y >> 1) ^ mag01[y & 0x1];
 }
 
 u32 MersenneTwister::temperingShiftL(u32 y)
@@ -40,32 +71,14 @@ u32 MersenneTwister::temperingShiftU(u32 y)
 // Calls the next psuedo-random number
 u32 MersenneTwister::Nextuint()
 {
-    u32 y;
-
     // Array reshuffle check
     if (index >= N)
     {
-        int kk = 0;
-
-        for (; kk < 227; ++kk)
-        {
-            y = (mt[kk] & UPPERMASK) | (mt[kk + 1] & LOWERMASK);
-            mt[kk] = mt[kk + M] ^ (y >> 1) ^ mag01[y & 0x1];
-        }
-
-        for (; kk < 623; ++kk)
-        {
-            y = (mt[kk] & UPPERMASK) | (mt[kk + 1] & LOWERMASK);
-            mt[kk] = mt[kk - 227] ^ (y >> 1) ^ mag01[y & 0x1];
-        }
-
-        y = (mt[623] & UPPERMASK) | (mt[0] & LOWERMASK);
-        mt[623] = mt[396] ^ (y >> 1) ^ mag01[y & 0x1];
-
+        Shuffle();
         index = 0;
     }
 
-    y = mt[index++];
+    u32 y = mt[index++];
     y ^= temperingShiftU(y);
     y ^= temperingShiftS(y) & TEMPERINGMASKB;
     y ^= temperingShiftT(y) & TEMPERINGMASKC;
@@ -89,6 +102,16 @@ MersenneTwisterUntempered::MersenneTwisterUntempered(u32 seed)
     init(seed);
 }
 
+void MersenneTwisterUntempered::AdvanceFrames(int frames)
+{
+    index += frames;
+    while (index >= 624)
+    {
+        index -= 624;
+        Shuffle();
+    }
+}
+
 // Initializes
 void MersenneTwisterUntempered::init(u32 seed)
 {
@@ -98,30 +121,34 @@ void MersenneTwisterUntempered::init(u32 seed)
         mt[index] = (0x6C078965*(mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
 }
 
+void MersenneTwisterUntempered::Shuffle()
+{
+    int kk = 0;
+    u32 y;
+
+    for (; kk < 227; ++kk)
+    {
+        y = (mt[kk] & UPPERMASK) | (mt[kk + 1] & LOWERMASK);
+        mt[kk] = mt[kk + M] ^ (y >> 1) ^ mag01[y & 0x1];
+    }
+
+    for (; kk < 623; ++kk)
+    {
+        y = (mt[kk] & UPPERMASK) | (mt[kk + 1] & LOWERMASK);
+        mt[kk] = mt[kk - 227] ^ (y >> 1) ^ mag01[y & 0x1];
+    }
+
+    y = (mt[623] & UPPERMASK) | (mt[0] & LOWERMASK);
+    mt[623] = mt[396] ^ (y >> 1) ^ mag01[y & 0x1];
+}
+
 // Calls the next psuedo-random number
 u32 MersenneTwisterUntempered::Nextuint()
 {
     // Array reshuffle check
     if (index >= N)
     {
-        int kk = 0;
-        u32 y;
-
-        for (; kk < 227; ++kk)
-        {
-            y = (mt[kk] & UPPERMASK) | (mt[kk + 1] & LOWERMASK);
-            mt[kk] = mt[kk + M] ^ (y >> 1) ^ mag01[y & 0x1];
-        }
-
-        for (; kk < 623; ++kk)
-        {
-            y = (mt[kk] & UPPERMASK) | (mt[kk + 1] & LOWERMASK);
-            mt[kk] = mt[kk - 227] ^ (y >> 1) ^ mag01[y & 0x1];
-        }
-
-        y = (mt[623] & UPPERMASK) | (mt[0] & LOWERMASK);
-        mt[623] = mt[396] ^ (y >> 1) ^ mag01[y & 0x1];
-
+        Shuffle();
         index = 0;
     }
 
@@ -151,6 +178,11 @@ MersenneTwisterFast::MersenneTwisterFast(u32 seed, int calls)
     init(seed);
 }
 
+void MersenneTwisterFast::AdvanceFrames(int frames)
+{
+
+}
+
 // Initializes
 void MersenneTwisterFast::init(u32 seed)
 {
@@ -158,6 +190,18 @@ void MersenneTwisterFast::init(u32 seed)
 
     for (index = 1; index < max; ++index)
         mt[index] = (0x6C078965*(mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
+}
+
+void MersenneTwisterFast::Shuffle()
+{
+    u32 y;
+    int kk = 0;
+
+    for (; kk < maxCalls; ++kk)
+    {
+        y = (mt[kk] & UPPERMASK) | (mt[kk + 1] & LOWERMASK);
+        mt[kk] = mt[kk + M] ^ (y >> 1) ^ mag01[y & 0x1];
+    }
 }
 
 u32 MersenneTwisterFast::temperingShiftS(u32 y)
@@ -178,23 +222,14 @@ u32 MersenneTwisterFast::temperingShiftU(u32 y)
 // Calls the next psuedo-random number
 u32 MersenneTwisterFast::Nextuint()
 {
-    u32 y;
-
     // Array reshuffle check
     if (index >= max)
     {
-        int kk = 0;
-
-        for (; kk < maxCalls; ++kk)
-        {
-            y = (mt[kk] & UPPERMASK) | (mt[kk + 1] & LOWERMASK);
-            mt[kk] = mt[kk + M] ^ (y >> 1) ^ mag01[y & 0x1];
-        }
-
+        Shuffle();
         index = 0;
     }
 
-    y = mt[index++];
+    u32 y = mt[index++];
     y ^= temperingShiftU(y);
     y ^= temperingShiftS(y) & TEMPERINGMASKB;
     y ^= temperingShiftT(y) & TEMPERINGMASKC2;
