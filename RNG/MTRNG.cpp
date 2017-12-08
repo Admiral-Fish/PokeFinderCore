@@ -180,7 +180,12 @@ MersenneTwisterFast::MersenneTwisterFast(u32 seed, int calls)
 
 void MersenneTwisterFast::AdvanceFrames(int frames)
 {
-
+	index += frames;
+    while (index >= max)
+    {
+        index -= max;
+        Shuffle();
+    }
 }
 
 // Initializes
