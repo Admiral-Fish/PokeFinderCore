@@ -44,6 +44,8 @@ private:
 
     vector<FrameGen3> generateMethod124(FrameCompare compare);
 
+    void Refill();
+
 public:
 
     GeneratorGen3();

@@ -61,11 +61,11 @@ vector<FrameGen3> GeneratorGen3::generateMethodChannel(FrameCompare compare)
             frame.SetPID(rngList[1] ^ 0x8000, rngList[2]);
         else
             frame.SetPID(rngList[1], rngList[2]);
-        if (!compare.CompareFramePID(frame))
+        if (!compare.ComparePID(frame))
             continue;
 
         frame.SetIVsManual(rngList[6] >> 11, rngList[7] >> 11, rngList[8] >> 11, rngList[10] >> 11, rngList[11] >> 11, rngList[9] >> 11);
-        if (!compare.CompareFrameIVs(frame))
+        if (!compare.CompareIVs(frame))
             continue;
 
         frame.frame = cnt;
@@ -82,7 +82,7 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124(FrameCompare compare)
     vector<FrameGen3> frames;
     FrameGen3 frame = FrameGen3(tid, sid, psv);
 
-    for (int i = 0; i < 1100; i++)
+    for (int i = 0; i < 20; i++)
         rngList.push_back(rng.Next16Bit());
 
     u32 max = initialFrame + maxResults;
@@ -95,10 +95,14 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124(FrameCompare compare)
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Grab the hunt nature
         frame.nature = rngList[++hunt] % 25;
+        if (!compare.CompareNature(frame))
+            continue;
 
         // Now search for a Method 124 PID that matches our hunt nature
         do
         {
+            if (hunt >= rngList.size())
+                Refill();
             pid2 = rngList[++hunt];
             pid1 = rngList[++hunt];
             pid = (pid1 << 16) | pid2;
@@ -107,11 +111,11 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124(FrameCompare compare)
 
         // Valid PID is found now time to generate IVs
         frame.SetIVs(rngList[hunt + iv1], rngList[hunt + iv2]);
-        if (!compare.CompareFrameIVs(frame))
+        if (!compare.CompareIVs(frame))
             continue;
 
         frame.SetPID(pid, pid1, pid2);
-        if (!compare.CompareFramePID(frame))
+        if (!compare.ComparePID(frame))
             continue;
 
         frame.frame = cnt;
@@ -129,7 +133,7 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124Synch(FrameCompare compare)
     vector<FrameGen3> frames;
     FrameGen3 frame = FrameGen3(tid, sid, psv);
 
-    for (int i = 0; i < 1200; i++)
+    for (int i = 0; i < 20; i++)
         rngList.push_back(rng.Next16Bit());
 
     u32 max = initialFrame + maxResults;
@@ -152,10 +156,14 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124Synch(FrameCompare compare)
             // Synch failed so grab hunt nature from next RNG call
             frame.nature = rngList[++hunt] % 25;
         }
+        if (!compare.CompareNature(frame))
+            continue;
 
         // Now search for a Method 124 PID that matches our hunt nature
         do
         {
+            if (hunt >= rngList.size())
+                Refill();
             pid2 = rngList[++hunt];
             pid1 = rngList[++hunt];
             pid = (pid1 << 16) | pid2;
@@ -164,11 +172,11 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124Synch(FrameCompare compare)
 
         // Valid PID is found now time to generate IVs
         frame.SetIVs(rngList[hunt + iv1], rngList[hunt + iv2]);
-        if (!compare.CompareFrameIVs(frame))
+        if (!compare.CompareIVs(frame))
             continue;
 
         frame.SetPID(pid, pid1, pid2);
-        if (!compare.CompareFramePID(frame))
+        if (!compare.ComparePID(frame))
             continue;
 
         frame.frame = cnt;
@@ -234,7 +242,7 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare compar
     vector<FrameGen3> frames;
     FrameGen3 frame = FrameGen3(tid, sid, psv);
 
-    for (int i = 0; i < 2500; i++)
+    for (int i = 0; i < 20; i++)
         rngList.push_back(rng.Next16Bit());
 
     u32 max = initialFrame + maxResults;
@@ -282,6 +290,8 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare compar
         // Cute charm uses first call
         // Call next RNG to determine hunt nature
         frame.nature = rngList[++hunt] % 25;
+        if (compare.CompareNature(frame))
+            continue;
 
         // Check if cute charm will effect frame
         if (first % 3 > 0)
@@ -289,6 +299,8 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare compar
             // Now search for a Method 124 PID that matches our hunt nature and cute charm
             do
             {
+                if (hunt >= rngList.size())
+                    Refill();
                 pid2 = rngList[++hunt];
                 pid1 = rngList[++hunt];
                 pid = (pid1 << 16) | pid2;
@@ -301,6 +313,8 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare compar
             // Only search for a Method 124 PID that matches our hunt nature
             do
             {
+                if (hunt > rngList.size())
+                    Refill();
                 pid2 = rngList[++hunt];
                 pid1 = rngList[++hunt];
                 pid = (pid1 << 16) | pid2;
@@ -310,11 +324,11 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare compar
 
         // Valid PID is found now time to generate IVs
         frame.SetIVs(rngList[hunt + iv1], rngList[hunt + iv2]);
-        if (!compare.CompareFrameIVs(frame))
+        if (!compare.CompareIVs(frame))
             continue;
 
         frame.SetPID(pid, pid1, pid2);
-        if (!compare.CompareFramePID(frame))
+        if (!compare.ComparePID(frame))
             continue;
 
         frame.frame = cnt;
@@ -341,11 +355,11 @@ vector<FrameGen3> GeneratorGen3::generateMethodXDColo(FrameCompare compare)
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
     {
         frame.SetPID(rngList[3], rngList[4]);
-        if (!compare.CompareFramePID(frame))
+        if (!compare.ComparePID(frame))
             continue;
 
         frame.SetIVs(rngList[0], rngList[1]);
-        if (!compare.CompareFrameIVs(frame))
+        if (!compare.CompareIVs(frame))
             continue;
 
         frame.frame = cnt;
@@ -372,11 +386,11 @@ vector<FrameGen3> GeneratorGen3::generateMethod124(FrameCompare compare)
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
     {
         frame.SetPID(rngList[1], rngList[0]);
-        if (!compare.CompareFramePID(frame))
+        if (!compare.ComparePID(frame))
             continue;
 
         frame.SetIVs(rngList[iv1], rngList[iv2]);
-        if (!compare.CompareFrameIVs(frame))
+        if (!compare.CompareIVs(frame))
             continue;
 
         frame.frame = cnt;
@@ -385,6 +399,12 @@ vector<FrameGen3> GeneratorGen3::generateMethod124(FrameCompare compare)
     rngList.clear();
 
     return frames;
+}
+
+void GeneratorGen3::Refill()
+{
+    for (int i = 0; i < 20; i++)
+        rngList.push_back(rng.Next16Bit());
 }
 
 // Determines what generational method to return

@@ -34,6 +34,13 @@ FrameCompare::FrameCompare( int hpEvalIndex,    int hpNum,
                             bool skipCompare
                           )
 {
+    for (int i = 0; i < 25; i++)
+    {
+        if (i < 16)
+            powers[i] = true;
+        natures[i] = true;
+    }
+
     hp[0] = (u32)hpEvalIndex;
     hp[1] = (u32)hpNum;
     atk[0] = (u32)atkEvalIndex;
@@ -51,19 +58,25 @@ FrameCompare::FrameCompare( int hpEvalIndex,    int hpNum,
     genderRatio = (u32)genderRatioIndex;
     ability = (u32)abilityIndex;
 
-    for(u32 i = 1; i < 26; i++)
-        if(natureBox->model()->data(natureBox->model()->index(i, 0), Qt::CheckStateRole).toBool())
-            natures.push_back(Nature::GetAdjustedNature(i - 1));
+    if (natureBox->currentText() != QObject::tr("Any"))
+    {
+        for(u32 i = 1; i < 26; i++)
+            if(!natureBox->model()->data(natureBox->model()->index(i, 0), Qt::CheckStateRole).toBool())
+                natures[Nature::GetAdjustedNature(i - 1)] = false;
+    }
 
-    for(u32 i = 1; i < 17; i++)
-        if(hiddenPowerBox->model()->data(hiddenPowerBox->model()->index(i, 0), Qt::CheckStateRole).toBool())
-            powers.push_back(i - 1);
+    if (hiddenPowerBox->currentText() != QObject::tr("Any"))
+    {
+        for(u32 i = 1; i < 17; i++)
+            if(!hiddenPowerBox->model()->data(hiddenPowerBox->model()->index(i, 0), Qt::CheckStateRole).toBool())
+                powers[(i - 1)] = false;
+    }
 
     shiny = onlyShiny;
     skip = skipCompare;
 }
 
-bool FrameCompare::CompareFramePID(Frame frame)
+bool FrameCompare::ComparePID(Frame frame)
 {
     if (skip)
         return true;
@@ -166,18 +179,18 @@ bool FrameCompare::CompareFramePID(Frame frame)
     if(ability != 0 && ability - 1 != frame.ability)
         return false;
 
-    if(natures.size() != 0 && find(natures.begin(), natures.end(), frame.nature) == natures.end())
+    if(!natures[frame.nature])
         return false;
 
     return true;
 }
 
-bool FrameCompare::CompareFrameIVs(Frame frame)
+bool FrameCompare::CompareIVs(Frame frame)
 {
     if (skip)
         return true;
 
-    if(powers.size() != 0 && find(powers.begin(), powers.end(), frame.hidden) == powers.end())
+    if(!powers[frame.hidden])
         return false;
 
     switch(hp[0])
@@ -311,6 +324,14 @@ bool FrameCompare::CompareFrameIVs(Frame frame)
         default:
             break;
     }
+
+    return true;
+}
+
+bool FrameCompare::CompareNature(Frame frame)
+{
+    if(!natures[frame.nature])
+        return false;
 
     return true;
 }
