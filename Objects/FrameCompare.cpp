@@ -330,8 +330,5 @@ bool FrameCompare::CompareIVs(Frame frame)
 
 bool FrameCompare::CompareNature(Frame frame)
 {
-    if(!natures[frame.nature])
-        return false;
-
-    return true;
+    return natures[frame.nature];
 }
