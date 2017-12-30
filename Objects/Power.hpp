@@ -21,7 +21,6 @@
 #define POWER_HPP
 #include <QString>
 #include <QTranslator>
-#include <vector>
 
 using namespace std;
 
@@ -30,7 +29,7 @@ class Power
 
 public:
 
-    static vector<QString> GetPowers();
+    static QStringList GetPowers();
 
 };
 

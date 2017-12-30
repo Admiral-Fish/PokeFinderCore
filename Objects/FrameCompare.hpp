@@ -44,14 +44,18 @@ private:
     u32 gender;
     u32 genderRatio;
     u32 ability;
-    bool natures[25];
-    bool powers[25];
+    vector<bool> natures;
+    vector<bool> powers;
 
     bool shiny;
     bool skip;
 
 public:
-    FrameCompare(int hpEvalIndex, int hpNum, int atkEvalIndex, int atkNum, int defEvalIndex, int defNum, int spaEvalIndex, int spaNum, int spdEvalIndex, int spdNum, int speEvalIndex, int speNum, int genderIndex, int genderRatioIndex, int abilityIndex, QComboBox *natureBox, QComboBox *hiddenPowerBox, bool onlyShiny, bool skipCompare);
+    FrameCompare(int hpEvalIndex, int hpNum, int atkEvalIndex, int atkNum,
+                 int defEvalIndex, int defNum, int spaEvalIndex, int spaNum,
+                 int spdEvalIndex, int spdNum, int speEvalIndex, int speNum,
+                 int genderIndex, int genderRatioIndex, int abilityIndex,
+                 vector<bool> nature, vector<bool> power, bool onlyShiny, bool skipCompare);
 
     bool ComparePID(Frame frame);
 

@@ -19,28 +19,12 @@
 
 #include "FrameCompare.hpp"
 
-FrameCompare::FrameCompare( int hpEvalIndex,    int hpNum,
-                            int atkEvalIndex,   int atkNum,
-                            int defEvalIndex,   int defNum,
-                            int spaEvalIndex,   int spaNum,
-                            int spdEvalIndex,   int spdNum,
-                            int speEvalIndex,   int speNum,
-                            int genderIndex,
-                            int genderRatioIndex,
-                            int abilityIndex,
-                            QComboBox *natureBox,
-                            QComboBox *hiddenPowerBox,
-                            bool onlyShiny,
-                            bool skipCompare
-                          )
+FrameCompare::FrameCompare(int hpEvalIndex, int hpNum, int atkEvalIndex, int atkNum,
+                           int defEvalIndex, int defNum, int spaEvalIndex, int spaNum,
+                           int spdEvalIndex, int spdNum, int speEvalIndex, int speNum,
+                           int genderIndex, int genderRatioIndex, int abilityIndex,
+                           vector<bool> nature, vector<bool> power, bool onlyShiny, bool skipCompare)
 {
-    for (int i = 0; i < 25; i++)
-    {
-        if (i < 16)
-            powers[i] = true;
-        natures[i] = true;
-    }
-
     hp[0] = (u32)hpEvalIndex;
     hp[1] = (u32)hpNum;
     atk[0] = (u32)atkEvalIndex;
@@ -58,19 +42,12 @@ FrameCompare::FrameCompare( int hpEvalIndex,    int hpNum,
     genderRatio = (u32)genderRatioIndex;
     ability = (u32)abilityIndex;
 
-    if (natureBox->currentText() != QObject::tr("Any"))
+    natures.resize(25);
+    for (auto i = 0; i < nature.size(); i++)
     {
-        for(u32 i = 1; i < 26; i++)
-            if(!natureBox->model()->data(natureBox->model()->index(i, 0), Qt::CheckStateRole).toBool())
-                natures[Nature::GetAdjustedNature(i - 1)] = false;
+        natures[Nature::GetAdjustedNature(i)] = nature[i];
     }
-
-    if (hiddenPowerBox->currentText() != QObject::tr("Any"))
-    {
-        for(u32 i = 1; i < 17; i++)
-            if(!hiddenPowerBox->model()->data(hiddenPowerBox->model()->index(i, 0), Qt::CheckStateRole).toBool())
-                powers[(i - 1)] = false;
-    }
+    powers = power;
 
     shiny = onlyShiny;
     skip = skipCompare;
