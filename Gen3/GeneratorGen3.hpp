@@ -31,6 +31,7 @@ private:
     int iv1;
     int iv2;
     LCRNG rng = PokeRNG(0);
+    u32 size;
 
     vector<FrameGen3> generateMethodChannel(FrameCompare compare);
 
