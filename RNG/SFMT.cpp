@@ -35,6 +35,7 @@ void SFMT::init(u32 seed)
 
     periodCertificaion();
     Shuffle();
+    index = 0;
 }
 
 // Verify internal state vector
