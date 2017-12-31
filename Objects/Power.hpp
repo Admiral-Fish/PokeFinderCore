@@ -29,7 +29,7 @@ class Power
 
 public:
 
-    static QStringList GetPowers();
+    static vector<QString> GetPowers();
 
 };
 

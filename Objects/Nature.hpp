@@ -21,6 +21,7 @@
 #define NATURE_HPP
 #include <QString>
 #include <QTranslator>
+#include <vector>
 #include <cstdint>
 
 using namespace std;
@@ -31,9 +32,9 @@ class Nature
 
 public:
 
-    static QStringList GetNatures();
+    static vector<QString> GetNatures();
 
-    static QStringList GetFrameNatures();
+    static vector<QString> GetFrameNatures();
 
     static u32 GetAdjustedNature(u32 nature);
 

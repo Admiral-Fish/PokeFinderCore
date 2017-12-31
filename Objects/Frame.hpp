@@ -27,6 +27,7 @@
 #include <libPokeFinder/Objects/Power.hpp>
 #include <QString>
 #include <cstdint>
+#include <vector>
 
 using namespace std;
 typedef uint32_t u32;
@@ -34,9 +35,9 @@ typedef uint32_t u32;
 class Frame
 {
 protected:
-    QStringList natures = Nature::GetFrameNatures();
+    vector<QString> natures = Nature::GetFrameNatures();
 
-    QStringList powers = Power::GetPowers();
+    vector<QString> powers = Power::GetPowers();
 
 public:
     u32 ivs[6];
