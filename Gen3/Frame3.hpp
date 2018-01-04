@@ -17,13 +17,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef FRAMEGEN3_HPP
-#define FRAMEGEN3_HPP
+#ifndef FRAME3_HPP
+#define FRAME3_HPP
 #include <libPokeFinder/Objects/Frame.hpp>
 #include <QList>
 #include <QStandardItem>
 
-class FrameGen3: public Frame
+class Frame3: public Frame
 {
 
 private:
@@ -41,7 +41,7 @@ public:
     u32 par2;
     u32 par3;
 
-    FrameGen3(u32 tid, u32 sid, u32 psv);
+    Frame3(u32 tid, u32 sid, u32 psv);
 
     QString GetTime();
 
@@ -53,4 +53,4 @@ public:
 
 };
 
-#endif // FRAMEGEN3_HPP
+#endif // FRAME3_HPP

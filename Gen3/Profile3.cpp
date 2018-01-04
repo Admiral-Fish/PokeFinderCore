@@ -17,9 +17,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "ProfileGen3.hpp"
+#include "Profile3.hpp"
 
-ProfileGen3::ProfileGen3(QString profileName, int version, u32 tid, u32 sid, int language, bool deadBattery, bool valid)
+Profile3::Profile3(QString profileName, int version, u32 tid, u32 sid, int language, bool deadBattery, bool valid)
 {
     this->profileName = profileName;
     this->version = version;
@@ -31,7 +31,7 @@ ProfileGen3::ProfileGen3(QString profileName, int version, u32 tid, u32 sid, int
 
 }
 
-void ProfileGen3::deleteProfile()
+void Profile3::deleteProfile()
 {
     bool exists = false;
     QDomDocument doc;
@@ -87,7 +87,7 @@ void ProfileGen3::deleteProfile()
 
 }
 
-void ProfileGen3::saveProfile()
+void Profile3::saveProfile()
 {
     bool exists = false;
     QDomDocument doc;
@@ -216,7 +216,7 @@ void ProfileGen3::saveProfile()
     }
 }
 
-ProfileGen3& ProfileGen3::loadProfile(QString profileName)
+Profile3& Profile3::loadProfile(QString profileName)
 {
     int version;
     int language;
@@ -297,12 +297,12 @@ ProfileGen3& ProfileGen3::loadProfile(QString profileName)
 
         file.close();
     }
-    static ProfileGen3 profile(profileName, version, tid, sid, language, deadBattery, exists);
+    static Profile3 profile(profileName, version, tid, sid, language, deadBattery, exists);
     return profile;
 
 }
 
-vector<QList<QStandardItem *>>& ProfileGen3::loadProfiles()
+vector<QList<QStandardItem *>>& Profile3::loadProfiles()
 {
     static vector<QList<QStandardItem *>> profileList;
 
@@ -400,9 +400,9 @@ vector<QList<QStandardItem *>>& ProfileGen3::loadProfiles()
     return profileList;
 }
 
-vector<ProfileGen3>& ProfileGen3::loadProfileList()
+vector<Profile3>& Profile3::loadProfileList()
 {
-    static vector<ProfileGen3> profileList;
+    static vector<Profile3> profileList;
     profileList.clear();
 
     bool pass;
@@ -463,7 +463,7 @@ vector<ProfileGen3>& ProfileGen3::loadProfileList()
                         }
                     }
 
-                    ProfileGen3 profile(profileName, version, tid.toUInt(&pass, 10), sid.toUInt(&pass, 10), language, deadBattery, true);
+                    Profile3 profile(profileName, version, tid.toUInt(&pass, 10), sid.toUInt(&pass, 10), language, deadBattery, true);
 
                     profileList.push_back(profile);
 
@@ -478,7 +478,7 @@ vector<ProfileGen3>& ProfileGen3::loadProfileList()
     return profileList;
 }
 
-QString ProfileGen3::getVersion(int i)
+QString Profile3::getVersion(int i)
 {
     switch(i)
     {
@@ -501,7 +501,7 @@ QString ProfileGen3::getVersion(int i)
     }
 }
 
-QString ProfileGen3::getLanguage(int i)
+QString Profile3::getLanguage(int i)
 {
     switch(i)
     {
@@ -522,7 +522,7 @@ QString ProfileGen3::getLanguage(int i)
     }
 }
 
-int ProfileGen3::getVersionIndex(QString s)
+int Profile3::getVersionIndex(QString s)
 {
     if(s.toLower() == QObject::tr("Ruby").toLower())
     {
@@ -558,7 +558,7 @@ int ProfileGen3::getVersionIndex(QString s)
     }
 }
 
-int ProfileGen3::getLanguageIndex(QString s)
+int Profile3::getLanguageIndex(QString s)
 {
     if(s.toLower() == "eng")
     {

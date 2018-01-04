@@ -17,10 +17,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "GeneratorGen3.hpp"
+#include "Generator3.hpp"
 
 // Default constructor
-GeneratorGen3::GeneratorGen3()
+Generator3::Generator3()
 {
     maxResults = 100000;
     initialFrame = 1;
@@ -31,7 +31,7 @@ GeneratorGen3::GeneratorGen3()
 }
 
 // Constructor given user defined parameters
-GeneratorGen3::GeneratorGen3(u32 maxResults, u32 initialFrame, u32 initialSeed, u32 tid, u32 sid, u32 offset)
+Generator3::Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u32 tid, u32 sid, u32 offset)
 {
     this->maxResults = maxResults;
     this->initialFrame = initialFrame;
@@ -43,10 +43,10 @@ GeneratorGen3::GeneratorGen3(u32 maxResults, u32 initialFrame, u32 initialSeed, 
 }
 
 // Returns vector of frames for Method Channel
-vector<FrameGen3> GeneratorGen3::generateMethodChannel(FrameCompare compare)
+vector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
 {
-    vector<FrameGen3> frames;
-    FrameGen3 frame = FrameGen3(tid, sid, psv);
+    vector<Frame3> frames;
+    Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 12; i++)
         rngList.push_back(rng.Next16Bit());
@@ -77,10 +77,10 @@ vector<FrameGen3> GeneratorGen3::generateMethodChannel(FrameCompare compare)
 }
 
 // Returns vector of frames for Method H 1, 2, or 4
-vector<FrameGen3> GeneratorGen3::generateMethodH124(FrameCompare compare)
+vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
 {
-    vector<FrameGen3> frames;
-    FrameGen3 frame = FrameGen3(tid, sid, psv);
+    vector<Frame3> frames;
+    Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 20; i++)
         rngList.push_back(rng.Next16Bit());
@@ -132,10 +132,10 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124(FrameCompare compare)
 }
 
 // Returns vector of frames for Method H 1, 2, or 4 given synch lead
-vector<FrameGen3> GeneratorGen3::generateMethodH124Synch(FrameCompare compare)
+vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
 {
-    vector<FrameGen3> frames;
-    FrameGen3 frame = FrameGen3(tid, sid, psv);
+    vector<Frame3> frames;
+    Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 20; i++)
         rngList.push_back(rng.Next16Bit());
@@ -245,10 +245,10 @@ bool cuteCharm25M(u32 pid)
 }
 
 // Returns vector of frames for Method H 1, 2, or 4 given cute charm lead
-vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare compare)
+vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
 {
-    vector<FrameGen3> frames;
-    FrameGen3 frame = FrameGen3(tid, sid, psv);
+    vector<Frame3> frames;
+    Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 20; i++)
         rngList.push_back(rng.Next16Bit());
@@ -353,10 +353,10 @@ vector<FrameGen3> GeneratorGen3::generateMethodH124CuteCharm(FrameCompare compar
 }
 
 // Returns vector of frames for Method XD/Colo
-vector<FrameGen3> GeneratorGen3::generateMethodXDColo(FrameCompare compare)
+vector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
 {
-    vector<FrameGen3> frames;
-    FrameGen3 frame = FrameGen3(tid, sid, psv);
+    vector<Frame3> frames;
+    Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 5; i++)
         rngList.push_back(rng.Next16Bit());
@@ -382,10 +382,10 @@ vector<FrameGen3> GeneratorGen3::generateMethodXDColo(FrameCompare compare)
 }
 
 // Returns vector of frames for Method 1, 2, or 4
-vector<FrameGen3> GeneratorGen3::generateMethod124(FrameCompare compare)
+vector<Frame3> Generator3::generateMethod124(FrameCompare compare)
 {
-    vector<FrameGen3> frames;
-    FrameGen3 frame = FrameGen3(tid, sid, psv);
+    vector<Frame3> frames;
+    Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 5; i++)
         rngList.push_back(rng.Next16Bit());
@@ -413,7 +413,7 @@ vector<FrameGen3> GeneratorGen3::generateMethod124(FrameCompare compare)
     return frames;
 }
 
-void GeneratorGen3::Refill()
+void Generator3::Refill()
 {
     for (int i = 0; i < 20; i++)
         rngList.push_back(rng.Next16Bit());
@@ -421,7 +421,7 @@ void GeneratorGen3::Refill()
 }
 
 // Determines what generational method to return
-vector<FrameGen3> GeneratorGen3::Generate(FrameCompare compare)
+vector<Frame3> Generator3::Generate(FrameCompare compare)
 {
     if (frameType == XDColo || frameType == Channel)
         rng = XDRNG(initialSeed);

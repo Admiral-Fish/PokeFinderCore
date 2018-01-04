@@ -17,27 +17,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PROFILEGEN3_HPP
-#define PROFILEGEN3_HPP
+#ifndef PROFILE3_HPP
+#define PROFILE3_HPP
 
 #include <libPokeFinder/Objects/Profile.hpp>
 #include <QList>
 #include <QStandardItemModel>
 
-class ProfileGen3 : public Profile
+class Profile3 : public Profile
 {
 public:
-    ProfileGen3(QString profileName, int version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);
+    Profile3(QString profileName, int version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);
 
     void saveProfile();
 
     void deleteProfile();
 
-    static ProfileGen3& loadProfile(QString profileName);
+    static Profile3& loadProfile(QString profileName);
 
     static vector<QList<QStandardItem *>>& loadProfiles();
 
-    static vector<ProfileGen3>& loadProfileList();
+    static vector<Profile3>& loadProfileList();
 
     static QString getVersion(int i);
 
@@ -53,4 +53,4 @@ public:
 
 };
 
-#endif // PROFILEGEN3_HPP
+#endif // PROFILE3_HPP

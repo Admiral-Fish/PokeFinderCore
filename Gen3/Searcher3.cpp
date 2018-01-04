@@ -17,10 +17,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "SearcherGen3.hpp"
+#include "Searcher3.hpp"
 
 // Default constructor
-SearcherGen3::SearcherGen3()
+Searcher3::Searcher3()
 {
     tid = 12345;
     sid = 54321;
@@ -29,7 +29,7 @@ SearcherGen3::SearcherGen3()
 }
 
 // Constructor given user defined parameters
-SearcherGen3::SearcherGen3(uint tid, uint sid)
+Searcher3::Searcher3(uint tid, uint sid)
 {
     this->tid = tid;
     this->sid = sid;
@@ -38,9 +38,9 @@ SearcherGen3::SearcherGen3(uint tid, uint sid)
 }
 
 // Returns vector of frames for Channel Method
-vector<FrameGen3> SearcherGen3::searchMethodChannel(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethodChannel(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
-    vector<FrameGen3> frames;
+    vector<Frame3> frames;
 
     vector<uint> seeds = euclidean.RecoverLower27BitsChannel(hp, atk, def, spa, spd, spe);
     int size = seeds.size();
@@ -70,9 +70,9 @@ vector<FrameGen3> SearcherGen3::searchMethodChannel(uint hp, uint atk, uint def,
 }
 
 // Returns vector of frames for Method Colo Shadows
-vector<FrameGen3> SearcherGen3::searchMethodColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethodColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
-    vector<FrameGen3> frames;
+    vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -104,9 +104,9 @@ vector<FrameGen3> SearcherGen3::searchMethodColo(uint hp, uint atk, uint def, ui
 }
 
 // Returns vector of frames for Method H1
-vector<FrameGen3> SearcherGen3::searchMethodH1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethodH1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
-    vector<FrameGen3> frames;
+    vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -194,9 +194,9 @@ vector<FrameGen3> SearcherGen3::searchMethodH1(uint hp, uint atk, uint def, uint
 }
 
 // Returns vector of frames for Method H2
-vector<FrameGen3> SearcherGen3::searchMethodH2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethodH2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
-    vector<FrameGen3> frames;
+    vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -285,9 +285,9 @@ vector<FrameGen3> SearcherGen3::searchMethodH2(uint hp, uint atk, uint def, uint
 }
 
 // Returns vector of frames for Method H4
-vector<FrameGen3> SearcherGen3::searchMethodH4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethodH4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
-    vector<FrameGen3> frames;
+    vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -376,9 +376,9 @@ vector<FrameGen3> SearcherGen3::searchMethodH4(uint hp, uint atk, uint def, uint
 }
 
 // Returns vector of frames for Method Gales Shadows
-vector<FrameGen3> SearcherGen3::searchMethodXD(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethodXD(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
-    vector<FrameGen3> frames;
+    vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -409,9 +409,9 @@ vector<FrameGen3> SearcherGen3::searchMethodXD(uint hp, uint atk, uint def, uint
 }
 
 // Return vector of frames for Method XDColo
-vector<FrameGen3> SearcherGen3::searchMethodXDColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethodXDColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
-    vector<FrameGen3> frames;
+    vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -441,9 +441,9 @@ vector<FrameGen3> SearcherGen3::searchMethodXDColo(uint hp, uint atk, uint def, 
 }
 
 // Returns vector of frames for Method 1
-vector<FrameGen3> SearcherGen3::searchMethod1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethod1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
-    vector<FrameGen3> frames;
+    vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -473,9 +473,9 @@ vector<FrameGen3> SearcherGen3::searchMethod1(uint hp, uint atk, uint def, uint 
 }
 
 // Returns vector of frames for Method 2
-vector<FrameGen3> SearcherGen3::searchMethod2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethod2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
-    vector<FrameGen3> frames;
+    vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -506,9 +506,9 @@ vector<FrameGen3> SearcherGen3::searchMethod2(uint hp, uint atk, uint def, uint 
 }
 
 // Returns vector of frames for Method 4
-vector<FrameGen3> SearcherGen3::searchMethod4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethod4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
-    vector<FrameGen3> frames;
+    vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -538,7 +538,7 @@ vector<FrameGen3> SearcherGen3::searchMethod4(uint hp, uint atk, uint def, uint 
 }
 
 // Determines which generational method to return
-vector<FrameGen3> SearcherGen3::Search(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::Search(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
     if (frameType == XDColo || frameType == Channel || frameType == XD || frameType == Colo)
     {
@@ -589,7 +589,7 @@ vector<FrameGen3> SearcherGen3::Search(uint hp, uint atk, uint def, uint spa, ui
 }
 
 // Switches cache or euclidean to user defined method
-void SearcherGen3::SetMethod(Method frameType)
+void Searcher3::SetMethod(Method frameType)
 {
     switch (frameType)
     {

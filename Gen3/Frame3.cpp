@@ -17,9 +17,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "FrameGen3.hpp"
+#include "Frame3.hpp"
 
-FrameGen3::FrameGen3(u32 tid, u32 sid, u32 psv)
+Frame3::Frame3(u32 tid, u32 sid, u32 psv)
 {
     this->tid = tid;
     this->sid = sid;
@@ -27,7 +27,7 @@ FrameGen3::FrameGen3(u32 tid, u32 sid, u32 psv)
 }
 
 // Returns real time for a given frame
-QString FrameGen3::GetTime()
+QString Frame3::GetTime()
 {
     int32_t seconds = frame / 60;
     int32_t milliseconds = ((frame % 60) * 100) / 60;
@@ -46,7 +46,7 @@ QString FrameGen3::GetTime()
 }
 
 // Change the tid/sid (mostly used for Channel)
-void FrameGen3::SetIDs(u32 tid, u32 sid, u32 psv)
+void Frame3::SetIDs(u32 tid, u32 sid, u32 psv)
 {
     this->tid = tid;
     this->sid = sid;
@@ -54,7 +54,7 @@ void FrameGen3::SetIDs(u32 tid, u32 sid, u32 psv)
 }
 
 // Sets IVs for either Channel method or manual input and calculates characteristics based on IVs
-void FrameGen3::SetIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6)
+void Frame3::SetIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6)
 {
     ivs[0] = iv1;
     ivs[1] = iv2;
@@ -66,7 +66,7 @@ void FrameGen3::SetIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv
     power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
 }
 
-QList<QStandardItem *> FrameGen3::GetTableRow(int genderRatioIndex)
+QList<QStandardItem *> Frame3::GetTableRow(int genderRatioIndex)
 {
     QList<QStandardItem *> row;
     row.append(new QStandardItem(QString::number(frame)));

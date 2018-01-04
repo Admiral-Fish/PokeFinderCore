@@ -17,14 +17,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef GENERATORGEN3_HPP
-#define GENERATORGEN3_HPP
-#include <libPokeFinder/Gen3/FrameGen3.hpp>
+#ifndef GENERATOR3_HPP
+#define GENERATOR3_HPP
+#include <libPokeFinder/Gen3/Frame3.hpp>
 #include <libPokeFinder/Objects/Generator.hpp>
 #include <libPokeFinder/Objects/FrameCompare.hpp>
 #include <libPokeFinder/RNG/LCRNG.hpp>
 
-class GeneratorGen3: public Generator
+class Generator3: public Generator
 {
 
 private:
@@ -33,28 +33,28 @@ private:
     LCRNG rng = PokeRNG(0);
     u32 size;
 
-    vector<FrameGen3> generateMethodChannel(FrameCompare compare);
+    vector<Frame3> generateMethodChannel(FrameCompare compare);
 
-    vector<FrameGen3> generateMethodH124(FrameCompare compare);
+    vector<Frame3> generateMethodH124(FrameCompare compare);
 
-    vector<FrameGen3> generateMethodH124Synch(FrameCompare compare);
+    vector<Frame3> generateMethodH124Synch(FrameCompare compare);
 
-    vector<FrameGen3> generateMethodH124CuteCharm(FrameCompare compare);
+    vector<Frame3> generateMethodH124CuteCharm(FrameCompare compare);
 
-    vector<FrameGen3> generateMethodXDColo(FrameCompare compare);
+    vector<Frame3> generateMethodXDColo(FrameCompare compare);
 
-    vector<FrameGen3> generateMethod124(FrameCompare compare);
+    vector<Frame3> generateMethod124(FrameCompare compare);
 
     void Refill();
 
 public:
 
-    GeneratorGen3();
+    Generator3();
 
-    GeneratorGen3(u32 maxResults, u32 initialFrame, u32 initialSeed, u32 tid, u32 sid, u32 offset);
+    Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u32 tid, u32 sid, u32 offset);
 
-    vector<FrameGen3> Generate(FrameCompare compare);
+    vector<Frame3> Generate(FrameCompare compare);
 
 };
 
-#endif // GENERATORGEN3_HPP
+#endif // GENERATOR3_HPP
