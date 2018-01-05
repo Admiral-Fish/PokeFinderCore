@@ -32,21 +32,19 @@ typedef uint32_t u32;
 
 class FrameCompare
 {
-private:
 
+private:
     uint hp[2];
     u32 atk[2];
     u32 def[2];
     u32 spa[2];
     u32 spd[2];
     u32 spe[2];
-
     u32 gender;
     u32 genderRatio;
     u32 ability;
     vector<bool> natures;
     vector<bool> powers;
-
     bool shiny;
     bool skip;
 
@@ -56,11 +54,8 @@ public:
                  int spdEvalIndex, int spdNum, int speEvalIndex, int speNum,
                  int genderIndex, int genderRatioIndex, int abilityIndex,
                  vector<bool> nature, vector<bool> power, bool onlyShiny, bool skipCompare);
-
     bool ComparePID(Frame frame);
-
     bool CompareIVs(Frame frame);
-
     bool CompareNature(Frame frame);
 
 };

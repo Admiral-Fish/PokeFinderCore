@@ -43,18 +43,18 @@ Generator3::Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u32 ti
 }
 
 // Returns vector of frames for Method Channel
-vector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
+vector<Frame3> Generator3::GenerateMethodChannel(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 12; i++)
-        rngList.push_back(rng.Next16Bit());
+        rngList.push_back(rng.Nextushort());
 
     // Method Channel [SEED] [SID] [PID] [PID] [BERRY] [GAME ORIGIN] [OT GENDER] [IV] [IV] [IV] [IV] [IV] [IV]
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Nextushort()))
     {
         frame.SetIDs(40122, rngList[0], 40122 ^ rngList[0]);
         if ((rngList[2] > 7 ? 0 : 1) != (rngList[1] ^ 40122 ^ rngList[0]))
@@ -77,18 +77,18 @@ vector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
 }
 
 // Returns vector of frames for Method H 1, 2, or 4
-vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
+vector<Frame3> Generator3::GenerateMethodH124(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.Next16Bit());
+        rngList.push_back(rng.Nextushort());
     size = 18;
 
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Nextushort()))
     {
         hunt = 0;
         frame.encounterSlot = EncounterSlot::HSlot(rngList[hunt++], encounterType);
@@ -132,18 +132,18 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
 }
 
 // Returns vector of frames for Method H 1, 2, or 4 given synch lead
-vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
+vector<Frame3> Generator3::GenerateMethodH124Synch(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.Next16Bit());
+        rngList.push_back(rng.Nextushort());
     size = 18;
 
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Nextushort()))
     {
         hunt = 0;
         frame.encounterSlot = EncounterSlot::HSlot(rngList[hunt++], encounterType);
@@ -196,62 +196,16 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
     return frames;
 }
 
-// Checks if PID fits constraints of 12.5% female target
-bool cuteCharm125F(u32 pid)
-{
-    return (pid & 0xff) < 31;
-}
 
-// Checks if PID fits constraints of 87.5% male target
-bool cuteCharm875M(u32 pid)
-{
-    return (pid & 0xff) >= 31;
-}
-
-// Checks if PID fits constraints of 25% female target
-bool cuteCharm25F(u32 pid)
-{
-    return (pid & 0xff) < 63;
-}
-
-// Checks if PID fits constraints of 75% male target
-bool cuteCharm75M(u32 pid)
-{
-    return (pid & 0xff) >= 63;
-}
-
-// Checks if PID fits constraints of 50% female target
-bool cuteCharm50F(u32 pid)
-{
-    return (pid & 0xff) < 127;
-}
-
-// Checks if PID fits constraints of 50% male target
-bool cuteCharm50M(u32 pid)
-{
-    return (pid & 0xff) >= 127;
-}
-
-// Checks if PID fits constraints of 75% female target
-bool cuteCharm75F(u32 pid)
-{
-    return (pid & 0xff) < 191;
-}
-
-// Checks if PID fits constraints of 25% male target
-bool cuteCharm25M(u32 pid)
-{
-    return (pid & 0xff) >= 191;
-}
 
 // Returns vector of frames for Method H 1, 2, or 4 given cute charm lead
-vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
+vector<Frame3> Generator3::GenerateMethodH124CuteCharm(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.Next16Bit());
+        rngList.push_back(rng.Nextushort());
     size = 18;
 
     u32 max = initialFrame + maxResults;
@@ -260,35 +214,35 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
     bool (*cuteCharm)(u32);
     switch (leadType)
     {
-        case CuteCharm125F:
-            cuteCharm = &cuteCharm125F;
+        case Lead::CuteCharm125F:
+            cuteCharm = &Generator3::CuteCharm125F;
             break;
-        case CuteCharm875M:
-            cuteCharm = &cuteCharm875M;
+        case Lead::CuteCharm875M:
+            cuteCharm = &Generator3::CuteCharm875M;
             break;
-        case CuteCharm25F:
-            cuteCharm = &cuteCharm25F;
+        case Lead::CuteCharm25F:
+            cuteCharm = &Generator3::CuteCharm25F;
             break;
-        case CuteCharm75M:
-            cuteCharm = &cuteCharm75M;
+        case Lead::CuteCharm75M:
+            cuteCharm = &Generator3::CuteCharm75M;
             break;
-        case CuteCharm50F:
-            cuteCharm = &cuteCharm50F;
+        case Lead::CuteCharm50F:
+            cuteCharm = &Generator3::CuteCharm50F;
             break;
-        case CuteCharm50M:
-            cuteCharm = &cuteCharm50M;
+        case Lead::CuteCharm50M:
+            cuteCharm = &Generator3::CuteCharm50M;
             break;
-        case CuteCharm75F:
-            cuteCharm = &cuteCharm75F;
+        case Lead::CuteCharm75F:
+            cuteCharm = &Generator3::CuteCharm75F;
             break;
         // Case CuteCharm25M:
         // Set to default to avoid compiler warning message
         default:
-            cuteCharm = &cuteCharm25F;
+            cuteCharm = &Generator3::CuteCharm25F;
             break;
     }
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Nextushort()))
     {
         hunt = 0;
         frame.encounterSlot = EncounterSlot::HSlot(rngList[hunt++], encounterType);
@@ -353,20 +307,20 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
 }
 
 // Returns vector of frames for Method XD/Colo
-vector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
+vector<Frame3> Generator3::GenerateMethodXDColo(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 5; i++)
-        rngList.push_back(rng.Next16Bit());
+        rngList.push_back(rng.Nextushort());
 
     // Method XD/Colo [SEED] [IVS] [IVS] [BLANK] [PID] [PID]
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Nextushort()))
     {
-        frame.SetPID(rngList[3], rngList[4]);
+        frame.SetPID(rngList[4], rngList[3]);
         if (!compare.ComparePID(frame))
             continue;
 
@@ -382,22 +336,22 @@ vector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
 }
 
 // Returns vector of frames for Method 1, 2, or 4
-vector<Frame3> Generator3::generateMethod124(FrameCompare compare)
+vector<Frame3> Generator3::GenerateMethod124(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 5; i++)
-        rngList.push_back(rng.Next16Bit());
+        rngList.push_back(rng.Nextushort());
 
     // Method 1 [SEED] [PID] [PID] [IVS] [IVS]
     // Method 2 [SEED] [PID] [PID] [BLANK] [IVS] [IVS]
     // Method 4 [SEED] [PID] [PID] [IVS] [BLANK] [IVS]
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Next16Bit()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Nextushort()))
     {
-        frame.SetPID(rngList[1], rngList[0]);
+        frame.SetPID(rngList[0], rngList[1]);
         if (!compare.ComparePID(frame))
             continue;
 
@@ -416,8 +370,8 @@ vector<Frame3> Generator3::generateMethod124(FrameCompare compare)
 void Generator3::Refill()
 {
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.Next16Bit());
-    size = rngList.size() - 2;
+        rngList.push_back(rng.Nextushort());
+    size = (int)rngList.size() - 2;
 }
 
 // Determines what generational method to return
@@ -451,26 +405,26 @@ vector<Frame3> Generator3::Generate(FrameCompare compare)
         case Method1:
         case Method2:
         case Method4:
-            return generateMethod124(compare);
+            return GenerateMethod124(compare);
         case MethodH1:
         case MethodH2:
         case MethodH4:
             switch (leadType)
             {
                 case None:
-                    return generateMethodH124(compare);
+                    return GenerateMethodH124(compare);
                 case Synchronize:
-                    return generateMethodH124Synch(compare);
+                    return GenerateMethodH124Synch(compare);
                 // case CuteCharm:
                 // Set to default to avoid compiler warning message
                 default:
-                    return generateMethodH124CuteCharm(compare);
+                    return GenerateMethodH124CuteCharm(compare);
             }
         case XDColo:
-            return generateMethodXDColo(compare);
+            return GenerateMethodXDColo(compare);
         // case Channel:
         // Set to default to avoid compiler warning message
         default:
-            return generateMethodChannel(compare);
+            return GenerateMethodChannel(compare);
     }
 }

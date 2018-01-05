@@ -18,26 +18,17 @@ private:
     u32 mt[624];
     int index;
 
-    void init(u32 seed);
-
+    void Initialize(u32 seed);
     void Shuffle();
-
-    u32 temperingShiftL(u32 y);
-
-    u32 temperingShiftS(u32 y);
-
-    u32 temperingShiftT(u32 y);
-
-    u32 temperingShiftU(u32 y);
+    inline u32 TemperingShiftL(u32 y) { return (y >> 18); }
+    inline u32 TemperingShiftS(u32 y) { return (y << 7); }
+    inline u32 TemperingShiftT(u32 y) { return (y << 15); }
+    inline u32 TemperingShiftU(u32 y) { return (y >> 11); }
 
 public:
-
     MersenneTwister(u32 seed);
-
     virtual void AdvanceFrames(int frames);
-
     virtual u32 Nextuint();
-
     virtual void Reseed(u32 seed);
     
 };
@@ -55,18 +46,13 @@ private:
     u32 mag01[2] = { 0x0, MATRIXA };
     int index;
 
-    void init(u32 seed);
-
+    void Initialize(u32 seed);
     void Shuffle();
 
 public:
-
     MersenneTwisterUntempered(u32 seed);
-
     virtual void AdvanceFrames(int frames);
-
     virtual void Reseed(u32 seed);
-
     virtual u32 Nextuint();
     
 };
@@ -88,24 +74,17 @@ private:
     u32 mt[624];
     int index;
 
-    void init(u32 seed);
-
+    void Initialize(u32 seed);
     void Shuffle();
+    inline u32 TemperingShiftS(u32 y) { return (y << 7); }
+    inline u32 TemperingShiftT(u32 y) { return (y << 15); }
+    inline u32 TemperingShiftU(u32 y) { return (y >> 11); }
 
-    u32 temperingShiftS(u32 y);
-
-    u32 temperingShiftT(u32 y);
-
-    u32 temperingShiftU(u32 y);
 
 public:
-
     MersenneTwisterFast(u32 seed, int calls);
-
     virtual void AdvanceFrames(int frames);
-
     virtual u32 Nextuint();
-
     virtual void Reseed(u32 seed);
     
 };

@@ -38,31 +38,31 @@ Searcher3::Searcher3(uint tid, uint sid)
 }
 
 // Returns vector of frames for Channel Method
-vector<Frame3> Searcher3::searchMethodChannel(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodChannel(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
     vector<uint> seeds = euclidean.RecoverLower27BitsChannel(hp, atk, def, spa, spd, spe);
-    int size = seeds.size();
+    auto size = seeds.size();
 
-    for (int i = 0; i < size; i++)
+    for (auto i = 0; i < size; i++)
     {
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
 
         // Calculate PID
         backward.AdvanceFrames(3);
-        uint pid2 = backward.Next16Bit();
-        uint pid1 = backward.Next16Bit();
+        uint pid2 = backward.Nextushort();
+        uint pid1 = backward.Nextushort();
 
         // Determine if PID needs to be XORed
-        if ((pid2 > 7 ? 0 : 1) != (pid1 ^ backward.Next16Bit() ^ 40122))
+        if ((pid2 > 7 ? 0 : 1) != (pid1 ^ backward.Nextushort() ^ 40122))
             pid1 ^= 0x8000;
-        frame.SetPID(pid1, pid2);
+        frame.SetPID(pid2, pid1);
 
         if (compare.ComparePID(frame))
         {
-            frame.seed = backward.Next32Bit();
+            frame.seed = backward.Nextuint();
             frames.push_back(frame);
         }
     }
@@ -70,23 +70,23 @@ vector<Frame3> Searcher3::searchMethodChannel(uint hp, uint atk, uint def, uint 
 }
 
 // Returns vector of frames for Method Colo Shadows
-vector<Frame3> Searcher3::searchMethodColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = euclidean.RecoverLower16BitsIV(first, second);
-    int size = seeds.size();
+    auto size = seeds.size();
 
     // Need to eventually add Naturelock checking
-    for (int i = 0; i < size; i += 2)
+    for (auto i = 0; i < size; i += 2)
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
         forward.seed = seeds[i + 1];
-        forward.AdvanceFrames(1);
-        frame.SetPID(forward.Next16Bit(), forward.Next16Bit());
+        forward.Nextuint();
+        frame.SetPID(forward.Nextushort(), forward.Nextushort());
         frame.seed = seeds[i] * 0xB9B33155 + 0xA170F641;
         if (compare.ComparePID(frame))
             frames.push_back(frame);
@@ -104,23 +104,23 @@ vector<Frame3> Searcher3::searchMethodColo(uint hp, uint atk, uint def, uint spa
 }
 
 // Returns vector of frames for Method H1
-vector<Frame3> Searcher3::searchMethodH1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodH1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.RecoverLower16BitsIV(first, second);
-    int size = seeds.size();
+    auto size = seeds.size();
     uint seed;
 
-    for (int i = 0; i < size; i++)
+    for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
-        frame.SetPID(backward.Next16Bit(), backward.Next16Bit());
-        seed = backward.Next32Bit();
+        frame.SetPID(backward.Nextushort(), backward.Nextushort());
+        seed = backward.Nextuint();
 
         // Use for loop to check both normal and sister spread
         for (int i = 0; i < 2; i++)
@@ -138,7 +138,7 @@ vector<Frame3> Searcher3::searchMethodH1(uint hp, uint atk, uint def, uint spa, 
             LCRNG testRNG = PokeRNGR(seed);
             uint testPID, slot, testSeed;
             uint nextRNG = seed >> 16;
-            uint nextRNG2 = testRNG.Next16Bit();
+            uint nextRNG2 = testRNG.Nextushort();
 
             do
             {
@@ -184,8 +184,8 @@ vector<Frame3> Searcher3::searchMethodH1(uint hp, uint atk, uint def, uint spa, 
                 }
 
                 testPID = (nextRNG << 16) | nextRNG2;
-                nextRNG = testRNG.Next16Bit();
-                nextRNG2 = testRNG.Next16Bit();
+                nextRNG = testRNG.Nextushort();
+                nextRNG2 = testRNG.Nextushort();
             }
             while ((testPID % 25) != frame.nature);
         }
@@ -194,24 +194,24 @@ vector<Frame3> Searcher3::searchMethodH1(uint hp, uint atk, uint def, uint spa, 
 }
 
 // Returns vector of frames for Method H2
-vector<Frame3> Searcher3::searchMethodH2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodH2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.RecoverLower16BitsIV(first, second);
-    int size = seeds.size();
+    auto size = seeds.size();
     uint seed;
 
-    for (int i = 0; i < size; i++)
+    for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
         backward.AdvanceFrames(1);
-        frame.SetPID(backward.Next16Bit(), backward.Next16Bit());
-        seed = backward.Next16Bit();
+        frame.SetPID(backward.Nextushort(), backward.Nextushort());
+        seed = backward.Nextushort();
 
         // Use for loop to check both normal and sister spread
         for (int i = 0; i < 2; i++)
@@ -229,7 +229,7 @@ vector<Frame3> Searcher3::searchMethodH2(uint hp, uint atk, uint def, uint spa, 
             LCRNG testRNG = PokeRNGR(seed);
             uint testPID, slot, testSeed;
             uint nextRNG = seed >> 16;
-            uint nextRNG2 = testRNG.Next16Bit();
+            uint nextRNG2 = testRNG.Nextushort();
 
             do
             {
@@ -275,8 +275,8 @@ vector<Frame3> Searcher3::searchMethodH2(uint hp, uint atk, uint def, uint spa, 
                 }
 
                 testPID = (nextRNG << 16) | nextRNG2;
-                nextRNG = testRNG.Next16Bit();
-                nextRNG2 = testRNG.Next16Bit();
+                nextRNG = testRNG.Nextushort();
+                nextRNG2 = testRNG.Nextushort();
             }
             while ((testPID % 25) != frame.nature);
         }
@@ -285,23 +285,23 @@ vector<Frame3> Searcher3::searchMethodH2(uint hp, uint atk, uint def, uint spa, 
 }
 
 // Returns vector of frames for Method H4
-vector<Frame3> Searcher3::searchMethodH4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodH4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.RecoverLower16BitsIV(first, second);
-    int size = seeds.size();
+    auto size = seeds.size();
     uint seed;
 
-    for (int i = 0; i < size; i++)
+    for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
-        frame.SetPID(backward.Next16Bit(), backward.Next16Bit());
-        seed = backward.Next32Bit();
+        frame.SetPID(backward.Nextushort(), backward.Nextushort());
+        seed = backward.Nextuint();
 
         // Use for loop to check both normal and sister spread
         for (int i = 0; i < 2; i++)
@@ -319,7 +319,7 @@ vector<Frame3> Searcher3::searchMethodH4(uint hp, uint atk, uint def, uint spa, 
             LCRNG testRNG = PokeRNGR(seed);
             uint testPID, slot, testSeed;
             uint nextRNG = seed >> 16;
-            uint nextRNG2 = testRNG.Next16Bit();
+            uint nextRNG2 = testRNG.Nextushort();
 
             do
             {
@@ -366,8 +366,8 @@ vector<Frame3> Searcher3::searchMethodH4(uint hp, uint atk, uint def, uint spa, 
                 }
 
                 testPID = (nextRNG << 16) | nextRNG2;
-                nextRNG = testRNG.Next16Bit();
-                nextRNG2 = testRNG.Next16Bit();
+                nextRNG = testRNG.Nextushort();
+                nextRNG2 = testRNG.Nextushort();
             }
             while ((testPID % 25) != frame.nature);
         }
@@ -376,22 +376,23 @@ vector<Frame3> Searcher3::searchMethodH4(uint hp, uint atk, uint def, uint spa, 
 }
 
 // Returns vector of frames for Method Gales Shadows
-vector<Frame3> Searcher3::searchMethodXD(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodXD(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = euclidean.RecoverLower16BitsIV(first, second);
-    int size = seeds.size();
+    auto size = seeds.size();
 
     // Need to setup Naturelock checking
-    for (int i = 0; i < size; i += 2)
+    for (auto i = 0; i < size; i += 2)
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
         forward.seed = seeds[i + 1];
-        frame.SetPID(forward.Next16Bit(), forward.Next16Bit());
+        forward.Nextuint();
+        frame.SetPID(forward.Nextushort(), forward.Nextushort());
         frame.seed = seeds[i] * 0xB9B33155 + 0xA170F641;
         if (compare.ComparePID(frame))
             frames.push_back(frame);
@@ -409,21 +410,22 @@ vector<Frame3> Searcher3::searchMethodXD(uint hp, uint atk, uint def, uint spa, 
 }
 
 // Return vector of frames for Method XDColo
-vector<Frame3> Searcher3::searchMethodXDColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodXDColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = euclidean.RecoverLower16BitsIV(first, second);
-    int size = seeds.size();
+    auto size = seeds.size();
 
-    for (int i = 0; i < size; i += 2)
+    for (auto i = 0; i < size; i += 2)
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
         forward.seed = seeds[i + 1];
-        frame.SetPID(forward.Next16Bit(), forward.Next16Bit());
+        forward.Nextuint();
+        frame.SetPID(forward.Nextushort(), forward.Nextushort());
         frame.seed = seeds[i] * 0xB9B33155 + 0xA170F641;
         if (compare.ComparePID(frame))
             frames.push_back(frame);
@@ -441,22 +443,22 @@ vector<Frame3> Searcher3::searchMethodXDColo(uint hp, uint atk, uint def, uint s
 }
 
 // Returns vector of frames for Method 1
-vector<Frame3> Searcher3::searchMethod1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethod1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.RecoverLower16BitsIV(first, second);
-    int size = seeds.size();
+    auto size = seeds.size();
 
-    for (int i = 0; i < size; i++)
+    for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
-        frame.SetPID(backward.Next16Bit(), backward.Next16Bit());
-        frame.seed = backward.Next32Bit();
+        frame.SetPID(backward.Nextushort(), backward.Nextushort());
+        frame.seed = backward.Nextuint();
         if (compare.ComparePID(frame))
             frames.push_back(frame);
 
@@ -473,23 +475,23 @@ vector<Frame3> Searcher3::searchMethod1(uint hp, uint atk, uint def, uint spa, u
 }
 
 // Returns vector of frames for Method 2
-vector<Frame3> Searcher3::searchMethod2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethod2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.RecoverLower16BitsIV(first, second);
-    int size = seeds.size();
+    auto size = seeds.size();
 
-    for (int i = 0; i < size; i++)
+    for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
         backward.AdvanceFrames(1);
-        frame.SetPID(backward.Next16Bit(), backward.Next16Bit());
-        frame.seed = backward.Next32Bit();
+        frame.SetPID(backward.Nextushort(), backward.Nextushort());
+        frame.seed = backward.Nextuint();
         if (compare.ComparePID(frame))
             frames.push_back(frame);
 
@@ -506,22 +508,22 @@ vector<Frame3> Searcher3::searchMethod2(uint hp, uint atk, uint def, uint spa, u
 }
 
 // Returns vector of frames for Method 4
-vector<Frame3> Searcher3::searchMethod4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethod4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
     uint first = (hp | (atk << 5) | (def << 10)) << 16;
     uint second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.RecoverLower16BitsIV(first, second);
-    int size = seeds.size();
+    auto size = seeds.size();
 
-    for (int i = 0; i < size; i++)
+    for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
         frame.SetIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
-        frame.SetPID(backward.Next16Bit(), backward.Next16Bit());
-        frame.seed = backward.Next32Bit();
+        frame.SetPID(backward.Nextushort(), backward.Nextushort());
+        frame.seed = backward.Nextuint();
         if (compare.ComparePID(frame))
             frames.push_back(frame);
 
@@ -555,36 +557,36 @@ vector<Frame3> Searcher3::Search(uint hp, uint atk, uint def, uint spa, uint spd
     {
         case Method1:
             cache.SwitchCache(Method1);
-            return searchMethod1(hp, atk, def, spa, spd, spe, compare);
+            return SearchMethod1(hp, atk, def, spa, spd, spe, compare);
         case Method2:
             cache.SwitchCache(Method2);
-            return searchMethod2(hp, atk, def, spa, spd, spe, compare);
+            return SearchMethod2(hp, atk, def, spa, spd, spe, compare);
         case Method4:
             cache.SwitchCache(Method4);
-            return searchMethod4(hp, atk, def, spa, spd, spe, compare);
+            return SearchMethod4(hp, atk, def, spa, spd, spe, compare);
         case MethodH1:
             cache.SwitchCache(Method1);
-            return searchMethodH1(hp, atk, def, spa, spd, spe, compare);
+            return SearchMethodH1(hp, atk, def, spa, spd, spe, compare);
         case MethodH2:
             cache.SwitchCache(Method2);
-            return searchMethodH2(hp, atk, def, spa, spd, spe, compare);
+            return SearchMethodH2(hp, atk, def, spa, spd, spe, compare);
         case MethodH4:
             cache.SwitchCache(Method4);
-            return searchMethodH4(hp, atk, def, spa, spd, spe, compare);
+            return SearchMethodH4(hp, atk, def, spa, spd, spe, compare);
         case Colo:
             euclidean.SwitchEuclidean(Colo);
-            return searchMethodColo(hp, atk, def, spa, spd, spe, compare);
+            return SearchMethodColo(hp, atk, def, spa, spd, spe, compare);
         case XD:
             euclidean.SwitchEuclidean(XD);
-            return searchMethodXD(hp, atk, def, spa, spd, spe, compare);
+            return SearchMethodXD(hp, atk, def, spa, spd, spe, compare);
         case XDColo:
             euclidean.SwitchEuclidean(XDColo);
-            return searchMethodXDColo(hp, atk, def, spa, spd, spe, compare);
+            return SearchMethodXDColo(hp, atk, def, spa, spd, spe, compare);
         // case Channel:
         // Set to default to avoid compiler warning message
         default:
             euclidean.SwitchEuclidean(Channel);
-            return searchMethodChannel(hp, atk, def, spa, spd, spe, compare);
+            return SearchMethodChannel(hp, atk, def, spa, spd, spe, compare);
     }
 }
 

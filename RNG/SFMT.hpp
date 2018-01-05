@@ -37,25 +37,16 @@ private:
     u32 parity[4] = { 0x1, 0x0, 0x0, 0x13c9e684 };
     u32 sfmt[624];
 
-    void init(u32 seed);
-
-    void periodCertificaion();
-
-    inline u32 getRand() { return sfmt[index++]; }
-
+    void Initialize(u32 seed);
+    void PeriodCertificaion();
+    inline u32 GetRand() { return sfmt[index++]; }
 
 public:
-
     SFMT(u32 seed);
-
     virtual void AdvanceFrames(int frames);
-
     virtual u32 Nextuint();
-
     virtual u64 Nextulong();
-
     virtual void Reseed(u64 seed);
-
     void Shuffle();
 
 };

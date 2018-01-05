@@ -34,9 +34,9 @@ typedef uint32_t u32;
 
 class Frame
 {
+
 protected:
     vector<QString> natures = Nature::GetFrameNatures();
-
     vector<QString> powers = Power::GetPowers();
 
 public:
@@ -55,30 +55,20 @@ public:
     u32 pid;
     u32 power;
     u32 psv;
-    u32 seed;
     bool shiny;
     u32 sid;
     bool synchable;
     u32 tid;
 
     QString GetFemale125();
-
     QString GetFemale25();
-
     QString GetFemale50();
-
     QString GetFemale75();
-
     QString GetNature();
-
     QString GetPower();
-
     QString GetShiny();
-
     void SetIVs(u32 iv1, u32 iv2);
-
     void SetPID(u32 pid1, u32 pid2);
-
     void SetPID(u32 pid, u32 pid1, u32 pid2);
 
 };

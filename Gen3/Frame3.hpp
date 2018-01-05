@@ -40,16 +40,12 @@ public:
     u32 par1;
     u32 par2;
     u32 par3;
+    u32 seed;
 
     Frame3(u32 tid, u32 sid, u32 psv);
-
     QString GetTime();
-
     void SetIDs(u32 tid, u32 sid, u32 psv);
-
     void SetIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6);
-
-    QList<QStandardItem *> GetTableRow(int genderRatioIndex);
 
 };
 

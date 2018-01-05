@@ -34,15 +34,9 @@ public:
     u32 seed;
 
     LCRNG(u32 add, u32 mult, u32 seed);
-
     virtual void AdvanceFrames(int frames);
-
-    u32 Next16Bit();
-
-    u32 Next32Bit();
-
+    u32 Nextushort();
     virtual u32 Nextuint();
-
     virtual void Reseed(u32 seed);
 
 };

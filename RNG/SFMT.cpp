@@ -22,24 +22,24 @@
 // Constructor for SFMT
 SFMT::SFMT(u32 seed)
 {
-    init(seed);
+    Initialize(seed);
 }
 
 // Initializes
-void SFMT::init(u32 seed)
+void SFMT::Initialize(u32 seed)
 {
     sfmt[0] = seed;
 
     for (index = 1; index < N32; index++)
         sfmt[index] = 0x6C078965 * (sfmt[index - 1] ^ (sfmt[index - 1] >> 30)) + index;
 
-    periodCertificaion();
+    PeriodCertificaion();
     Shuffle();
     index = 0;
 }
 
 // Verify internal state vector
-void SFMT::periodCertificaion()
+void SFMT::PeriodCertificaion()
 {
     u32 inner = 0;
     u32 work;
@@ -90,7 +90,7 @@ u32 SFMT::Nextuint()
         index = 0;
     }
     ++index;
-    return getRand();
+    return GetRand();
 }
 
 // Generates the next 64bit psuedo random number
@@ -102,13 +102,13 @@ u64 SFMT::Nextulong()
         Shuffle();
         index = 0;
     }
-    return getRand() | ((u64)getRand() << 32);
+    return GetRand() | ((u64)GetRand() << 32);
 }
 
 // Recreates the SFMT with a new seed
 void SFMT::Reseed(u64 seed)
 {
-    init((u32)seed);
+    Initialize((u32)seed);
 }
 
 // Shuffles the array once all 624 states have been used

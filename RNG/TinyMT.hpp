@@ -19,24 +19,16 @@ private:
     int const TINYMT32SH8 = 8;
     u32 state[4];
 
-    void init(u32 seed);
-
-    void periodCertification();
+    void Initialize(u32 seed);
+    void PeriodCertification();
 
 public:
-
     TinyMT(u32 seed);
-
     TinyMT(u32 st[]);
-
     virtual void AdvanceFrames(int frames);
-
     void NextState();
-
     virtual u32 Nextuint();
-
     u32 Temper();
-
     virtual void Reseed(u32 seed);
 
 };

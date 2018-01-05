@@ -37,22 +37,16 @@ void LCRNG::AdvanceFrames(int frames)
 }
 
 // Method for finding next 16 bit seed
-u32 LCRNG::Next16Bit()
+u32 LCRNG::Nextushort()
 {
-    return (Next32Bit() >> 16);
-}
-
-// Method for finding next 32 bit seed
-u32 LCRNG::Next32Bit()
-{
-    seed = seed * mult + add;
-    return seed;
+    return (Nextuint() >> 16);
 }
 
 // IRNG Member
 u32 LCRNG::Nextuint()
 {
-    return Next32Bit();
+    seed = seed * mult + add;
+    return seed;
 }
 
 // IRNG Member

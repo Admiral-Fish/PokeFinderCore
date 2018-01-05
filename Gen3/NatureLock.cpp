@@ -26,38 +26,38 @@
 // Constructor for NatureLock
 NatureLock::NatureLock()
 {
-    natureLockSetupGales(0);
-    backCount = lockInfo.size();
+    NatureLockSetupGales(0);
+    backCount = (int)lockInfo.size();
     frontCount = backCount == 1 ? 0 : backCount - 2;
     x = 0;
     if (backCount == 1)
-        getCurrLock();
+        GetCurrLock();
 }
 
 // Keeps rerolling PID backwards by 2 until it finds a match for current lock
-void NatureLock::countBackTwo()
+void NatureLock::CountBackTwo()
 {
     do
     {
-        pid = getPIDReverse();
+        pid = GetPIDReverse();
         gender = pid & 255;
     }
     while (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature));
 }
 
 // Keeps rerolling PID forward by 2 until it finds a match for current lock
-void NatureLock::countForwardTwo()
+void NatureLock::CountForwardTwo()
 {
     do
     {
-        pid = getPIDForward();
+        pid = GetPIDForward();
         gender = pid & 255;
     }
     while (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature));
 }
 
 // Quick sets the values of the current lock
-void NatureLock::getCurrLock()
+void NatureLock::GetCurrLock()
 {
     nature = lockInfo[x].GetNature();
     genderLower = lockInfo[x].GetGenderLower();
@@ -65,25 +65,25 @@ void NatureLock::getCurrLock()
 }
 
 // Generates the next PID forwards
-u32 NatureLock::getPIDForward()
+u32 NatureLock::GetPIDForward()
 {
-    return (forward.Next32Bit() & 0xFFFF0000) | forward.Next16Bit();
+    return (forward.Nextuint() & 0xFFFF0000) | forward.Nextushort();
 }
 
 // Generates the next PID backwards
-u32 NatureLock::getPIDReverse()
+u32 NatureLock::GetPIDReverse()
 {
-    return backward.Next16Bit() | (backward.Next32Bit() & 0xFFFF0000);
+    return backward.Nextushort() | (backward.Nextuint() & 0xFFFF0000);
 }
 
 // Generates the PSV of the next PID backwards
-u32 NatureLock::getPSVReverse()
+u32 NatureLock::GetPSVReverse()
 {
-    return (backward.Next16Bit() ^ backward.Next16Bit()) >> 3;
+    return (backward.Nextushort() ^ backward.Nextushort()) >> 3;
 }
 
 // Sets up rest of nature lock data for Colo
-void NatureLock::natureLockSetupColo(int lockNum)
+void NatureLock::NatureLockSetupColo(int lockNum)
 {
     switch (lockNum) {
         case 0: // Heracross
@@ -102,7 +102,7 @@ void NatureLock::natureLockSetupColo(int lockNum)
 }
 
 // Sets up rest of nature lock data for Gales
-void NatureLock::natureLockSetupGales(int lockNum)
+void NatureLock::NatureLockSetupGales(int lockNum)
 {
     switch(lockNum)
     {
@@ -438,7 +438,7 @@ bool NatureLock::IVMethodFirstShadow(u32 seed)
     backward.AdvanceFrames(1);
 
     // Build temp pid first to not waste time looping if first backwards nl fails
-    pidOriginal = getPIDReverse();
+    pidOriginal = GetPIDReverse();
 
     // Backwards nature lock check
     gender = pidOriginal & 255;
@@ -449,13 +449,13 @@ bool NatureLock::IVMethodFirstShadow(u32 seed)
     for (x = 1; x < backCount; x++)
     {
         backward.AdvanceFrames(3);
-        pid = getPIDReverse();
-        getCurrLock();
+        pid = GetPIDReverse();
+        GetCurrLock();
         if (nature != 500)
         {
             gender = pid & 255;
             if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countBackTwo();
+                CountBackTwo();
         }
     }
 
@@ -466,13 +466,13 @@ bool NatureLock::IVMethodFirstShadow(u32 seed)
     for (x = frontCount; x >= 0; x--)
     {
         forward.AdvanceFrames(3);
-        pid = getPIDForward();
-        getCurrLock();
+        pid = GetPIDForward();
+        GetCurrLock();
         if (nature != 500)
         {
             gender = pid & 255;
             if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countForwardTwo();
+                CountForwardTwo();
         }
     }
 
@@ -487,7 +487,7 @@ bool NatureLock::IVMethodFirstShadowSet(u32 seed)
     backward.AdvanceFrames(6);
 
     // Build temp pid first to not waste time looping if first nl fails
-    pidOriginal = getPIDReverse();
+    pidOriginal = GetPIDReverse();
 
     // Backwards nature lock check
     gender = pidOriginal & 255;
@@ -498,13 +498,13 @@ bool NatureLock::IVMethodFirstShadowSet(u32 seed)
     for (x = 1; x < backCount; x++)
     {
         backward.AdvanceFrames(3);
-        pid = getPIDReverse();
-        getCurrLock();
+        pid = GetPIDReverse();
+        GetCurrLock();
         if (nature != 500)
         {
             gender = pid & 255;
             if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countBackTwo();
+                CountBackTwo();
         }
     }
 
@@ -515,13 +515,13 @@ bool NatureLock::IVMethodFirstShadowSet(u32 seed)
     for (x = frontCount; x >= 0; x--)
     {
         forward.AdvanceFrames(3);
-        pid = getPIDForward();
-        getCurrLock();
+        pid = GetPIDForward();
+        GetCurrLock();
         if (nature != 500)
         {
             gender = pid & 255;
             if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countForwardTwo();
+                CountForwardTwo();
         }
     }
 
@@ -538,16 +538,16 @@ bool NatureLock::IVMethodFirstShadowShinySkip(u32 seed)
     u32 psv, psvtemp;
 
     // Check how many advances from shiny skip and build initial pid for first nl
-    psv = getPSVReverse();
-    psvtemp = getPSVReverse();
+    psv = GetPSVReverse();
+    psvtemp = GetPSVReverse();
     while (psv == psvtemp)
     {
         psvtemp = psv;
-        psv = getPSVReverse();
+        psv = GetPSVReverse();
     }
 
     backward.AdvanceFrames(5);
-    pidOriginal = getPIDReverse();
+    pidOriginal = GetPIDReverse();
 
     // Backwards nature lock check
     gender = pidOriginal & 255;
@@ -558,13 +558,13 @@ bool NatureLock::IVMethodFirstShadowShinySkip(u32 seed)
     for (x = 1; x < backCount; x++)
     {
         backward.AdvanceFrames(3);
-        pid = getPIDReverse();
-        getCurrLock();
+        pid = GetPIDReverse();
+        GetCurrLock();
         if (nature != 500)
         {
             gender = pid & 255;
             if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countBackTwo();
+                CountBackTwo();
         }
     }
 
@@ -575,13 +575,13 @@ bool NatureLock::IVMethodFirstShadowShinySkip(u32 seed)
     for (x = frontCount; x >= 0; x--)
     {
         forward.AdvanceFrames(3);
-        pid = getPIDForward();
-        getCurrLock();
+        pid = GetPIDForward();
+        GetCurrLock();
         if (nature != 500)
         {
             gender = pid & 255;
             if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countForwardTwo();
+                CountForwardTwo();
         }
     }
 
@@ -596,7 +596,7 @@ bool NatureLock::IVMethodFirstShadowUnset(u32 seed)
     backward.AdvanceFrames(8);
 
     // Build temp pid first to not waste time looping if first nl fails
-    pidOriginal = getPIDReverse();
+    pidOriginal = GetPIDReverse();
 
     // Backwards nature lock check
     gender = pidOriginal & 255;
@@ -607,13 +607,13 @@ bool NatureLock::IVMethodFirstShadowUnset(u32 seed)
     for (x = 1; x < backCount; x++)
     {
         backward.AdvanceFrames(3);
-        pid = getPIDReverse();
-        getCurrLock();
+        pid = GetPIDReverse();
+        GetCurrLock();
         if (nature != 500)
         {
             gender = pid & 255;
             if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countBackTwo();
+                CountBackTwo();
         }
     }
 
@@ -624,13 +624,13 @@ bool NatureLock::IVMethodFirstShadowUnset(u32 seed)
     for (x = frontCount; x >= 0; x--)
     {
         forward.AdvanceFrames(3);
-        pid = getPIDForward();
-        getCurrLock();
+        pid = GetPIDForward();
+        GetCurrLock();
         if (nature != 500)
         {
             gender = pid & 255;
             if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countForwardTwo();
+                CountForwardTwo();
         }
     }
 
@@ -645,7 +645,7 @@ bool NatureLock::IVMethodSalamenceSet(u32 seed)
     backward.AdvanceFrames(6);
 
     // Build PID
-    pid = getPIDReverse();
+    pid = GetPIDReverse();
 
     // Backwards nature lock check
     gender = pid & 255;
@@ -661,17 +661,17 @@ bool NatureLock::IVMethodSalamenceShinySkip(u32 seed)
     u32 psv, psvtemp;
 
     // Check how many advances from shiny skip and build PID
-    psv = getPSVReverse();
-    psvtemp = getPSVReverse();
+    psv = GetPSVReverse();
+    psvtemp = GetPSVReverse();
 
     while (psv == psvtemp)
     {
         psvtemp = psv;
-        psv = getPSVReverse();
+        psv = GetPSVReverse();
     }
 
     backward.AdvanceFrames(5);
-    pid = getPIDReverse();
+    pid = GetPIDReverse();
 
     // Backwards nature lock check
     gender = pid & 255;
@@ -686,7 +686,7 @@ bool NatureLock::IVMethodSalamenceUnset(u32 seed)
     backward.AdvanceFrames(8);
 
     // Build PID
-    pid = getPIDReverse();
+    pid = GetPIDReverse();
 
     // Backwards nature lock check
     gender = pid & 255;
@@ -700,7 +700,7 @@ bool NatureLock::IVMethodSingleNL(u32 seed)
     backward.AdvanceFrames(1);
 
     // Build PID
-    pid = getPIDReverse();
+    pid = GetPIDReverse();
 
     // Backwards nature lock check
     gender = pid & 255;
@@ -710,23 +710,23 @@ bool NatureLock::IVMethodSingleNL(u32 seed)
 // Changes which lock info is being used for Colo
 void NatureLock::SwitchLockColo(int lockNum)
 {
-    natureLockSetupGales(lockNum);
-    backCount = lockInfo.size();
+    NatureLockSetupGales(lockNum);
+    backCount = (int)lockInfo.size();
     frontCount = backCount == 1 ? 0 : backCount - 2;
     x = 0;
     if (backCount == 1)
-        getCurrLock();
+        GetCurrLock();
 }
 
 // Changes which lock info is being used for Gales
 void NatureLock::SwitchLockGales(int lockNum)
 {
-    natureLockSetupGales(lockNum);
-    backCount = lockInfo.size();
+    NatureLockSetupGales(lockNum);
+    backCount = (int)lockInfo.size();
     frontCount = backCount == 1 ? 0 : backCount - 2;
     x = 0;
     if (backCount == 1)
-        getCurrLock();
+        GetCurrLock();
 }
 
 

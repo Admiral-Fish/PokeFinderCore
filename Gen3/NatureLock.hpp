@@ -45,13 +45,9 @@ private:
     u32 nature;
     
 public:
-    
     LockInfo(u32 nature, u32 genderLower, u32 genderUpper);
-
     u32 GetGenderLower();
-
-    u32 GetGenderUpper();
-    
+    u32 GetGenderUpper();    
     u32 GetNature();
     
 };
@@ -74,46 +70,27 @@ private:
     ShadowType type;
     int x;
 
-    void countBackTwo();
-
-    void countForwardTwo();
-
-    void getCurrLock();
-
-    u32 getPIDForward();
-
-    u32 getPIDReverse();
-
-    u32 getPSVReverse();
-
-    void natureLockSetupColo(int lockNum);
-    
-    void natureLockSetupGales(int lockNum);
+    void CountBackTwo();
+    void CountForwardTwo();
+    void GetCurrLock();
+    u32 GetPIDForward();
+    u32 GetPIDReverse();
+    u32 GetPSVReverse();
+    void NatureLockSetupColo(int lockNum);
+    void NatureLockSetupGales(int lockNum);
     
 public:
-
     NatureLock();
-
     ShadowType GetType();
-
     bool IVMethodFirstShadow(u32 seed);
-
     bool IVMethodFirstShadowSet(u32 seed);
-
     bool IVMethodFirstShadowShinySkip(u32 seed);
-
     bool IVMethodFirstShadowUnset(u32 seed);
-
     bool IVMethodSalamenceSet(u32 seed);
-
     bool IVMethodSalamenceShinySkip(u32 seed);
-
     bool IVMethodSalamenceUnset(u32 seed);
-
     bool IVMethodSingleNL(u32 seed);
-
-    void SwitchLockColo(int lockNum);
-    
+    void SwitchLockColo(int lockNum);    
     void SwitchLockGales(int lockNum);
 
 };

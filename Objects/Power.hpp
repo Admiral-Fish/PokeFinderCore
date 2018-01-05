@@ -28,7 +28,6 @@ class Power
 {
 
 public:
-
     static vector<QString> GetPowers();
 
 };

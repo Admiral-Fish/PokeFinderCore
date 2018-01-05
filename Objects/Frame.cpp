@@ -77,7 +77,7 @@ void Frame::SetIVs(u32 iv1, u32 iv2)
 // Sets PID and calculates characteristics based on PID
 void Frame::SetPID(u32 pid1, u32 pid2)
 {
-    pid = (pid1 << 16) | pid2;
+    pid = (pid2 << 16) | pid1;
     nature = pid % 25;
     gender = pid & 255;
     ability = pid & 1;

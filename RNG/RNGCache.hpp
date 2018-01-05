@@ -36,18 +36,13 @@ private:
     u32 mult;
     unordered_map<u32, u32> keys;
 
-    void populateMap();
-
-    void setupCache(Method MethodType);
+    void PopulateMap();
+    void SetupCache(Method MethodType);
 
 public:
-
     RNGCache(Method MethodType);
-
     vector<u32> RecoverLower16BitsIV(u32 first, u32 second);
-
     vector<u32> RecoverLower16BitsPID(u32 first, u32 second);
-
     void SwitchCache(Method MethodType);
 
 };

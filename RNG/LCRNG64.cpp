@@ -34,35 +34,23 @@ void LCRNG64::AdvanceFrames(int frames)
         seed = seed * mult + add;
 }
 
-// Method for finding next 32 bit seed
-u32 LCRNG64::Next32Bit()
-{
-    return (u32) (Next64Bit() >> 32);
-}
-
 // Method for finding next modified 32 bit seed
-u32 LCRNG64::Next32Bit(u32 max)
+u32 LCRNG64::Nextuint(u32 max)
 {
-    return (u32) (((Next64Bit() >> 32) * max) >> 32);
-}
-
-// Method for finding next 64 bit seed
-u64 LCRNG64::Next64Bit()
-{
-    seed = seed * mult + add;
-    return seed;
+    return (u32) (((Nextulong() >> 32) * max) >> 32);
 }
 
 // IRNG64 Member
 u64 LCRNG64::Nextulong()
 {
-    return Next64Bit();
+    seed = seed * mult + add;
+    return seed;
 }
 
 // IRNG64 Memeber
 u32 LCRNG64::Nextuint()
 {
-    return Next32Bit();
+    return (u32)(Nextulong() >> 32);
 }
 
 // IRNG64 Member

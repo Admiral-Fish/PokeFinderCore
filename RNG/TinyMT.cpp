@@ -3,7 +3,7 @@
 // Constructor
 TinyMT::TinyMT(u32 seed)
 {
-    init(seed);
+    Initialize(seed);
 }
 
 // Constructor given Tiny states
@@ -11,7 +11,7 @@ TinyMT::TinyMT(u32 st[])
 {
     for (int i = 0; i < 4; i++)
         state[i] = st[i];
-    periodCertification();
+    PeriodCertification();
 }
 
 void TinyMT::AdvanceFrames(int frames)
@@ -21,7 +21,7 @@ void TinyMT::AdvanceFrames(int frames)
 }
 
 // Creates Tiny state given seed
-void TinyMT::init(u32 seed)
+void TinyMT::Initialize(u32 seed)
 {
     state[0] = seed;
     state[1] = MAT1;
@@ -32,14 +32,14 @@ void TinyMT::init(u32 seed)
     for (i = 1; i < MINLOOP; i++)
         state[i & 3] ^= i + 0x6c078965 * (state[(i - 1) & 3] ^ (state[(i - 1) & 3] >> 30));
 
-    periodCertification();
+    PeriodCertification();
 
     for (i = 0; i < PRELOOP; i++)
         NextState();
 }
 
 // Verifies not all 4 Tiny states are 0
-void TinyMT::periodCertification()
+void TinyMT::PeriodCertification()
 {
     if (state[0] == 0 && state[1] == 0 && state[2] == 0 && state[3] == 0)
     {
@@ -91,5 +91,5 @@ u32 TinyMT::Temper()
 // IRNG Memeber
 void TinyMT::Reseed(u32 seed)
 {
-    init(seed);
+    Initialize(seed);
 }

@@ -31,13 +31,9 @@ class Nature
 {
 
 public:
-
     static vector<QString> GetNatures();
-
     static vector<QString> GetFrameNatures();
-
     static u32 GetAdjustedNature(u32 nature);
-
     static u32 GetReversedNature(u32 nature);
 
 };

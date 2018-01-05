@@ -29,15 +29,10 @@ class IRNG64
 {
 
 public:
-
     virtual u64 Nextulong() = 0;
-
     virtual u32 Nextuint() = 0;
-
     virtual void Reseed(u64 seed) = 0;
-
     virtual void AdvanceFrames(int frames) = 0;
-
     virtual ~IRNG64() { }
 
 };

@@ -34,13 +34,9 @@ private:
     u32 min;
     
 public:
-
     Range(u32 min, u32 max);
-
-    u32 GetMax();
-    
-    u32 GetMin();
-    
+    u32 GetMax();    
+    u32 GetMin();    
 
 };
 
@@ -48,14 +44,11 @@ class EncounterSlot
 {
     
 private:
-    static int calcSlot(unsigned int compare, vector<Range> ranges);
+    static int CalcSlot(unsigned int compare, vector<Range> ranges);
     
 public:
-
     static int HSlot(u32 result, Encounter encounterType);
-
-    static int JSlot(u32 result, Encounter encounterType);
-    
+    static int JSlot(u32 result, Encounter encounterType);    
     static int KSlot(u32 result, Encounter encounterType);
 };
 

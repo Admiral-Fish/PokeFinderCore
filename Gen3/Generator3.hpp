@@ -33,26 +33,25 @@ private:
     LCRNG rng = PokeRNG(0);
     u32 size;
 
-    vector<Frame3> generateMethodChannel(FrameCompare compare);
-
-    vector<Frame3> generateMethodH124(FrameCompare compare);
-
-    vector<Frame3> generateMethodH124Synch(FrameCompare compare);
-
-    vector<Frame3> generateMethodH124CuteCharm(FrameCompare compare);
-
-    vector<Frame3> generateMethodXDColo(FrameCompare compare);
-
-    vector<Frame3> generateMethod124(FrameCompare compare);
-
+    vector<Frame3> GenerateMethodChannel(FrameCompare compare);
+    vector<Frame3> GenerateMethodH124(FrameCompare compare);
+    vector<Frame3> GenerateMethodH124Synch(FrameCompare compare);
+    vector<Frame3> GenerateMethodH124CuteCharm(FrameCompare compare);
+    vector<Frame3> GenerateMethodXDColo(FrameCompare compare);
+    vector<Frame3> GenerateMethod124(FrameCompare compare);
     void Refill();
+    static inline bool CuteCharm125F(u32 pid) { return (pid & 0xff) < 31; }
+    static inline bool CuteCharm875M(u32 pid) { return (pid & 0xff) >= 31; }
+    static inline bool CuteCharm25F(u32 pid) { return (pid & 0xff) < 63; }
+    static inline bool CuteCharm75M(u32 pid) { return (pid & 0xff) >= 63; }
+    static inline bool CuteCharm50F(u32 pid) { return (pid & 0xff) < 127; }
+    static inline bool CuteCharm50M(u32 pid) { return (pid & 0xff) >= 127; }
+    static inline bool CuteCharm75F(u32 pid) { return (pid & 0xff) < 191; }
+    static inline bool CuteCharm25M(u32 pid) { return (pid & 0xff) >= 191; }
 
 public:
-
     Generator3();
-
     Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u32 tid, u32 sid, u32 offset);
-
     vector<Frame3> Generate(FrameCompare compare);
 
 };

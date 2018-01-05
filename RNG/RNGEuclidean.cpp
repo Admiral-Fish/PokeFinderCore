@@ -26,11 +26,11 @@
 // Constructor for RNGEuclidean
 RNGEuclidean::RNGEuclidean(Method FrameType)
 {
-    setupEuclidean(FrameType);
+    SetupEuclidean(FrameType);
 }
 
 // Sets up the Euclidean constants
-void RNGEuclidean::setupEuclidean(Method FrameType)
+void RNGEuclidean::SetupEuclidean(Method FrameType)
 {
     if (FrameType == Channel)
     {
@@ -60,11 +60,11 @@ vector<u32> RNGEuclidean::RecoverLower16BitsIV(u32 first, u32 second)
     u32 fullFirst, fullSecond;
 
     u32 t = ((second - sub1 * first) - sub2);
-    u32 kmax = (base - t) / 0x80000000;
+    auto kmax = (base - t) / 0x80000000;
 
-    int64_t test = t;
+    u64 test = t;
 
-    for (u32 k = 0; k <= kmax; k++, test += 0x80000000)
+    for (auto k = 0; k <= kmax; k++, test += 0x80000000)
     {
         if ((test % sub1) < 0x10000)
         {
@@ -84,11 +84,11 @@ vector<u32> RNGEuclidean::RecoverLower16BitsPID(u32 first, u32 second)
     u32 fullFirst, fullSecond;
 
     u32 t = ((second - sub1 * first) - sub2);
-    u32 kmax = (base - t) / 0x100000000;
+    auto kmax = (base - t) / 0x100000000;
 
-    int64_t test = t;
+    u64 test = t;
 
-    for (u32 k = 0; k <= kmax; k++, test += 0x100000000)
+    for (auto k = 0; k <= kmax; k++, test += 0x100000000)
     {
         if ((test % sub1) < 0x10000)
         {
@@ -108,11 +108,11 @@ vector<u32> RNGEuclidean::RecoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u3
     u32 first = hp << 27, fullFirst;
 
     u32 t = (((spd << 27) - sub1 * first) - sub2);
-    u32 kmax = (base - t) / 0x100000000;
+    auto kmax = (base - t) / 0x100000000;
 
-    int64_t test = t;
+    u64 test = t;
 
-    for (u32 k = 0; k <= kmax; k++, test += 0x100000000)
+    for (auto k = 0; k <= kmax; k++, test += 0x100000000)
     {
         if ((test % sub1) >= 0x8000000)
             continue;
@@ -145,5 +145,5 @@ vector<u32> RNGEuclidean::RecoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u3
 // Switches the Euclidean being used
 void RNGEuclidean::SwitchEuclidean(Method FrameType)
 {
-    setupEuclidean(FrameType);
+    SetupEuclidean(FrameType);
 }

@@ -34,39 +34,25 @@ private:
     Frame3 frame = Frame3(0, 0, 0);
     LCRNG forward = PokeRNG(0);
     LCRNG backward = PokeRNGR(0);
-    NatureLock natureLock = NatureLock();
+    NatureLock natureLock;
 
-    vector<Frame3> searchMethodChannel(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
-
-    vector<Frame3> searchMethodColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
-
-    vector<Frame3> searchMethodH1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
-
-    vector<Frame3> searchMethodH2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
-
-    vector<Frame3> searchMethodH4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
-
-    vector<Frame3> searchMethodXD(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
-
-    vector<Frame3> searchMethodXDColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
-
-    vector<Frame3> searchMethod1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
-
-    vector<Frame3> searchMethod2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
-
-    vector<Frame3> searchMethod4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
-
-
+    vector<Frame3> SearchMethodChannel(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
+    vector<Frame3> SearchMethodColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
+    vector<Frame3> SearchMethodH1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
+    vector<Frame3> SearchMethodH2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
+    vector<Frame3> SearchMethodH4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
+    vector<Frame3> SearchMethodXD(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
+    vector<Frame3> SearchMethodXDColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
+    vector<Frame3> SearchMethod1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
+    vector<Frame3> SearchMethod2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
+    vector<Frame3> SearchMethod4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
 
 public:
-
     Searcher3();
-
     Searcher3(uint tid, uint sid);
-
     vector<Frame3> Search(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
-
     void SetMethod(Method frameType);
+
 };
 
 #endif // SEARCHER3_HPP

@@ -33,19 +33,10 @@ public:
     u64 seed;
 
     LCRNG64(u64 add, u64 mult, u64 seed);
-
     virtual void AdvanceFrames(int frames);
-
-    u32 Next32Bit();
-
-    u32 Next32Bit(u32 max);
-
-    u64 Next64Bit();
-
+    u32 Nextuint(u32 max);
     virtual u64 Nextulong();
-
     virtual u32 Nextuint();
-
     virtual void Reseed(u64 seed);
 
 };

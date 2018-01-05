@@ -31,8 +31,8 @@ typedef uint32_t u32;
 
 class Profile
 {
-public:
 
+public:
     QString profileName;
     int version;
     int language;

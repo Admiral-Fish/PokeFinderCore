@@ -27,8 +27,7 @@ typedef uint32_t u32;
 class Utilities
 {
     
-public:
-    
+public:    
     static u32 CalcGen3Seed(QDate time, u32 h, u32 m);
 
 };

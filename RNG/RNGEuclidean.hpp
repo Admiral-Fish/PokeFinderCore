@@ -37,18 +37,13 @@ private:
     u64 sub1;
     u64 sub2;
 
-    void setupEuclidean(Method FrameType);
+    void SetupEuclidean(Method FrameType);
 
 public:
-
     RNGEuclidean(Method FrameType);
-
     vector<u32> RecoverLower16BitsIV(u32 first, u32 second);
-
     vector<u32> RecoverLower16BitsPID(u32 first, u32 second);
-
     vector<u32> RecoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
-
     void SwitchEuclidean(Method FrameType);
 
 };
