@@ -58,9 +58,9 @@ vector<Frame3> Generator3::GenerateMethodChannel(FrameCompare compare)
     {
         frame.SetIDs(40122, rngList[0], 40122 ^ rngList[0]);
         if ((rngList[2] > 7 ? 0 : 1) != (rngList[1] ^ 40122 ^ rngList[0]))
-            frame.SetPID(rngList[1] ^ 0x8000, rngList[2]);
+            frame.SetPID(rngList[2], rngList[1] ^ 0x8000);
         else
-            frame.SetPID(rngList[1], rngList[2]);
+            frame.SetPID(rngList[2], rngList[1]);
         if (!compare.ComparePID(frame))
             continue;
 
