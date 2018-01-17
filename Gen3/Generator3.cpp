@@ -374,32 +374,9 @@ void Generator3::Refill()
     size = (int)rngList.size() - 2;
 }
 
-// Determines what generational method to return
+// Generates frames
 vector<Frame3> Generator3::Generate(FrameCompare compare)
 {
-    if (frameType == XDColo || frameType == Channel)
-        rng = XDRNG(initialSeed);
-    else
-        rng = PokeRNG(initialSeed);
-
-    rng.AdvanceFrames(initialFrame - 1 + offset);
-
-    if (frameType == Method1 || frameType == MethodH1)
-    {
-        iv1 = frameType == MethodH1 ? 1 : 2;
-        iv2 = frameType == MethodH1 ? 2 : 3;
-    }
-    else if (frameType == Method2 || frameType == MethodH2)
-    {
-        iv1 = frameType == MethodH2 ? 2 : 3;
-        iv2 = frameType == MethodH2 ? 3 : 4;
-    }
-    else if (frameType == Method4 || frameType == MethodH4)
-    {
-        iv1 = frameType == MethodH4 ? 1 : 2;
-        iv2 = frameType == MethodH4 ? 3 : 4;
-    }
-
     switch (frameType)
     {
         case Method1:
@@ -426,5 +403,33 @@ vector<Frame3> Generator3::Generate(FrameCompare compare)
         // Set to default to avoid compiler warning message
         default:
             return GenerateMethodChannel(compare);
+    }
+}
+
+// Determines what generational method to use
+void Generator3::Setup(Method method)
+{
+    frameType = method;
+    if (frameType == XDColo || frameType == Channel)
+        rng = XDRNG(initialSeed);
+    else
+        rng = PokeRNG(initialSeed);
+
+    rng.AdvanceFrames(initialFrame - 1 + offset);
+
+    if (frameType == Method1 || frameType == MethodH1)
+    {
+        iv1 = frameType == MethodH1 ? 1 : 2;
+        iv2 = frameType == MethodH1 ? 2 : 3;
+    }
+    else if (frameType == Method2 || frameType == MethodH2)
+    {
+        iv1 = frameType == MethodH2 ? 2 : 3;
+        iv2 = frameType == MethodH2 ? 3 : 4;
+    }
+    else if (frameType == Method4 || frameType == MethodH4)
+    {
+        iv1 = frameType == MethodH4 ? 1 : 2;
+        iv2 = frameType == MethodH4 ? 3 : 4;
     }
 }

@@ -22,6 +22,10 @@
 // See https://crypto.stackexchange.com/a/10609 for how the following math works
 // Uses a brute force meet in the middle attack using precomputated data
 
+RNGCache::RNGCache()
+{
+}
+
 // Constructor for RNGCache
 RNGCache::RNGCache(Method MethodType)
 {

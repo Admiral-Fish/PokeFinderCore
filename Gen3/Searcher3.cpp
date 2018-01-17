@@ -542,6 +542,38 @@ vector<Frame3> Searcher3::SearchMethod4(uint hp, uint atk, uint def, uint spa, u
 // Determines which generational method to return
 vector<Frame3> Searcher3::Search(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
 {
+    switch (frameType)
+    {
+        case Method1:
+            return SearchMethod1(hp, atk, def, spa, spd, spe, compare);
+        case Method2:
+            return SearchMethod2(hp, atk, def, spa, spd, spe, compare);
+        case Method4:
+            return SearchMethod4(hp, atk, def, spa, spd, spe, compare);
+        case MethodH1:
+            return SearchMethodH1(hp, atk, def, spa, spd, spe, compare);
+        case MethodH2:
+            return SearchMethodH2(hp, atk, def, spa, spd, spe, compare);
+        case MethodH4:
+            return SearchMethodH4(hp, atk, def, spa, spd, spe, compare);
+        case Colo:
+            return SearchMethodColo(hp, atk, def, spa, spd, spe, compare);
+        case XD:
+            return SearchMethodXD(hp, atk, def, spa, spd, spe, compare);
+        case XDColo:
+            return SearchMethodXDColo(hp, atk, def, spa, spd, spe, compare);
+        // case Channel:
+        // Set to default to avoid compiler warning message
+        default:
+            return SearchMethodChannel(hp, atk, def, spa, spd, spe, compare);
+    }
+}
+
+// Switches cache or euclidean to user defined method
+void Searcher3::Setup(Method method)
+{
+    frameType = method;
+
     if (frameType == XDColo || frameType == Channel || frameType == XD || frameType == Colo)
     {
         forward = XDRNG(0);
@@ -553,46 +585,6 @@ vector<Frame3> Searcher3::Search(uint hp, uint atk, uint def, uint spa, uint spd
         backward = PokeRNGR(0);
     }
 
-    switch (frameType)
-    {
-        case Method1:
-            cache.SwitchCache(Method1);
-            return SearchMethod1(hp, atk, def, spa, spd, spe, compare);
-        case Method2:
-            cache.SwitchCache(Method2);
-            return SearchMethod2(hp, atk, def, spa, spd, spe, compare);
-        case Method4:
-            cache.SwitchCache(Method4);
-            return SearchMethod4(hp, atk, def, spa, spd, spe, compare);
-        case MethodH1:
-            cache.SwitchCache(Method1);
-            return SearchMethodH1(hp, atk, def, spa, spd, spe, compare);
-        case MethodH2:
-            cache.SwitchCache(Method2);
-            return SearchMethodH2(hp, atk, def, spa, spd, spe, compare);
-        case MethodH4:
-            cache.SwitchCache(Method4);
-            return SearchMethodH4(hp, atk, def, spa, spd, spe, compare);
-        case Colo:
-            euclidean.SwitchEuclidean(Colo);
-            return SearchMethodColo(hp, atk, def, spa, spd, spe, compare);
-        case XD:
-            euclidean.SwitchEuclidean(XD);
-            return SearchMethodXD(hp, atk, def, spa, spd, spe, compare);
-        case XDColo:
-            euclidean.SwitchEuclidean(XDColo);
-            return SearchMethodXDColo(hp, atk, def, spa, spd, spe, compare);
-        // case Channel:
-        // Set to default to avoid compiler warning message
-        default:
-            euclidean.SwitchEuclidean(Channel);
-            return SearchMethodChannel(hp, atk, def, spa, spd, spe, compare);
-    }
-}
-
-// Switches cache or euclidean to user defined method
-void Searcher3::SetMethod(Method frameType)
-{
     switch (frameType)
     {
         case Method1:

@@ -53,6 +53,7 @@ public:
     Generator3();
     Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u32 tid, u32 sid, u32 offset);
     vector<Frame3> Generate(FrameCompare compare);
+    void Setup(Method method);
 
 };
 

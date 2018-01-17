@@ -40,6 +40,7 @@ private:
     void SetupCache(Method MethodType);
 
 public:
+    RNGCache();
     RNGCache(Method MethodType);
     vector<u32> RecoverLower16BitsIV(u32 first, u32 second);
     vector<u32> RecoverLower16BitsPID(u32 first, u32 second);

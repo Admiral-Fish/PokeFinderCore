@@ -29,7 +29,7 @@ class Searcher3: public Searcher
 {
 
 private:
-    RNGCache cache = RNGCache(Method1);
+    RNGCache cache;
     RNGEuclidean euclidean = RNGEuclidean(XDColo);
     Frame3 frame = Frame3(0, 0, 0);
     LCRNG forward = PokeRNG(0);
@@ -51,7 +51,7 @@ public:
     Searcher3();
     Searcher3(uint tid, uint sid);
     vector<Frame3> Search(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare);
-    void SetMethod(Method frameType);
+    void Setup(Method method);
 
 };
 
