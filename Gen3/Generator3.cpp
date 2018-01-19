@@ -196,8 +196,6 @@ vector<Frame3> Generator3::GenerateMethodH124Synch(FrameCompare compare)
     return frames;
 }
 
-
-
 // Returns vector of frames for Method H 1, 2, or 4 given cute charm lead
 vector<Frame3> Generator3::GenerateMethodH124CuteCharm(FrameCompare compare)
 {

@@ -20,8 +20,7 @@
 #ifndef FRAME3_HPP
 #define FRAME3_HPP
 #include <libPokeFinder/Objects/Frame.hpp>
-#include <QList>
-#include <QStandardItem>
+#include <QString>
 
 class Frame3: public Frame
 {
@@ -35,7 +34,7 @@ public:
     u32 inh1;
     u32 inh2;
     u32 inh3;
-    string lockReason;
+    QString lockReason;
     u32 occidentary;
     u32 par1;
     u32 par2;

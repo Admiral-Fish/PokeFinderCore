@@ -96,7 +96,7 @@ u32 Nature::GetAdjustedNature(u32 nature)
         case 23:
             return 24;
         case 24:
-            return 18;
+            return 12;
         default:
             return 0;
     }

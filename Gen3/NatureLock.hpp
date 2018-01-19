@@ -29,7 +29,6 @@ typedef uint32_t u32;
 // Defines the different types of shadows
 enum ShadowType
 {
-    NoLock,
     SingleLock,
     FirstShadow,
     Salamence,
@@ -82,14 +81,14 @@ private:
 public:
     NatureLock();
     ShadowType GetType();
-    bool IVMethodFirstShadow(u32 seed);
-    bool IVMethodFirstShadowSet(u32 seed);
-    bool IVMethodFirstShadowShinySkip(u32 seed);
-    bool IVMethodFirstShadowUnset(u32 seed);
-    bool IVMethodSalamenceSet(u32 seed);
-    bool IVMethodSalamenceShinySkip(u32 seed);
-    bool IVMethodSalamenceUnset(u32 seed);
-    bool IVMethodSingleNL(u32 seed);
+    bool FirstShadowNormal(u32 seed);
+    bool FirstShadowSet(u32 seed);
+    bool FirstShadowShinySkip(u32 seed);
+    bool FirstShadowUnset(u32 seed);
+    bool SalamenceSet(u32 seed);
+    bool SalamenceShinySkip(u32 seed);
+    bool SalamenceUnset(u32 seed);
+    bool SingleNL(u32 seed);
     void SwitchLockColo(int lockNum);    
     void SwitchLockGales(int lockNum);
 

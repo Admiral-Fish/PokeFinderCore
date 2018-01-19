@@ -29,7 +29,7 @@ Searcher3::Searcher3()
 }
 
 // Constructor given user defined parameters
-Searcher3::Searcher3(uint tid, uint sid)
+Searcher3::Searcher3(u32 tid, u32 sid)
 {
     this->tid = tid;
     this->sid = sid;
@@ -38,7 +38,7 @@ Searcher3::Searcher3(uint tid, uint sid)
 }
 
 // Returns vector of frames for Channel Method
-vector<Frame3> Searcher3::SearchMethodChannel(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
@@ -52,8 +52,8 @@ vector<Frame3> Searcher3::SearchMethodChannel(uint hp, uint atk, uint def, uint 
 
         // Calculate PID
         backward.AdvanceFrames(3);
-        uint pid2 = backward.Nextushort();
-        uint pid1 = backward.Nextushort();
+        u32 pid2 = backward.Nextushort();
+        u32 pid1 = backward.Nextushort();
 
         // Determine if PID needs to be XORed
         if ((pid2 > 7 ? 0 : 1) != (pid1 ^ backward.Nextushort() ^ 40122))
@@ -70,12 +70,12 @@ vector<Frame3> Searcher3::SearchMethodChannel(uint hp, uint atk, uint def, uint 
 }
 
 // Returns vector of frames for Method Colo Shadows
-vector<Frame3> Searcher3::SearchMethodColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
-    uint first = (hp | (atk << 5) | (def << 10)) << 16;
-    uint second = (spe | (spa << 5) | (spd << 10)) << 16;
+    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
+    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = euclidean.RecoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
@@ -89,7 +89,13 @@ vector<Frame3> Searcher3::SearchMethodColo(uint hp, uint atk, uint def, uint spa
         frame.SetPID(forward.Nextushort(), forward.Nextushort());
         frame.seed = seeds[i] * 0xB9B33155 + 0xA170F641;
         if (compare.ComparePID(frame))
-            frames.push_back(frame);
+        {
+            if (natureLock.FirstShadowNormal(frame.seed))
+            {
+                frames.push_back(frame);
+                continue;
+            }
+        }
 
         // Setup XORed frame
         frame.pid ^= 0x80008000;
@@ -97,22 +103,23 @@ vector<Frame3> Searcher3::SearchMethodColo(uint hp, uint atk, uint def, uint spa
         if (compare.ComparePID(frame))
         {
             frame.seed ^= 0x80000000;
-            frames.push_back(frame);
+            if (natureLock.FirstShadowNormal(frame.seed))
+                frames.push_back(frame);
         }
     }
     return frames;
 }
 
 // Returns vector of frames for Method H1
-vector<Frame3> Searcher3::SearchMethodH1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodH1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
-    uint first = (hp | (atk << 5) | (def << 10)) << 16;
-    uint second = (spe | (spa << 5) | (spd << 10)) << 16;
+    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
+    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.RecoverLower16BitsIV(first, second);
     auto size = seeds.size();
-    uint seed;
+    u32 seed;
 
     for (auto i = 0; i < size; i++)
     {
@@ -136,9 +143,9 @@ vector<Frame3> Searcher3::SearchMethodH1(uint hp, uint atk, uint def, uint spa, 
                 continue;
 
             LCRNG testRNG = PokeRNGR(seed);
-            uint testPID, slot, testSeed;
-            uint nextRNG = seed >> 16;
-            uint nextRNG2 = testRNG.Nextushort();
+            u32 testPID, slot, testSeed;
+            u32 nextRNG = seed >> 16;
+            u32 nextRNG2 = testRNG.Nextushort();
 
             do
             {
@@ -194,15 +201,15 @@ vector<Frame3> Searcher3::SearchMethodH1(uint hp, uint atk, uint def, uint spa, 
 }
 
 // Returns vector of frames for Method H2
-vector<Frame3> Searcher3::SearchMethodH2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodH2(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
-    uint first = (hp | (atk << 5) | (def << 10)) << 16;
-    uint second = (spe | (spa << 5) | (spd << 10)) << 16;
+    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
+    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.RecoverLower16BitsIV(first, second);
     auto size = seeds.size();
-    uint seed;
+    u32 seed;
 
     for (auto i = 0; i < size; i++)
     {
@@ -227,9 +234,9 @@ vector<Frame3> Searcher3::SearchMethodH2(uint hp, uint atk, uint def, uint spa, 
                 continue;
 
             LCRNG testRNG = PokeRNGR(seed);
-            uint testPID, slot, testSeed;
-            uint nextRNG = seed >> 16;
-            uint nextRNG2 = testRNG.Nextushort();
+            u32 testPID, slot, testSeed;
+            u32 nextRNG = seed >> 16;
+            u32 nextRNG2 = testRNG.Nextushort();
 
             do
             {
@@ -285,15 +292,15 @@ vector<Frame3> Searcher3::SearchMethodH2(uint hp, uint atk, uint def, uint spa, 
 }
 
 // Returns vector of frames for Method H4
-vector<Frame3> Searcher3::SearchMethodH4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodH4(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
-    uint first = (hp | (atk << 5) | (def << 10)) << 16;
-    uint second = (spe | (spa << 5) | (spd << 10)) << 16;
+    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
+    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.RecoverLower16BitsIV(first, second);
     auto size = seeds.size();
-    uint seed;
+    u32 seed;
 
     for (auto i = 0; i < size; i++)
     {
@@ -317,9 +324,9 @@ vector<Frame3> Searcher3::SearchMethodH4(uint hp, uint atk, uint def, uint spa, 
                 continue;
 
             LCRNG testRNG = PokeRNGR(seed);
-            uint testPID, slot, testSeed;
-            uint nextRNG = seed >> 16;
-            uint nextRNG2 = testRNG.Nextushort();
+            u32 testPID, slot, testSeed;
+            u32 nextRNG = seed >> 16;
+            u32 nextRNG2 = testRNG.Nextushort();
 
             do
             {
@@ -376,13 +383,13 @@ vector<Frame3> Searcher3::SearchMethodH4(uint hp, uint atk, uint def, uint spa, 
 }
 
 // Returns vector of frames for Method Gales Shadows
-vector<Frame3> Searcher3::SearchMethodXD(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
-    uint first = (hp | (atk << 5) | (def << 10)) << 16;
-    uint second = (spe | (spa << 5) | (spd << 10)) << 16;
-    vector<uint> seeds = euclidean.RecoverLower16BitsIV(first, second);
+    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
+    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
+    vector<u32> seeds = euclidean.RecoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     // Need to setup Naturelock checking
@@ -395,7 +402,65 @@ vector<Frame3> Searcher3::SearchMethodXD(uint hp, uint atk, uint def, uint spa, 
         frame.SetPID(forward.Nextushort(), forward.Nextushort());
         frame.seed = seeds[i] * 0xB9B33155 + 0xA170F641;
         if (compare.ComparePID(frame))
-            frames.push_back(frame);
+        {
+            switch (type)
+            {
+                case SingleLock:
+                    if (natureLock.SingleNL(frame.seed))
+                    {
+                        frames.push_back(frame);
+                        continue;
+                    }
+                    break;
+                case FirstShadow:
+                    if (natureLock.FirstShadowNormal(frame.seed))
+                    {
+                        frames.push_back(frame);
+                        continue;
+                    }
+                    break;
+                case SecondShadow:
+                    if (natureLock.FirstShadowUnset(frame.seed))
+                    {
+                        frame.lockReason = QObject::tr("First shadow unset");
+                        frames.push_back(frame);
+                        continue;
+                    }
+                    if (natureLock.FirstShadowSet(frame.seed))
+                    {
+                        frame.lockReason = QObject::tr("First shadow set");
+                        frames.push_back(frame);
+                        continue;
+                    }
+                    if (natureLock.FirstShadowShinySkip(frame.seed))
+                    {
+                        frame.lockReason = QObject::tr("Shiny Skip");
+                        frames.push_back(frame);
+                        continue;
+                    }
+                    break;
+                case Salamence:
+                    if (natureLock.SalamenceUnset(frame.seed))
+                    {
+                        frame.lockReason = QObject::tr("First shadow unset");
+                        frames.push_back(frame);
+                        continue;
+                    }
+                    if (natureLock.SalamenceSet(frame.seed))
+                    {
+                        frame.lockReason = QObject::tr("First shadow set");
+                        frames.push_back(frame);
+                        continue;
+                    }
+                    if (natureLock.SalamenceShinySkip(frame.seed))
+                    {
+                        frame.lockReason = QObject::tr("Shiny Skip");
+                        frames.push_back(frame);
+                        continue;
+                    }
+                    break;
+            }
+        }
 
         // Setup XORed frame
         frame.pid ^= 0x80008000;
@@ -403,19 +468,67 @@ vector<Frame3> Searcher3::SearchMethodXD(uint hp, uint atk, uint def, uint spa, 
         if (compare.ComparePID(frame))
         {
             frame.seed ^= 0x80000000;
-            frames.push_back(frame);
+            switch (type)
+            {
+                case SingleLock:
+                    if (natureLock.SingleNL(frame.seed))
+                    {
+                        frames.push_back(frame);
+                    }
+                    break;
+                case FirstShadow:
+                    if (natureLock.FirstShadowNormal(frame.seed))
+                    {
+                        frames.push_back(frame);
+                    }
+                    break;
+                case SecondShadow:
+                    if (natureLock.FirstShadowUnset(frame.seed))
+                    {
+                        frame.lockReason = QObject::tr("First shadow unset");
+                        frames.push_back(frame);
+                    }
+                    if (natureLock.FirstShadowSet(frame.seed))
+                    {
+                        frame.lockReason = QObject::tr("First shadow set");
+                        frames.push_back(frame);
+                    }
+                    if (natureLock.FirstShadowShinySkip(frame.seed))
+                    {
+                        frame.lockReason = QObject::tr("Shiny Skip");
+                        frames.push_back(frame);
+                    }
+                    break;
+                case Salamence:
+                    if (natureLock.SalamenceUnset(frame.seed))
+                    {
+                        frame.lockReason = QObject::tr("First shadow unset");
+                        frames.push_back(frame);
+                    }
+                    if (natureLock.SalamenceSet(frame.seed))
+                    {
+                        frame.lockReason = QObject::tr("First shadow set");
+                        frames.push_back(frame);
+                    }
+                    if (natureLock.SalamenceShinySkip(frame.seed))
+                    {
+                        frame.lockReason = QObject::tr("Shiny Skip");
+                        frames.push_back(frame);
+                    }
+                    break;
+            }
         }
     }
     return frames;
 }
 
 // Return vector of frames for Method XDColo
-vector<Frame3> Searcher3::SearchMethodXDColo(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
-    uint first = (hp | (atk << 5) | (def << 10)) << 16;
-    uint second = (spe | (spa << 5) | (spd << 10)) << 16;
+    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
+    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = euclidean.RecoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
@@ -443,12 +556,12 @@ vector<Frame3> Searcher3::SearchMethodXDColo(uint hp, uint atk, uint def, uint s
 }
 
 // Returns vector of frames for Method 1
-vector<Frame3> Searcher3::SearchMethod1(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
-    uint first = (hp | (atk << 5) | (def << 10)) << 16;
-    uint second = (spe | (spa << 5) | (spd << 10)) << 16;
+    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
+    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.RecoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
@@ -475,12 +588,12 @@ vector<Frame3> Searcher3::SearchMethod1(uint hp, uint atk, uint def, uint spa, u
 }
 
 // Returns vector of frames for Method 2
-vector<Frame3> Searcher3::SearchMethod2(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethod2(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
-    uint first = (hp | (atk << 5) | (def << 10)) << 16;
-    uint second = (spe | (spa << 5) | (spd << 10)) << 16;
+    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
+    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.RecoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
@@ -508,12 +621,12 @@ vector<Frame3> Searcher3::SearchMethod2(uint hp, uint atk, uint def, uint spa, u
 }
 
 // Returns vector of frames for Method 4
-vector<Frame3> Searcher3::SearchMethod4(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::SearchMethod4(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
 {
     vector<Frame3> frames;
 
-    uint first = (hp | (atk << 5) | (def << 10)) << 16;
-    uint second = (spe | (spa << 5) | (spd << 10)) << 16;
+    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
+    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.RecoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
@@ -540,7 +653,7 @@ vector<Frame3> Searcher3::SearchMethod4(uint hp, uint atk, uint def, uint spa, u
 }
 
 // Determines which generational method to return
-vector<Frame3> Searcher3::Search(uint hp, uint atk, uint def, uint spa, uint spd, uint spe, FrameCompare compare)
+vector<Frame3> Searcher3::Search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
 {
     switch (frameType)
     {
@@ -610,4 +723,18 @@ void Searcher3::Setup(Method method)
             euclidean.SwitchEuclidean(Channel);
             break;
     }
+}
+
+void Searcher3::SetupNatureLock(int num)
+{
+    if (frameType == XD)
+    {
+        natureLock.SwitchLockGales(num);
+    }
+    else if (frameType == Colo)
+    {
+        natureLock.SwitchLockColo(num);
+    }
+    type = natureLock.GetType();
+    frame.lockReason = QObject::tr("Pass NL");
 }
