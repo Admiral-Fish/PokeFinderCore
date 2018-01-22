@@ -19,24 +19,11 @@
 
 #include "FrameCompare.hpp"
 
-FrameCompare::FrameCompare(int hpEvalIndex, int hpNum, int atkEvalIndex, int atkNum,
-                           int defEvalIndex, int defNum, int spaEvalIndex, int spaNum,
-                           int spdEvalIndex, int spdNum, int speEvalIndex, int speNum,
-                           int genderIndex, int genderRatioIndex, int abilityIndex,
+FrameCompare::FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
                            vector<bool> nature, vector<bool> power, bool onlyShiny, bool skipCompare)
 {
-    hp[0] = (u32)hpEvalIndex;
-    hp[1] = (u32)hpNum;
-    atk[0] = (u32)atkEvalIndex;
-    atk[1] = (u32)atkNum;
-    def[0] = (u32)defEvalIndex;
-    def[1] = (u32)defNum;
-    spa[0] = (u32)spaEvalIndex;
-    spa[1] = (u32)spaNum;
-    spd[0] = (u32)spdEvalIndex;
-    spd[1] = (u32)spdNum;
-    spe[0] = (u32)speEvalIndex;
-    spe[1] = (u32)speNum;
+    this->eval = eval;
+    val = values;
 
     gender = (u32)genderIndex;
     genderRatio = (u32)genderRatioIndex;
@@ -170,136 +157,29 @@ bool FrameCompare::CompareIVs(Frame frame)
     if(!powers[frame.hidden])
         return false;
 
-    switch(hp[0])
+    for (int i = 0; i < 6; i++)
     {
-        case 1:
-            if(frame.ivs[0] != hp[1])
-                return false;
-            break;
-        case 2:
-            if(frame.ivs[0] < hp[1])
-                return false;
-            break;
-        case 3:
-            if(frame.ivs[0] > hp[1])
-                return false;
-            break;
-        case 4:
-            if(frame.ivs[0] == hp[1])
-                return false;
-            break;
-        default:
-            break;
-    }
-
-    switch(atk[0])
-    {
-        case 1:
-            if(frame.ivs[1] != atk[1])
-                return false;
-            break;
-        case 2:
-            if(frame.ivs[1] < atk[1])
-                return false;
-            break;
-        case 3:
-            if(frame.ivs[1] > atk[1])
-                return false;
-            break;
-        case 4:
-            if(frame.ivs[1] == atk[1])
-                return false;
-            break;
-        default:
-            break;
-    }
-
-    switch(def[0])
-    {
-        case 1:
-            if(frame.ivs[2] != def[1])
-                return false;
-            break;
-        case 2:
-            if(frame.ivs[2] < def[1])
-                return false;
-            break;
-        case 3:
-            if(frame.ivs[2] > def[1])
-                return false;
-            break;
-        case 4:
-            if(frame.ivs[2] == def[1])
-                return false;
-            break;
-        default:
-            break;
-    }
-
-    switch(spa[0])
-    {
-        case 1:
-            if(frame.ivs[3] != spa[1])
-                return false;
-            break;
-        case 2:
-            if(frame.ivs[3] < spa[1])
-                return false;
-            break;
-        case 3:
-            if(frame.ivs[3] > spa[1])
-                return false;
-            break;
-        case 4:
-            if(frame.ivs[3] == spa[1])
-                return false;
-            break;
-        default:
-            break;
-    }
-
-    switch(spd[0])
-    {
-        case 1:
-            if(frame.ivs[4] != spd[1])
-                return false;
-            break;
-        case 2:
-            if(frame.ivs[4] < spd[1])
-                return false;
-            break;
-        case 3:
-            if(frame.ivs[4] > spd[1])
-                return false;
-            break;
-        case 4:
-            if(frame.ivs[4] == spd[1])
-                return false;
-            break;
-        default:
-            break;
-    }
-
-    switch(spe[0])
-    {
-        case 1:
-            if(frame.ivs[5] != spe[1])
-                return false;
-            break;
-        case 2:
-            if(frame.ivs[5] < spe[1])
-                return false;
-            break;
-        case 3:
-            if(frame.ivs[5] > spe[1])
-                return false;
-            break;
-        case 4:
-            if(frame.ivs[5] == spe[1])
-                return false;
-            break;
-        default:
-            break;
+        switch(eval[i])
+        {
+            case 1:
+                if(frame.ivs[i] != val[i])
+                    return false;
+                break;
+            case 2:
+                if(frame.ivs[i] < val[i])
+                    return false;
+                break;
+            case 3:
+                if(frame.ivs[i] > val[i])
+                    return false;
+                break;
+            case 4:
+                if(frame.ivs[i] == val[i])
+                    return false;
+                break;
+            default:
+                break;
+        }
     }
 
     return true;

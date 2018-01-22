@@ -34,12 +34,8 @@ class FrameCompare
 {
 
 private:
-    uint hp[2];
-    u32 atk[2];
-    u32 def[2];
-    u32 spa[2];
-    u32 spd[2];
-    u32 spe[2];
+    vector<u32> eval;
+    vector<u32> val;
     u32 gender;
     u32 genderRatio;
     u32 ability;
@@ -49,10 +45,7 @@ private:
     bool skip;
 
 public:
-    FrameCompare(int hpEvalIndex, int hpNum, int atkEvalIndex, int atkNum,
-                 int defEvalIndex, int defNum, int spaEvalIndex, int spaNum,
-                 int spdEvalIndex, int spdNum, int speEvalIndex, int speNum,
-                 int genderIndex, int genderRatioIndex, int abilityIndex,
+    FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
                  vector<bool> nature, vector<bool> power, bool onlyShiny, bool skipCompare);
     bool ComparePID(Frame frame);
     bool CompareIVs(Frame frame);
