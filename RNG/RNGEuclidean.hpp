@@ -19,11 +19,11 @@
 
 #ifndef RNGEUCLIDEAN_HPP
 #define RNGEUCLIDEAN_HPP
+
 #include <libPokeFinder/Objects/Method.hpp>
-#include <cstdint>
 #include <vector>
 
-using namespace std;
+using std::vector;
 typedef uint64_t u64;
 typedef uint32_t u32;
 
@@ -31,20 +31,20 @@ class RNGEuclidean
 {
 
 private:
-    const u32 ADD = 0x269EC3;
-    const u32 MULT = 0x343FD;
+    static const u32 ADD = 0x269EC3;
+    static const u32 MULT = 0x343FD;
     u64 base;
     u64 sub1;
     u64 sub2;
 
-    void SetupEuclidean(Method FrameType);
+    void setupEuclidean(Method FrameType);
 
 public:
     RNGEuclidean(Method FrameType);
-    vector<u32> RecoverLower16BitsIV(u32 first, u32 second);
-    vector<u32> RecoverLower16BitsPID(u32 first, u32 second);
-    vector<u32> RecoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
-    void SwitchEuclidean(Method FrameType);
+    vector<u32> recoverLower16BitsIV(u32 first, u32 second);
+    vector<u32> recoverLower16BitsPID(u32 first, u32 second);
+    vector<u32> recoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    void switchEuclidean(Method FrameType);
 
 };
 

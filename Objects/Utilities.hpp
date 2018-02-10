@@ -19,8 +19,8 @@
 
 #ifndef UTILITIES_HPP
 #define UTILITIES_HPP
+
 #include <QDateTime>
-#include <cstdint>
 
 typedef uint32_t u32;
 
@@ -28,7 +28,7 @@ class Utilities
 {
     
 public:    
-    static u32 CalcGen3Seed(QDate time, u32 h, u32 m);
+    static u32 calcGen3Seed(QDate time, u32 h, u32 m);
 
 };
 

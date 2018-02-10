@@ -26,7 +26,7 @@
 #include <QFile>
 #include <QTextStream>
 
-using namespace std;
+using std::vector;
 typedef uint32_t u32;
 
 class Profile

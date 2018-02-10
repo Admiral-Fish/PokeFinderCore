@@ -19,11 +19,11 @@
 
 #ifndef ENCOUNTERSLOT_HPP
 #define ENCOUNTERSLOT_HPP
+
 #include <libPokeFinder/Objects/Encounter.hpp>
-#include <cstdint>
 #include <vector>
 
-using namespace std;
+using std::vector;
 typedef uint32_t u32;
 
 class Range
@@ -35,8 +35,8 @@ private:
     
 public:
     Range(u32 min, u32 max);
-    u32 GetMax();    
-    u32 GetMin();    
+    u32 getMax();
+    u32 getMin();
 
 };
 
@@ -44,12 +44,12 @@ class EncounterSlot
 {
     
 private:
-    static int CalcSlot(unsigned int compare, vector<Range> ranges);
+    static int calcSlot(u32 compare, vector<Range> ranges);
     
 public:
-    static int HSlot(u32 result, Encounter encounterType);
-    static int JSlot(u32 result, Encounter encounterType);    
-    static int KSlot(u32 result, Encounter encounterType);
+    static int hSlot(u32 result, Encounter encounterType);
+    static int jSlot(u32 result, Encounter encounterType);
+    static int kSlot(u32 result, Encounter encounterType);
 };
 
 #endif // ENCOUNTERSLOT_HPP

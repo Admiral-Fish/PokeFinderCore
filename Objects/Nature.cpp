@@ -19,7 +19,7 @@
 
 #include "Nature.hpp"
 
-vector<QString> Nature::GetNatures()
+vector<QString> Nature::getNatures()
 {
     vector<QString> natures ={ QObject::tr("Adamant"), QObject::tr("Bold"), QObject::tr("Brave"), QObject::tr("Calm"),
                                QObject::tr("Careful"), QObject::tr("Hasty"), QObject::tr("Impish"), QObject::tr("Jolly"),
@@ -31,7 +31,7 @@ vector<QString> Nature::GetNatures()
     return natures;
 }
 
-vector<QString> Nature::GetFrameNatures()
+vector<QString> Nature::getFrameNatures()
 {
     vector<QString> natures = { QObject::tr("Hardy"), QObject::tr("Lonely"), QObject::tr("Brave"), QObject::tr("Adamant"),
                                 QObject::tr("Naughty"), QObject::tr("Bold"), QObject::tr("Docile"), QObject::tr("Relaxed"),
@@ -43,7 +43,7 @@ vector<QString> Nature::GetFrameNatures()
     return natures;
 }
 
-u32 Nature::GetAdjustedNature(u32 nature)
+u32 Nature::getAdjustedNature(u32 nature)
 {
     switch (nature)
     {
@@ -102,7 +102,7 @@ u32 Nature::GetAdjustedNature(u32 nature)
     }
 }
 
-u32 Nature::GetReversedNature(u32 nature)
+u32 Nature::getReversedNature(u32 nature)
 {
     switch (nature)
     {

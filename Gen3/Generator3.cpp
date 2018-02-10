@@ -31,7 +31,7 @@ Generator3::Generator3()
 }
 
 // Constructor given user defined parameters
-Generator3::Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u32 tid, u32 sid, u32 offset)
+Generator3::Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u16 tid, u16 sid, u32 offset)
 {
     this->maxResults = maxResults;
     this->initialFrame = initialFrame;
@@ -43,29 +43,29 @@ Generator3::Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u32 ti
 }
 
 // Returns vector of frames for Method Channel
-vector<Frame3> Generator3::GenerateMethodChannel(FrameCompare compare)
+vector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 12; i++)
-        rngList.push_back(rng.Nextushort());
+        rngList.push_back(rng.nextUShort());
 
     // Method Channel [SEED] [SID] [PID] [PID] [BERRY] [GAME ORIGIN] [OT GENDER] [IV] [IV] [IV] [IV] [IV] [IV]
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Nextushort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
-        frame.SetIDs(40122, rngList[0], 40122 ^ rngList[0]);
+        frame.setIDs(40122, rngList[0], 40122 ^ rngList[0]);
         if ((rngList[2] > 7 ? 0 : 1) != (rngList[1] ^ 40122 ^ rngList[0]))
-            frame.SetPID(rngList[2], rngList[1] ^ 0x8000);
+            frame.setPID(rngList[2], rngList[1] ^ 0x8000);
         else
-            frame.SetPID(rngList[2], rngList[1]);
-        if (!compare.ComparePID(frame))
+            frame.setPID(rngList[2], rngList[1]);
+        if (!compare.comparePID(frame))
             continue;
 
-        frame.SetIVsManual(rngList[6] >> 11, rngList[7] >> 11, rngList[8] >> 11, rngList[10] >> 11, rngList[11] >> 11, rngList[9] >> 11);
-        if (!compare.CompareIVs(frame))
+        frame.setIVsManual(rngList[6] >> 11, rngList[7] >> 11, rngList[8] >> 11, rngList[10] >> 11, rngList[11] >> 11, rngList[9] >> 11);
+        if (!compare.compareIVs(frame))
             continue;
 
         frame.frame = cnt;
@@ -77,49 +77,49 @@ vector<Frame3> Generator3::GenerateMethodChannel(FrameCompare compare)
 }
 
 // Returns vector of frames for Method H 1, 2, or 4
-vector<Frame3> Generator3::GenerateMethodH124(FrameCompare compare)
+vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.Nextushort());
+        rngList.push_back(rng.nextUShort());
     size = 18;
 
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Nextushort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
         hunt = 0;
-        frame.encounterSlot = EncounterSlot::HSlot(rngList[hunt++], encounterType);
+        frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Grab the hunt nature
         frame.nature = rngList[++hunt] % 25;
-        if (!compare.CompareNature(frame))
+        if (!compare.compareNature(frame))
             continue;
 
         // Now search for a Method 124 PID that matches our hunt nature
         do
         {
             if (hunt >= size)
-                Refill();
+                refill();
             pid2 = rngList[++hunt];
             pid1 = rngList[++hunt];
             pid = (pid1 << 16) | pid2;
         }
         while (pid % 25 != frame.nature);
 
-        frame.SetPID(pid, pid1, pid2);
-        if (!compare.ComparePID(frame))
+        frame.setPID(pid, pid1, pid2);
+        if (!compare.comparePID(frame))
             continue;
 
         if (hunt >= size)
-            Refill();
+            refill();
 
         // Valid PID is found now time to generate IVs
-        frame.SetIVs(rngList[hunt + iv1], rngList[hunt + iv2]);
-        if (!compare.CompareIVs(frame))
+        frame.setIVs(rngList[hunt + iv1], rngList[hunt + iv2]);
+        if (!compare.compareIVs(frame))
             continue;
 
         frame.frame = cnt;
@@ -132,21 +132,21 @@ vector<Frame3> Generator3::GenerateMethodH124(FrameCompare compare)
 }
 
 // Returns vector of frames for Method H 1, 2, or 4 given synch lead
-vector<Frame3> Generator3::GenerateMethodH124Synch(FrameCompare compare)
+vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.Nextushort());
+        rngList.push_back(rng.nextUShort());
     size = 18;
 
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Nextushort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
         hunt = 0;
-        frame.encounterSlot = EncounterSlot::HSlot(rngList[hunt++], encounterType);
+        frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Check by seeing if frame can synch
@@ -161,30 +161,30 @@ vector<Frame3> Generator3::GenerateMethodH124Synch(FrameCompare compare)
             // Synch failed so grab hunt nature from next RNG call
             frame.nature = rngList[++hunt] % 25;
         }
-        if (!compare.CompareNature(frame))
+        if (!compare.compareNature(frame))
             continue;
 
         // Now search for a Method 124 PID that matches our hunt nature
         do
         {
             if (hunt >= size)
-                Refill();
+                refill();
             pid2 = rngList[++hunt];
             pid1 = rngList[++hunt];
             pid = (pid1 << 16) | pid2;
         }
         while (pid % 25 != frame.nature);
 
-        frame.SetPID(pid, pid1, pid2);
-        if (!compare.ComparePID(frame))
+        frame.setPID(pid, pid1, pid2);
+        if (!compare.comparePID(frame))
             continue;
 
         if (hunt >= size)
-            Refill();
+            refill();
 
         // Valid PID is found now time to generate IVs
-        frame.SetIVs(rngList[hunt + iv1], rngList[hunt + iv2]);
-        if (!compare.CompareIVs(frame))
+        frame.setIVs(rngList[hunt + iv1], rngList[hunt + iv2]);
+        if (!compare.compareIVs(frame))
             continue;
 
         frame.frame = cnt;
@@ -197,13 +197,13 @@ vector<Frame3> Generator3::GenerateMethodH124Synch(FrameCompare compare)
 }
 
 // Returns vector of frames for Method H 1, 2, or 4 given cute charm lead
-vector<Frame3> Generator3::GenerateMethodH124CuteCharm(FrameCompare compare)
+vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.Nextushort());
+        rngList.push_back(rng.nextUShort());
     size = 18;
 
     u32 max = initialFrame + maxResults;
@@ -213,37 +213,37 @@ vector<Frame3> Generator3::GenerateMethodH124CuteCharm(FrameCompare compare)
     switch (leadType)
     {
         case Lead::CuteCharm125F:
-            cuteCharm = &Generator3::CuteCharm125F;
+            cuteCharm = &Generator3::cuteCharm125F;
             break;
         case Lead::CuteCharm875M:
-            cuteCharm = &Generator3::CuteCharm875M;
+            cuteCharm = &Generator3::cuteCharm875M;
             break;
         case Lead::CuteCharm25F:
-            cuteCharm = &Generator3::CuteCharm25F;
+            cuteCharm = &Generator3::cuteCharm25F;
             break;
         case Lead::CuteCharm75M:
-            cuteCharm = &Generator3::CuteCharm75M;
+            cuteCharm = &Generator3::cuteCharm75M;
             break;
         case Lead::CuteCharm50F:
-            cuteCharm = &Generator3::CuteCharm50F;
+            cuteCharm = &Generator3::cuteCharm50F;
             break;
         case Lead::CuteCharm50M:
-            cuteCharm = &Generator3::CuteCharm50M;
+            cuteCharm = &Generator3::cuteCharm50M;
             break;
         case Lead::CuteCharm75F:
-            cuteCharm = &Generator3::CuteCharm75F;
+            cuteCharm = &Generator3::cuteCharm75F;
             break;
         // Case CuteCharm25M:
         // Set to default to avoid compiler warning message
         default:
-            cuteCharm = &Generator3::CuteCharm25F;
+            cuteCharm = &Generator3::cuteCharm25F;
             break;
     }
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Nextushort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
         hunt = 0;
-        frame.encounterSlot = EncounterSlot::HSlot(rngList[hunt++], encounterType);
+        frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         first = rngList[++hunt];
@@ -251,7 +251,7 @@ vector<Frame3> Generator3::GenerateMethodH124CuteCharm(FrameCompare compare)
         // Cute charm uses first call
         // Call next RNG to determine hunt nature
         frame.nature = rngList[++hunt] % 25;
-        if (compare.CompareNature(frame))
+        if (compare.compareNature(frame))
             continue;
 
         // Check if cute charm will effect frame
@@ -261,7 +261,7 @@ vector<Frame3> Generator3::GenerateMethodH124CuteCharm(FrameCompare compare)
             do
             {
                 if (hunt >= size)
-                    Refill();
+                    refill();
                 pid2 = rngList[++hunt];
                 pid1 = rngList[++hunt];
                 pid = (pid1 << 16) | pid2;
@@ -275,7 +275,7 @@ vector<Frame3> Generator3::GenerateMethodH124CuteCharm(FrameCompare compare)
             do
             {
                 if (hunt > size)
-                    Refill();
+                    refill();
                 pid2 = rngList[++hunt];
                 pid1 = rngList[++hunt];
                 pid = (pid1 << 16) | pid2;
@@ -283,16 +283,16 @@ vector<Frame3> Generator3::GenerateMethodH124CuteCharm(FrameCompare compare)
             while (pid % 25 != frame.nature);
         }
 
-        frame.SetPID(pid, pid1, pid2);
-        if (!compare.ComparePID(frame))
+        frame.setPID(pid, pid1, pid2);
+        if (!compare.comparePID(frame))
             continue;
 
         if (hunt >= size)
-            Refill();
+            refill();
 
         // Valid PID is found now time to generate IVs
-        frame.SetIVs(rngList[hunt + iv1], rngList[hunt + iv2]);
-        if (!compare.CompareIVs(frame))
+        frame.setIVs(rngList[hunt + iv1], rngList[hunt + iv2]);
+        if (!compare.compareIVs(frame))
             continue;
 
         frame.frame = cnt;
@@ -305,25 +305,25 @@ vector<Frame3> Generator3::GenerateMethodH124CuteCharm(FrameCompare compare)
 }
 
 // Returns vector of frames for Method XD/Colo
-vector<Frame3> Generator3::GenerateMethodXDColo(FrameCompare compare)
+vector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 5; i++)
-        rngList.push_back(rng.Nextushort());
+        rngList.push_back(rng.nextUShort());
 
     // Method XD/Colo [SEED] [IVS] [IVS] [BLANK] [PID] [PID]
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Nextushort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
-        frame.SetPID(rngList[4], rngList[3]);
-        if (!compare.ComparePID(frame))
+        frame.setPID(rngList[4], rngList[3]);
+        if (!compare.comparePID(frame))
             continue;
 
-        frame.SetIVs(rngList[0], rngList[1]);
-        if (!compare.CompareIVs(frame))
+        frame.setIVs(rngList[0], rngList[1]);
+        if (!compare.compareIVs(frame))
             continue;
 
         frame.frame = cnt;
@@ -334,27 +334,27 @@ vector<Frame3> Generator3::GenerateMethodXDColo(FrameCompare compare)
 }
 
 // Returns vector of frames for Method 1, 2, or 4
-vector<Frame3> Generator3::GenerateMethod124(FrameCompare compare)
+vector<Frame3> Generator3::generateMethod124(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
     for (int i = 0; i < 5; i++)
-        rngList.push_back(rng.Nextushort());
+        rngList.push_back(rng.nextUShort());
 
     // Method 1 [SEED] [PID] [PID] [IVS] [IVS]
     // Method 2 [SEED] [PID] [PID] [BLANK] [IVS] [IVS]
     // Method 4 [SEED] [PID] [PID] [IVS] [BLANK] [IVS]
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.Nextushort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
-        frame.SetPID(rngList[0], rngList[1]);
-        if (!compare.ComparePID(frame))
+        frame.setPID(rngList[0], rngList[1]);
+        if (!compare.comparePID(frame))
             continue;
 
-        frame.SetIVs(rngList[iv1], rngList[iv2]);
-        if (!compare.CompareIVs(frame))
+        frame.setIVs(rngList[iv1], rngList[iv2]);
+        if (!compare.compareIVs(frame))
             continue;
 
         frame.frame = cnt;
@@ -365,47 +365,47 @@ vector<Frame3> Generator3::GenerateMethod124(FrameCompare compare)
     return frames;
 }
 
-void Generator3::Refill()
+void Generator3::refill()
 {
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.Nextushort());
+        rngList.push_back(rng.nextUShort());
     size = (int)rngList.size() - 2;
 }
 
 // Generates frames
-vector<Frame3> Generator3::Generate(FrameCompare compare)
+vector<Frame3> Generator3::generate(FrameCompare compare)
 {
     switch (frameType)
     {
         case Method1:
         case Method2:
         case Method4:
-            return GenerateMethod124(compare);
+            return generateMethod124(compare);
         case MethodH1:
         case MethodH2:
         case MethodH4:
             switch (leadType)
             {
                 case None:
-                    return GenerateMethodH124(compare);
+                    return generateMethodH124(compare);
                 case Synchronize:
-                    return GenerateMethodH124Synch(compare);
+                    return generateMethodH124Synch(compare);
                 // case CuteCharm:
                 // Set to default to avoid compiler warning message
                 default:
-                    return GenerateMethodH124CuteCharm(compare);
+                    return generateMethodH124CuteCharm(compare);
             }
         case XDColo:
-            return GenerateMethodXDColo(compare);
+            return generateMethodXDColo(compare);
         // case Channel:
         // Set to default to avoid compiler warning message
         default:
-            return GenerateMethodChannel(compare);
+            return generateMethodChannel(compare);
     }
 }
 
 // Determines what generational method to use
-void Generator3::Setup(Method method)
+void Generator3::setup(Method method)
 {
     frameType = method;
     if (frameType == XDColo || frameType == Channel)
@@ -413,7 +413,7 @@ void Generator3::Setup(Method method)
     else
         rng = PokeRNG(initialSeed);
 
-    rng.AdvanceFrames(initialFrame - 1 + offset);
+    rng.advanceFrames(initialFrame - 1 + offset);
 
     if (frameType == Method1 || frameType == MethodH1)
     {

@@ -5,21 +5,21 @@
 // Constructor for Mersenne Twister
 MersenneTwister::MersenneTwister(u32 seed)
 {
-    Initialize(seed);
+    initialize(seed);
 }
 
-void MersenneTwister::AdvanceFrames(int frames)
+void MersenneTwister::advanceFrames(int frames)
 {
     index += frames;
     while (index >= 624)
     {
         index -= 624;
-        Shuffle();
+        shuffle();
     }
 }
 
 // Initializes
-void MersenneTwister::Initialize(u32 seed)
+void MersenneTwister::initialize(u32 seed)
 {
     mt[0] = seed;
 
@@ -27,7 +27,7 @@ void MersenneTwister::Initialize(u32 seed)
         mt[index] = (0x6C078965*(mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
 }
 
-void MersenneTwister::Shuffle()
+void MersenneTwister::shuffle()
 {
     u32 y;
     int kk = 0;
@@ -49,28 +49,28 @@ void MersenneTwister::Shuffle()
 }
 
 // Calls the next psuedo-random number
-u32 MersenneTwister::Nextuint()
+u32 MersenneTwister::nextUInt()
 {
     // Array reshuffle check
     if (index >= N)
     {
-        Shuffle();
+        shuffle();
         index = 0;
     }
 
     u32 y = mt[index++];
-    y ^= TemperingShiftU(y);
-    y ^= TemperingShiftS(y) & TEMPERINGMASKB;
-    y ^= TemperingShiftT(y) & TEMPERINGMASKC;
-    y ^= TemperingShiftL(y);
+    y ^= temperingShiftU(y);
+    y ^= temperingShiftS(y) & TEMPERINGMASKB;
+    y ^= temperingShiftT(y) & TEMPERINGMASKC;
+    y ^= temperingShiftL(y);
 
     return y;
 }
 
 // Recreates the Mersenne Twister with a new seed
-void MersenneTwister::Reseed(u32 seed)
+void MersenneTwister::reseed(u32 seed)
 {
-    Initialize(seed);
+    initialize(seed);
 }
 
 
@@ -79,21 +79,21 @@ void MersenneTwister::Reseed(u32 seed)
 // Constructor for Mersenne Twister Untempered 
 MersenneTwisterUntempered::MersenneTwisterUntempered(u32 seed)
 {
-    Initialize(seed);
+    initialize(seed);
 }
 
-void MersenneTwisterUntempered::AdvanceFrames(int frames)
+void MersenneTwisterUntempered::advanceFrames(int frames)
 {
     index += frames;
     while (index >= 624)
     {
         index -= 624;
-        Shuffle();
+        shuffle();
     }
 }
 
 // Initializes
-void MersenneTwisterUntempered::Initialize(u32 seed)
+void MersenneTwisterUntempered::initialize(u32 seed)
 {
     mt[0] = seed;
 
@@ -101,7 +101,7 @@ void MersenneTwisterUntempered::Initialize(u32 seed)
         mt[index] = (0x6C078965*(mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
 }
 
-void MersenneTwisterUntempered::Shuffle()
+void MersenneTwisterUntempered::shuffle()
 {
     int kk = 0;
     u32 y;
@@ -123,12 +123,12 @@ void MersenneTwisterUntempered::Shuffle()
 }
 
 // Calls the next psuedo-random number
-u32 MersenneTwisterUntempered::Nextuint()
+u32 MersenneTwisterUntempered::nextUInt()
 {
     // Array reshuffle check
     if (index >= N)
     {
-        Shuffle();
+        shuffle();
         index = 0;
     }
 
@@ -136,9 +136,9 @@ u32 MersenneTwisterUntempered::Nextuint()
 }
 
 // Recreates the Mersenne Twister Untempered with a new seed
-void MersenneTwisterUntempered::Reseed(u32 seed)
+void MersenneTwisterUntempered::reseed(u32 seed)
 {
-    Initialize(seed);
+    initialize(seed);
 }
 
 
@@ -155,21 +155,21 @@ MersenneTwisterFast::MersenneTwisterFast(u32 seed, int calls)
         //Throw an error eventually
     }
     max = M + maxCalls;
-    Initialize(seed);
+    initialize(seed);
 }
 
-void MersenneTwisterFast::AdvanceFrames(int frames)
+void MersenneTwisterFast::advanceFrames(int frames)
 {
 	index += frames;
     while (index >= max)
     {
         index -= max;
-        Shuffle();
+        shuffle();
     }
 }
 
 // Initializes
-void MersenneTwisterFast::Initialize(u32 seed)
+void MersenneTwisterFast::initialize(u32 seed)
 {
     mt[0] = seed;
 
@@ -177,7 +177,7 @@ void MersenneTwisterFast::Initialize(u32 seed)
         mt[index] = (0x6C078965*(mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
 }
 
-void MersenneTwisterFast::Shuffle()
+void MersenneTwisterFast::shuffle()
 {
     u32 y;
     int kk = 0;
@@ -190,25 +190,25 @@ void MersenneTwisterFast::Shuffle()
 }
 
 // Calls the next psuedo-random number
-u32 MersenneTwisterFast::Nextuint()
+u32 MersenneTwisterFast::nextUInt()
 {
     // Array reshuffle check
     if (index >= max)
     {
-        Shuffle();
+        shuffle();
         index = 0;
     }
 
     u32 y = mt[index++];
-    y ^= TemperingShiftU(y);
-    y ^= TemperingShiftS(y) & TEMPERINGMASKB;
-    y ^= TemperingShiftT(y) & TEMPERINGMASKC2;
+    y ^= temperingShiftU(y);
+    y ^= temperingShiftS(y) & TEMPERINGMASKB;
+    y ^= temperingShiftT(y) & TEMPERINGMASKC2;
 
     return y;
 }
 
 // Recreates the Mersenne Twister Fast with a new seed
-void MersenneTwisterFast::Reseed(u32 seed)
+void MersenneTwisterFast::reseed(u32 seed)
 {
-    Initialize(seed);
+    initialize(seed);
 }

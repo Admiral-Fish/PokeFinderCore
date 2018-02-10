@@ -20,7 +20,7 @@
 #include "Utilities.hpp"
 
 // Returns initial seed for Ruby/Sapphire live battery given date and time
-u32 Utilities::CalcGen3Seed(QDate time, u32 h, u32 m)
+u32 Utilities::calcGen3Seed(QDate time, u32 h, u32 m)
 {
     u32 d = QDate(1999, 12, 31).daysTo(time);
     

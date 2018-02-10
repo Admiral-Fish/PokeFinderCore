@@ -26,24 +26,23 @@
 #include <libPokeFinder/Objects/Nature.hpp>
 #include <libPokeFinder/Objects/Power.hpp>
 #include <QString>
-#include <cstdint>
 #include <vector>
 
-using namespace std;
+using std::vector;
+typedef uint64_t u64;
 typedef uint32_t u32;
+typedef uint16_t u16;
 
 class Frame
 {
 
 protected:
-    vector<QString> natures = Nature::GetFrameNatures();
-    vector<QString> powers = Power::GetPowers();
+    vector<QString> natures = Nature::getFrameNatures();
+    vector<QString> powers = Power::getPowers();
 
 public:
     u32 ivs[6];
     u32 ability;
-    u32 dv1;
-    u32 dv2;
     u32 encounterSlot;
     Encounter encounterType;
     u32 frame;
@@ -54,22 +53,22 @@ public:
     u32 nature;
     u32 pid;
     u32 power;
-    u32 psv;
+    u16 psv;
     bool shiny;
-    u32 sid;
+    u16 sid;
     bool synchable;
-    u32 tid;
+    u16 tid;
 
-    QString GetFemale125();
-    QString GetFemale25();
-    QString GetFemale50();
-    QString GetFemale75();
-    QString GetNature();
-    QString GetPower();
-    QString GetShiny();
-    void SetIVs(u32 iv1, u32 iv2);
-    void SetPID(u32 pid1, u32 pid2);
-    void SetPID(u32 pid, u32 pid1, u32 pid2);
+    QString getFemale125();
+    QString getFemale25();
+    QString getFemale50();
+    QString getFemale75();
+    QString getNature();
+    QString getPower();
+    QString getShiny();
+    void setIVs(u32 iv1, u32 iv2);
+    void setPID(u32 pid1, u32 pid2);
+    void setPID(u32 pid, u32 pid1, u32 pid2);
 
 };
 

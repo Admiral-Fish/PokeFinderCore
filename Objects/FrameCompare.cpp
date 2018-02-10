@@ -32,7 +32,7 @@ FrameCompare::FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex
     natures.resize(25);
     for (auto i = 0; i < nature.size(); i++)
     {
-        natures[Nature::GetAdjustedNature(i)] = nature[i];
+        natures[Nature::getAdjustedNature(i)] = nature[i];
     }
     powers = power;
 
@@ -40,7 +40,7 @@ FrameCompare::FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex
     skip = skipCompare;
 }
 
-bool FrameCompare::ComparePID(Frame frame)
+bool FrameCompare::comparePID(Frame frame)
 {
     if (skip)
         return true;
@@ -149,7 +149,7 @@ bool FrameCompare::ComparePID(Frame frame)
     return true;
 }
 
-bool FrameCompare::CompareIVs(Frame frame)
+bool FrameCompare::compareIVs(Frame frame)
 {
     if (skip)
         return true;
@@ -185,7 +185,7 @@ bool FrameCompare::CompareIVs(Frame frame)
     return true;
 }
 
-bool FrameCompare::CompareNature(Frame frame)
+bool FrameCompare::compareNature(Frame frame)
 {
     return natures[frame.nature];
 }

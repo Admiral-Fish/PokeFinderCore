@@ -28,9 +28,9 @@ class IRNG
 {
 
 public:
-    virtual u32 Nextuint() = 0;
-    virtual void Reseed(u32 seed) = 0;
-    virtual void AdvanceFrames(int frames) = 0;
+    virtual u32 nextUInt() = 0;
+    virtual void reseed(u32 seed) = 0;
+    virtual void advanceFrames(int frames) = 0;
     virtual ~IRNG() { }
 
 };

@@ -31,7 +31,7 @@ Profile3::Profile3(QString profileName, int version, u32 tid, u32 sid, int langu
 
 }
 
-void Profile3::DeleteProfile()
+void Profile3::deleteProfile()
 {
     bool exists = false;
     QDomDocument doc;
@@ -87,7 +87,7 @@ void Profile3::DeleteProfile()
 
 }
 
-void Profile3::SaveProfile()
+void Profile3::saveProfile()
 {
     bool exists = false;
     QDomDocument doc;
@@ -216,7 +216,7 @@ void Profile3::SaveProfile()
     }
 }
 
-Profile3& Profile3::LoadProfile(QString profileName)
+Profile3& Profile3::loadProfile(QString profileName)
 {
     int version;
     int language;
@@ -302,7 +302,7 @@ Profile3& Profile3::LoadProfile(QString profileName)
 
 }
 
-vector<QList<QStandardItem *>>& Profile3::LoadProfiles()
+vector<QList<QStandardItem *>>& Profile3::loadProfiles()
 {
     static vector<QList<QStandardItem *>> profileList;
 
@@ -368,8 +368,8 @@ vector<QList<QStandardItem *>>& Profile3::LoadProfiles()
                     }
 
                     row.append(new QStandardItem(profileName));
-                    row.append(new QStandardItem(GetVersion(version)));
-                    row.append(new QStandardItem(GetLanguage(language)));
+                    row.append(new QStandardItem(getVersion(version)));
+                    row.append(new QStandardItem(getLanguage(language)));
                     row.append(new QStandardItem(tid));
                     row.append(new QStandardItem(sid));
 
@@ -400,7 +400,7 @@ vector<QList<QStandardItem *>>& Profile3::LoadProfiles()
     return profileList;
 }
 
-vector<Profile3>& Profile3::LoadProfileList()
+vector<Profile3>& Profile3::loadProfileList()
 {
     static vector<Profile3> profileList;
     profileList.clear();
@@ -478,7 +478,7 @@ vector<Profile3>& Profile3::LoadProfileList()
     return profileList;
 }
 
-QString Profile3::GetVersion(int i)
+QString Profile3::getVersion(int i)
 {
     switch(i)
     {
@@ -501,7 +501,7 @@ QString Profile3::GetVersion(int i)
     }
 }
 
-QString Profile3::GetLanguage(int i)
+QString Profile3::getLanguage(int i)
 {
     switch(i)
     {
@@ -522,7 +522,7 @@ QString Profile3::GetLanguage(int i)
     }
 }
 
-int Profile3::GetVersionIndex(QString s)
+int Profile3::getVersionIndex(QString s)
 {
     if(s.toLower() == QObject::tr("Ruby").toLower())
     {
@@ -558,7 +558,7 @@ int Profile3::GetVersionIndex(QString s)
     }
 }
 
-int Profile3::GetLanguageIndex(QString s)
+int Profile3::getLanguageIndex(QString s)
 {
     if(s.toLower() == "eng")
     {

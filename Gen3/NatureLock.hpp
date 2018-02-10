@@ -19,12 +19,11 @@
 
 #ifndef NATURELOCK_HPP
 #define NATURELOCK_HPP
+
 #include <libPokeFinder/RNG/LCRNG.hpp>
-#include <cstdint>
 #include <vector>
 
-using namespace std;
-typedef uint32_t u32;
+using std::vector;
 
 // Defines the different types of shadows
 enum ShadowType
@@ -45,9 +44,9 @@ private:
     
 public:
     LockInfo(u32 nature, u32 genderLower, u32 genderUpper);
-    u32 GetGenderLower();
-    u32 GetGenderUpper();    
-    u32 GetNature();
+    u32 getGenderLower();
+    u32 getGenderUpper();
+    u32 getNature();
     
 };
 
@@ -69,28 +68,28 @@ private:
     ShadowType type;
     int x;
 
-    void CountBackTwo();
-    void CountForwardTwo();
-    void GetCurrLock();
-    u32 GetPIDForward();
-    u32 GetPIDReverse();
-    u32 GetPSVReverse();
-    void NatureLockSetupColo(int lockNum);
-    void NatureLockSetupGales(int lockNum);
+    void countBackTwo();
+    void countForwardTwo();
+    void getCurrLock();
+    u32 getPIDForward();
+    u32 getPIDReverse();
+    u32 getPSVReverse();
+    void natureLockSetupColo(int lockNum);
+    void natureLockSetupGales(int lockNum);
     
 public:
     NatureLock();
-    ShadowType GetType();
-    bool FirstShadowNormal(u32 seed);
-    bool FirstShadowSet(u32 seed);
-    bool FirstShadowShinySkip(u32 seed);
-    bool FirstShadowUnset(u32 seed);
-    bool SalamenceSet(u32 seed);
-    bool SalamenceShinySkip(u32 seed);
-    bool SalamenceUnset(u32 seed);
-    bool SingleNL(u32 seed);
-    void SwitchLockColo(int lockNum);    
-    void SwitchLockGales(int lockNum);
+    ShadowType getType();
+    bool firstShadowNormal(u32 seed);
+    bool firstShadowSet(u32 seed);
+    bool firstShadowShinySkip(u32 seed);
+    bool firstShadowUnset(u32 seed);
+    bool salamenceSet(u32 seed);
+    bool salamenceShinySkip(u32 seed);
+    bool salamenceUnset(u32 seed);
+    bool singleNL(u32 seed);
+    void switchLockColo(int lockNum);
+    void switchLockGales(int lockNum);
 
 };
 

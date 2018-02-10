@@ -20,7 +20,6 @@
 #ifndef LCRNG_HPP
 #define LCRNG_HPP
 
-#include <cstdint>
 #include <libPokeFinder/RNG/IRNG.hpp>
 
 class LCRNG : public IRNG
@@ -34,10 +33,10 @@ public:
     u32 seed;
 
     LCRNG(u32 add, u32 mult, u32 seed);
-    virtual void AdvanceFrames(int frames);
-    u32 Nextushort();
-    virtual u32 Nextuint();
-    virtual void Reseed(u32 seed);
+    virtual void advanceFrames(int frames);
+    u32 nextUShort();
+    u32 nextUInt() override;
+    void reseed(u32 seed) override;
 
 };
 
@@ -45,7 +44,6 @@ class ARNG : public LCRNG
 {
 
 public:
-
     ARNG(u32 seed) : LCRNG(0x01, 0x6c078965, seed)
     {
     }
@@ -56,7 +54,6 @@ class ARNGR : public LCRNG
 {
 
 public:
-
     ARNGR(u32 seed) : LCRNG(0x69c77f93, 0x9638806d, seed)
     {
     }
@@ -67,7 +64,6 @@ class PokeRNG : public LCRNG
 {
 
 public:
-
     PokeRNG(u32 seed) : LCRNG(0x6073, 0x41c64e6d, seed)
     {
     }
@@ -78,7 +74,6 @@ class PokeRNGR : public LCRNG
 {
 
 public:
-
     PokeRNGR(u32 seed) : LCRNG(0xa3561a1, 0xeeb9eb65, seed)
     {
     }
@@ -89,7 +84,6 @@ class XDRNG : public LCRNG
 {
 
 public:
-
     XDRNG(u32 seed) : LCRNG(0x269EC3, 0x343FD, seed)
     {
     }
@@ -100,7 +94,6 @@ class XDRNGR: public LCRNG
 {
 
 public:
-
     XDRNGR(u32 seed) : LCRNG(0xA170F641, 0xB9B33155, seed)
     {
     }

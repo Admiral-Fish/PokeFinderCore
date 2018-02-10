@@ -25,20 +25,20 @@
 #include <libPokeFinder/Objects/Lead.hpp>
 #include <libPokeFinder/Objects/Method.hpp>
 #include <libPokeFinder/RNG/IRNG.hpp>
-#include <cstdint>
 #include <vector>
 
-using namespace std;
+using std::vector;
 typedef uint32_t u32;
+typedef uint16_t u16;
 
 class Generator
 {
 
 protected:
-    u32 psv;
+    u16 psv;
     vector<u32> rngList;
-    u32 sid;
-    u32 tid;
+    u16 sid;
+    u16 tid;
     u32 offset;
 
 public:

@@ -3,7 +3,7 @@
 // Constructor
 TinyMT::TinyMT(u32 seed)
 {
-    Initialize(seed);
+    initialize(seed);
 }
 
 // Constructor given Tiny states
@@ -11,17 +11,17 @@ TinyMT::TinyMT(u32 st[])
 {
     for (int i = 0; i < 4; i++)
         state[i] = st[i];
-    PeriodCertification();
+    periodCertification();
 }
 
-void TinyMT::AdvanceFrames(int frames)
+void TinyMT::advanceFrames(int frames)
 {
     for (int i = 0; i < frames; i++)
-        NextState();
+        nextState();
 }
 
 // Creates Tiny state given seed
-void TinyMT::Initialize(u32 seed)
+void TinyMT::initialize(u32 seed)
 {
     state[0] = seed;
     state[1] = MAT1;
@@ -32,14 +32,14 @@ void TinyMT::Initialize(u32 seed)
     for (i = 1; i < MINLOOP; i++)
         state[i & 3] ^= i + 0x6c078965 * (state[(i - 1) & 3] ^ (state[(i - 1) & 3] >> 30));
 
-    PeriodCertification();
+    periodCertification();
 
     for (i = 0; i < PRELOOP; i++)
-        NextState();
+        nextState();
 }
 
 // Verifies not all 4 Tiny states are 0
-void TinyMT::PeriodCertification()
+void TinyMT::periodCertification()
 {
     if (state[0] == 0 && state[1] == 0 && state[2] == 0 && state[3] == 0)
     {
@@ -51,7 +51,7 @@ void TinyMT::PeriodCertification()
 }
 
 // Generates the next Tiny state
-void TinyMT::NextState()
+void TinyMT::nextState()
 {
     u32 y = state[3];
     u32 x = (state[0] & TINYMT32MASK) ^ state[1] ^ state[2];
@@ -70,14 +70,14 @@ void TinyMT::NextState()
 }
 
 // Calls the next state and next psuedo random number
-u32 TinyMT::Nextuint()
+u32 TinyMT::nextUInt()
 {
-    NextState();
-    return Temper();
+    nextState();
+    return temper();
 }
 
 // Generates the psuedo random number from the Tiny state
-u32 TinyMT::Temper()
+u32 TinyMT::temper()
 {
     u32 t0 = state[3];
     u32 t1 = state[0] + (state[2] >> TINYMT32SH8);
@@ -89,7 +89,7 @@ u32 TinyMT::Temper()
 }
 
 // IRNG Memeber
-void TinyMT::Reseed(u32 seed)
+void TinyMT::reseed(u32 seed)
 {
-    Initialize(seed);
+    initialize(seed);
 }

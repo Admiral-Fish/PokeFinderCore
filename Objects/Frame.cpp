@@ -20,49 +20,49 @@
 #include "Frame.hpp"
 
 // Returns gender of 12.5% F ratio
-QString Frame::GetFemale125()
+QString Frame::getFemale125()
 {
     return (gender >= 31) ? "M" : "F";
 }
 
 // Returns gender of 25% F ratio
-QString Frame::GetFemale25()
+QString Frame::getFemale25()
 {
     return (gender >= 63) ? "M" : "F";
 }
 
 // Returns gender of 50% F ratio
-QString Frame::GetFemale50()
+QString Frame::getFemale50()
 {
     return (gender >= 127) ? "M" : "F";
 }
 
 // Returns gender of 75% F ratio
-QString Frame::GetFemale75()
+QString Frame::getFemale75()
 {
     return (gender >= 191) ? "M" : "F";
 }
 
 // Returns string equivalent of nature
-QString Frame::GetNature()
+QString Frame::getNature()
 {
     return natures[nature];
 }
 
 // Returns string equivalent of hidden power
-QString Frame::GetPower()
+QString Frame::getPower()
 {
     return powers[hidden];
 }
 
 // Returns !!! if shiny or blank if not
-QString Frame::GetShiny()
+QString Frame::getShiny()
 {
     return shiny ? "!!!" : "";
 }
 
 // Sets IVs and calculates characteristics based on IVs
-void Frame::SetIVs(u32 iv1, u32 iv2)
+void Frame::setIVs(u32 iv1, u32 iv2)
 {
     ivs[0] = iv1 & 0x1f;
     ivs[1] = (iv1 >> 5) & 0x1f;
@@ -75,7 +75,7 @@ void Frame::SetIVs(u32 iv1, u32 iv2)
 }
 
 // Sets PID and calculates characteristics based on PID
-void Frame::SetPID(u32 pid1, u32 pid2)
+void Frame::setPID(u32 pid1, u32 pid2)
 {
     pid = (pid2 << 16) | pid1;
     nature = pid % 25;
@@ -88,7 +88,7 @@ void Frame::SetPID(u32 pid1, u32 pid2)
 }
 
 // Sets PID and calculates characteristics based on PID
-void Frame::SetPID(u32 pid, u32 pid1, u32 pid2)
+void Frame::setPID(u32 pid, u32 pid1, u32 pid2)
 {
     this->pid = pid;
     gender = pid & 255;

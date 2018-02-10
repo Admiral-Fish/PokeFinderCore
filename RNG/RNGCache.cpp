@@ -29,11 +29,11 @@ RNGCache::RNGCache()
 // Constructor for RNGCache
 RNGCache::RNGCache(Method MethodType)
 {
-    SetupCache(MethodType);
+    setupCache(MethodType);
 }
 
 // Populates cache to use for brute forcing
-void RNGCache::PopulateMap()
+void RNGCache::populateMap()
 {
     for (u32 i = 0; i < 256; i++)
     {
@@ -46,7 +46,7 @@ void RNGCache::PopulateMap()
 }
 
 // Generates brute force cache based on which method is provided
-void RNGCache::SetupCache(Method MethodType)
+void RNGCache::setupCache(Method MethodType)
 {
     if (MethodType == Method4)
     {
@@ -62,11 +62,11 @@ void RNGCache::SetupCache(Method MethodType)
         add = 0x6073; // pokerng constant
     }
 
-    PopulateMap();
+    populateMap();
 }
 
 // Recovers origin seeds for two 16 bit calls(15 bits known) with or without gap based on the cache
-vector<u32> RNGCache::RecoverLower16BitsIV(u32 first, u32 second)
+vector<u32> RNGCache::recoverLower16BitsIV(u32 first, u32 second)
 {
     vector<u32> origin;
 
@@ -100,7 +100,7 @@ vector<u32> RNGCache::RecoverLower16BitsIV(u32 first, u32 second)
 }
 
 // Recovers origin seeds for two 16 bit calls based on the cache
-vector<u32> RNGCache::RecoverLower16BitsPID(u32 first, u32 second)
+vector<u32> RNGCache::recoverLower16BitsPID(u32 first, u32 second)
 {
     vector<u32> origin;
     u32 search = second - first * mult;
@@ -120,7 +120,7 @@ vector<u32> RNGCache::RecoverLower16BitsPID(u32 first, u32 second)
 }
 
 // Switches cache being used
-void RNGCache::SwitchCache(Method MethodType)
+void RNGCache::switchCache(Method MethodType)
 {
-    SetupCache(MethodType);
+    setupCache(MethodType);
 }

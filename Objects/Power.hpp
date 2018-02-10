@@ -19,16 +19,17 @@
 
 #ifndef POWER_HPP
 #define POWER_HPP
+
 #include <QString>
 #include <QTranslator>
 
-using namespace std;
+using std::vector;
 
 class Power
 {
 
 public:
-    static vector<QString> GetPowers();
+    static vector<QString> getPowers();
 
 };
 

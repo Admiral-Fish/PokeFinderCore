@@ -30,10 +30,7 @@ enum Encounter
     SuperRod,
     Stationary,
     SafariZone,
-    BugCatchingContestPreDex,
-    BugCatchingContestTues,
-    BugCatchingContestThurs,
-    BugCatchingContestSat,
+    BugCatchingContest,
     HeadButt
 };
 

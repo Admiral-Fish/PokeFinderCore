@@ -19,12 +19,13 @@
 
 #ifndef RNGCACHE_HPP
 #define RNGCACHE_HPP
+
 #include <libPokeFinder/Objects/Method.hpp>
-#include <cstdint>
 #include <vector>
 #include <unordered_map>
 
-using namespace std;
+using std::vector;
+using std::unordered_map;
 typedef uint32_t u32;
 
 class RNGCache
@@ -36,15 +37,15 @@ private:
     u32 mult;
     unordered_map<u32, u32> keys;
 
-    void PopulateMap();
-    void SetupCache(Method MethodType);
+    void populateMap();
+    void setupCache(Method MethodType);
 
 public:
     RNGCache();
     RNGCache(Method MethodType);
-    vector<u32> RecoverLower16BitsIV(u32 first, u32 second);
-    vector<u32> RecoverLower16BitsPID(u32 first, u32 second);
-    void SwitchCache(Method MethodType);
+    vector<u32> recoverLower16BitsIV(u32 first, u32 second);
+    vector<u32> recoverLower16BitsPID(u32 first, u32 second);
+    void switchCache(Method MethodType);
 
 };
 

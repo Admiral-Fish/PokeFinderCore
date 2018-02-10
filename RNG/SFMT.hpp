@@ -26,27 +26,27 @@ class SFMT : public IRNG64
 {
 
 private:
-    u32 const CMSK1 = 0xdfffffef;
-    u32 const CMSK2 = 0xddfecb7f;
-    u32 const CMSK3 = 0xbffaffff;
-    u32 const CMSK4 = 0xbffffff6;
-    int const CSL1 = 18;
-    int const CSR1 = 11;
-    int const N32 = 624;
+    static const u32 CMSK1 = 0xdfffffef;
+    static const u32 CMSK2 = 0xddfecb7f;
+    static const u32 CMSK3 = 0xbffaffff;
+    static const u32  CMSK4 = 0xbffffff6;
+    static const int CSL1 = 18;
+    static const int CSR1 = 11;
+    static const int N32 = 624;
     int index;
-    u32 parity[4] = { 0x1, 0x0, 0x0, 0x13c9e684 };
+    const u32 parity[4] = { 0x1, 0x0, 0x0, 0x13c9e684 };
     u32 sfmt[624];
 
-    void Initialize(u32 seed);
-    void PeriodCertificaion();
-    inline u32 GetRand() { return sfmt[index++]; }
+    void initialize(u32 seed);
+    void periodCertificaion();
+    inline u32 getRand() { return sfmt[index++]; }
 
 public:
     SFMT(u32 seed);
-    virtual void AdvanceFrames(int frames);
-    virtual u32 Nextuint();
-    virtual u64 Nextulong();
-    virtual void Reseed(u64 seed);
+    void advanceFrames(int frames) override;
+    u32 nextUInt() override;
+    u64 nextULong() override;
+    void reseed(u64 seed) override;
     void Shuffle();
 
 };

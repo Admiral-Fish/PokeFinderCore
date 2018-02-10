@@ -33,11 +33,11 @@ public:
     u64 seed;
 
     LCRNG64(u64 add, u64 mult, u64 seed);
-    virtual void AdvanceFrames(int frames);
-    u32 Nextuint(u32 max);
-    virtual u64 Nextulong();
-    virtual u32 Nextuint();
-    virtual void Reseed(u64 seed);
+    virtual void advanceFrames(int frames);
+    u32 nextUInt(u32 max);
+    u64 nextULong() override;
+    u32 nextUInt() override;
+    void reseed(u64 seed) override;
 
 };
 
@@ -45,7 +45,6 @@ class BWRNG : public LCRNG64
 {
 
 public:
-
     BWRNG(u64 seed) : LCRNG64(0x269ec3, 0x5d588b656c078965, seed)
     {
     }
@@ -56,7 +55,6 @@ class BWRNGR : public LCRNG64
 {
 
 public:
-
     BWRNGR(u64 seed) : LCRNG64(0x9b1ae6e9a384e6f9, 0xdedcedae9638806d, seed)
     {
     }

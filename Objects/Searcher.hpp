@@ -25,19 +25,19 @@
 #include <libPokeFinder/Objects/Lead.hpp>
 #include <libPokeFinder/Objects/Method.hpp>
 #include <libPokeFinder/RNG/LCRNG.hpp>
-#include <cstdint>
 #include <vector>
 
-using namespace std;
+using std::vector;
 typedef uint32_t u32;
+typedef uint16_t u16;
 
 class Searcher
 {
 
 protected:
-    u32 psv;
-    u32 sid;
-    u32 tid;
+    u16 psv;
+    u16 sid;
+    u16 tid;
 
 public:
     u32 cuteCharm;

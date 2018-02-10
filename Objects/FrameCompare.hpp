@@ -19,16 +19,9 @@
 
 #ifndef FRAMECOMPARE_HPP
 #define FRAMECOMPARE_HPP
-#include <QString>
-#include <QTranslator>
-#include <QComboBox>
-#include <libPokeFinder/Objects/Nature.hpp>
-#include <cstdint>
-#include <vector>
-#include <libPokeFinder/Objects/Frame.hpp>
 
-using namespace std;
-typedef uint32_t u32;
+#include <libPokeFinder/Objects/Nature.hpp>
+#include <libPokeFinder/Objects/Frame.hpp>
 
 class FrameCompare
 {
@@ -47,9 +40,9 @@ private:
 public:
     FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
                  vector<bool> nature, vector<bool> power, bool onlyShiny, bool skipCompare);
-    bool ComparePID(Frame frame);
-    bool CompareIVs(Frame frame);
-    bool CompareNature(Frame frame);
+    bool comparePID(Frame frame);
+    bool compareIVs(Frame frame);
+    bool compareNature(Frame frame);
 
 };
 

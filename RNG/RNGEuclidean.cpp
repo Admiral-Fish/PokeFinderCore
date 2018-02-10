@@ -26,11 +26,11 @@
 // Constructor for RNGEuclidean
 RNGEuclidean::RNGEuclidean(Method FrameType)
 {
-    SetupEuclidean(FrameType);
+    setupEuclidean(FrameType);
 }
 
 // Sets up the Euclidean constants
-void RNGEuclidean::SetupEuclidean(Method FrameType)
+void RNGEuclidean::setupEuclidean(Method FrameType)
 {
     if (FrameType == Channel)
     {
@@ -54,7 +54,7 @@ void RNGEuclidean::SetupEuclidean(Method FrameType)
 }
 
 // Recovers origin seeds for two 16 bit calls(15 bits known)
-vector<u32> RNGEuclidean::RecoverLower16BitsIV(u32 first, u32 second)
+vector<u32> RNGEuclidean::recoverLower16BitsIV(u32 first, u32 second)
 {
     vector<u32> origin;
     u32 fullFirst, fullSecond;
@@ -78,7 +78,7 @@ vector<u32> RNGEuclidean::RecoverLower16BitsIV(u32 first, u32 second)
 }
 
 // Recovers origin seeds for two 16 bit calls
-vector<u32> RNGEuclidean::RecoverLower16BitsPID(u32 first, u32 second)
+vector<u32> RNGEuclidean::recoverLower16BitsPID(u32 first, u32 second)
 {
     vector<u32> origin;
     u32 fullFirst, fullSecond;
@@ -102,7 +102,7 @@ vector<u32> RNGEuclidean::RecoverLower16BitsPID(u32 first, u32 second)
 }
 
 // Recovers origin seeds for six 5 bit calls
-vector<u32> RNGEuclidean::RecoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+vector<u32> RNGEuclidean::recoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     vector<u32> origin;
     u32 first = hp << 27, fullFirst;
@@ -143,7 +143,7 @@ vector<u32> RNGEuclidean::RecoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u3
 }
 
 // Switches the Euclidean being used
-void RNGEuclidean::SwitchEuclidean(Method FrameType)
+void RNGEuclidean::switchEuclidean(Method FrameType)
 {
-    SetupEuclidean(FrameType);
+    setupEuclidean(FrameType);
 }

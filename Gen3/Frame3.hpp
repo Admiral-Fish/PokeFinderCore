@@ -19,32 +19,21 @@
 
 #ifndef FRAME3_HPP
 #define FRAME3_HPP
+
 #include <libPokeFinder/Objects/Frame.hpp>
-#include <QString>
 
 class Frame3: public Frame
 {
 
-private:
-    u32 ABCDS[5] = { 1, 2, 5, 3, 4 };
-    u32 ACDS[4] = { 1, 5, 3, 4 };
-    u32 HABCDS[6] = { 0, 1, 2, 5, 3, 4 };
-
 public:
-    u32 inh1;
-    u32 inh2;
-    u32 inh3;
     QString lockReason;
     u32 occidentary;
-    u32 par1;
-    u32 par2;
-    u32 par3;
     u32 seed;
 
-    Frame3(u32 tid, u32 sid, u32 psv);
-    QString GetTime();
-    void SetIDs(u32 tid, u32 sid, u32 psv);
-    void SetIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6);
+    Frame3(u16 tid, u16 sid, u16 psv);
+    QString getTime();
+    void setIDs(u16 tid, u16 sid, u16 psv);
+    void setIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6);
 
 };
 

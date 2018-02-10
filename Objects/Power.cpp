@@ -19,7 +19,7 @@
 
 #include "Power.hpp"
 
-vector<QString> Power::GetPowers()
+vector<QString> Power::getPowers()
 {
     vector<QString> powers = { QObject::tr("Fighting"), QObject::tr("Flying"), QObject::tr("Poison"), QObject::tr("Ground"),
                                QObject::tr("Rock"), QObject::tr("Bug"), QObject::tr("Ghost"), QObject::tr("Steel"),

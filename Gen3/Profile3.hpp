@@ -28,20 +28,20 @@ class Profile3 : public Profile
 {
 
 public:
-    Profile3(QString profileName, int version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);
-    void SaveProfile();
-    void DeleteProfile();
-    static Profile3& LoadProfile(QString profileName);
-    static vector<QList<QStandardItem *>>& LoadProfiles();
-    static vector<Profile3>& LoadProfileList();
-    static QString GetVersion(int i);
-    static QString GetLanguage(int i);
-    static int GetVersionIndex(QString s);
-    static int GetLanguageIndex(QString s);
-
     u32 tid;
     u32 sid;
     bool deadBattery;
+
+    Profile3(QString profileName, int version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);
+    void saveProfile();
+    void deleteProfile();
+    static Profile3& loadProfile(QString profileName);
+    static vector<QList<QStandardItem *>>& loadProfiles();
+    static vector<Profile3>& loadProfileList();
+    static QString getVersion(int i);
+    static QString getLanguage(int i);
+    static int getVersionIndex(QString s);
+    static int getLanguageIndex(QString s);
 
 };
 

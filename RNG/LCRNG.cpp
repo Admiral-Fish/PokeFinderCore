@@ -30,27 +30,27 @@ LCRNG::LCRNG(u32 add, u32 mult, u32 seed)
 }
 
 // Method for advancing seed by a given number of frames
-void LCRNG::AdvanceFrames(int frames)
+void LCRNG::advanceFrames(int frames)
 {
     for(int i = 0; i < frames; i++)
         seed = seed * mult + add;
 }
 
 // Method for finding next 16 bit seed
-u32 LCRNG::Nextushort()
+u32 LCRNG::nextUShort()
 {
-    return (Nextuint() >> 16);
+    return (nextUInt() >> 16);
 }
 
 // IRNG Member
-u32 LCRNG::Nextuint()
+u32 LCRNG::nextUInt()
 {
     seed = seed * mult + add;
     return seed;
 }
 
 // IRNG Member
-void LCRNG::Reseed(u32 seed)
+void LCRNG::reseed(u32 seed)
 {
     this->seed = seed;
 }

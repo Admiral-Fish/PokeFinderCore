@@ -19,7 +19,7 @@
 
 #include "Frame3.hpp"
 
-Frame3::Frame3(u32 tid, u32 sid, u32 psv)
+Frame3::Frame3(u16 tid, u16 sid, u16 psv)
 {
     this->tid = tid;
     this->sid = sid;
@@ -27,7 +27,7 @@ Frame3::Frame3(u32 tid, u32 sid, u32 psv)
 }
 
 // Returns real time for a given frame
-QString Frame3::GetTime()
+QString Frame3::getTime()
 {
     int32_t seconds = frame / 60;
     int32_t milliseconds = ((frame % 60) * 100) / 60;
@@ -46,7 +46,7 @@ QString Frame3::GetTime()
 }
 
 // Change the tid/sid (mostly used for Channel)
-void Frame3::SetIDs(u32 tid, u32 sid, u32 psv)
+void Frame3::setIDs(u16 tid, u16 sid, u16 psv)
 {
     this->tid = tid;
     this->sid = sid;
@@ -54,7 +54,7 @@ void Frame3::SetIDs(u32 tid, u32 sid, u32 psv)
 }
 
 // Sets IVs for either Channel method or manual input and calculates characteristics based on IVs
-void Frame3::SetIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6)
+void Frame3::setIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6)
 {
     ivs[0] = iv1;
     ivs[1] = iv2;
