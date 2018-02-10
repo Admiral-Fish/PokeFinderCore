@@ -21,6 +21,7 @@
 #define RNGEUCLIDEAN_HPP
 
 #include <libPokeFinder/Objects/Method.hpp>
+#include <cstdint>
 #include <vector>
 
 using std::vector;

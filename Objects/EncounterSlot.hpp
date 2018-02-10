@@ -21,6 +21,7 @@
 #define ENCOUNTERSLOT_HPP
 
 #include <libPokeFinder/Objects/Encounter.hpp>
+#include <cstdint>
 #include <vector>
 
 using std::vector;
