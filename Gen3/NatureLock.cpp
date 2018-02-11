@@ -67,13 +67,17 @@ void NatureLock::getCurrLock()
 // Generates the next PID forwards
 u32 NatureLock::getPIDForward()
 {
-    return (forward.nextUInt() & 0xFFFF0000) | forward.nextUShort();
+    u32 high = forward.nextUInt() & 0xFFFF0000;
+    u32 low = forward.nextUShort();
+    return high | low;
 }
 
 // Generates the next PID backwards
 u32 NatureLock::getPIDReverse()
 {
-    return backward.nextUShort() | (backward.nextUInt() & 0xFFFF0000);
+    u32 low = backward.nextUShort();
+    u32 high = backward.nextUInt() & 0xFFFF0000;
+    return low | high;
 }
 
 // Generates the PSV of the next PID backwards

@@ -487,11 +487,13 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
                     {
                         frame.lockReason = QObject::tr("First shadow unset");
                         frames.push_back(frame);
+                        continue;
                     }
                     if (natureLock.firstShadowSet(frame.seed))
                     {
                         frame.lockReason = QObject::tr("First shadow set");
                         frames.push_back(frame);
+                        continue;
                     }
                     if (natureLock.firstShadowShinySkip(frame.seed))
                     {
@@ -504,11 +506,13 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
                     {
                         frame.lockReason = QObject::tr("First shadow unset");
                         frames.push_back(frame);
+                        continue;
                     }
                     if (natureLock.salamenceSet(frame.seed))
                     {
                         frame.lockReason = QObject::tr("First shadow set");
                         frames.push_back(frame);
+                        continue;
                     }
                     if (natureLock.salamenceShinySkip(frame.seed))
                     {
