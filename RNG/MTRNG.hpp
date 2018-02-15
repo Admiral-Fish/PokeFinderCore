@@ -66,7 +66,7 @@ private:
     static const u32 LOWERMASK = 0x7FFFFFFF;
     static const u32 MATRIXA = 0x9908B0DF;
     static const u32 TEMPERINGMASKB = 0x9D2C5680;
-    static const u32 TEMPERINGMASKC2 = 0xEFC00000;
+    static const u32 TEMPERINGMASKC2 = 0xEF000000;
     static const u32 UPPERMASK = 0x80000000;
     const u32 mag01[2] = { 0x0, MATRIXA };
     int max;

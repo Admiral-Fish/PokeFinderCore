@@ -20,7 +20,7 @@
 #include "LCRNG64.hpp"
 
 // LCRNG64 constructor that sets a given seed
-LCRNG64::LCRNG64(u64 add, u64 mult,u64 seed)
+LCRNG64::LCRNG64(u64 add, u64 mult, u64 seed)
 {
     this->add = add;
     this->mult = mult;

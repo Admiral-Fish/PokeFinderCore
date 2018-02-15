@@ -45,118 +45,12 @@ vector<QString> Nature::getFrameNatures()
 
 u32 Nature::getAdjustedNature(u32 nature)
 {
-    switch (nature)
-    {
-        case 0:
-            return 3;
-        case 1:
-            return 5;
-        case 2:
-            return 2;
-        case 3:
-            return 20;
-        case 4:
-            return 23;
-        case 5:
-            return 11;
-        case 6:
-            return 8;
-        case 7:
-            return 13;
-        case 8:
-            return 1;
-        case 9:
-            return 16;
-        case 10:
-            return 15;
-        case 11:
-            return 14;
-        case 12:
-            return 4;
-        case 13:
-            return 17;
-        case 14:
-            return 19;
-        case 15:
-            return 7;
-        case 16:
-            return 22;
-        case 17:
-            return 10;
-        case 18:
-            return 21;
-        case 19:
-            return 9;
-        case 20:
-            return 18;
-        case 21:
-            return 6;
-        case 22:
-            return 0;
-        case 23:
-            return 24;
-        case 24:
-            return 12;
-        default:
-            return 0;
-    }
+    u32 vals[25] = { 3, 5, 2, 20, 23, 11, 8, 13, 1, 16, 15, 14, 4, 17, 19, 7, 22, 10, 21, 9, 18, 6, 0, 24, 12 };
+    return vals[nature];
 }
 
 u32 Nature::getReversedNature(u32 nature)
 {
-    switch (nature)
-    {
-        case 0:
-            return 22;
-        case 1:
-            return 8;
-        case 2:
-            return 2;
-        case 3:
-            return 0;
-        case 4:
-            return 12;
-        case 5:
-            return 1;
-        case 6:
-            return 21;
-        case 7:
-            return 15;
-        case 8:
-            return 6;
-        case 9:
-            return 19;
-        case 10:
-            return 17;
-        case 11:
-            return 5;
-        case 12:
-            return 24;
-        case 13:
-            return 7;
-        case 14:
-            return 11;
-        case 15:
-            return 10;
-        case 16:
-            return 9;
-        case 17:
-            return 13;
-        case 18:
-            return 20;
-        case 19:
-            return 14;
-        case 20:
-            return 3;
-        case 21:
-            return 18;
-        case 22:
-            return 16;
-        case 23:
-            return 4;
-        case 24:
-            return 23;
-        default:
-            return 0;
-    }
+    u32 vals[25] = { 22, 8, 2, 0, 12, 1, 21, 15, 6, 19, 17, 5, 24, 7, 11, 10, 9, 13, 20, 14, 3, 18, 16, 4, 23 };
+    return vals[nature];
 }

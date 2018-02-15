@@ -31,6 +31,17 @@ Profile3::Profile3(QString profileName, int version, u32 tid, u32 sid, int langu
 
 }
 
+Profile3::Profile3()
+{
+    profileName = "";
+    version = 0;
+    language = 0;
+    tid = 0;
+    sid = 0;
+    deadBattery = false;
+    valid = false;
+}
+
 void Profile3::deleteProfile()
 {
     bool exists = false;
@@ -82,9 +93,52 @@ void Profile3::deleteProfile()
         }
         file.close();
     }
+}
 
+void Profile3::updateProfile(Profile3 original)
+{
+    QDomDocument doc;
+    QFile file(QApplication::applicationDirPath() + "/profiles.xml");
+    if (file.open(QIODevice::ReadOnly | QFile::Text))
+    {
+        doc.setContent(&file);
+        file.close();
 
+        QDomElement profiles = doc.documentElement();
+        QDomNode domNode = profiles.firstChild();
+        while (!domNode.isNull())
+        {
+            QDomElement domElement = domNode.toElement();
+            if (!domElement.isNull() && domElement.tagName() == "Gen3")
+            {
+                QString name = domElement.childNodes().at(0).toElement().text();
+                int ver = domElement.childNodes().at(1).toElement().text().toUInt(NULL, 10);
+                int lang = domElement.childNodes().at(2).toElement().text().toUInt(NULL, 10);
+                u32 id = domElement.childNodes().at(3).toElement().text().toUInt(NULL, 10);
+                u32 id2 = domElement.childNodes().at(4).toElement().text().toInt(NULL, 10);
+                bool flag = domElement.childNodes().at(5).toElement().text() == "0" ? false : true;
 
+                if (original.profileName == name && original.version == ver && original.language == lang && original.tid == id && original.sid == id2 && original.deadBattery == flag)
+                {
+                    domElement.childNodes().at(0).toElement().firstChild().setNodeValue(profileName);
+                    domElement.childNodes().at(1).toElement().firstChild().setNodeValue(QString::number(version));
+                    domElement.childNodes().at(2).toElement().firstChild().setNodeValue(QString::number(language));
+                    domElement.childNodes().at(3).toElement().firstChild().setNodeValue(QString::number(tid));
+                    domElement.childNodes().at(4).toElement().firstChild().setNodeValue(QString::number(sid));
+                    domElement.childNodes().at(5).toElement().firstChild().setNodeValue(QString::number(deadBattery));
+
+                    if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
+                    {
+                        QTextStream stream( &file );
+                        stream << doc.toString();
+                    }
+                    file.close();
+                    return;
+                }
+            }
+            domNode = domNode.nextSibling();
+        }
+    }
 }
 
 void Profile3::saveProfile()
@@ -92,7 +146,7 @@ void Profile3::saveProfile()
     bool exists = false;
     QDomDocument doc;
     QFile file(QApplication::applicationDirPath() + "/profiles.xml");
-    if(file.open(QIODevice::ReadOnly | QFile::Text))
+    if (file.open(QIODevice::ReadOnly | QFile::Text))
     {
         doc.setContent(&file);
 
@@ -100,50 +154,50 @@ void Profile3::saveProfile()
 
         QDomElement profiles = doc.documentElement();
         QDomNode domNode = profiles.firstChild();
-        while(!domNode.isNull() && !exists)
+        while (!domNode.isNull() && !exists)
         {
             QDomElement domElement = domNode.toElement();
-            if(!domElement.isNull())
+            if (!domElement.isNull())
             {
-                if(domElement.tagName() == "Gen3")
+                if (domElement.tagName() == "Gen3")
                 {
                     QDomNode info = domElement.firstChild();
-                    while(!info.isNull())
+                    while (!info.isNull())
                     {
                         QDomElement infoElement = info.toElement();
-                        if(!infoElement.isNull())
+                        if (!infoElement.isNull())
                         {
                             const QString tagName(infoElement.tagName());
-                            if(tagName == "profileName")
+                            if (tagName == "profileName")
                             {
-                                if(this->profileName == infoElement.text())
+                                if (this->profileName == infoElement.text())
                                 {
                                     exists = true;
-                                    for(int i = 0; i < domNode.childNodes().count(); i++)
+                                    for (int i = 0; i < domNode.childNodes().count(); i++)
                                     {
                                         QDomNode node = domNode.childNodes().at(i);
-                                        if(!node.isNull())
+                                        if (!node.isNull())
                                         {
                                             QDomElement nodeElement = node.toElement();
-                                            if(!nodeElement.isNull())
+                                            if (!nodeElement.isNull())
                                             {
-                                                if(nodeElement.tagName() == "version")
+                                                if (nodeElement.tagName() == "version")
                                                 {
                                                     node.firstChild().setNodeValue(QString::number(this->version));
                                                 }
-                                                else if(nodeElement.tagName() == "language")
+                                                else if (nodeElement.tagName() == "language")
                                                 {
                                                     node.firstChild().setNodeValue(QString::number(this->language));
                                                 }
-                                                else if(nodeElement.tagName() == "tid")
+                                                else if (nodeElement.tagName() == "tid")
                                                 {
                                                     node.firstChild().setNodeValue(QString::number(this->tid));
                                                 }
-                                                else if(nodeElement.tagName() == "sid")
+                                                else if (nodeElement.tagName() == "sid")
                                                 {
                                                     node.firstChild().setNodeValue(QString::number(this->sid));
                                                 }
-                                                else if(nodeElement.tagName() == "deadBattery")
+                                                else if (nodeElement.tagName() == "deadBattery")
                                                 {
                                                     node.firstChild().setNodeValue(QString::number(this->deadBattery));
                                                 }
@@ -161,9 +215,8 @@ void Profile3::saveProfile()
             domNode = domNode.nextSibling();
         }
 
-        if(!exists)
+        if (!exists)
         {
-
             QDomElement gen3 = doc.createElement("Gen3");
             QDomElement profileNameE = doc.createElement("profileName");
             QDomElement versionE = doc.createElement("version");
@@ -193,219 +246,32 @@ void Profile3::saveProfile()
             gen3.appendChild(sidE);
             gen3.appendChild(deadBatteryE);
 
-            if(profiles.isNull())
+            if (profiles.isNull())
             {
                 profiles = doc.createElement("Profiles");
                 profiles.appendChild(gen3);
                 doc.appendChild(profiles);
-            } else
+            }
+            else
             {
                 profiles.appendChild(gen3);
             }
-
-
         }
 
-        if(file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
+        if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
         {
             QTextStream stream( &file );
             stream << doc.toString();
         }
         file.close();
-
     }
 }
 
-Profile3& Profile3::loadProfile(QString profileName)
-{
-    int version;
-    int language;
-    u32 tid;
-    u32 sid;
-    bool deadBattery;
-
-    bool exists = false;
-    bool pass;
-    QDomDocument doc;
-    QFile file(QApplication::applicationDirPath() + "/profiles.xml");
-    if(file.open(QIODevice::ReadOnly | QFile::Text))
-    {
-        doc.setContent(&file);
-
-        QDomElement profiles = doc.documentElement();
-        QDomNode domNode = profiles.firstChild();
-        while(!domNode.isNull() && !exists)
-        {
-            QDomElement domElement = domNode.toElement();
-            if(!domElement.isNull())
-            {
-                if(domElement.tagName() == "Gen3")
-                {
-                    QDomNode info = domElement.firstChild();
-                    while(!info.isNull())
-                    {
-                        QDomElement infoElement = info.toElement();
-                        if(!infoElement.isNull())
-                        {
-                            const QString tagName(infoElement.tagName());
-                            if(tagName == "profileName")
-                            {
-                                if(profileName == infoElement.text())
-                                {
-                                    exists = true;
-                                    for(int i = 0; i < domNode.childNodes().count(); i++)
-                                    {
-                                        QDomNode node = domNode.childNodes().at(i);
-                                        if(!node.isNull())
-                                        {
-                                            QDomElement nodeElement = node.toElement();
-                                            if(!nodeElement.isNull())
-                                            {
-                                                if(nodeElement.tagName() == "version")
-                                                {
-                                                    version = nodeElement.text().toInt(&pass, 10);
-                                                }
-                                                else if(nodeElement.tagName() == "language")
-                                                {
-                                                    language = nodeElement.text().toInt(&pass, 10);
-                                                }
-                                                else if(nodeElement.tagName() == "tid")
-                                                {
-                                                    tid = nodeElement.text().toUInt(&pass, 10);
-                                                }
-                                                else if(nodeElement.tagName() == "sid")
-                                                {
-                                                    sid = nodeElement.text().toUInt(&pass, 10);
-                                                }
-                                                else if(nodeElement.tagName() == "deadBattery")
-                                                {
-                                                    deadBattery = (nodeElement.text() == "1" ? true : false);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                break;
-                            }
-                            info = info.nextSibling();
-                        }
-                    }
-                }
-            }
-            domNode = domNode.nextSibling();
-        }
-
-        file.close();
-    }
-    static Profile3 profile(profileName, version, tid, sid, language, deadBattery, exists);
-    return profile;
-
-}
-
-vector<QList<QStandardItem *>>& Profile3::loadProfiles()
-{
-    static vector<QList<QStandardItem *>> profileList;
-
-    profileList.clear();
-
-    bool pass;
-    QDomDocument doc;
-    QFile file(QApplication::applicationDirPath() + "/profiles.xml");
-    if(file.open(QIODevice::ReadOnly | QFile::Text))
-    {
-        doc.setContent(&file);
-
-        QDomElement profiles = doc.documentElement();
-        QDomNode domNode = profiles.firstChild();
-        while(!domNode.isNull())
-        {
-            QDomElement domElement = domNode.toElement();
-            if(!domElement.isNull())
-            {
-                if(domElement.tagName() == "Gen3")
-                {
-                    QDomNode info = domElement.firstChild();
-                    QList<QStandardItem *> row;
-                    QString profileName;
-                    int version;
-                    int language;
-                    QString tid;
-                    QString sid;
-                    bool deadBattery;
-                    while(!info.isNull())
-                    {
-                        QDomElement infoElement = info.toElement();
-                        if(!infoElement.isNull())
-                        {
-                            const QString tagName(infoElement.tagName());
-                            if(tagName == "profileName")
-                            {
-                                profileName = infoElement.text();
-                            }
-                            else if(tagName == "version")
-                            {
-                                version = infoElement.text().toInt(&pass, 10);
-                            }
-                            else if(tagName == "language")
-                            {
-                                language = infoElement.text().toInt(&pass, 10);
-                            }
-                            else if(tagName == "tid")
-                            {
-                                tid = infoElement.text();
-                            }
-                            else if(tagName == "sid")
-                            {
-                                sid = infoElement.text();
-                            }
-                            else if(tagName == "deadBattery")
-                            {
-                                deadBattery = (infoElement.text() == "1" ? true : false);
-                            }
-
-                            info = info.nextSibling();
-                        }
-                    }
-
-                    row.append(new QStandardItem(profileName));
-                    row.append(new QStandardItem(getVersion(version)));
-                    row.append(new QStandardItem(getLanguage(language)));
-                    row.append(new QStandardItem(tid));
-                    row.append(new QStandardItem(sid));
-
-                    if(version == 0 || version == 1)
-                    {
-                        row.append(new QStandardItem(deadBattery ? "Yes" : "No"));
-                    }
-                    else
-                    {
-                        row.append(new QStandardItem("N/A"));
-                    }
-
-                    for(int i = 0; i < row.count(); i++)
-                    {
-                        row.at(i)->setData(Qt::AlignCenter, Qt::TextAlignmentRole);
-                    }
-
-                    profileList.push_back(row);
-
-                }
-            }
-            domNode = domNode.nextSibling();
-        }
-
-        file.close();
-    }
-
-    return profileList;
-}
-
-vector<Profile3>& Profile3::loadProfileList()
+vector<Profile3> Profile3::loadProfileList()
 {
     static vector<Profile3> profileList;
     profileList.clear();
 
-    bool pass;
     QDomDocument doc;
     QFile file(QApplication::applicationDirPath() + "/profiles.xml");
     if(file.open(QIODevice::ReadOnly | QFile::Text))
@@ -440,11 +306,11 @@ vector<Profile3>& Profile3::loadProfileList()
                             }
                             else if(tagName == "version")
                             {
-                                version = infoElement.text().toInt(&pass, 10);
+                                version = infoElement.text().toInt(NULL, 10);
                             }
                             else if(tagName == "language")
                             {
-                                language = infoElement.text().toInt(&pass, 10);
+                                language = infoElement.text().toInt(NULL, 10);
                             }
                             else if(tagName == "tid")
                             {
@@ -462,25 +328,21 @@ vector<Profile3>& Profile3::loadProfileList()
                             info = info.nextSibling();
                         }
                     }
-
-                    Profile3 profile(profileName, version, tid.toUInt(&pass, 10), sid.toUInt(&pass, 10), language, deadBattery, true);
-
+                    Profile3 profile(profileName, version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language, deadBattery, true);
                     profileList.push_back(profile);
-
                 }
             }
             domNode = domNode.nextSibling();
         }
-
         file.close();
     }
 
     return profileList;
 }
 
-QString Profile3::getVersion(int i)
+QString Profile3::getVersion()
 {
-    switch(i)
+    switch(version)
     {
         case 0:
             return QObject::tr("Ruby");
@@ -501,9 +363,9 @@ QString Profile3::getVersion(int i)
     }
 }
 
-QString Profile3::getLanguage(int i)
+QString Profile3::getLanguage()
 {
-    switch(i)
+    switch(language)
     {
         case 1:
             return "ENG";
@@ -519,73 +381,5 @@ QString Profile3::getLanguage(int i)
             return "JPN";
         default:
             return "-";
-    }
-}
-
-int Profile3::getVersionIndex(QString s)
-{
-    if(s.toLower() == QObject::tr("Ruby").toLower())
-    {
-        return 0;
-    }
-    else if(s.toLower() == QObject::tr("Sapphire").toLower())
-    {
-        return 1;
-    }
-    else if(s.toLower() == QObject::tr("Fire Red").toLower())
-    {
-        return 2;
-    }
-    else if(s.toLower() == QObject::tr("Leaf Green").toLower())
-    {
-        return 3;
-    }
-    else if(s.toLower() == QObject::tr("Emerald").toLower())
-    {
-        return 4;
-    }
-    else if(s.toLower() == QObject::tr("XD").toLower())
-    {
-        return 5;
-    }
-    else if(s.toLower() == QObject::tr("Colosseum").toLower())
-    {
-        return 6;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int Profile3::getLanguageIndex(QString s)
-{
-    if(s.toLower() == "eng")
-    {
-        return 1;
-    }
-    else if(s.toLower() == "spa")
-    {
-        return 2;
-    }
-    else if(s.toLower() == "fre")
-    {
-        return 3;
-    }
-    else if(s.toLower() == "ita")
-    {
-        return 4;
-    }
-    else if(s.toLower() == "deu")
-    {
-        return 5;
-    }
-    else if(s.toLower() == "jpn")
-    {
-        return 6;
-    }
-    else
-    {
-        return 0;
     }
 }

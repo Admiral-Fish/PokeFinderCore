@@ -24,7 +24,7 @@ void MersenneTwister::initialize(u32 seed)
     mt[0] = seed;
 
     for (index = 1; index < N; index++)
-        mt[index] = (0x6C078965*(mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
+        mt[index] = (0x6C078965 * (mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
 }
 
 void MersenneTwister::shuffle()
@@ -98,7 +98,7 @@ void MersenneTwisterUntempered::initialize(u32 seed)
     mt[0] = seed;
 
     for (index = 1; index < N; index++)
-        mt[index] = (0x6C078965*(mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
+        mt[index] = (0x6C078965 * (mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
 }
 
 void MersenneTwisterUntempered::shuffle()
@@ -174,7 +174,7 @@ void MersenneTwisterFast::initialize(u32 seed)
     mt[0] = seed;
 
     for (index = 1; index < max; ++index)
-        mt[index] = (0x6C078965*(mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
+        mt[index] = (0x6C078965 * (mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
 }
 
 void MersenneTwisterFast::shuffle()
