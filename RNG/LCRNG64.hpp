@@ -33,7 +33,7 @@ public:
     u64 seed;
 
     LCRNG64(u64 add, u64 mult, u64 seed);
-    virtual void advanceFrames(int frames);
+    void advanceFrames(int frames) override;
     u32 nextUInt(u32 max);
     u64 nextULong() override;
     u32 nextUInt() override;

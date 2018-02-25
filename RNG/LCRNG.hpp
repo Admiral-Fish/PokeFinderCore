@@ -33,7 +33,7 @@ public:
     u32 seed;
 
     LCRNG(u32 add, u32 mult, u32 seed);
-    virtual void advanceFrames(int frames);
+    void advanceFrames(int frames) override;
     u32 nextUShort();
     u32 nextUInt() override;
     void reseed(u32 seed) override;
