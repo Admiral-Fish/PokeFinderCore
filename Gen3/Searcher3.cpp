@@ -29,12 +29,13 @@ Searcher3::Searcher3()
 }
 
 // Constructor given user defined parameters
-Searcher3::Searcher3(u16 tid, u16 sid)
+Searcher3::Searcher3(u16 tid, u16 sid, u32 ratio)
 {
     this->tid = tid;
     this->sid = sid;
     psv = tid ^ sid;
     frame.setIDs(tid, sid, psv);
+    frame.genderRatio = ratio;
 }
 
 // Returns vector of frames for Channel Method

@@ -39,6 +39,10 @@ class Frame
 protected:
     vector<QString> natures = Nature::getFrameNatures();
     vector<QString> powers = Power::getPowers();
+    QString getFemale125();
+    QString getFemale25();
+    QString getFemale50();
+    QString getFemale75();
 
 public:
     u32 ivs[6];
@@ -47,6 +51,7 @@ public:
     Encounter encounterType;
     u32 frame;
     u32 gender;
+    u32 genderRatio;
     u32 hidden;
     Lead leadType;
     Method methodType;
@@ -59,10 +64,7 @@ public:
     bool synchable;
     u16 tid;
 
-    QString getFemale125();
-    QString getFemale25();
-    QString getFemale50();
-    QString getFemale75();
+    QString getGender();
     QString getNature();
     QString getPower();
     QString getShiny();

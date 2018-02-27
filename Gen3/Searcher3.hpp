@@ -52,7 +52,7 @@ private:
 
 public:
     Searcher3();
-    Searcher3(u16 tid, u16 sid);
+    Searcher3(u16 tid, u16 sid, u32 ratio);
     vector<Frame3> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
     void setup(Method method);
     void setupNatureLock(int num);

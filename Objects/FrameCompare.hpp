@@ -43,6 +43,7 @@ public:
     bool comparePID(Frame frame);
     bool compareIVs(Frame frame);
     bool compareNature(Frame frame);
+    u32 getGenderRatio();
 
 };
 

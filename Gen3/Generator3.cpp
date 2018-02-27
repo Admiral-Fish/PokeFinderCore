@@ -47,6 +47,7 @@ vector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
+    frame.genderRatio = compare.getGenderRatio();
 
     for (int i = 0; i < 12; i++)
         rngList.push_back(rng.nextUShort());
@@ -81,6 +82,7 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
+    frame.genderRatio = compare.getGenderRatio();
 
     for (int i = 0; i < 20; i++)
         rngList.push_back(rng.nextUShort());
@@ -136,6 +138,7 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
+    frame.genderRatio = compare.getGenderRatio();
 
     for (int i = 0; i < 20; i++)
         rngList.push_back(rng.nextUShort());
@@ -201,6 +204,7 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
+    frame.genderRatio = compare.getGenderRatio();
 
     for (int i = 0; i < 20; i++)
         rngList.push_back(rng.nextUShort());
@@ -309,6 +313,7 @@ vector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
+    frame.genderRatio = compare.getGenderRatio();
 
     for (int i = 0; i < 5; i++)
         rngList.push_back(rng.nextUShort());
@@ -338,6 +343,7 @@ vector<Frame3> Generator3::generateMethod124(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
+    frame.genderRatio = compare.getGenderRatio();
 
     for (int i = 0; i < 5; i++)
         rngList.push_back(rng.nextUShort());

@@ -19,28 +19,27 @@
 
 #include "Frame.hpp"
 
-// Returns gender of 12.5% F ratio
-QString Frame::getFemale125()
+// Gets gender based on gender ratio
+QString Frame::getGender()
 {
-    return (gender >= 31) ? "M" : "F";
-}
-
-// Returns gender of 25% F ratio
-QString Frame::getFemale25()
-{
-    return (gender >= 63) ? "M" : "F";
-}
-
-// Returns gender of 50% F ratio
-QString Frame::getFemale50()
-{
-    return (gender >= 127) ? "M" : "F";
-}
-
-// Returns gender of 75% F ratio
-QString Frame::getFemale75()
-{
-    return (gender >= 191) ? "M" : "F";
+    switch (genderRatio)
+    {
+        case 0:
+            return "-";
+        case 1:
+            return (gender >= 127) ? "M" : "F";
+        case 2:
+            return (gender >= 191) ? "M" : "F";
+        case 3:
+            return (gender >= 63) ? "M" : "F";
+        case 4:
+            return (gender >= 31) ? "M" : "F";
+        case 5:
+            return "M";
+        case 6:
+        default:
+            return "F";
+    }
 }
 
 // Returns string equivalent of nature

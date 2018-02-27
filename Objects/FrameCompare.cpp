@@ -189,3 +189,8 @@ bool FrameCompare::compareNature(Frame frame)
 {
     return natures[frame.nature];
 }
+
+u32 FrameCompare::getGenderRatio()
+{
+    return genderRatio;
+}
