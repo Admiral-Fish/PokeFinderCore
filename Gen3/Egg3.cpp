@@ -55,7 +55,7 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
         rng.seed = 0;
         rng.advanceFrames(initialFrame - 1);
         rngList.clear();
-        for (uint x = 0; x < 20; x++)
+        for (uint x = 0; x < 19; x++)
             rngList.push_back(rng.nextUShort());
 
         u32 offset = calibration + 3 * redraw;
@@ -100,12 +100,9 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
                 do
                 {
                     // VBlank at 17
+                    // Skip at this point since it's unlikely to occur
                     if (total == 17)
-                        ++i;
-
-                    // Check if need to add to
-                    if (i >= rngList.size())
-                        refill();
+                        break;
 
                     // generate lower
                     pid = rngList[i++];
@@ -115,6 +112,9 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
                     ++total;
                 }
                 while (pid % 0x19 != everstoneNature);
+
+                if (total == 17)
+                    continue;
 
                 frame.setPID(pid, pid >> 16, pid & 0xFFFF);
                 frame.nature = everstoneNature;
