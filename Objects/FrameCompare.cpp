@@ -40,6 +40,22 @@ FrameCompare::FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex
     skip = skipCompare;
 }
 
+FrameCompare::FrameCompare(int genderIndex, int genderRatioIndex, int abilityIndex, vector<bool> nature, bool onlyShiny)
+{
+    gender = (u32)genderIndex;
+    genderRatio = (u32)genderRatioIndex;
+    ability = (u32)abilityIndex;
+
+    natures.resize(25);
+    for (auto i = 0; i < nature.size(); i++)
+    {
+        natures[Nature::getAdjustedNature(i)] = nature[i];
+    }
+
+    shiny = onlyShiny;
+    skip = false;
+}
+
 bool FrameCompare::comparePID(Frame frame)
 {
     if (skip)

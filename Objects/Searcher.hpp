@@ -19,6 +19,7 @@
 
 #ifndef SEARCHER_HPP
 #define SEARCHER_HPP
+
 #include <libPokeFinder/Objects/Encounter.hpp>
 #include <libPokeFinder/Objects/EncounterSlot.hpp>
 #include <libPokeFinder/Objects/FrameCompare.hpp>

@@ -40,6 +40,7 @@ private:
 public:
     FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
                  vector<bool> nature, vector<bool> power, bool onlyShiny, bool skipCompare);
+    FrameCompare(int genderIndex, int genderRatioIndex, int abilityIndex, vector<bool> nature, bool onlyShiny);
     bool comparePID(Frame frame);
     bool compareIVs(Frame frame);
     bool compareNature(Frame frame);

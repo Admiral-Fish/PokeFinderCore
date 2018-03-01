@@ -19,6 +19,7 @@
 
 #ifndef GENERATOR_HPP
 #define GENERATOR_HPP
+
 #include <libPokeFinder/Objects/FrameCompare.hpp>
 #include <libPokeFinder/Objects/Encounter.hpp>
 #include <libPokeFinder/Objects/EncounterSlot.hpp>
