@@ -29,11 +29,14 @@ public:
     QString lockReason;
     u32 occidentary;
     u32 seed;
+    bool split = false;
 
     Frame3(u16 tid, u16 sid, u16 psv);
     QString getTime();
     void setIDs(u16 tid, u16 sid, u16 psv);
     void setIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6);
+    void setInheritance(u32 par1, u32 par2, u32 par3, u32 inh1, u32 inh2,
+                        u32 inh3, vector<u32> parent1, vector<u32> parent2);
 
 };
 

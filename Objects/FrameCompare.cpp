@@ -56,12 +56,27 @@ FrameCompare::FrameCompare(int genderIndex, int genderRatioIndex, int abilityInd
     skip = false;
 }
 
+FrameCompare::FrameCompare(vector<u32> eval, vector<u32> values)
+{
+    this->eval = eval;
+    val = values;
+
+    for (int i = 0; i < 16; i++)
+        powers.push_back(true);
+}
+
 bool FrameCompare::comparePID(Frame frame)
 {
     if (skip)
         return true;
 
     if(shiny && !frame.shiny)
+        return false;
+
+    if(!natures[frame.nature])
+        return false;
+
+    if(ability != 0 && ability - 1 != frame.ability)
         return false;
 
     switch(genderRatio)
@@ -155,12 +170,6 @@ bool FrameCompare::comparePID(Frame frame)
         default:
             break;
     }
-
-    if(ability != 0 && ability - 1 != frame.ability)
-        return false;
-
-    if(!natures[frame.nature])
-        return false;
 
     return true;
 }

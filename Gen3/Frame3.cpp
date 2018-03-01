@@ -65,3 +65,63 @@ void Frame3::setIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6)
     hidden = ((((ivs[0] & 1) + 2 * (ivs[1] & 1) + 4 * (ivs[2] & 1) + 8 * (ivs[5] & 1) + 16 * (ivs[3] & 1) + 32 * (ivs[4] & 1)) * 15) / 63);
     power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
 }
+
+void Frame3::setInheritance(u32 par1, u32 par2, u32 par3, u32 inh1, u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2)
+{
+    switch (inh1)
+    {
+        case 0:
+            ivs[0] = par1 == 0 ? parent1[0] : parent2[0];
+            break;
+        case 1:
+            ivs[1] = par1 == 0 ? parent1[1] : parent2[1];
+            break;
+        case 2:
+            ivs[2] = par1 == 0 ? parent1[2] : parent2[2];
+            break;
+        case 3:
+            ivs[3] = par1 == 0 ? parent1[3] : parent2[3];
+            break;
+        case 4:
+            ivs[4] = par1 == 0 ? parent1[4] : parent2[4];
+            break;
+        case 5:
+            ivs[5] = par1 == 0 ? parent1[5] : parent2[5];
+            break;
+    }
+
+    switch (inh2)
+    {
+        case 1:
+            ivs[1] = par2 == 0 ? parent1[1] : parent2[1];
+            break;
+        case 2:
+            ivs[2] = par2 == 0 ? parent1[2] : parent2[2];
+            break;
+        case 3:
+            ivs[3] = par2 == 0 ? parent1[3] : parent2[3];
+            break;
+        case 4:
+            ivs[4] = par2 == 0 ? parent1[4] : parent2[4];
+            break;
+        case 5:
+            ivs[5] = par2 == 0 ? parent1[5] : parent2[5];
+            break;
+    }
+
+    switch (inh3)
+    {
+        case 1:
+            ivs[1] = par3 == 0 ? parent1[1] : parent2[1];
+            break;
+        case 3:
+            ivs[3] = par3 == 0 ? parent1[3] : parent2[3];
+            break;
+        case 4:
+            ivs[4] = par3 == 0 ? parent1[4] : parent2[4];
+            break;
+        case 5:
+            ivs[5] = par3 == 0 ? parent1[5] : parent2[5];
+            break;
+    }
+}

@@ -30,14 +30,22 @@ class Egg3 : public Egg
 
 private:
     LCRNG rng = PokeRNG(0);
+    vector<u32> parent1;
+    vector<u32> parent2;
+    const u32 HABCDS[6] = { 0, 1, 2, 5, 3, 4 };
+    const u32 ABCDS[5] = { 1, 2, 5, 3, 4 };
+    const u32 ACDS[4] = { 1, 5, 3, 4 };
 
     vector<Frame3> generateEmeraldPID(FrameCompare compare);
-    void refill();
+    vector<Frame3> generateEmerald(FrameCompare compare);
+    vector<Frame3> generateEmeraldSplit(FrameCompare compare);
+    vector<Frame3> generateEmeraldAlternate(FrameCompare compare);
 
 public:
     Egg3();
     Egg3(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 seed = 0);
     vector<Frame3> generate(FrameCompare compare);
+    void setParents(vector<u32> parent1, vector<u32> parent2);
 
     u32 calibration;
     u32 minRedraw;
