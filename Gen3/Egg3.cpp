@@ -47,7 +47,7 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
     Frame3 frame = Frame3(tid, sid, psv);
     frame.genderRatio = compare.getGenderRatio();
 
-    int i, total;
+    int i;
     u32 pid;
 
     rng.seed = 0;
@@ -56,7 +56,6 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
         rngList.push_back(rng.nextUShort());
 
     u32 val = initialFrame;
-
 
     for (u32 cnt = initialFrame; cnt < maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()), val++)
     {
@@ -97,12 +96,12 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
             }
             else
             {
-                total = 0;
                 do
                 {
-                    // VBlank at 17
-                    // Skip at this point since it's unlikely to occur
-                    if (total == 17)
+                    // VBlank at 17 from starting PID generation
+                    // Adjusted i value is 19
+                    // Skip at this point since spread is unlikely to occur
+                    if (i == 19)
                         break;
 
                     // generate lower
@@ -110,11 +109,10 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
 
                     // generate upper
                     pid |= trng.nextUInt() & 0xFFFF0000;
-                    ++total;
                 }
                 while (pid % 0x19 != everstoneNature);
 
-                if (total == 17)
+                if (i == 19)
                     continue;
 
                 frame.setPID(pid, pid >> 16, pid & 0xFFFF);
@@ -180,8 +178,6 @@ vector<Frame3> Egg3::generateEmeraldSplit(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
-    Frame3 split = Frame3(tid, sid, psv);
-    split.split = true;
 
     rng.seed = 0;
     rng.advanceFrames(initialFrame - 1);
@@ -194,19 +190,8 @@ vector<Frame3> Egg3::generateEmeraldSplit(FrameCompare compare)
     for (u32 cnt = initialFrame; cnt < maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
         iv1 = rngList[4];
-        iv2 = rngList[5];
-        frame.setIVs(iv1, iv2);
         iv2 = rngList[6];
-        split.setIVs(iv1, iv2);
-
-        inh1 = rngList[7];
-        inh2 = rngList[8];
-        inh3 = rngList[9];
-        par1 = rngList[10];
-        par2 = rngList[11];
-        par3 = rngList[12];
-        frame.setInheritance(par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
-                             ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
+        frame.setIVs(iv1, iv2);
 
         inh1 = rngList[8];
         inh2 = rngList[9];
@@ -214,19 +199,13 @@ vector<Frame3> Egg3::generateEmeraldSplit(FrameCompare compare)
         par1 = rngList[11];
         par2 = rngList[12];
         par3 = rngList[13];
-        split.setInheritance(par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
+        frame.setInheritance(par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
                              ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
 
         if (compare.compareIVs(frame))
         {
             frame.frame = cnt;
             frames.push_back(frame);
-        }
-
-        if (compare.compareIVs(split))
-        {
-            split.frame = cnt;
-            frames.push_back(split);
         }
     }
     return frames;

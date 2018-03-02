@@ -29,7 +29,6 @@ public:
     QString lockReason;
     u32 occidentary;
     u32 seed;
-    bool split = false;
 
     Frame3(u16 tid, u16 sid, u16 psv);
     QString getTime();
