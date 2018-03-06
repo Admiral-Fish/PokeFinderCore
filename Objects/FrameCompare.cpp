@@ -56,13 +56,11 @@ FrameCompare::FrameCompare(int genderIndex, int genderRatioIndex, int abilityInd
     skip = false;
 }
 
-FrameCompare::FrameCompare(vector<u32> eval, vector<u32> values)
+FrameCompare::FrameCompare(vector<u32> eval, vector<u32> values, vector<bool> power)
 {
     this->eval = eval;
     val = values;
-
-    for (int i = 0; i < 16; i++)
-        powers.push_back(true);
+    powers = power;
 }
 
 bool FrameCompare::comparePID(Frame frame)

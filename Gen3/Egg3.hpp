@@ -40,6 +40,8 @@ private:
     vector<Frame3> generateEmerald(FrameCompare compare);
     vector<Frame3> generateEmeraldSplit(FrameCompare compare);
     vector<Frame3> generateEmeraldAlternate(FrameCompare compare);
+    vector<Frame3> generateLower();
+    vector<Frame3> generateUpper(vector<Frame3> lower, FrameCompare compare);
 
 public:
     Egg3();
@@ -51,6 +53,9 @@ public:
     u32 minRedraw;
     u32 maxRedraw;
     u32 compatability;
+    u32 minPickup;
+    u32 maxPickup;
+    u32 seed;
     bool everstone;
 
 };

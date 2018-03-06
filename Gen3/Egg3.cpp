@@ -52,12 +52,12 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
 
     rng.seed = 0;
     rng.advanceFrames(initialFrame - 1);
-    for (uint x = 0; x < 19; x++)
+    for (int x = 0; x < 19; x++)
         rngList.push_back(rng.nextUShort());
 
     u32 val = initialFrame;
 
-    for (u32 cnt = initialFrame; cnt < maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()), val++)
+    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()), val++)
     {
         for (u32 redraw = minRedraw; redraw <= maxRedraw; redraw++)
         {
@@ -143,25 +143,22 @@ vector<Frame3> Egg3::generateEmerald(FrameCompare compare)
 
     rng.seed = 0;
     rng.advanceFrames(initialFrame - 1);
-    rngList.clear();
-    for (uint x = 0; x < 13; x++)
+    for (int x = 0; x < 13; x++)
         rngList.push_back(rng.nextUShort());
 
     u32 iv1, iv2, inh1, inh2, inh3, par1, par2, par3;
 
-    for (u32 cnt = initialFrame; cnt < maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
         iv1 = rngList[4];
         iv2 = rngList[5];
-        frame.setIVs(iv1, iv2);
-
         inh1 = rngList[7];
         inh2 = rngList[8];
         inh3 = rngList[9];
         par1 = rngList[10];
         par2 = rngList[11];
         par3 = rngList[12];
-        frame.setInheritance(par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
+        frame.setInheritanceEmerald(iv1, iv2, par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
                              ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
 
         if (compare.compareIVs(frame))
@@ -181,25 +178,22 @@ vector<Frame3> Egg3::generateEmeraldSplit(FrameCompare compare)
 
     rng.seed = 0;
     rng.advanceFrames(initialFrame - 1);
-    rngList.clear();
-    for (uint x = 0; x < 14; x++)
+    for (int x = 0; x < 14; x++)
         rngList.push_back(rng.nextUShort());
 
     u32 iv1, iv2, inh1, inh2, inh3, par1, par2, par3;
 
-    for (u32 cnt = initialFrame; cnt < maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
         iv1 = rngList[4];
         iv2 = rngList[6];
-        frame.setIVs(iv1, iv2);
-
         inh1 = rngList[8];
         inh2 = rngList[9];
         inh3 = rngList[10];
         par1 = rngList[11];
         par2 = rngList[12];
         par3 = rngList[13];
-        frame.setInheritance(par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
+        frame.setInheritanceEmerald(iv1, iv2, par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
                              ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
 
         if (compare.compareIVs(frame))
@@ -218,31 +212,118 @@ vector<Frame3> Egg3::generateEmeraldAlternate(FrameCompare compare)
 
     rng.seed = 0;
     rng.advanceFrames(initialFrame - 1);
-    rngList.clear();
-    for (uint x = 0; x < 14; x++)
+    for (int x = 0; x < 14; x++)
         rngList.push_back(rng.nextUShort());
 
     u32 iv1, iv2, inh1, inh2, inh3, par1, par2, par3;
 
-    for (u32 cnt = initialFrame; cnt < maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
         iv1 = rngList[4];
         iv2 = rngList[5];
-        frame.setIVs(iv1, iv2);
-
         inh1 = rngList[8];
         inh2 = rngList[9];
         inh3 = rngList[10];
         par1 = rngList[11];
         par2 = rngList[12];
         par3 = rngList[13];
-        frame.setInheritance(par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
+        frame.setInheritanceEmerald(iv1, iv2, par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
                              ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
 
         if (compare.compareIVs(frame))
         {
             frame.frame = cnt;
             frames.push_back(frame);
+        }
+    }
+
+    return frames;
+}
+
+vector<Frame3> Egg3::generateLower()
+{
+    vector<Frame3> frames;
+    Frame3 frame = Frame3(tid, sid, psv);
+
+    rng.seed = seed;
+    rng.advanceFrames(initialFrame + 17);
+    for (int x = 0; x < 2; x++)
+        rngList.push_back(rng.nextUShort());
+
+    u32 pid;
+
+    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    {
+        if (((rngList[0] * 100) / 0xFFFF) >= compatability)
+            continue;
+
+        pid = rngList[1];
+
+        if (pid > 0xFFFD)
+        {
+            frame.pid = pid - 0xFFFC;
+        }
+        else
+            frame.pid = pid + 1;
+
+        frame.frame = cnt;
+        frames.push_back(frame);
+    }
+
+    return frames;
+}
+
+vector<Frame3> Egg3::generateUpper(vector<Frame3> lower, FrameCompare compare)
+{
+    vector<Frame3> upper;
+    Frame3 frame = Frame3(tid, sid, psv);
+
+    rng.seed = seed;
+    rng.advanceFrames(minPickup - 1);
+    rngList.clear();
+    for (int x = 0; x < 14; x++)
+        rngList.push_back(rng.nextUShort());
+
+    u32 low = lower[0].pid;
+    u32 iv1, iv2, inh1, inh2, inh3, par1, par2, par3;
+
+    for (u32 cnt = minPickup; cnt <= maxPickup; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    {
+        frame.setPID(low, rngList[3]);
+
+        if (!compare.comparePID(frame))
+            continue;
+
+        iv1 = rngList[5];
+        iv2 = rngList[6];
+        inh1 = rngList[8];
+        inh2 = rngList[9];
+        inh3 = rngList[10];
+        par1 = rngList[11];
+        par2 = rngList[12];
+        par3 = rngList[13];
+
+        frame.setInheritance(iv1, iv2, par1, par2, par3, inh1,
+                             inh2, inh3, parent1, parent2);
+
+        if (compare.compareIVs(frame))
+        {
+            frame.occidentary = cnt;
+            upper.push_back(frame);
+        }
+    }
+
+    vector<Frame3> frames;
+
+    for (Frame3 low : lower)
+    {
+        for (Frame3 up : upper)
+        {
+            if (up.occidentary <= low.frame)
+                continue;
+
+            up.frame = low.frame;
+            frames.push_back(up);
         }
     }
 
@@ -260,8 +341,15 @@ vector<Frame3> Egg3::generate(FrameCompare compare)
         case EBredSplit:
             return generateEmeraldSplit(compare);
         case EBredAlternate:
-        default:
             return generateEmeraldAlternate(compare);
+        case RSBred:
+        case FRLGBred:
+        default:
+            vector<Frame3> lower = generateLower();
+            if (lower.size() == 0)
+                return lower;
+            else
+                return generateUpper(lower, compare);
     }
 }
 
