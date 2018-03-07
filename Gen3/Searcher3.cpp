@@ -181,7 +181,7 @@ vector<Frame3> Searcher3::searchMethodH1(u32 hp, u32 atk, u32 def, u32 spa, u32 
                     }
                 }
                 // Check synch
-                else if ((nextRNG2 & 1) == 0)
+                else if ((nextRNG & 1) == 0)
                 {
                     frame.leadType = Synchronize;
                     slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
