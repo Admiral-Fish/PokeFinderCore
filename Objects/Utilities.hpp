@@ -29,7 +29,7 @@ class Utilities
     
 public:    
     static u32 calcGen3Seed(QDate time, u32 h, u32 m);
-
+    static bool shiny(u32 pid, u32 tid, u32  sid);
 };
 
 #endif // UTILITIES_HPP

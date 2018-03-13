@@ -27,3 +27,8 @@ u32 Utilities::calcGen3Seed(QDate time, u32 h, u32 m)
     u32 seed = 1440 * d + 960 * (h / 10) + 60 * (h % 10) + 16 * (m / 10) + m % 10;
     return (seed >> 16) ^ (seed & 0xFFFF);
 }
+
+bool Utilities::shiny(u32 pid, u32 tid, u32 sid)
+{
+    return ((((pid & 0xFFFF) ^ (pid >> 16) ^ tid ^ sid) & 0xFFF8) == 0);
+}
