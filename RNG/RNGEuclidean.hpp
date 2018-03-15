@@ -20,7 +20,7 @@
 #ifndef RNGEUCLIDEAN_HPP
 #define RNGEUCLIDEAN_HPP
 
-#include <libPokeFinder/Objects/Method.hpp>
+#include <PokeFinderCore/Objects/Method.hpp>
 #include <cstdint>
 #include <vector>
 

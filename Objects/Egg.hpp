@@ -20,9 +20,9 @@
 #ifndef EGG_HPP
 #define EGG_HPP
 
-#include <libPokeFinder/Objects/FrameCompare.hpp>
-#include <libPokeFinder/Objects/Method.hpp>
-#include <libPokeFinder/RNG/IRNG.hpp>
+#include <PokeFinderCore/Objects/FrameCompare.hpp>
+#include <PokeFinderCore/Objects/Method.hpp>
+#include <PokeFinderCore/RNG/IRNG.hpp>
 #include <vector>
 
 using std::vector;

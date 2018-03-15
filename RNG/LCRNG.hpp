@@ -20,7 +20,7 @@
 #ifndef LCRNG_HPP
 #define LCRNG_HPP
 
-#include <libPokeFinder/RNG/IRNG.hpp>
+#include <PokeFinderCore/RNG/IRNG.hpp>
 
 class LCRNG : public IRNG
 {

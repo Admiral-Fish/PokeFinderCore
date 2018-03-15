@@ -20,7 +20,7 @@
 #ifndef MTRNG_HPP
 #define MTRNG_HPP
 
-#include <libPokeFinder/RNG/IRNG.hpp>
+#include <PokeFinderCore/RNG/IRNG.hpp>
 
 class MersenneTwister : public IRNG
 {

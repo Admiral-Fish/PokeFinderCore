@@ -20,8 +20,8 @@
 #ifndef FRAMECOMPARE_HPP
 #define FRAMECOMPARE_HPP
 
-#include <libPokeFinder/Objects/Nature.hpp>
-#include <libPokeFinder/Objects/Frame.hpp>
+#include <PokeFinderCore/Objects/Nature.hpp>
+#include <PokeFinderCore/Objects/Frame.hpp>
 
 class FrameCompare
 {

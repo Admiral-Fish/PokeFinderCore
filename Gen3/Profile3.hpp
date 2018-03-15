@@ -20,7 +20,7 @@
 #ifndef PROFILE3_HPP
 #define PROFILE3_HPP
 
-#include <libPokeFinder/Objects/Profile.hpp>
+#include <PokeFinderCore/Objects/Profile.hpp>
 #include <QStandardItemModel>
 
 class Profile3 : public Profile

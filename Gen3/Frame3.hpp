@@ -20,7 +20,7 @@
 #ifndef FRAME3_HPP
 #define FRAME3_HPP
 
-#include <libPokeFinder/Objects/Frame.hpp>
+#include <PokeFinderCore/Objects/Frame.hpp>
 
 class Frame3: public Frame
 {

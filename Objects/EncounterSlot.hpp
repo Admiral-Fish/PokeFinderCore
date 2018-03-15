@@ -20,7 +20,7 @@
 #ifndef ENCOUNTERSLOT_HPP
 #define ENCOUNTERSLOT_HPP
 
-#include <libPokeFinder/Objects/Encounter.hpp>
+#include <PokeFinderCore/Objects/Encounter.hpp>
 #include <cstdint>
 #include <vector>
 

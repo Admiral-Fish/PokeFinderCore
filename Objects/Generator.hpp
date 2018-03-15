@@ -20,12 +20,12 @@
 #ifndef GENERATOR_HPP
 #define GENERATOR_HPP
 
-#include <libPokeFinder/Objects/FrameCompare.hpp>
-#include <libPokeFinder/Objects/Encounter.hpp>
-#include <libPokeFinder/Objects/EncounterSlot.hpp>
-#include <libPokeFinder/Objects/Lead.hpp>
-#include <libPokeFinder/Objects/Method.hpp>
-#include <libPokeFinder/RNG/IRNG.hpp>
+#include <PokeFinderCore/Objects/FrameCompare.hpp>
+#include <PokeFinderCore/Objects/Encounter.hpp>
+#include <PokeFinderCore/Objects/EncounterSlot.hpp>
+#include <PokeFinderCore/Objects/Lead.hpp>
+#include <PokeFinderCore/Objects/Method.hpp>
+#include <PokeFinderCore/RNG/IRNG.hpp>
 #include <vector>
 
 using std::vector;

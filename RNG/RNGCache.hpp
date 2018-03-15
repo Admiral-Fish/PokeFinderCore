@@ -20,7 +20,7 @@
 #ifndef RNGCACHE_HPP
 #define RNGCACHE_HPP
 
-#include <libPokeFinder/Objects/Method.hpp>
+#include <PokeFinderCore/Objects/Method.hpp>
 #include <vector>
 #include <unordered_map>
 

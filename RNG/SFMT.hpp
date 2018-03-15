@@ -20,7 +20,7 @@
 #ifndef SFMT_HPP
 #define SFMT_HPP
 
-#include <libPokeFinder/RNG/IRNG64.hpp>
+#include <PokeFinderCore/RNG/IRNG64.hpp>
 
 class SFMT : public IRNG64
 {
