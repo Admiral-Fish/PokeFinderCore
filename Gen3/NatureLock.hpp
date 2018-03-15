@@ -1,6 +1,6 @@
 /*
  * This file is part of libPokéFinder
- * Copyright (C) 2017 by Admiral_Fish and bumba
+ * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,23 +36,23 @@ enum ShadowType
 
 class LockInfo
 {
-    
+
 private:
     u32 genderUpper;
     u32 genderLower;
     u32 nature;
-    
+
 public:
     LockInfo(u32 nature, u32 genderLower, u32 genderUpper);
     u32 getGenderLower();
     u32 getGenderUpper();
     u32 getNature();
-    
+
 };
 
 class NatureLock
 {
-    
+
 private:
     int backCount;
     int frontCount;
@@ -76,7 +76,7 @@ private:
     u32 getPSVReverse();
     void natureLockSetupColo(int lockNum);
     void natureLockSetupGales(int lockNum);
-    
+
 public:
     NatureLock();
     ShadowType getType();

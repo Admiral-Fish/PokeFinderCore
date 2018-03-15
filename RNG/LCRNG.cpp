@@ -1,6 +1,6 @@
 /*
  * This file is part of libPokéFinder
- * Copyright (C) 2017 by Admiral_Fish and bumba
+ * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ LCRNG::LCRNG(u32 add, u32 mult, u32 seed)
 // Method for advancing seed by a given number of frames
 void LCRNG::advanceFrames(int frames)
 {
-    for(int i = 0; i < frames; i++)
+    for (int i = 0; i < frames; i++)
         seed = seed * mult + add;
 }
 

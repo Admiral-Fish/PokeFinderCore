@@ -1,6 +1,6 @@
 /*
  * This file is part of libPokéFinder
- * Copyright (C) 2017 by Admiral_Fish and bumba
+ * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,11 +29,11 @@ typedef uint32_t u32;
 
 class Range
 {
-    
+
 private:
     u32 max;
     u32 min;
-    
+
 public:
     Range(u32 min, u32 max);
     u32 getMax();
@@ -43,10 +43,10 @@ public:
 
 class EncounterSlot
 {
-    
+
 private:
     static int calcSlot(u32 compare, vector<Range> ranges);
-    
+
 public:
     static int hSlot(u32 result, Encounter encounterType);
     static int jSlot(u32 result, Encounter encounterType);

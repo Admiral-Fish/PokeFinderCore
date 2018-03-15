@@ -1,6 +1,6 @@
 /*
  * This file is part of libPokéFinder
- * Copyright (C) 2017 by Admiral_Fish and bumba
+ * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,9 +128,9 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
         }
     }
 
-    sort(frames.begin(), frames.end(), [](const Frame3& frame1, const Frame3& frame2)
+    sort(frames.begin(), frames.end(), [](const Frame3 & frame1, const Frame3 & frame2)
     {
-       return frame1.frame < frame2.frame;
+        return frame1.frame < frame2.frame;
     });
 
     return frames;
@@ -159,7 +159,7 @@ vector<Frame3> Egg3::generateEmerald(FrameCompare compare)
         par2 = rngList[11];
         par3 = rngList[12];
         frame.setInheritanceEmerald(iv1, iv2, par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
-                             ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
+                                    ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
 
         if (compare.compareIVs(frame))
         {
@@ -194,7 +194,7 @@ vector<Frame3> Egg3::generateEmeraldSplit(FrameCompare compare)
         par2 = rngList[12];
         par3 = rngList[13];
         frame.setInheritanceEmerald(iv1, iv2, par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
-                             ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
+                                    ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
 
         if (compare.compareIVs(frame))
         {
@@ -228,7 +228,7 @@ vector<Frame3> Egg3::generateEmeraldAlternate(FrameCompare compare)
         par2 = rngList[12];
         par3 = rngList[13];
         frame.setInheritanceEmerald(iv1, iv2, par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
-                             ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
+                                    ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
 
         if (compare.compareIVs(frame))
         {

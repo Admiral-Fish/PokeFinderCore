@@ -1,6 +1,6 @@
 /*
  * This file is part of libPokéFinder
- * Copyright (C) 2017 by Admiral_Fish and bumba
+ * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,13 +21,14 @@
 
 vector<QString> Nature::getNatures()
 {
-    vector<QString> natures ={ QObject::tr("Adamant"), QObject::tr("Bold"), QObject::tr("Brave"), QObject::tr("Calm"),
-                               QObject::tr("Careful"), QObject::tr("Hasty"), QObject::tr("Impish"), QObject::tr("Jolly"),
-                               QObject::tr("Lonely"), QObject::tr("Mild"), QObject::tr("Modest"), QObject::tr("Naive"),
-                               QObject::tr("Naughty"), QObject::tr("Quiet"), QObject::tr("Rash"), QObject::tr("Relaxed"),
-                               QObject::tr("Sassy"), QObject::tr("Timid"), QObject::tr("Gentle"), QObject::tr("Lax"),
-                               QObject::tr("Bashful"), QObject::tr("Docile"), QObject::tr("Hardy"), QObject::tr("Quirky"),
-                               QObject::tr("Serious") };
+    vector<QString> natures = { QObject::tr("Adamant"), QObject::tr("Bold"), QObject::tr("Brave"), QObject::tr("Calm"),
+                                QObject::tr("Careful"), QObject::tr("Hasty"), QObject::tr("Impish"), QObject::tr("Jolly"),
+                                QObject::tr("Lonely"), QObject::tr("Mild"), QObject::tr("Modest"), QObject::tr("Naive"),
+                                QObject::tr("Naughty"), QObject::tr("Quiet"), QObject::tr("Rash"), QObject::tr("Relaxed"),
+                                QObject::tr("Sassy"), QObject::tr("Timid"), QObject::tr("Gentle"), QObject::tr("Lax"),
+                                QObject::tr("Bashful"), QObject::tr("Docile"), QObject::tr("Hardy"), QObject::tr("Quirky"),
+                                QObject::tr("Serious")
+                              };
     return natures;
 }
 
@@ -39,7 +40,8 @@ vector<QString> Nature::getFrameNatures()
                                 QObject::tr("Serious"), QObject::tr("Jolly"), QObject::tr("Naive"), QObject::tr("Modest"),
                                 QObject::tr("Mild"), QObject::tr("Quiet"), QObject::tr("Bashful"), QObject::tr("Rash"),
                                 QObject::tr("Calm"), QObject::tr("Gentle"), QObject::tr("Sassy"), QObject::tr("Careful"),
-                                QObject::tr("Quirky") };
+                                QObject::tr("Quirky")
+                              };
     return natures;
 }
 

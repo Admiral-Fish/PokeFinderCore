@@ -1,6 +1,6 @@
 /*
  * This file is part of libPokéFinder
- * Copyright (C) 2017 by Admiral_Fish and bumba
+ * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ void Profile3::deleteProfile()
     bool exists = false;
     QDomDocument doc;
     QFile file(QApplication::applicationDirPath() + "/profiles.xml");
-    if(file.open(QIODevice::ReadOnly | QFile::Text))
+    if (file.open(QIODevice::ReadOnly | QFile::Text))
     {
         doc.setContent(&file);
 
@@ -55,23 +55,23 @@ void Profile3::deleteProfile()
 
         QDomElement profiles = doc.documentElement();
         QDomNode domNode = profiles.firstChild();
-        while(!domNode.isNull() && !exists)
+        while (!domNode.isNull() && !exists)
         {
             QDomElement domElement = domNode.toElement();
-            if(!domElement.isNull())
+            if (!domElement.isNull())
             {
-                if(domElement.tagName() == "Gen3")
+                if (domElement.tagName() == "Gen3")
                 {
                     QDomNode info = domElement.firstChild();
-                    while(!info.isNull())
+                    while (!info.isNull())
                     {
                         QDomElement infoElement = info.toElement();
-                        if(!infoElement.isNull())
+                        if (!infoElement.isNull())
                         {
                             const QString tagName(infoElement.tagName());
-                            if(tagName == "profileName")
+                            if (tagName == "profileName")
                             {
-                                if(this->profileName == infoElement.text())
+                                if (this->profileName == infoElement.text())
                                 {
                                     exists = true;
                                     domNode.parentNode().removeChild(domNode);
@@ -86,7 +86,7 @@ void Profile3::deleteProfile()
             domNode = domNode.nextSibling();
         }
 
-        if(file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
+        if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
         {
             QTextStream stream( &file );
             stream << doc.toString();

@@ -1,6 +1,6 @@
 /*
  * This file is part of libPokéFinder
- * Copyright (C) 2017 by Admiral_Fish and bumba
+ * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,27 +68,27 @@ bool FrameCompare::comparePID(Frame frame)
     if (skip)
         return true;
 
-    if(shiny && !frame.shiny)
+    if (shiny && !frame.shiny)
         return false;
 
-    if(!natures[frame.nature])
+    if (!natures[frame.nature])
         return false;
 
-    if(ability != 0 && ability - 1 != frame.ability)
+    if (ability != 0 && ability - 1 != frame.ability)
         return false;
 
-    switch(genderRatio)
+    switch (genderRatio)
     {
         case 1:
-            switch(gender)
+            switch (gender)
             {
                 case 1:
-                    if(frame.gender < 127)
+                    if (frame.gender < 127)
                         return false;
 
                     break;
                 case 2:
-                    if(frame.gender >= 127)
+                    if (frame.gender >= 127)
                         return false;
 
                     break;
@@ -97,15 +97,15 @@ bool FrameCompare::comparePID(Frame frame)
             }
             break;
         case 2:
-            switch(gender)
+            switch (gender)
             {
                 case 1:
-                    if(frame.gender < 191)
+                    if (frame.gender < 191)
                         return false;
 
                     break;
                 case 2:
-                    if(frame.gender >= 191)
+                    if (frame.gender >= 191)
                         return false;
 
                     break;
@@ -114,15 +114,15 @@ bool FrameCompare::comparePID(Frame frame)
             }
             break;
         case 3:
-            switch(gender)
+            switch (gender)
             {
                 case 1:
-                    if(frame.gender < 63)
+                    if (frame.gender < 63)
                         return false;
 
                     break;
                 case 2:
-                    if(frame.gender >= 63)
+                    if (frame.gender >= 63)
                         return false;
 
                     break;
@@ -131,15 +131,15 @@ bool FrameCompare::comparePID(Frame frame)
             }
             break;
         case 4:
-            switch(gender)
+            switch (gender)
             {
                 case 1:
-                    if(frame.gender < 31)
+                    if (frame.gender < 31)
                         return false;
 
                     break;
                 case 2:
-                    if(frame.gender >= 31)
+                    if (frame.gender >= 31)
                         return false;
 
                     break;
@@ -148,16 +148,16 @@ bool FrameCompare::comparePID(Frame frame)
             }
             break;
         case 5:
-            switch(gender)
+            switch (gender)
             {
                 case 2:
                     return false;
                 default:
                     break;
-                }
-                break;
+            }
+            break;
         case 6:
-            switch(gender)
+            switch (gender)
             {
                 case 1:
                     return false;
@@ -177,27 +177,27 @@ bool FrameCompare::compareIVs(Frame frame)
     if (skip)
         return true;
 
-    if(!powers[frame.hidden])
+    if (!powers[frame.hidden])
         return false;
 
     for (int i = 0; i < 6; i++)
     {
-        switch(eval[i])
+        switch (eval[i])
         {
             case 1:
-                if(frame.ivs[i] != val[i])
+                if (frame.ivs[i] != val[i])
                     return false;
                 break;
             case 2:
-                if(frame.ivs[i] < val[i])
+                if (frame.ivs[i] < val[i])
                     return false;
                 break;
             case 3:
-                if(frame.ivs[i] > val[i])
+                if (frame.ivs[i] > val[i])
                     return false;
                 break;
             case 4:
-                if(frame.ivs[i] == val[i])
+                if (frame.ivs[i] == val[i])
                     return false;
                 break;
             default:

@@ -1,6 +1,6 @@
 /*
  * This file is part of libPokéFinder
- * Copyright (C) 2017 by Admiral_Fish and bumba
+ * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +26,8 @@ typedef uint32_t u32;
 
 class Utilities
 {
-    
-public:    
+
+public:
     static u32 calcGen3Seed(QDate time, u32 h, u32 m);
     static bool shiny(u32 pid, u32 tid, u32  sid);
 };

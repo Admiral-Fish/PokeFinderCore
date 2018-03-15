@@ -1,6 +1,6 @@
 /*
  * This file is part of libPokéFinder
- * Copyright (C) 2017 by Admiral_Fish and bumba
+ * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,7 +117,7 @@ void NatureLock::natureLockSetupColo(int lockNum)
 // Sets up rest of nature lock data for Gales
 void NatureLock::natureLockSetupGales(int lockNum)
 {
-    switch(lockNum)
+    switch (lockNum)
     {
         case 0: // Altaria
             lockInfo = { LockInfo(24, 127, 255), LockInfo(0, 0, 126), LockInfo(12, 127, 255) };

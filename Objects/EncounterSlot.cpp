@@ -1,6 +1,6 @@
 /*
  * This file is part of libPokéFinder
- * Copyright (C) 2017 by Admiral_Fish and bumba
+ * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,10 +19,10 @@
 
 #include "EncounterSlot.hpp"
 
-/* Ranges are used alongside an RNG call to 
+/* Ranges are used alongside an RNG call to
  * determine what encounter slot a frame will have
  */
- 
+
 // Constructor for Range
 Range::Range(u32 min, u32 max)
 {
@@ -59,7 +59,7 @@ int EncounterSlot::hSlot(u32 result, Encounter encounterType)
 {
     u32 compare = result % 100;
     vector<Range> ranges;
-    switch(encounterType)
+    switch (encounterType)
     {
         case OldRod:
             ranges = { Range(0, 69), Range(70, 99) } ;
@@ -74,9 +74,10 @@ int EncounterSlot::hSlot(u32 result, Encounter encounterType)
             ranges = { Range(0, 59), Range(60, 89), Range(90, 94), Range(95, 98), Range(99, 99) };
             return calcSlot(compare, ranges);
         default:
-            ranges = { Range(0, 19), Range(20, 39), Range(40, 49), Range(50, 59), Range(60, 69), 
-                        Range(70, 79), Range(80, 84), Range(85, 89), Range(90, 93), Range(94, 97), 
-                        Range(98, 98), Range(99, 99) };
+            ranges = { Range(0, 19), Range(20, 39), Range(40, 49), Range(50, 59), Range(60, 69),
+                       Range(70, 79), Range(80, 84), Range(85, 89), Range(90, 93), Range(94, 97),
+                       Range(98, 98), Range(99, 99)
+                 };
             return calcSlot(compare, ranges);
     }
 }
@@ -98,8 +99,9 @@ int EncounterSlot::jSlot(u32 result, Encounter encounterType)
             return calcSlot(compare, ranges);
         default:
             ranges = { Range(0, 19), Range(20, 39), Range(40, 49), Range(50, 59), Range(60, 69),
-                        Range(70, 79), Range(80, 84), Range(85, 89), Range(90, 93), Range(94, 97),
-                        Range(98, 98), Range(99, 99) };
+                       Range(70, 79), Range(80, 84), Range(85, 89), Range(90, 93), Range(94, 97),
+                       Range(98, 98), Range(99, 99)
+                 };
             return calcSlot(compare, ranges);
     }
 }
@@ -109,7 +111,7 @@ int EncounterSlot::kSlot(u32 result, Encounter encounterType)
 {
     u32 compare = (result >> 16) % 100;
     vector<Range> ranges;
-    switch(encounterType)
+    switch (encounterType)
     {
         case OldRod:
         case GoodRod:
@@ -121,18 +123,21 @@ int EncounterSlot::kSlot(u32 result, Encounter encounterType)
             return calcSlot(compare, ranges);
         case BugCatchingContest:
             ranges = { Range(80, 99), Range(60, 79), Range(50, 59), Range(40, 49), Range(30, 39),
-                        Range(20, 29), Range(15, 19), Range(10, 14), Range(5, 9), Range(0, 4) };
+                       Range(20, 29), Range(15, 19), Range(10, 14), Range(5, 9), Range(0, 4)
+                 };
             return calcSlot(compare, ranges);
         case SafariZone:
             return (int) (compare % 10);
         case HeadButt:
-            ranges = { Range(0, 49), Range(50, 64), Range(65, 79), Range(80, 89), Range(90, 94), 
-                        Range(95, 99) };
+            ranges = { Range(0, 49), Range(50, 64), Range(65, 79), Range(80, 89), Range(90, 94),
+                       Range(95, 99)
+                 };
             return calcSlot(compare, ranges);
         default:
-            ranges = { Range(0, 19), Range(20, 39), Range(40, 49), Range(50, 59), Range(60, 69), 
-                        Range(70, 79), Range(80, 84), Range(85, 89), Range(90, 93), Range(94, 97), 
-                        Range(98, 98), Range(99, 99) };
+            ranges = { Range(0, 19), Range(20, 39), Range(40, 49), Range(50, 59), Range(60, 69),
+                       Range(70, 79), Range(80, 84), Range(85, 89), Range(90, 93), Range(94, 97),
+                       Range(98, 98), Range(99, 99)
+                 };
             return calcSlot(compare, ranges);
     }
 }
