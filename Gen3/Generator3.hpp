@@ -40,6 +40,7 @@ private:
     vector<Frame3> generateMethodH124CuteCharm(FrameCompare compare);
     vector<Frame3> generateMethodXDColo(FrameCompare compare);
     vector<Frame3> generateMethod124(FrameCompare compare);
+    vector<Frame3> generateMethod1Reverse(FrameCompare compare);
     void refill();
     static inline bool cuteCharm125F(u32 pid) { return (pid & 0xff) < 31; }
     static inline bool cuteCharm875M(u32 pid) { return (pid & 0xff) >= 31; }

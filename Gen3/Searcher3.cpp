@@ -592,6 +592,40 @@ vector<Frame3> Searcher3::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     return frames;
 }
 
+// Returns vector of frames for Method 1 Reverse
+vector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
+{
+    vector<Frame3> frames;
+
+    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
+    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
+    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    auto size = seeds.size();
+    u32 temp;
+
+    for (auto i = 0; i < size; i++)
+    {
+        // Setup normal frame
+        frame.setIVsManual(hp, atk, def, spa, spd, spe);
+        backward.seed = seeds[i];
+        temp = backward.nextUShort();
+        frame.setPID(temp, backward.nextUShort());
+        frame.seed = backward.nextUInt();
+        if (compare.comparePID(frame))
+            frames.push_back(frame);
+
+        // Setup XORed frame
+        frame.pid ^= 0x80008000;
+        frame.nature = frame.pid % 25;
+        if (compare.comparePID(frame))
+        {
+            frame.seed ^= 0x80000000;
+            frames.push_back(frame);
+        }
+    }
+    return frames;
+}
+
 // Returns vector of frames for Method 2
 vector<Frame3> Searcher3::searchMethod2(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
 {
@@ -664,6 +698,8 @@ vector<Frame3> Searcher3::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32
     {
         case Method1:
             return searchMethod1(hp, atk, def, spa, spd, spe, compare);
+        case Method1Reverse:
+            return searchMethod1Reverse(hp, atk, def, spa, spd, spe, compare);
         case Method2:
             return searchMethod2(hp, atk, def, spa, spd, spe, compare);
         case Method4:
@@ -706,6 +742,7 @@ void Searcher3::setup(Method method)
     switch (frameType)
     {
         case Method1:
+        case Method1Reverse:
         case MethodH1:
             cache.switchCache(Method1);
             break;

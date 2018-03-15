@@ -371,6 +371,36 @@ vector<Frame3> Generator3::generateMethod124(FrameCompare compare)
     return frames;
 }
 
+vector<Frame3> Generator3::generateMethod1Reverse(FrameCompare compare)
+{
+    vector<Frame3> frames;
+    Frame3 frame = Frame3(tid, sid, psv);
+    frame.genderRatio = compare.getGenderRatio();
+
+    for (int i = 0; i < 4; i++)
+        rngList.push_back(rng.nextUShort());
+
+    // Method 1 Reverse [SEED] [PID] [PID] [IVS] [IVS]
+
+    u32 max = initialFrame + maxResults;
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    {
+        frame.setPID(rngList[1], rngList[0]);
+        if (!compare.comparePID(frame))
+            continue;
+
+        frame.setIVs(rngList[2], rngList[3]);
+        if (!compare.compareIVs(frame))
+            continue;
+
+        frame.frame = cnt;
+        frames.push_back(frame);
+    }
+    rngList.clear();
+
+    return frames;
+}
+
 void Generator3::refill()
 {
     for (int i = 0; i < 20; i++)
@@ -387,6 +417,8 @@ vector<Frame3> Generator3::generate(FrameCompare compare)
         case Method2:
         case Method4:
             return generateMethod124(compare);
+        case Method1Reverse:
+            return generateMethod1Reverse(compare);
         case MethodH1:
         case MethodH2:
         case MethodH4:
