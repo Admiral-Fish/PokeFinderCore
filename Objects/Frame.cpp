@@ -27,18 +27,18 @@ QString Frame::getGender()
         case 0:
             return "-";
         case 1:
-            return (gender >= 127) ? "M" : "F";
+            return (gender >= 127) ? "♂" : "♀";
         case 2:
-            return (gender >= 191) ? "M" : "F";
+            return (gender >= 191) ? "♂" : "♀";
         case 3:
-            return (gender >= 63) ? "M" : "F";
+            return (gender >= 63) ? "♂" : "♀";
         case 4:
-            return (gender >= 31) ? "M" : "F";
+            return (gender >= 31) ? "♂" : "♀";
         case 5:
-            return "M";
+            return "♂";
         case 6:
         default:
-            return "F";
+            return "♀";
     }
 }
 

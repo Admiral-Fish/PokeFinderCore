@@ -19,16 +19,16 @@
 
 #include "Nature.hpp"
 
-vector<QString> Nature::getNatures()
+QStringList Nature::getNatures()
 {
-    vector<QString> natures = { QObject::tr("Adamant"), QObject::tr("Bold"), QObject::tr("Brave"), QObject::tr("Calm"),
-                                QObject::tr("Careful"), QObject::tr("Hasty"), QObject::tr("Impish"), QObject::tr("Jolly"),
-                                QObject::tr("Lonely"), QObject::tr("Mild"), QObject::tr("Modest"), QObject::tr("Naive"),
-                                QObject::tr("Naughty"), QObject::tr("Quiet"), QObject::tr("Rash"), QObject::tr("Relaxed"),
-                                QObject::tr("Sassy"), QObject::tr("Timid"), QObject::tr("Gentle"), QObject::tr("Lax"),
-                                QObject::tr("Bashful"), QObject::tr("Docile"), QObject::tr("Hardy"), QObject::tr("Quirky"),
-                                QObject::tr("Serious")
-                              };
+    QStringList natures = { QObject::tr("Adamant"), QObject::tr("Bold"), QObject::tr("Brave"), QObject::tr("Calm"),
+                            QObject::tr("Careful"), QObject::tr("Hasty"), QObject::tr("Impish"), QObject::tr("Jolly"),
+                            QObject::tr("Lonely"), QObject::tr("Mild"), QObject::tr("Modest"), QObject::tr("Naive"),
+                            QObject::tr("Naughty"), QObject::tr("Quiet"), QObject::tr("Rash"), QObject::tr("Relaxed"),
+                            QObject::tr("Sassy"), QObject::tr("Timid"), QObject::tr("Gentle"), QObject::tr("Lax"),
+                            QObject::tr("Bashful"), QObject::tr("Docile"), QObject::tr("Hardy"), QObject::tr("Quirky"),
+                            QObject::tr("Serious")
+                          };
     return natures;
 }
 

@@ -38,23 +38,20 @@ private:
     LCRNG backward = PokeRNGR(0);
     NatureLock natureLock;
     ShadowType type;
+    FrameCompare compare;
 
-    vector<Frame3> searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
-    vector<Frame3> searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
-    vector<Frame3> searchMethodH1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
-    vector<Frame3> searchMethodH2(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
-    vector<Frame3> searchMethodH4(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
-    vector<Frame3> searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
-    vector<Frame3> searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
-    vector<Frame3> searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
-    vector<Frame3> searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
-    vector<Frame3> searchMethod2(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
-    vector<Frame3> searchMethod4(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
+    vector<Frame3> searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame3> searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame3> searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame3> searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame3> searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame3> searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame3> searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
 
 public:
     Searcher3();
-    Searcher3(u16 tid, u16 sid, u32 ratio);
-    vector<Frame3> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare);
+    Searcher3(u16 tid, u16 sid, u32 ratio, FrameCompare compare);
+    vector<Frame3> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     void setup(Method method);
     void setupNatureLock(int num);
 

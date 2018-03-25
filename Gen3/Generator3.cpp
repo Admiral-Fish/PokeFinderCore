@@ -255,7 +255,7 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
         // Cute charm uses first call
         // Call next RNG to determine hunt nature
         frame.nature = rngList[++hunt] % 25;
-        if (compare.compareNature(frame))
+        if (!compare.compareNature(frame))
             continue;
 
         // Check if cute charm will effect frame

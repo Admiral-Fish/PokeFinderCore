@@ -24,6 +24,7 @@
 enum Lead
 {
     None,
+    Search,
     Synchronize,
     CuteCharm,
     CuteCharm50M,

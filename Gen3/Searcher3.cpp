@@ -29,17 +29,18 @@ Searcher3::Searcher3()
 }
 
 // Constructor given user defined parameters
-Searcher3::Searcher3(u16 tid, u16 sid, u32 ratio)
+Searcher3::Searcher3(u16 tid, u16 sid, u32 ratio, FrameCompare compare)
 {
     this->tid = tid;
     this->sid = sid;
     psv = tid ^ sid;
+    this->compare = compare;
     frame.setIDs(tid, sid, psv);
     frame.genderRatio = ratio;
 }
 
 // Returns vector of frames for Channel Method
-vector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     vector<Frame3> frames;
 
@@ -71,7 +72,7 @@ vector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa,
 }
 
 // Returns vector of frames for Method Colo Shadows
-vector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     vector<Frame3> frames;
 
@@ -111,8 +112,8 @@ vector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u3
     return frames;
 }
 
-// Returns vector of frames for Method H1
-vector<Frame3> Searcher3::searchMethodH1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
+// Returns vector of frames for Method H1/H2/H4
+vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     vector<Frame3> frames;
 
@@ -127,6 +128,8 @@ vector<Frame3> Searcher3::searchMethodH1(u32 hp, u32 atk, u32 def, u32 spa, u32 
         // Setup normal frame
         frame.setIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
+        if (frameType == MethodH2)
+            backward.advanceFrames(1);
         frame.setPID(backward.nextUShort(), backward.nextUShort());
         seed = backward.nextUInt();
 
@@ -150,227 +153,94 @@ vector<Frame3> Searcher3::searchMethodH1(u32 hp, u32 atk, u32 def, u32 spa, u32 
 
             do
             {
-                frame.leadType = None;
-
-                // Check normal
-                if ((nextRNG % 25) == frame.nature)
+                switch (leadType)
                 {
-                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                    testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                    frame.seed = seed;
-                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                    frames.push_back(frame);
+                    case None:
+                        if ((nextRNG % 25) == frame.nature)
+                        {
+                            frame.leadType = None;
+                            slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.seed = testSeed;
+                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                            frames.push_back(frame);
+                        }
+                        break;
+                    case Synchronize:
+                        // Successful synch
+                        if ((nextRNG & 1) == 0)
+                        {
+                            frame.leadType = Synchronize;
+                            slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.seed = testSeed;
+                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                            frames.push_back(frame);
+                        }
+                        // Failed synch
+                        else if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
+                        {
+                            frame.leadType = Synchronize;
+                            slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
+                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.seed = testSeed;
+                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                            frames.push_back(frame);
+                        }
+                        break;
+                    case CuteCharm:
+                        if ((nextRNG2 % 3) > 0)
+                        {
+                            frame.leadType = CuteCharm;
+                            slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
+                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.seed = testSeed;
+                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                            frames.push_back(frame);
+                        }
+                        break;
+                    case Search:
+                    default:
+                        // Normal
+                        if ((nextRNG % 25) == frame.nature)
+                        {
+                            frame.leadType = None;
+                            slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.seed = testSeed;
+                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                            frames.push_back(frame);
 
-                    slot = slot * 0xeeb9eb65 + 0xa3561a1;
-                    testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
-                    frame.seed = testSeed;
-                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                            slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
+                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.seed = testSeed;
+                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
 
-                    // Check failed synch
-                    if ((nextRNG2 & 1) == 1)
-                    {
-                        frame.leadType = Synchronize;
-                        frames.push_back(frame);
-                    }
+                            // Failed synch
+                            if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
+                            {
+                                frame.leadType = Synchronize;
+                                frames.push_back(frame);
+                            }
 
-                    // Check Cute Charm
-                    if ((nextRNG2 % 3) > 0)
-                    {
-                        frame.leadType = CuteCharm;
-                        frames.push_back(frame);
-                    }
-                }
-                // Check synch
-                else if ((nextRNG & 1) == 0)
-                {
-                    frame.leadType = Synchronize;
-                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                    testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                    frame.seed = testSeed;
-                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                    frames.push_back(frame);
-                }
-
-                testPID = (nextRNG << 16) | nextRNG2;
-                nextRNG = testRNG.nextUShort();
-                nextRNG2 = testRNG.nextUShort();
-            }
-            while ((testPID % 25) != frame.nature);
-        }
-    }
-    return frames;
-}
-
-// Returns vector of frames for Method H2
-vector<Frame3> Searcher3::searchMethodH2(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
-{
-    vector<Frame3> frames;
-
-    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
-    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
-    auto size = seeds.size();
-    u32 seed;
-
-    for (auto i = 0; i < size; i++)
-    {
-        // Setup normal frame
-        frame.setIVsManual(hp, atk, def, spa, spd, spe);
-        backward.seed = seeds[i];
-        backward.advanceFrames(1);
-        frame.setPID(backward.nextUShort(), backward.nextUShort());
-        seed = backward.nextUShort();
-
-        // Use for loop to check both normal and sister spread
-        for (int i = 0; i < 2; i++)
-        {
-            if (i == 1)
-            {
-                frame.pid ^= 0x80008000;
-                frame.nature = frame.pid % 25;
-                seed ^= 0x80000000;
-            }
-
-            if (!compare.comparePID(frame))
-                continue;
-
-            LCRNG testRNG = PokeRNGR(seed);
-            u32 testPID, slot, testSeed;
-            u32 nextRNG = seed >> 16;
-            u32 nextRNG2 = testRNG.nextUShort();
-
-            do
-            {
-                frame.leadType = None;
-
-                // Check normal
-                if ((nextRNG % 25) == frame.nature)
-                {
-                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                    testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                    frame.seed = seed;
-                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                    frames.push_back(frame);
-
-                    slot = slot * 0xeeb9eb65 + 0xa3561a1;
-                    testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
-                    frame.seed = testSeed;
-                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-
-                    // Check failed synch
-                    if ((nextRNG2 & 1) == 1)
-                    {
-                        frame.leadType = Synchronize;
-                        frames.push_back(frame);
-                    }
-
-                    // Check Cute Charm
-                    if ((nextRNG2 % 3) > 0)
-                    {
-                        frame.leadType = CuteCharm;
-                        frames.push_back(frame);
-                    }
-                }
-                // Check synch
-                else if ((nextRNG2 & 1) == 0)
-                {
-                    frame.leadType = Synchronize;
-                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                    testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                    frame.seed = testSeed;
-                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                    frames.push_back(frame);
-                }
-
-                testPID = (nextRNG << 16) | nextRNG2;
-                nextRNG = testRNG.nextUShort();
-                nextRNG2 = testRNG.nextUShort();
-            }
-            while ((testPID % 25) != frame.nature);
-        }
-    }
-    return frames;
-}
-
-// Returns vector of frames for Method H4
-vector<Frame3> Searcher3::searchMethodH4(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
-{
-    vector<Frame3> frames;
-
-    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
-    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
-    auto size = seeds.size();
-    u32 seed;
-
-    for (auto i = 0; i < size; i++)
-    {
-        // Setup normal frame
-        frame.setIVsManual(hp, atk, def, spa, spd, spe);
-        backward.seed = seeds[i];
-        frame.setPID(backward.nextUShort(), backward.nextUShort());
-        seed = backward.nextUInt();
-
-        // Use for loop to check both normal and sister spread
-        for (int i = 0; i < 2; i++)
-        {
-            if (i == 1)
-            {
-                frame.pid ^= 0x80008000;
-                frame.nature = frame.pid % 25;
-                seed ^= 0x80000000;
-            }
-
-            if (!compare.comparePID(frame))
-                continue;
-
-            LCRNG testRNG = PokeRNGR(seed);
-            u32 testPID, slot, testSeed;
-            u32 nextRNG = seed >> 16;
-            u32 nextRNG2 = testRNG.nextUShort();
-
-            do
-            {
-                frame.leadType = None;
-
-                // Check normal
-                if (nextRNG % 25 == frame.nature)
-                {
-                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                    testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                    frame.seed = seed;
-                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                    frames.push_back(frame);
-
-                    slot = slot * 0xeeb9eb65 + 0xa3561a1;
-                    testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
-                    frame.seed = testSeed;
-                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-
-                    // Check failed synch
-                    if ((nextRNG2 & 1) == 1)
-                    {
-                        frame.leadType = Synchronize;
-                        frames.push_back(frame);
-                    }
-
-                    // Check Cute Charm
-                    if ((nextRNG2 % 3) > 0)
-                    {
-                        frame.leadType = CuteCharm;
-                        frames.push_back(frame);
-                    }
-                }
-
-                // Check synch
-                if ((nextRNG2 & 1) == 0)
-                {
-                    frame.leadType = Synchronize;
-                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                    testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                    frame.seed = seed;
-                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                    frames.push_back(frame);
+                            // Cute Charm
+                            if ((nextRNG2 % 3) > 0)
+                            {
+                                frame.leadType = CuteCharm;
+                                frames.push_back(frame);
+                            }
+                        }
+                        // Successful Synch
+                        else if ((nextRNG & 1) == 0)
+                        {
+                            frame.leadType = Synchronize;
+                            slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.seed = testSeed;
+                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                            frames.push_back(frame);
+                        }
+                        break;
                 }
 
                 testPID = (nextRNG << 16) | nextRNG2;
@@ -384,7 +254,7 @@ vector<Frame3> Searcher3::searchMethodH4(u32 hp, u32 atk, u32 def, u32 spa, u32 
 }
 
 // Returns vector of frames for Method Gales Shadows
-vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     vector<Frame3> frames;
 
@@ -528,7 +398,7 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
 }
 
 // Return vector of frames for Method XDColo
-vector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     vector<Frame3> frames;
 
@@ -560,8 +430,8 @@ vector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, 
     return frames;
 }
 
-// Returns vector of frames for Method 1
-vector<Frame3> Searcher3::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
+// Returns vector of frames for Method 1/2/4
+vector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     vector<Frame3> frames;
 
@@ -575,6 +445,8 @@ vector<Frame3> Searcher3::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
         // Setup normal frame
         frame.setIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
+        if (frameType = Method2)
+            backward.advanceFrames(1);
         frame.setPID(backward.nextUShort(), backward.nextUShort());
         frame.seed = backward.nextUInt();
         if (compare.comparePID(frame))
@@ -593,7 +465,7 @@ vector<Frame3> Searcher3::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 }
 
 // Returns vector of frames for Method 1 Reverse
-vector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
+vector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     vector<Frame3> frames;
 
@@ -626,100 +498,31 @@ vector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa
     return frames;
 }
 
-// Returns vector of frames for Method 2
-vector<Frame3> Searcher3::searchMethod2(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
-{
-    vector<Frame3> frames;
-
-    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
-    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
-    auto size = seeds.size();
-
-    for (auto i = 0; i < size; i++)
-    {
-        // Setup normal frame
-        frame.setIVsManual(hp, atk, def, spa, spd, spe);
-        backward.seed = seeds[i];
-        backward.advanceFrames(1);
-        frame.setPID(backward.nextUShort(), backward.nextUShort());
-        frame.seed = backward.nextUInt();
-        if (compare.comparePID(frame))
-            frames.push_back(frame);
-
-        // Setup XORed frame
-        frame.pid ^= 0x80008000;
-        frame.nature = frame.pid % 25;
-        if (compare.comparePID(frame))
-        {
-            frame.seed ^= 0x80000000;
-            frames.push_back(frame);
-        }
-    }
-    return frames;
-}
-
-// Returns vector of frames for Method 4
-vector<Frame3> Searcher3::searchMethod4(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
-{
-    vector<Frame3> frames;
-
-    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
-    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
-    auto size = seeds.size();
-
-    for (auto i = 0; i < size; i++)
-    {
-        // Setup normal frame
-        frame.setIVsManual(hp, atk, def, spa, spd, spe);
-        backward.seed = seeds[i];
-        frame.setPID(backward.nextUShort(), backward.nextUShort());
-        frame.seed = backward.nextUInt();
-        if (compare.comparePID(frame))
-            frames.push_back(frame);
-
-        // Setup XORed frame
-        frame.pid ^= 0x80008000;
-        frame.nature = frame.pid % 25;
-        if (compare.comparePID(frame))
-        {
-            frame.seed ^= 0x80000000;
-            frames.push_back(frame);
-        }
-    }
-    return frames;
-}
-
 // Determines which generational method to return
-vector<Frame3> Searcher3::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe, FrameCompare compare)
+vector<Frame3> Searcher3::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     switch (frameType)
     {
         case Method1:
-            return searchMethod1(hp, atk, def, spa, spd, spe, compare);
-        case Method1Reverse:
-            return searchMethod1Reverse(hp, atk, def, spa, spd, spe, compare);
         case Method2:
-            return searchMethod2(hp, atk, def, spa, spd, spe, compare);
         case Method4:
-            return searchMethod4(hp, atk, def, spa, spd, spe, compare);
+            return searchMethod124(hp, atk, def, spa, spd, spe);
+        case Method1Reverse:
+            return searchMethod1Reverse(hp, atk, def, spa, spd, spe);
         case MethodH1:
-            return searchMethodH1(hp, atk, def, spa, spd, spe, compare);
         case MethodH2:
-            return searchMethodH2(hp, atk, def, spa, spd, spe, compare);
         case MethodH4:
-            return searchMethodH4(hp, atk, def, spa, spd, spe, compare);
+            return searchMethodH124(hp, atk, def, spa, spd, spe);
         case Colo:
-            return searchMethodColo(hp, atk, def, spa, spd, spe, compare);
+            return searchMethodColo(hp, atk, def, spa, spd, spe);
         case XD:
-            return searchMethodXD(hp, atk, def, spa, spd, spe, compare);
+            return searchMethodXD(hp, atk, def, spa, spd, spe);
         case XDColo:
-            return searchMethodXDColo(hp, atk, def, spa, spd, spe, compare);
+            return searchMethodXDColo(hp, atk, def, spa, spd, spe);
         // case Channel:
         // Set to default to avoid compiler warning message
         default:
-            return searchMethodChannel(hp, atk, def, spa, spd, spe, compare);
+            return searchMethodChannel(hp, atk, def, spa, spd, spe);
     }
 }
 
