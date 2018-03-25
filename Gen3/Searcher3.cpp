@@ -453,7 +453,7 @@ vector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32
         // Setup normal frame
         frame.setIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
-        if (frameType = Method2)
+        if (frameType == Method2)
             backward.advanceFrames(1);
         frame.setPID(backward.nextUShort(), backward.nextUShort());
         frame.seed = backward.nextUInt();
