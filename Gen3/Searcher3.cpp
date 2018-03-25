@@ -163,7 +163,8 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            frames.push_back(frame);
+                            if (compare.compareSlot(frame))
+                                frames.push_back(frame);
                         }
                         break;
                     case Synchronize:
@@ -175,7 +176,8 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            frames.push_back(frame);
+                            if (compare.compareSlot(frame))
+                                frames.push_back(frame);
                         }
                         // Failed synch
                         else if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
@@ -196,7 +198,8 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            frames.push_back(frame);
+                            if (compare.compareSlot(frame))
+                                frames.push_back(frame);
                         }
                         break;
                     case Search:
@@ -209,25 +212,29 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            frames.push_back(frame);
+                            if (compare.compareSlot(frame))
+                                frames.push_back(frame);
 
                             slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
                             testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-
-                            // Failed synch
-                            if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
+                            if (compare.compareSlot(frame))
                             {
-                                frame.leadType = Synchronize;
-                                frames.push_back(frame);
-                            }
 
-                            // Cute Charm
-                            if ((nextRNG2 % 3) > 0)
-                            {
-                                frame.leadType = CuteCharm;
-                                frames.push_back(frame);
+                                // Failed synch
+                                if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
+                                {
+                                    frame.leadType = Synchronize;
+                                    frames.push_back(frame);
+                                }
+
+                                // Cute Charm
+                                if ((nextRNG2 % 3) > 0)
+                                {
+                                    frame.leadType = CuteCharm;
+                                    frames.push_back(frame);
+                                }
                             }
                         }
                         // Successful Synch
@@ -238,7 +245,8 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            frames.push_back(frame);
+                            if (compare.compareSlot(frame))
+                                frames.push_back(frame);
                         }
                         break;
                 }

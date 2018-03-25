@@ -34,6 +34,7 @@ private:
     u32 ability;
     vector<bool> natures;
     vector<bool> powers;
+    vector<bool> encounterSlots;
     bool shiny;
     bool skip;
 
@@ -41,11 +42,14 @@ public:
     FrameCompare() {}
     FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
                  vector<bool> nature, vector<bool> power, bool onlyShiny, bool skipCompare);
+    FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
+                 vector<bool> nature, vector<bool> power, bool onlyShiny, bool skipCompare, vector<bool> encounter);
     FrameCompare(int genderIndex, int genderRatioIndex, int abilityIndex, vector<bool> nature, bool onlyShiny);
     FrameCompare(vector<u32> eval, vector<u32> values, vector<bool> power);
     bool comparePID(Frame frame);
     bool compareIVs(Frame frame);
     bool compareNature(Frame frame);
+    bool compareSlot(Frame frame);
     u32 getGenderRatio();
 
 };

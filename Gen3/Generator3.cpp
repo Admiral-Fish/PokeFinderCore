@@ -94,6 +94,8 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
     {
         hunt = 0;
         frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
+        if (!compare.compareSlot(frame))
+            continue;
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Grab the hunt nature
@@ -150,6 +152,8 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
     {
         hunt = 0;
         frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
+        if (!compare.compareSlot(frame))
+            continue;
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Check by seeing if frame can synch
@@ -248,6 +252,8 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
     {
         hunt = 0;
         frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
+        if (!compare.compareSlot(frame))
+            continue;
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         first = rngList[++hunt];

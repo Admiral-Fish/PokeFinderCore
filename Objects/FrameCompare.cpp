@@ -40,6 +40,28 @@ FrameCompare::FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex
     skip = skipCompare;
 }
 
+FrameCompare::FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
+                           vector<bool> nature, vector<bool> power, bool onlyShiny, bool skipCompare, vector<bool> encounter)
+{
+    this->eval = eval;
+    val = values;
+
+    gender = (u32)genderIndex;
+    genderRatio = (u32)genderRatioIndex;
+    ability = (u32)abilityIndex;
+
+    natures.resize(25);
+    for (auto i = 0; i < nature.size(); i++)
+    {
+        natures[Nature::getAdjustedNature(i)] = nature[i];
+    }
+    powers = power;
+    encounterSlots = encounter;
+
+    shiny = onlyShiny;
+    skip = skipCompare;
+}
+
 FrameCompare::FrameCompare(int genderIndex, int genderRatioIndex, int abilityIndex, vector<bool> nature, bool onlyShiny)
 {
     gender = (u32)genderIndex;
@@ -211,6 +233,11 @@ bool FrameCompare::compareIVs(Frame frame)
 bool FrameCompare::compareNature(Frame frame)
 {
     return natures[frame.nature];
+}
+
+bool FrameCompare::compareSlot(Frame frame)
+{
+    return encounterSlots[frame.encounterSlot];
 }
 
 u32 FrameCompare::getGenderRatio()
