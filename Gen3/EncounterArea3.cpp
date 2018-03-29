@@ -70,7 +70,7 @@ EncounterArea3::EncounterArea3(u32 data[])
 
 vector<EncounterArea3> EncounterArea3::getEncountersRuby(Encounter type)
 {
-    QFile file("PokeFinderCore/Resources/Gen3/ruby.csv");
+    QFile file(":/ruby.csv");
     vector<EncounterArea3> areas;
     if (file.open(QIODevice::ReadOnly))
     {
