@@ -24,6 +24,7 @@
 enum Encounter
 {
     Wild,
+    RockSmash,
     Surfing,
     OldRod,
     GoodRod,
