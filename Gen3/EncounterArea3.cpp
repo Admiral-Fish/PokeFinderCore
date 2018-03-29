@@ -79,3 +79,10 @@ vector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Games game)
     file.close();
     return areas;
 }
+
+QStringList EncounterArea3::getSpecieNames()
+{
+    vector<u32> nums = species;
+    nums.erase(std::unique(nums.begin(), nums.end()), nums.end());
+    return Translator::getSpecies(nums);
+}

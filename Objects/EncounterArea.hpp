@@ -23,6 +23,7 @@
 #include <vector>
 #include <cstdint>
 #include <PokeFinderCore/Objects/Encounter.hpp>
+#include <PokeFinderCore/Translator.hpp>
 
 using std::vector;
 typedef uint32_t u32;
