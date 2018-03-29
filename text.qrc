@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="species_de.txt">Resources/Text/species_de.txt</file>
+        <file alias="species_en.txt">Resources/Text/species_en.txt</file>
+        <file alias="species_fr.txt">Resources/Text/species_fr.txt</file>
+        <file alias="species_ja.txt">Resources/Text/species_ja.txt</file>
+        <file alias="species_zh.txt">Resources/Text/species_zh.txt</file>
+    </qresource>
+</RCC>
