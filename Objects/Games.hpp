@@ -17,29 +17,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PROFILE3_HPP
-#define PROFILE3_HPP
+#ifndef GAMES_HPP
+#define GAMES_HPP
 
-#include <PokeFinderCore/Objects/Profile.hpp>
-#include <QStandardItemModel>
-
-class Profile3 : public Profile
+enum Games
 {
-
-public:
-    u32 tid;
-    u32 sid;
-    bool deadBattery;
-
-    Profile3(QString profileName, Games version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);
-    Profile3();
-    static vector<Profile3> loadProfileList();
-    void saveProfile();
-    void deleteProfile();
-    void updateProfile(Profile3 original);
-    QString getVersion();
-    QString getLanguage();
-
+    Ruby,
+    Sapphire,
+    Emerald,
+    FireRed,
+    LeafGreen,
+    Gales,
+    Colosseum
 };
 
-#endif // PROFILE3_HPP
+#endif // GAMES_HPP

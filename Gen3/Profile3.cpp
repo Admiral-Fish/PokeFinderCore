@@ -1,5 +1,5 @@
 /*
- * This file is part of PokéFinderCore
+ * This file is part of PokÃ©FinderCore
  * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include "Profile3.hpp"
 
-Profile3::Profile3(QString profileName, int version, u32 tid, u32 sid, int language, bool deadBattery, bool valid)
+Profile3::Profile3(QString profileName, Games version, u32 tid, u32 sid, int language, bool deadBattery, bool valid)
 {
     this->profileName = profileName;
     this->version = version;
@@ -35,7 +35,7 @@ Profile3::Profile3()
 {
     profileName = "";
     version = 0;
-    language = 0;
+    language = Emerald;
     tid = 0;
     sid = 0;
     deadBattery = false;
@@ -256,7 +256,7 @@ vector<Profile3> Profile3::loadProfileList()
                             info = info.nextSibling();
                         }
                     }
-                    Profile3 profile(profileName, version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language, deadBattery, true);
+                    Profile3 profile(profileName, (Games)version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language, deadBattery, true);
                     profileList.push_back(profile);
                 }
             }
@@ -272,19 +272,19 @@ QString Profile3::getVersion()
 {
     switch (version)
     {
-        case 0:
+        case Ruby:
             return QObject::tr("Ruby");
-        case 1:
+        case Sapphire:
             return QObject::tr("Sapphire");
-        case 2:
+        case FireRed:
             return QObject::tr("Fire Red");
-        case 3:
+        case LeafGreen:
             return QObject::tr("Leaf Green");
-        case 4:
+        case Emerald:
             return QObject::tr("Emerald");
-        case 5:
+        case Gales:
             return QObject::tr("XD");
-        case 6:
+        case Colosseum:
             return QObject::tr("Colosseum");
         default:
             return "-";
