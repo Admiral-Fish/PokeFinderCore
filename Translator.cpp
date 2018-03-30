@@ -23,19 +23,20 @@ QStringList Translator::getSpecies(vector<u32> nums)
 {
     QStringList species;
 
-    QString locale = QLocale::QLocale().name().left(2);
+    QString locale = QLocale().name().left(2);
     QString path = QString(":/species_%1.txt").arg(locale);
     QFile file(path);
 
     if (file.open(QIODevice::ReadOnly))
     {
         QTextStream ts(&file);
+        ts.setCodec("UTF-8");
         QStringList input;
         while (!ts.atEnd())
             input << ts.readLine();
 
         for (u32 x : nums)
-            species.push_back(input[x]);
+            species.push_back(input[x - 1]);
     }
 
     return species;
