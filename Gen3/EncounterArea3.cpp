@@ -24,53 +24,45 @@ EncounterArea3::EncounterArea3(u32 location, Encounter type, vector<u32> species
 {
 }
 
-EncounterArea3::EncounterArea3(u32 data[])
+EncounterArea3::EncounterArea3(QStringList data)
 {
-    Encounter type = (Encounter)data[1];
-    vector<u32> minLevel, maxLevel, species;
+    location = data[0].toUInt();
+    type = (Encounter)data[1].toUInt();
 
-    int length = 0;
-    int max = 0;
-
-    switch (type)
+    int len = (data.length() - 2) / 3;
+    for (int i = 2; i < len + 2; i++)
     {
-        case Wild:
-            length = 12;
-            max = 14;
-            break;
-        case RockSmash:
-        case Surfing:
-        case SuperRod:
-            length = 5;
-            max = 7;
-            break;
-        case OldRod:
-            length = 2;
-            max = 4;
-            break;
-        case GoodRod:
-            length = 3;
-            max = 5;
-            break;
+        species.push_back(data[i].toUInt());
+        minLevel.push_back(data[i + len].toUInt());
+        maxLevel.push_back(data[i + len * 2].toUInt());
     }
-
-    for (int j = 2; j < max; j++)
-    {
-        minLevel.push_back(data[j]);
-        maxLevel.push_back(data[j + length]);
-        species.push_back(data[j] + length * 2);
-    }
-
-    this->location = data[0];
-    this->type = type;
-    this->species = species;
-    this->minLevel = minLevel;
-    this->maxLevel = maxLevel;
 }
 
-vector<EncounterArea3> EncounterArea3::getEncountersRuby(Encounter type)
+vector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Games game)
 {
-    QFile file(":/ruby.csv");
+    QString path;
+    switch (game)
+    {
+        case Ruby:
+            path = ":/ruby.csv";
+            break;
+        case Sapphire:
+            path = ":/sapphire.csv";
+            break;
+        case FireRed:
+            path = ":/firered.csv";
+            break;
+        case LeafGreen:
+            path = ":/leafgreen.csv";
+            break;
+        case Emerald:
+        default:
+            path = ":/emerald.csv";
+            break;
+    }
+
+    QFile file(path);
+
     vector<EncounterArea3> areas;
     if (file.open(QIODevice::ReadOnly))
     {
@@ -78,25 +70,19 @@ vector<EncounterArea3> EncounterArea3::getEncountersRuby(Encounter type)
 
         while (!ts.atEnd())
         {
-            QStringList data = ts.readLine().split(",");
-            Encounter ty = (Encounter)data[1].toUInt();
+            EncounterArea3 area = EncounterArea3(ts.readLine().split(","));
 
-            if (ty == type)
-            {
-                u32 loc = data[0].toUInt();
-                int len = (data.length() - 2) / 3;
-                vector<u32> num, min, max;
-                for (int i = 2; i < len + 2; i++)
-                {
-                    num.push_back(i);
-                    min.push_back(i + len);
-                    max.push_back(i + len * 2);
-                }
-                EncounterArea3 area = EncounterArea3(loc, ty, num, min, max);
+            if (area.getType() == type)
                 areas.push_back(area);
-            }
         }
     }
     file.close();
     return areas;
+}
+
+QStringList EncounterArea3::getSpecieNames()
+{
+    vector<u32> nums = species;
+    nums.erase(std::unique(nums.begin(), nums.end()), nums.end());
+    return Translator::getSpecies(nums);
 }

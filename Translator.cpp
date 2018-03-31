@@ -17,24 +17,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef ENCOUNTERAREA3_HPP
-#define ENCOUNTERAREA3_HPP
+#include "Translator.hpp"
 
-#include <QStringList>
-#include <QTextStream>
-#include <QFile>
-#include <PokeFinderCore/Objects/Games.hpp>
-#include <PokeFinderCore/Objects/EncounterArea.hpp>
-
-class EncounterArea3 : public EncounterArea
+QStringList Translator::getSpecies(vector<u32> nums)
 {
+    QStringList species;
 
-public:
-    EncounterArea3(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel);
-    EncounterArea3(QStringList data);
-    static vector<EncounterArea3> getEncounters(Encounter type, Games game);
-    QStringList getSpecieNames();
+    QString locale = QLocale().name().left(2);
+    QString path = QString(":/species_%1.txt").arg(locale);
+    QFile file(path);
 
-};
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QTextStream ts(&file);
+        ts.setCodec("UTF-8");
+        QStringList input;
+        while (!ts.atEnd())
+            input << ts.readLine();
 
-#endif // ENCOUNTERAREA3_HPP
+        for (u32 x : nums)
+            species.push_back(input[x - 1]);
+    }
+
+    return species;
+}

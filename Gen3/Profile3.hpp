@@ -1,5 +1,5 @@
 /*
- * This file is part of PokÈFinderCore
+ * This file is part of Pok√©FinderCore
  * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ public:
     u32 sid;
     bool deadBattery;
 
-    Profile3(QString profileName, int version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);
+    Profile3(QString profileName, Games version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);
     Profile3();
     static vector<Profile3> loadProfileList();
     void saveProfile();

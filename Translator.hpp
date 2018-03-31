@@ -17,24 +17,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef ENCOUNTERAREA3_HPP
-#define ENCOUNTERAREA3_HPP
+#ifndef TRANSLATOR_HPP
+#define TRANSLATOR_HPP
 
+#include <vector>
+#include <cstdint>
+#include <QLocale>
 #include <QStringList>
-#include <QTextStream>
 #include <QFile>
-#include <PokeFinderCore/Objects/Games.hpp>
-#include <PokeFinderCore/Objects/EncounterArea.hpp>
+#include <QTextStream>
 
-class EncounterArea3 : public EncounterArea
+using std::vector;
+typedef uint32_t u32;
+
+class Translator
 {
 
 public:
-    EncounterArea3(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel);
-    EncounterArea3(QStringList data);
-    static vector<EncounterArea3> getEncounters(Encounter type, Games game);
-    QStringList getSpecieNames();
+    static QStringList getSpecies(vector<u32> nums);
 
 };
 
-#endif // ENCOUNTERAREA3_HPP
+#endif // TRANSLATOR_HPP

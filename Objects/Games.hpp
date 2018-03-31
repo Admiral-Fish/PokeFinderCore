@@ -17,24 +17,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef ENCOUNTERAREA3_HPP
-#define ENCOUNTERAREA3_HPP
+#ifndef GAMES_HPP
+#define GAMES_HPP
 
-#include <QStringList>
-#include <QTextStream>
-#include <QFile>
-#include <PokeFinderCore/Objects/Games.hpp>
-#include <PokeFinderCore/Objects/EncounterArea.hpp>
-
-class EncounterArea3 : public EncounterArea
+enum Games
 {
-
-public:
-    EncounterArea3(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel);
-    EncounterArea3(QStringList data);
-    static vector<EncounterArea3> getEncounters(Encounter type, Games game);
-    QStringList getSpecieNames();
-
+    Ruby,
+    Sapphire,
+    Emerald,
+    FireRed,
+    LeafGreen,
+    Gales,
+    Colosseum
 };
 
-#endif // ENCOUNTERAREA3_HPP
+#endif // GAMES_HPP

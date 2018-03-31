@@ -1,5 +1,5 @@
 /*
- * This file is part of PokÈFinderCore
+ * This file is part of Pok√©FinderCore
  * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QTextStream>
+#include <PokeFinderCore/Objects/Games.hpp>
 
 using std::vector;
 typedef uint32_t u32;
