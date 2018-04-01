@@ -27,8 +27,6 @@ class Profile3 : public Profile
 {
 
 public:
-    u32 tid;
-    u32 sid;
     bool deadBattery;
 
     Profile3(QString profileName, Game version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);

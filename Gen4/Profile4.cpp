@@ -17,31 +17,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "Profile3.hpp"
+#include "Profile4.hpp"
 
-Profile3::Profile3(QString profileName, Game version, u32 tid, u32 sid, int language, bool deadBattery, bool valid)
+Profile4::Profile4(QString profileName, Game version, u32 tid, u32 sid, int language, bool valid)
 {
     this->profileName = profileName;
     this->version = version;
     this->language = language;
     this->tid = tid;
     this->sid = sid;
-    this->deadBattery = deadBattery;
     this->valid = valid;
 }
 
-Profile3::Profile3()
+Profile4::Profile4()
 {
     profileName = "";
-    version = Emerald;
+    version = Diamond;
     language = 0;
     tid = 0;
     sid = 0;
-    deadBattery = false;
     valid = false;
 }
 
-void Profile3::deleteProfile()
+void Profile4::deleteProfile()
 {
     bool exists = false;
     QDomDocument doc;
@@ -59,7 +57,7 @@ void Profile3::deleteProfile()
             QDomElement domElement = domNode.toElement();
             if (!domElement.isNull())
             {
-                if (domElement.tagName() == "Gen3")
+                if (domElement.tagName() == "Gen4")
                 {
                     QDomNode info = domElement.firstChild();
                     while (!info.isNull())
@@ -94,7 +92,7 @@ void Profile3::deleteProfile()
     }
 }
 
-void Profile3::updateProfile(Profile3 original)
+void Profile4::updateProfile(Profile4 original)
 {
     QDomDocument doc;
     QFile file(QApplication::applicationDirPath() + "/profiles.xml");
@@ -108,23 +106,21 @@ void Profile3::updateProfile(Profile3 original)
         while (!domNode.isNull())
         {
             QDomElement domElement = domNode.toElement();
-            if (!domElement.isNull() && domElement.tagName() == "Gen3")
+            if (!domElement.isNull() && domElement.tagName() == "Gen4")
             {
                 QString name = domElement.childNodes().at(0).toElement().text();
                 int ver = domElement.childNodes().at(1).toElement().text().toUInt(NULL, 10);
                 int lang = domElement.childNodes().at(2).toElement().text().toUInt(NULL, 10);
                 u32 id = domElement.childNodes().at(3).toElement().text().toUInt(NULL, 10);
                 u32 id2 = domElement.childNodes().at(4).toElement().text().toInt(NULL, 10);
-                bool flag = domElement.childNodes().at(5).toElement().text() == "0" ? false : true;
 
-                if (original.profileName == name && original.version == ver && original.language == lang && original.tid == id && original.sid == id2 && original.deadBattery == flag)
+                if (original.profileName == name && original.version == ver && original.language == lang && original.tid == id && original.sid == id2)
                 {
                     domElement.childNodes().at(0).toElement().firstChild().setNodeValue(profileName);
                     domElement.childNodes().at(1).toElement().firstChild().setNodeValue(QString::number(version));
                     domElement.childNodes().at(2).toElement().firstChild().setNodeValue(QString::number(language));
                     domElement.childNodes().at(3).toElement().firstChild().setNodeValue(QString::number(tid));
                     domElement.childNodes().at(4).toElement().firstChild().setNodeValue(QString::number(sid));
-                    domElement.childNodes().at(5).toElement().firstChild().setNodeValue(QString::number(deadBattery));
 
                     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
                     {
@@ -140,7 +136,7 @@ void Profile3::updateProfile(Profile3 original)
     }
 }
 
-void Profile3::saveProfile()
+void Profile4::saveProfile()
 {
     QDomDocument doc;
     QFile file(QApplication::applicationDirPath() + "/profiles.xml");
@@ -152,37 +148,35 @@ void Profile3::saveProfile()
 
         QDomElement profiles = doc.documentElement();
 
-        QDomElement gen3 = doc.createElement("Gen3");
+        QDomElement gen4 = doc.createElement("Gen4");
         QDomElement profileNameE = doc.createElement("profileName");
         QDomElement versionE = doc.createElement("version");
         QDomElement languageE = doc.createElement("language");
         QDomElement tidE = doc.createElement("tid");
         QDomElement sidE = doc.createElement("sid");
-        QDomElement deadBatteryE = doc.createElement("deadBattery");
 
         profileNameE.appendChild(doc.createTextNode(profileName));
         versionE.appendChild(doc.createTextNode(QString::number(version)));
         languageE.appendChild(doc.createTextNode(QString::number(language)));
         tidE.appendChild(doc.createTextNode(QString::number(tid)));
         sidE.appendChild(doc.createTextNode(QString::number(sid)));
-        deadBatteryE.appendChild(doc.createTextNode(QString::number(deadBattery)));
 
-        gen3.appendChild(profileNameE);
-        gen3.appendChild(versionE);
-        gen3.appendChild(languageE);
-        gen3.appendChild(tidE);
-        gen3.appendChild(sidE);
-        gen3.appendChild(deadBatteryE);
+        gen4.appendChild(profileNameE);
+        gen4.appendChild(versionE);
+        gen4.appendChild(languageE);
+        gen4.appendChild(tidE);
+        gen4.appendChild(sidE);
+        gen4.appendChild(deadBatteryE);
 
         if (profiles.isNull())
         {
             profiles = doc.createElement("Profiles");
-            profiles.appendChild(gen3);
+            profiles.appendChild(gen4);
             doc.appendChild(profiles);
         }
         else
         {
-            profiles.appendChild(gen3);
+            profiles.appendChild(gen4);
         }
 
         if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
@@ -194,9 +188,9 @@ void Profile3::saveProfile()
     }
 }
 
-vector<Profile3> Profile3::loadProfileList()
+vector<Profile4> Profile4::loadProfileList()
 {
-    static vector<Profile3> profileList;
+    static vector<Profile4> profileList;
     profileList.clear();
 
     QDomDocument doc;
@@ -212,7 +206,7 @@ vector<Profile3> Profile3::loadProfileList()
             QDomElement domElement = domNode.toElement();
             if (!domElement.isNull())
             {
-                if (domElement.tagName() == "Gen3")
+                if (domElement.tagName() == "Gen4")
                 {
                     QDomNode info = domElement.firstChild();
                     QString profileName;
@@ -220,7 +214,6 @@ vector<Profile3> Profile3::loadProfileList()
                     int language;
                     QString tid;
                     QString sid;
-                    bool deadBattery;
                     while (!info.isNull())
                     {
                         QDomElement infoElement = info.toElement();
@@ -247,15 +240,11 @@ vector<Profile3> Profile3::loadProfileList()
                             {
                                 sid = infoElement.text();
                             }
-                            else if (tagName == "deadBattery")
-                            {
-                                deadBattery = (infoElement.text() == "1" ? true : false);
-                            }
 
                             info = info.nextSibling();
                         }
                     }
-                    Profile3 profile(profileName, (Game)version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language, deadBattery, true);
+                    Profile4 profile(profileName, (Game)version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language, true);
                     profileList.push_back(profile);
                 }
             }
@@ -267,30 +256,26 @@ vector<Profile3> Profile3::loadProfileList()
     return profileList;
 }
 
-QString Profile3::getVersion()
+QString Profile4::getVersion()
 {
     switch (version)
     {
-        case Ruby:
-            return QObject::tr("Ruby");
-        case Sapphire:
-            return QObject::tr("Sapphire");
-        case FireRed:
-            return QObject::tr("Fire Red");
-        case LeafGreen:
-            return QObject::tr("Leaf Green");
-        case Emerald:
-            return QObject::tr("Emerald");
-        case Gales:
-            return QObject::tr("XD");
-        case Colosseum:
-            return QObject::tr("Colosseum");
+        case Diamond:
+            return QObject::tr("Diamond");
+        case Pearl:
+            return QObject::tr("Pearl");
+        case Platinum:
+            return QObject::tr("Platinum");
+        case HeartGold:
+            return QObject::tr("Heart Gold");
+        case SoulSilver:
+            return QObject::tr("Soul Silver");
         default:
             return "-";
     }
 }
 
-QString Profile3::getLanguage()
+QString Profile4::getLanguage()
 {
     switch (language)
     {

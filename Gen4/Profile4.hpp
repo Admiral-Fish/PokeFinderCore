@@ -17,30 +17,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PROFILE_HPP
-#define PROFILE_HPP
+#ifndef PROFILE4_HPP
+#define PROFILE4_HPP
 
-#include <QString>
-#include <QDomDocument>
-#include <QApplication>
-#include <QFile>
-#include <QTextStream>
-#include <PokeFinderCore/Objects/Game.hpp>
+#include <PokeFinderCore/Objects/Profile.hpp>
+#include <QStandardItemModel>
 
-using std::vector;
-typedef uint32_t u32;
-
-class Profile
+class Profile4 : public Profile
 {
 
 public:
-    QString profileName;
-    Game version;
-    int language;
-    bool valid;
-    u32 tid;
-    u32 sid;
+    Profile4(QString profileName, Game version, u32 tid, u32 sid, int language = 0, bool valid = false);
+    Profile4();
+    static vector<Profile4> loadProfileList();
+    void saveProfile();
+    void deleteProfile();
+    void updateProfile(Profile4 original);
+    QString getVersion();
+    QString getLanguage();
 
 };
 
-#endif // PROFILE_HPP
+#endif // PROFILE4_HPP

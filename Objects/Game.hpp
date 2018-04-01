@@ -28,7 +28,12 @@ enum Game
     FireRed,
     LeafGreen,
     Gales,
-    Colosseum
+    Colosseum,
+    Diamond,
+    Pearl,
+    Platinum,
+    HeartGold,
+    SoulSilver
 };
 
 #endif // GAME_HPP
