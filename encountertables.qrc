@@ -1,9 +1,9 @@
 <RCC>
-    <qresource prefix="/">
-        <file alias="emerald.csv">Resources/Tables/emerald.csv</file>
-        <file alias="firered.csv">Resources/Tables/firered.csv</file>
-        <file alias="leafgreen.csv">Resources/Tables/leafgreen.csv</file>
-        <file alias="ruby.csv">Resources/Tables/ruby.csv</file>
-        <file alias="sapphire.csv">Resources/Tables/sapphire.csv</file>
-    </qresource>
+	<qresource prefix="/">
+		<file alias="emerald.csv">Resources/Tables/emerald.csv</file>
+		<file alias="firered.csv">Resources/Tables/firered.csv</file>
+		<file alias="leafgreen.csv">Resources/Tables/leafgreen.csv</file>
+		<file alias="ruby.csv">Resources/Tables/ruby.csv</file>
+		<file alias="sapphire.csv">Resources/Tables/sapphire.csv</file>
+	</qresource>
 </RCC>
