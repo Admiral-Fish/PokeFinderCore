@@ -25,7 +25,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QTextStream>
-#include <PokeFinderCore/Objects/Games.hpp>
+#include <PokeFinderCore/Objects/Game.hpp>
 
 using std::vector;
 typedef uint32_t u32;
@@ -35,7 +35,7 @@ class Profile
 
 public:
     QString profileName;
-    int version;
+    Game version;
     int language;
     bool valid;
 

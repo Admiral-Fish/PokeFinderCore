@@ -23,8 +23,9 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QFile>
-#include <PokeFinderCore/Objects/Games.hpp>
+#include <PokeFinderCore/Objects/Game.hpp>
 #include <PokeFinderCore/Objects/EncounterArea.hpp>
+#include <algorithm>
 
 class EncounterArea3 : public EncounterArea
 {
@@ -32,7 +33,7 @@ class EncounterArea3 : public EncounterArea
 public:
     EncounterArea3(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel);
     EncounterArea3(QStringList data);
-    static vector<EncounterArea3> getEncounters(Encounter type, Games game);
+    static vector<EncounterArea3> getEncounters(Encounter type, Game game);
     QStringList getSpecieNames();
 
 };

@@ -38,7 +38,7 @@ EncounterArea3::EncounterArea3(QStringList data)
     }
 }
 
-vector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Games game)
+vector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Game game)
 {
     QString path;
     switch (game)
@@ -82,7 +82,12 @@ vector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Games game)
 
 QStringList EncounterArea3::getSpecieNames()
 {
-    vector<u32> nums = species;
-    nums.erase(std::unique(nums.begin(), nums.end()), nums.end());
+    vector<u32> nums;
+
+    nums.push_back(species[0]);
+    for (int i = 1; i < species.size(); i++)
+        if (std::find(nums.begin(), nums.end(), species[i]) == nums.end())
+            nums.push_back(species[i]);
+
     return Translator::getSpecies(nums);
 }

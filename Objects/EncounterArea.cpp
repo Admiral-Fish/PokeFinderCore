@@ -59,3 +59,30 @@ vector<u32> EncounterArea::getSpecies()
 {
     return species;
 }
+
+vector<u32> EncounterArea::getUniqueSpecies()
+{
+    vector<u32> nums;
+
+    nums.push_back(species[0]);
+    for (int i = 1; i < species.size(); i++)
+        if (std::find(nums.begin(), nums.end(), species[i]) == nums.end())
+            nums.push_back(species[i]);
+
+    return nums;
+}
+
+vector<bool> EncounterArea::getSlots(u32 num)
+{
+    vector<bool> flags;
+
+    for (int i = 0; i < species.size(); i++)
+    {
+        if (species[i] == num)
+            flags.push_back(true);
+        else
+            flags.push_back(false);
+    }
+
+    return flags;
+}

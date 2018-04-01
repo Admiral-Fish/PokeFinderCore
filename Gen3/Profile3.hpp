@@ -31,7 +31,7 @@ public:
     u32 sid;
     bool deadBattery;
 
-    Profile3(QString profileName, Games version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);
+    Profile3(QString profileName, Game version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);
     Profile3();
     static vector<Profile3> loadProfileList();
     void saveProfile();

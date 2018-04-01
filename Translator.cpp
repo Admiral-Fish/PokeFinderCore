@@ -24,8 +24,7 @@ QStringList Translator::getSpecies(vector<u32> nums)
     QStringList species;
 
     QString locale = QLocale().name().left(2);
-    QString path = QString(":/species_%1.txt").arg(locale);
-    QFile file(path);
+    QFile file(QString(":/species_%1.txt").arg(locale));
 
     if (file.open(QIODevice::ReadOnly))
     {
@@ -38,6 +37,30 @@ QStringList Translator::getSpecies(vector<u32> nums)
         for (u32 x : nums)
             species.push_back(input[x - 1]);
     }
+    file.close();
 
     return species;
+}
+
+QStringList Translator::getLocations(vector<u32> nums)
+{
+    QStringList locations;
+
+    QString locale = QLocale().name().left(2);
+    QFile file(QString(":/rsefrlg_%1.txt").arg(locale));
+
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QTextStream ts(&file);
+        ts.setCodec("UTF-8");
+        QStringList input;
+        while (!ts.atEnd())
+            input << ts.readLine();
+
+        for (u32 x : nums)
+            locations.push_back(input[x]);
+    }
+    file.close();
+
+    return locations;
 }

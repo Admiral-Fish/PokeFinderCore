@@ -17,10 +17,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef GAMES_HPP
-#define GAMES_HPP
+#ifndef GAME_HPP
+#define GAME_HPP
 
-enum Games
+enum Game
 {
     Ruby,
     Sapphire,
@@ -31,4 +31,4 @@ enum Games
     Colosseum
 };
 
-#endif // GAMES_HPP
+#endif // GAME_HPP

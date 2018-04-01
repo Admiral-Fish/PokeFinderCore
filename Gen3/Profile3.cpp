@@ -19,7 +19,7 @@
 
 #include "Profile3.hpp"
 
-Profile3::Profile3(QString profileName, Games version, u32 tid, u32 sid, int language, bool deadBattery, bool valid)
+Profile3::Profile3(QString profileName, Game version, u32 tid, u32 sid, int language, bool deadBattery, bool valid)
 {
     this->profileName = profileName;
     this->version = version;
@@ -34,8 +34,8 @@ Profile3::Profile3(QString profileName, Games version, u32 tid, u32 sid, int lan
 Profile3::Profile3()
 {
     profileName = "";
-    version = 0;
-    language = Emerald;
+    version = Emerald;
+    language = 0;
     tid = 0;
     sid = 0;
     deadBattery = false;
@@ -256,7 +256,7 @@ vector<Profile3> Profile3::loadProfileList()
                             info = info.nextSibling();
                         }
                     }
-                    Profile3 profile(profileName, (Games)version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language, deadBattery, true);
+                    Profile3 profile(profileName, (Game)version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language, deadBattery, true);
                     profileList.push_back(profile);
                 }
             }
