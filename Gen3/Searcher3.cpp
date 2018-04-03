@@ -1,5 +1,5 @@
 /*
- * This file is part of libPokéFinder
+ * This file is part of PokéFinderCore
  * Copyright (C) 2017 by Admiral_Fish, bumba, and EzPzStreamz
  *
  * This program is free software; you can redistribute it and/or
@@ -163,7 +163,10 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
+                            {
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testSeed >> 16);
                                 frames.push_back(frame);
+                            }
                         }
                         break;
                     case Synchronize:
@@ -176,7 +179,10 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
+                            {
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testSeed >> 16);
                                 frames.push_back(frame);
+                            }
                         }
                         // Failed synch
                         else if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
@@ -187,7 +193,10 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
+                            {
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testSeed >> 16);
                                 frames.push_back(frame);
+                            }
                         }
                         break;
                     case CuteCharm:
@@ -199,7 +208,10 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
+                            {
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testSeed >> 16);
                                 frames.push_back(frame);
+                            }
                         }
                         break;
                     case Search:
@@ -213,7 +225,10 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
+                            {
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testSeed >> 16);
                                 frames.push_back(frame);
+                            }
 
                             slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
                             testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
@@ -221,6 +236,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testSeed >> 16);
                                 // Failed synch
                                 if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
                                 {
@@ -245,7 +261,10 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
+                            {
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testSeed >> 16);
                                 frames.push_back(frame);
+                            }
                         }
                         break;
                 }

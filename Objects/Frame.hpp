@@ -63,6 +63,7 @@ public:
     u16 sid;
     bool synchable;
     u16 tid;
+    u32 level;
 
     QString getGender();
     QString getNature();

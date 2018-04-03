@@ -91,3 +91,11 @@ QStringList EncounterArea3::getSpecieNames()
 
     return Translator::getSpecies(nums);
 }
+
+u32 EncounterArea3::calcLevel(u32 index, u32 prng)
+{
+    if (levelLocked(index))
+        return minLevel[index];
+
+    return (prng % (maxLevel[index] - minLevel[index] + 1)) + minLevel[index];
+}

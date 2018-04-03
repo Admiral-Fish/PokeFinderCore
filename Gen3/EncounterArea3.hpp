@@ -27,14 +27,18 @@
 #include <PokeFinderCore/Objects/EncounterArea.hpp>
 #include <algorithm>
 
+typedef uint32_t u32;
+
 class EncounterArea3 : public EncounterArea
 {
 
 public:
+    EncounterArea3() : EncounterArea() {}
     EncounterArea3(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel);
     EncounterArea3(QStringList data);
     static vector<EncounterArea3> getEncounters(Encounter type, Game game);
     QStringList getSpecieNames();
+    u32 calcLevel(u32 index, u32 prng);
 
 };
 

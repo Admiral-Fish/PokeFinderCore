@@ -25,6 +25,7 @@
 #include <PokeFinderCore/Objects/Searcher.hpp>
 #include <PokeFinderCore/RNG/RNGCache.hpp>
 #include <PokeFinderCore/RNG/RNGEuclidean.hpp>
+#include <PokeFinderCore/Gen3/EncounterArea3.hpp>
 #include <QObject>
 
 class Searcher3: public Searcher
@@ -49,6 +50,8 @@ private:
     vector<Frame3> searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
 
 public:
+    EncounterArea3 encounter;
+
     Searcher3();
     Searcher3(u16 tid, u16 sid, u32 ratio, FrameCompare compare);
     vector<Frame3> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);

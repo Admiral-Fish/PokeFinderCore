@@ -24,6 +24,7 @@
 #include <PokeFinderCore/Objects/Generator.hpp>
 #include <PokeFinderCore/Objects/FrameCompare.hpp>
 #include <PokeFinderCore/RNG/LCRNG.hpp>
+#include <PokeFinderCore/Gen3/EncounterArea3.hpp>
 
 class Generator3: public Generator
 {
@@ -52,6 +53,8 @@ private:
     static inline bool cuteCharm25M(u32 pid) { return (pid & 0xff) >= 191; }
 
 public:
+    EncounterArea3 encounter;
+
     Generator3();
     Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u16 tid, u16 sid, u32 offset);
     vector<Frame3> generate(FrameCompare compare);
