@@ -19,26 +19,9 @@
 
 #include "Profile3.hpp"
 
-Profile3::Profile3(QString profileName, Game version, u32 tid, u32 sid, int language, bool deadBattery, bool valid)
+Profile3::Profile3(QString profileName, Game version, u32 tid, u32 sid, int language, bool deadBattery, bool valid) : Profile(profileName, version, tid, sid, language, valid)
 {
-    this->profileName = profileName;
-    this->version = version;
-    this->language = language;
-    this->tid = tid;
-    this->sid = sid;
     this->deadBattery = deadBattery;
-    this->valid = valid;
-}
-
-Profile3::Profile3()
-{
-    profileName = "";
-    version = Emerald;
-    language = 0;
-    tid = 0;
-    sid = 0;
-    deadBattery = false;
-    valid = false;
 }
 
 void Profile3::deleteProfile()
@@ -265,48 +248,4 @@ vector<Profile3> Profile3::loadProfileList()
     }
 
     return profileList;
-}
-
-QString Profile3::getVersion()
-{
-    switch (version)
-    {
-        case Ruby:
-            return QObject::tr("Ruby");
-        case Sapphire:
-            return QObject::tr("Sapphire");
-        case FireRed:
-            return QObject::tr("Fire Red");
-        case LeafGreen:
-            return QObject::tr("Leaf Green");
-        case Emerald:
-            return QObject::tr("Emerald");
-        case Gales:
-            return QObject::tr("XD");
-        case Colosseum:
-            return QObject::tr("Colosseum");
-        default:
-            return "-";
-    }
-}
-
-QString Profile3::getLanguage()
-{
-    switch (language)
-    {
-        case 1:
-            return "ENG";
-        case 2:
-            return "SPA";
-        case 3:
-            return "FRE";
-        case 4:
-            return "ITA";
-        case 5:
-            return "DEU";
-        case 6:
-            return "JPN";
-        default:
-            return "-";
-    }
 }

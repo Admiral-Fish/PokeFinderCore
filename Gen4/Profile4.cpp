@@ -19,24 +19,8 @@
 
 #include "Profile4.hpp"
 
-Profile4::Profile4(QString profileName, Game version, u32 tid, u32 sid, int language, bool valid)
+Profile4::Profile4(QString profileName, Game version, u32 tid, u32 sid, int language, bool valid) : Profile(profileName, version, tid, sid, language, valid)
 {
-    this->profileName = profileName;
-    this->version = version;
-    this->language = language;
-    this->tid = tid;
-    this->sid = sid;
-    this->valid = valid;
-}
-
-Profile4::Profile4()
-{
-    profileName = "";
-    version = Diamond;
-    language = 0;
-    tid = 0;
-    sid = 0;
-    valid = false;
 }
 
 void Profile4::deleteProfile()
@@ -166,7 +150,6 @@ void Profile4::saveProfile()
         gen4.appendChild(languageE);
         gen4.appendChild(tidE);
         gen4.appendChild(sidE);
-        gen4.appendChild(deadBatteryE);
 
         if (profiles.isNull())
         {
@@ -254,44 +237,4 @@ vector<Profile4> Profile4::loadProfileList()
     }
 
     return profileList;
-}
-
-QString Profile4::getVersion()
-{
-    switch (version)
-    {
-        case Diamond:
-            return QObject::tr("Diamond");
-        case Pearl:
-            return QObject::tr("Pearl");
-        case Platinum:
-            return QObject::tr("Platinum");
-        case HeartGold:
-            return QObject::tr("Heart Gold");
-        case SoulSilver:
-            return QObject::tr("Soul Silver");
-        default:
-            return "-";
-    }
-}
-
-QString Profile4::getLanguage()
-{
-    switch (language)
-    {
-        case 1:
-            return "ENG";
-        case 2:
-            return "SPA";
-        case 3:
-            return "FRE";
-        case 4:
-            return "ITA";
-        case 5:
-            return "DEU";
-        case 6:
-            return "JPN";
-        default:
-            return "-";
-    }
 }

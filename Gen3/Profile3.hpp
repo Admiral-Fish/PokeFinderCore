@@ -21,7 +21,6 @@
 #define PROFILE3_HPP
 
 #include <PokeFinderCore/Objects/Profile.hpp>
-#include <QStandardItemModel>
 
 class Profile3 : public Profile
 {
@@ -30,13 +29,11 @@ public:
     bool deadBattery;
 
     Profile3(QString profileName, Game version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);
-    Profile3();
+    Profile3() : Profile() {}
     static vector<Profile3> loadProfileList();
     void saveProfile();
     void deleteProfile();
     void updateProfile(Profile3 original);
-    QString getVersion();
-    QString getLanguage();
 
 };
 

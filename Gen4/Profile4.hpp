@@ -21,20 +21,17 @@
 #define PROFILE4_HPP
 
 #include <PokeFinderCore/Objects/Profile.hpp>
-#include <QStandardItemModel>
 
 class Profile4 : public Profile
 {
 
 public:
     Profile4(QString profileName, Game version, u32 tid, u32 sid, int language = 0, bool valid = false);
-    Profile4();
+    Profile4() : Profile() {}
     static vector<Profile4> loadProfileList();
     void saveProfile();
     void deleteProfile();
     void updateProfile(Profile4 original);
-    QString getVersion();
-    QString getLanguage();
 
 };
 
