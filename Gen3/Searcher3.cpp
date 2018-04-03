@@ -81,7 +81,6 @@ vector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u3
     vector<uint> seeds = euclidean.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
-    // Need to eventually add Naturelock checking
     for (auto i = 0; i < size; i += 2)
     {
         // Setup normal frame
@@ -187,7 +186,8 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
                             frame.seed = testSeed;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            frames.push_back(frame);
+                            if (compare.compareSlot(frame))
+                                frames.push_back(frame);
                         }
                         break;
                     case CuteCharm:
@@ -221,7 +221,6 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
-
                                 // Failed synch
                                 if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
                                 {
@@ -271,7 +270,6 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
     vector<u32> seeds = euclidean.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
-    // Need to setup Naturelock checking
     for (auto i = 0; i < size; i += 2)
     {
         // Setup normal frame
