@@ -97,7 +97,7 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
         if (!compare.compareSlot(frame))
             continue;
 
-        frame.level = encounter.calcLevel(frame.encounterSlot. rngList[0]);
+        frame.level = encounter.calcLevel(frame.encounterSlot, rngList[0]);
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Grab the hunt nature
@@ -157,7 +157,7 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         if (!compare.compareSlot(frame))
             continue;
 
-        frame.level = encounter.calcLevel(frame.encounterSlot. rngList[0]);
+        frame.level = encounter.calcLevel(frame.encounterSlot, rngList[0]);
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Check by seeing if frame can synch
@@ -259,7 +259,7 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
         if (!compare.compareSlot(frame))
             continue;
 
-        frame.level = encounter.calcLevel(frame.encounterSlot. rngList[0]);
+        frame.level = encounter.calcLevel(frame.encounterSlot, rngList[0]);
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         first = rngList[++hunt];
