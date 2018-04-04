@@ -186,7 +186,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, slot >> 16);
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
                                 frames.push_back(frame);
                             }
                         }
@@ -202,7 +202,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, slot >> 16);
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
                                 frames.push_back(frame);
                             }
                         }
@@ -212,7 +212,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = CuteCharm;
                             slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.level = encounter.calcLevel(frame.encounterSlot, slot >> 16);
+                            frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
                             testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (fish)
                                 testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
@@ -220,7 +220,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, slot >> 16);
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
                                 frames.push_back(frame);
                             }
                         }
@@ -239,7 +239,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, slot >> 16);
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
                                 frames.push_back(frame);
                             }
 
@@ -251,7 +251,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, slot >> 16);
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
 
                                 // Failed synch
                                 if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
@@ -280,7 +280,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, slot >> 16);
+                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
                                 frames.push_back(frame);
                             }
                         }
