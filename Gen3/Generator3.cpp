@@ -88,13 +88,11 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
         rngList.push_back(rng.nextUShort());
     size = 18;
 
-    bool fish = encounterType == OldRod || encounterType == GoodRod || encounterType == SuperRod;
-
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt;
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
-        hunt = fish ? 1 : 0;
+        hunt = 1;
         frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
         if (!compare.compareSlot(frame))
             continue;
@@ -150,13 +148,11 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         rngList.push_back(rng.nextUShort());
     size = 18;
 
-    bool fish = encounterType == OldRod || encounterType == GoodRod || encounterType == SuperRod;
-
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first;
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
-        hunt = fish ? 1 : 0;
+        hunt = 1;
         frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
         if (!compare.compareSlot(frame))
             continue;
@@ -222,8 +218,6 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
         rngList.push_back(rng.nextUShort());
     size = 18;
 
-    bool fish = encounterType == OldRod || encounterType == GoodRod || encounterType == SuperRod;
-
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first;
 
@@ -260,7 +254,7 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
-        hunt = fish ? 1 : 0;
+        hunt = 1;
         frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
         if (!compare.compareSlot(frame))
             continue;

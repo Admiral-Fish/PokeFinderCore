@@ -71,6 +71,7 @@ int EncounterSlot::hSlot(u32 result, Encounter encounterType)
             ranges = { Range(0, 39), Range(40, 69), Range(70, 84), Range(85, 94), Range(95, 99) };
             return calcSlot(compare, ranges);
         case Surfing:
+        case RockSmash:
             ranges = { Range(0, 59), Range(60, 89), Range(90, 94), Range(95, 98), Range(99, 99) };
             return calcSlot(compare, ranges);
         default:

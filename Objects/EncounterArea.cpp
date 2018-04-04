@@ -30,9 +30,7 @@ EncounterArea::EncounterArea(u32 location, Encounter type, vector<u32> species, 
 
 bool EncounterArea::levelLocked(u32 slot)
 {
-    if (minLevel[slot] == maxLevel[slot])
-        return true;
-    return false;
+    return minLevel[slot] == maxLevel[slot];
 }
 
 Encounter EncounterArea::getType()
@@ -77,12 +75,7 @@ vector<bool> EncounterArea::getSlots(u32 num)
     vector<bool> flags;
 
     for (int i = 0; i < species.size(); i++)
-    {
-        if (species[i] == num)
-            flags.push_back(true);
-        else
-            flags.push_back(false);
-    }
+        flags.push_back(species[i] == num);
 
     return flags;
 }

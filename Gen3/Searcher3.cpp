@@ -122,8 +122,6 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
     auto size = seeds.size();
     u32 seed;
 
-    bool fish = encounterType == OldRod || encounterType == GoodRod || encounterType == SuperRod;
-
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
@@ -148,7 +146,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                 continue;
 
             LCRNG testRNG = PokeRNGR(seed);
-            u32 testPID, slot, testSeed;
+            u32 testPID, slot;
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
 
@@ -161,10 +159,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = None;
                             slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (fish)
-                                testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = testSeed;
+                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
@@ -179,10 +174,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = Synchronize;
                             slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (fish)
-                                testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = testSeed;
+                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
@@ -195,10 +187,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = Synchronize;
                             slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
-                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (fish)
-                                testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = testSeed;
+                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
@@ -212,11 +201,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = CuteCharm;
                             slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
-                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (fish)
-                                testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = testSeed;
+                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
@@ -232,10 +217,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = None;
                             slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (fish)
-                                testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = testSeed;
+                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
@@ -244,10 +226,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             }
 
                             slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
-                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (fish)
-                                testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = testSeed;
+                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
@@ -273,10 +252,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = Synchronize;
                             slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                            testSeed = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (fish)
-                                testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = testSeed;
+                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
                             frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
                             if (compare.compareSlot(frame))
                             {
