@@ -88,20 +88,22 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
         rngList.push_back(rng.nextUShort());
     size = 18;
 
+    bool fish = encounterType == OldRod || encounterType == GoodRod || encounterType == SuperRod;
+
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt;
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
-        hunt = 0;
+        hunt = fish ? 1 : 0;
         frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
         if (!compare.compareSlot(frame))
             continue;
 
-        frame.level = encounter.calcLevel(frame.encounterSlot, rngList[0]);
+        frame.level = encounter.calcLevel(frame.encounterSlot, rngList[hunt++]);
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Grab the hunt nature
-        frame.nature = rngList[++hunt] % 25;
+        frame.nature = rngList[hunt] % 25;
         if (!compare.compareNature(frame))
             continue;
 
@@ -148,20 +150,22 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         rngList.push_back(rng.nextUShort());
     size = 18;
 
+    bool fish = encounterType == OldRod || encounterType == GoodRod || encounterType == SuperRod;
+
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first;
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
-        hunt = 0;
+        hunt = fish ? 1 : 0;
         frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
         if (!compare.compareSlot(frame))
             continue;
 
-        frame.level = encounter.calcLevel(frame.encounterSlot, rngList[0]);
+        frame.level = encounter.calcLevel(frame.encounterSlot, rngList[hunt++]);
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Check by seeing if frame can synch
-        first = rngList[++hunt];
+        first = rngList[hunt];
         if ((first & 1) == 0)
         {
             // Frame is synchable so set nature to synch nature
@@ -218,6 +222,8 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
         rngList.push_back(rng.nextUShort());
     size = 18;
 
+    bool fish = encounterType == OldRod || encounterType == GoodRod || encounterType == SuperRod;
+
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first;
 
@@ -254,15 +260,15 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
-        hunt = 0;
+        hunt = fish ? 1 : 0;
         frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
         if (!compare.compareSlot(frame))
             continue;
 
-        frame.level = encounter.calcLevel(frame.encounterSlot, rngList[0]);
+        frame.level = encounter.calcLevel(frame.encounterSlot, rngList[hunt++]);
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
-        first = rngList[++hunt];
+        first = rngList[hunt];
 
         // Cute charm uses first call
         // Call next RNG to determine hunt nature
