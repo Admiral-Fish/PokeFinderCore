@@ -411,7 +411,7 @@ void Generator3::refill()
 {
     for (int i = 0; i < 20; i++)
         rngList.push_back(rng.nextUShort());
-    size = (int)rngList.size() - 2;
+    size += 20;
 }
 
 // Generates frames

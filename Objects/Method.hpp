@@ -39,7 +39,10 @@ enum Method
     EBredAlternate,
     EBredPID,
     RSBred,
-    FRLGBred
+    FRLGBred,
+    MethodJ,
+    MethodK,
+    ChainedShiny,
 };
 
 #endif // METHOD_HPP
