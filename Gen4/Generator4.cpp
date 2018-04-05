@@ -195,7 +195,7 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
             if (!compare.comparePID(frame))
                 continue;
 
-            frame.setIVs(rngList[hunt + 2], rngList[hunt + 3]);
+            frame.setIVs(rngList[hunt], rngList[hunt + 1]);
             if (!compare.compareIVs(frame))
                 continue;
 
@@ -223,7 +223,7 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
             if (hunt >= size)
                 refill();
 
-            frame.setIVs(rngList[hunt + 2], rngList[hunt + 3]);
+            frame.setIVs(rngList[hunt], rngList[hunt + 1]);
             if (!compare.compareIVs(frame))
                 continue;
 
@@ -339,7 +339,7 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
             if (!compare.comparePID(frame))
                 continue;
 
-            frame.setIVs(rngList[hunt + 2], rngList[hunt + 3]);
+            frame.setIVs(rngList[hunt], rngList[hunt + 1]);
             if (!compare.compareIVs(frame))
                 continue;
 
@@ -367,7 +367,7 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
             if (hunt >= size)
                 refill();
 
-            frame.setIVs(rngList[hunt + 2], rngList[hunt + 3]);
+            frame.setIVs(rngList[hunt], rngList[hunt + 1]);
             //if (!compare.compareIVs(frame))
             //  continue;
 
