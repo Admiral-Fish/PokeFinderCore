@@ -106,7 +106,8 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
     size = 17;
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, hunt, first, thresh;
+    u32 pid, pid1, pid2, hunt, first, thresh, buffer;
+    bool charm = true;
 
     switch (encounterType)
     {
@@ -120,6 +121,40 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
             thresh = leadType == SuctionCups ? 100 : 74;
             break;
     }
+
+    switch (leadType)
+    {
+        case CuteCharm25F:
+            buffer = 0;
+            break;
+        case CuteCharm50F:
+            buffer = 0;
+            break;
+        case CuteCharm75F:
+            buffer = 0;
+            break;
+        case CuteCharm125F:
+            buffer = 0;
+            break;
+        case CuteCharm25M:
+            buffer = 0xC8;
+            break;
+        case CuteCharm50M:
+            buffer = 0x96;
+            break;
+        case CuteCharm75M:
+            buffer = 0x4B;
+            break;
+        case CuteCharm875M:
+            buffer = 0x32;
+            break;
+        default:
+            charm = false;
+            break;
+    }
+
+    // Occidentary offset
+    u32 val = charm ? 3 : 2;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
@@ -174,11 +209,11 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
                 frame.nature = synchNature;
             // Failed synch
             else
-                frame.nature = rngList[hunt] / 0xa3e;
+                frame.nature = rngList[hunt++] / 0xa3e;
         }
-        else if (leadType == CuteCharm)
+        else if (charm)
         {
-            frame.nature = rngList[hunt] / 0xa3e;
+            frame.nature = rngList[hunt++] / 0xa3e;
         }
         else
         {
@@ -187,10 +222,8 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
         if (!compare.compareNature(frame))
             continue;
 
-        if (leadType == CuteCharm && (first / 0x5556) != 0)
+        if (charm && (first / 0x5556) != 0)
         {
-            u32 buffer = 0; // TODO
-
             frame.setPID(buffer + frame.nature, 0, buffer + frame.nature);
             if (!compare.comparePID(frame))
                 continue;
@@ -200,7 +233,7 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
                 continue;
 
             frame.frame = cnt;
-            frame.occidentary = hunt + cnt - 1;
+            frame.occidentary = hunt + cnt - val;
             frames.push_back(frame);
         }
         else
@@ -228,7 +261,7 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
                 continue;
 
             frame.frame = cnt;
-            frame.occidentary = hunt + cnt - 2;
+            frame.occidentary = hunt + cnt - val;
             frames.push_back(frame);
         }
     }
@@ -248,7 +281,8 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
     size = 17;
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, hunt, first, thresh;
+    u32 pid, pid1, pid2, hunt, first, thresh, buffer;
+    bool charm = true;
 
     switch (encounterType)
     {
@@ -262,6 +296,40 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
             thresh = leadType == SuctionCups ? 100 : 74;
             break;
     }
+
+    switch (leadType)
+    {
+        case CuteCharm25F:
+            buffer = 0;
+            break;
+        case CuteCharm50F:
+            buffer = 0;
+            break;
+        case CuteCharm75F:
+            buffer = 0;
+            break;
+        case CuteCharm125F:
+            buffer = 0;
+            break;
+        case CuteCharm25M:
+            buffer = 0xC8;
+            break;
+        case CuteCharm50M:
+            buffer = 0x96;
+            break;
+        case CuteCharm75M:
+            buffer = 0x4B;
+            break;
+        case CuteCharm875M:
+            buffer = 0x32;
+            break;
+        default:
+            charm = false;
+            break;
+    }
+
+    // Occidentary offset
+    u32 val = charm ? 3 : 2;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
@@ -318,11 +386,11 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
                 frame.nature = synchNature;
             // Failed synch
             else
-                frame.nature = rngList[hunt] % 25;
+                frame.nature = rngList[hunt++] % 25;
         }
-        else if (leadType == CuteCharm)
+        else if (charm)
         {
-            frame.nature = rngList[hunt] % 25;
+            frame.nature = rngList[hunt++] % 25;
         }
         else
         {
@@ -331,10 +399,8 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
         if (!compare.compareNature(frame))
             continue;
 
-        if (leadType == CuteCharm && (first % 3) != 0)
+        if (charm && (first % 3) != 0)
         {
-            u32 buffer = 0; // TODO
-
             frame.setPID(buffer + frame.nature, 0, buffer + frame.nature);
             if (!compare.comparePID(frame))
                 continue;
@@ -344,7 +410,7 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
                 continue;
 
             frame.frame = cnt;
-            frame.occidentary = hunt + cnt - 1;
+            frame.occidentary = hunt + cnt - val;
             frames.push_back(frame);
         }
         else
@@ -372,7 +438,7 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
             //  continue;
 
             frame.frame = cnt;
-            frame.occidentary = hunt + cnt - 2;
+            frame.occidentary = hunt + cnt - val;
             frames.push_back(frame);
         }
     }
