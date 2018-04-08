@@ -44,12 +44,15 @@ vector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa,
 {
     vector<Frame3> frames;
 
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+    if (!compare.compareHiddenPower(frame))
+        return frames;
+
     vector<uint> seeds = euclidean.recoverLower27BitsChannel(hp, atk, def, spa, spd, spe);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
-        frame.setIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
 
         // Calculate PID
@@ -76,6 +79,10 @@ vector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u3
 {
     vector<Frame3> frames;
 
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+    if (!compare.compareHiddenPower(frame))
+        return frames;
+
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = euclidean.recoverLower16BitsIV(first, second);
@@ -84,7 +91,6 @@ vector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u3
     for (auto i = 0; i < size; i += 2)
     {
         // Setup normal frame
-        frame.setIVsManual(hp, atk, def, spa, spd, spe);
         forward.seed = seeds[i + 1];
         forward.nextUInt();
         frame.setPID(forward.nextUShort(), forward.nextUShort());
@@ -116,6 +122,10 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
 {
     vector<Frame3> frames;
 
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+    if (!compare.compareHiddenPower(frame))
+        return frames;
+
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
@@ -125,7 +135,6 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        frame.setIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
         if (frameType == MethodH2)
             backward.advanceFrames(1);
@@ -278,6 +287,10 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
 {
     vector<Frame3> frames;
 
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+    if (!compare.compareHiddenPower(frame))
+        return frames;
+
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<u32> seeds = euclidean.recoverLower16BitsIV(first, second);
@@ -286,7 +299,6 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
     for (auto i = 0; i < size; i += 2)
     {
         // Setup normal frame
-        frame.setIVsManual(hp, atk, def, spa, spd, spe);
         forward.seed = seeds[i + 1];
         forward.nextUInt();
         frame.setPID(forward.nextUShort(), forward.nextUShort());
@@ -421,6 +433,10 @@ vector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, 
 {
     vector<Frame3> frames;
 
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+    if (!compare.compareHiddenPower(frame))
+        return frames;
+
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = euclidean.recoverLower16BitsIV(first, second);
@@ -429,7 +445,6 @@ vector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, 
     for (auto i = 0; i < size; i += 2)
     {
         // Setup normal frame
-        frame.setIVsManual(hp, atk, def, spa, spd, spe);
         forward.seed = seeds[i + 1];
         forward.nextUInt();
         frame.setPID(forward.nextUShort(), forward.nextUShort());
@@ -454,6 +469,10 @@ vector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32
 {
     vector<Frame3> frames;
 
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+    if (!compare.compareHiddenPower(frame))
+        return frames;
+
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
@@ -462,7 +481,6 @@ vector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        frame.setIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
         if (frameType == Method2)
             backward.advanceFrames(1);
@@ -488,6 +506,10 @@ vector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa
 {
     vector<Frame3> frames;
 
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+    if (!compare.compareHiddenPower(frame))
+        return frames;
+
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
@@ -497,7 +519,6 @@ vector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        frame.setIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
         temp = backward.nextUShort();
         frame.setPID(temp, backward.nextUShort());

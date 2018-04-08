@@ -235,6 +235,11 @@ bool FrameCompare::compareNature(Frame frame)
     return natures[frame.nature];
 }
 
+bool FrameCompare::compareHiddenPower(Frame frame)
+{
+    return power[frame.hidden];
+}
+
 bool FrameCompare::compareSlot(Frame frame)
 {
     return encounterSlots[frame.encounterSlot];

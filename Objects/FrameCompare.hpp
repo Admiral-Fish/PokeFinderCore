@@ -49,6 +49,7 @@ public:
     bool comparePID(Frame frame);
     bool compareIVs(Frame frame);
     bool compareNature(Frame frame);
+    bool compareHiddenPower(Frame frame);
     bool compareSlot(Frame frame);
     u32 getGenderRatio();
 
