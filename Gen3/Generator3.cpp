@@ -90,8 +90,17 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
 
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt;
+
+    u32 rate = encounter.getEncounterRate() * 16;
+
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
+        if (encounterType == RockSmash)
+        {
+            if ((rngList[0] % 2880) >= rate)
+                continue;
+        }
+
         hunt = 1;
         frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
         if (!compare.compareSlot(frame))
@@ -150,8 +159,17 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
 
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first;
+
+    u32 rate = encounter.getEncounterRate() * 16;
+
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
+        if (encounterType == RockSmash)
+        {
+            if ((rngList[0] % 2880) >= rate)
+                continue;
+        }
+
         hunt = 1;
         frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
         if (!compare.compareSlot(frame))
@@ -252,8 +270,16 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
             break;
     }
 
+    u32 rate = encounter.getEncounterRate() * 16;
+
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
+        if (encounterType == RockSmash)
+        {
+            if ((rngList[0] % 2880) >= rate)
+                continue;
+        }
+
         hunt = 1;
         frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
         if (!compare.compareSlot(frame))

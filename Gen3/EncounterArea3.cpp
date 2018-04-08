@@ -112,22 +112,23 @@ u32 EncounterArea3::getEncounterRate()
             return 20;
         case 51: // Safari Zone 4
         case 53: // Safari Zone 6
-        case 152: // Kindle Road
-        case 167: // Sevault Canyon
             return 25;
-        case 134: // Rock Tunnel B1F
-        case 145: // Cerulean Cave 1F
-        case 146: // Cerulean Cave 2F
-        case 147: // Cerulean Cave B1F
-        case 169: // Mt. Ember
-        case 171: // Mt. Ember Room 2
-        case 173: // Mt. Ember 1F
-        case 174: // Mt. Ember B1F
-        case 175: // Mt. Ember B2F
-        case 176: // Mt. Ember B3F
-        case 177: // Mt. Ember B4F
-        case 178: // Mt. Ember B5F
-            return 50;
+        // FRLG doesn't seem to force encounter with encounter rate
+        case 134: // Rock Tunnel B1F (50)
+        case 145: // Cerulean Cave 1F  (50)
+        case 146: // Cerulean Cave 2F (50)
+        case 147: // Cerulean Cave B1F (50)
+        case 152: // Kindle Road (25)
+        case 167: // Sevault Canyon (25)
+        case 169: // Mt. Ember (50)
+        case 171: // Mt. Ember Room 2 (50)
+        case 173: // Mt. Ember 1F (50)
+        case 174: // Mt. Ember B1F (50)
+        case 175: // Mt. Ember B2F (50)
+        case 176: // Mt. Ember B3F (50)
+        case 177: // Mt. Ember B4F (50)
+        case 178: // Mt. Ember B5F (50)
+            return 180;
         default:
             return 0;
     }
