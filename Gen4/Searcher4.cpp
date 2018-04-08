@@ -64,7 +64,7 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
 
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<u32> seeds = cache.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
@@ -73,17 +73,17 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
         backward.seed = seeds[i];
         frame.setPID(backward.nextUShort(), backward.nextUShort());
         frame.seed = backward.nextUInt();
-        //if (compare.comparePID(frame))
-        results.push_back(frame);
+        if (compare.comparePID(frame))
+            results.push_back(frame);
 
         // Setup XORed frame
         frame.pid ^= 0x80008000;
         frame.nature = frame.pid % 25;
-        //if (compare.comparePID(frame))
-        //{
-        frame.seed ^= 0x80000000;
-        results.push_back(frame);
-        // }
+        if (compare.comparePID(frame))
+        {
+            frame.seed ^= 0x80000000;
+            results.push_back(frame);
+        }
     }
 
     vector<Frame4> frames;
@@ -91,8 +91,9 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     for (Frame4 result : results)
     {
         backward.seed = result.seed;
+        backward.advanceFrames(minFrame - 1);
 
-        for (u32 cnt = 1; cnt < maxFrame; cnt++)
+        for (u32 cnt = minFrame; cnt < maxFrame; cnt++)
         {
             u32 test = backward.seed;
 
@@ -100,15 +101,11 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
             u32 delay = test & 0xFFFF;
 
             // Check if seed matches a valid gen 4 format
-            if (hour < 23 && delay > minDelay && delay < maxDelay)
+            if (hour < 24 && delay >= minDelay && delay <= maxDelay)
             {
-                // Check if within user specific frame range
-                if (cnt >= minFrame)
-                {
-                    result.seed = test;
-                    result.frame = cnt;
-                    frames.push_back(result);
-                }
+                result.seed = test;
+                result.frame = cnt;
+                frames.push_back(result);
             }
 
             backward.nextUInt();
@@ -140,8 +137,9 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     for (Frame4 result : results)
     {
         backward.seed = result.seed;
+        backward.advanceFrames(minFrame - 1);
 
-        for (u32 cnt = 1; cnt < maxFrame; cnt++)
+        for (u32 cnt = minFrame; cnt < maxFrame; cnt++)
         {
             u32 test = backward.seed;
 
@@ -149,15 +147,11 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
             u32 delay = test & 0xFFFF;
 
             // Check if seed matches a valid gen 4 format
-            if (hour < 23 && delay > minDelay && delay < maxDelay)
+            if (hour < 24 && delay >= minDelay && delay <= maxDelay)
             {
-                // Check if within user specific frame range
-                if (cnt >= minFrame)
-                {
-                    result.seed = test;
-                    result.frame = cnt;
-                    frames.push_back(result);
-                }
+                result.seed = test;
+                result.frame = cnt;
+                frames.push_back(result);
             }
 
             backward.nextUInt();
@@ -189,8 +183,9 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     for (Frame4 result : results)
     {
         backward.seed = result.seed;
+        backward.advanceFrames(minFrame - 1);
 
-        for (u32 cnt = 1; cnt < maxFrame; cnt++)
+        for (u32 cnt = minFrame; cnt < maxFrame; cnt++)
         {
             u32 test = backward.seed;
 
@@ -198,15 +193,11 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
             u32 delay = test & 0xFFFF;
 
             // Check if seed matches a valid gen 4 format
-            if (hour < 23 && delay > minDelay && delay < maxDelay)
+            if (hour < 24 && delay >= minDelay && delay <= maxDelay)
             {
-                // Check if within user specific frame range
-                if (cnt >= minFrame)
-                {
-                    result.seed = test;
-                    result.frame = cnt;
-                    frames.push_back(result);
-                }
+                result.seed = test;
+                result.frame = cnt;
+                frames.push_back(result);
             }
 
             backward.nextUInt();
@@ -241,12 +232,16 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
         high = chainedPIDHigh(calls[13], low, tid, sid);
         frame.setPID(low, high);
 
-        //if (!compare.comparePID(frame))
-        backward.nextUInt();
-        frame.seed = backward.nextUInt();
-        results.push_back(frame);
-        frame.seed ^= 0x80000000;
-        results.push_back(frame);
+        if (!compare.comparePID(frame))
+        {
+            backward.nextUInt();
+            frame.seed = backward.nextUInt();
+            results.push_back(frame);
+
+            // Sister spread shares PID
+            frame.seed ^= 0x80000000;
+            results.push_back(frame);
+        }
     }
 
     vector<Frame4> frames;
@@ -255,8 +250,9 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
     for (Frame4 result : results)
     {
         backward.seed = result.seed;
+        backward.advanceFrames(minFrame - 1);
 
-        for (u32 cnt = 1; cnt <= maxFrame; cnt++)
+        for (u32 cnt = minFrame; cnt <= maxFrame; cnt++)
         {
             u32 test = backward.seed;
 
@@ -264,15 +260,11 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
             u32 delay = test & 0xFFFF;
 
             // Check if seed matches a valid gen 4 format
-            if (hour < 24 && delay > minDelay && delay < maxDelay)
+            if (hour < 24 && delay >= minDelay && delay <= maxDelay)
             {
-                // Check if within user specific frame range
-                if (cnt >= minFrame)
-                {
-                    result.seed = test;
-                    result.frame = cnt;
-                    frames.push_back(result);
-                }
+                result.seed = test;
+                result.frame = cnt;
+                frames.push_back(result);
             }
 
             backward.nextUInt();
