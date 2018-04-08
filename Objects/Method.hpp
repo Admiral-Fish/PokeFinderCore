@@ -43,6 +43,7 @@ enum Method
     MethodJ,
     MethodK,
     ChainedShiny,
+    WondercardIVs,
 };
 
 #endif // METHOD_HPP

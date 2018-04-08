@@ -274,6 +274,59 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
     return frames;
 }
 
+vector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+{
+    vector<Frame4> results;
+
+    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
+    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+
+    vector<u32> seeds = cache.recoverLower16BitsIV(first, second);
+    auto size = seeds.size();
+
+    for (auto i = 0; i < size; i++)
+    {
+        // Setup normal frame
+        backward.seed = seeds[i];
+        frame.seed = backward.nextUInt();
+        results.push_back(frame);
+
+        // Setup XORed frame
+        frame.seed ^= 0x80000000;
+        results.push_back(frame);
+    }
+
+    vector<Frame4> frames;
+
+    for (Frame4 result : results)
+    {
+        backward.seed = result.seed;
+        backward.advanceFrames(minFrame - 1);
+
+        for (u32 cnt = minFrame; cnt < maxFrame; cnt++)
+        {
+            u32 test = backward.seed;
+
+            u32 hour = (test >> 16) & 0xFF;
+            u32 delay = test & 0xFFFF;
+
+            // Check if seed matches a valid gen 4 format
+            if (hour < 24 && delay >= minDelay && delay <= maxDelay)
+            {
+                result.seed = test;
+                result.frame = cnt;
+                frames.push_back(result);
+            }
+
+            backward.nextUInt();
+        }
+    }
+
+    return frames;
+}
+
+
 u32 Searcher4::chainedPIDLow(u32 low, u32 call1, u32 call2, u32 call3, u32 call4, u32 call5, u32 call6, u32 call7, u32 call8, u32 call9, u32 call10, u32 call11, u32 call12, u32 call13)
 {
     return (low & 0x7) | (call13 & 1) << 3 | (call12 & 1) << 4 | (call11 & 1) << 5 | (call10 & 1) << 6 |
