@@ -41,7 +41,7 @@ void RNGCache::populateMap()
         u32 val = right >> 16;
 
         keys[val] = i;
-        keys[val - 1] = i;
+        keys[(val - 1) & 0xFFFF] = i;
     }
 }
 
