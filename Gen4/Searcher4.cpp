@@ -62,13 +62,14 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+
     vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        frame.setIVsManual(hp, atk, def, spa, spd, spe);
         backward.seed = seeds[i];
         frame.setPID(backward.nextUShort(), backward.nextUShort());
         frame.seed = backward.nextUInt();
@@ -123,6 +124,8 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+
     vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
@@ -156,9 +159,9 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                     frames.push_back(result);
                 }
             }
-        }
 
-        backward.nextUInt();
+            backward.nextUInt();
+        }
     }
 
     return frames;
@@ -170,6 +173,8 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+
     vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
@@ -203,9 +208,9 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                     frames.push_back(result);
                 }
             }
-        }
 
-        backward.nextUInt();
+            backward.nextUInt();
+        }
     }
 
     return frames;
@@ -217,12 +222,31 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+
     vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
+    u32 calls[15];
+    u32 low, high;
+
     for (auto i = 0; i < size; i++)
     {
-        // TODO
+        backward.seed = seeds[i];
+
+        for (int i = 0; i < 15; i++)
+            calls[i] = backward.nextUShort();
+
+        low = chainedPIDLow(calls[14], calls[0], calls[1], calls[2], calls[3], calls[4], calls[5], calls[6], calls[7], calls[8], calls[9], calls[10], calls[11], calls[12]);
+        high = chainedPIDHigh(calls[13], low, tid, sid);
+        frame.setPID(low, high);
+
+        //if (!compare.comparePID(frame))
+        backward.nextUInt();
+        frame.seed = backward.nextUInt();
+        results.push_back(frame);
+        frame.seed ^= 0x80000000;
+        results.push_back(frame);
     }
 
     vector<Frame4> frames;
@@ -232,7 +256,7 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
     {
         backward.seed = result.seed;
 
-        for (u32 cnt = 1; cnt < maxFrame; cnt++)
+        for (u32 cnt = 1; cnt <= maxFrame; cnt++)
         {
             u32 test = backward.seed;
 
@@ -240,7 +264,7 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
             u32 delay = test & 0xFFFF;
 
             // Check if seed matches a valid gen 4 format
-            if (hour < 23 && delay > minDelay && delay < maxDelay)
+            if (hour < 24 && delay > minDelay && delay < maxDelay)
             {
                 // Check if within user specific frame range
                 if (cnt >= minFrame)
@@ -250,9 +274,9 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
                     frames.push_back(result);
                 }
             }
-        }
 
-        backward.nextUInt();
+            backward.nextUInt();
+        }
     }
 
     return frames;

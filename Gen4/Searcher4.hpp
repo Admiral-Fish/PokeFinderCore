@@ -30,7 +30,6 @@ class Searcher4 : public Searcher
 private:
     RNGCache cache = RNGCache(Method1);
     Frame4 frame = Frame4(0, 0, 0);
-    LCRNG forward = PokeRNG(0);
     LCRNG backward = PokeRNGR(0);
     FrameCompare compare;
 
