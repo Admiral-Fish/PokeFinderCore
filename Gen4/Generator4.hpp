@@ -40,6 +40,7 @@ private:
     vector<Frame4> generateMethodKSynch(FrameCompare compare);
     vector<Frame4> generateMethodKCuteCharm(FrameCompare compare);
     vector<Frame4> generateChainedShiny(FrameCompare compare);
+    vector<Frame4> generateWondercardIVs(FrameCompare compare);
     u32 chainedPIDLow(u32 low, u32 call1, u32 call2, u32 call3, u32 call4, u32 call5,
                       u32 call6, u32 call7, u32 call8, u32 call9, u32 call10, u32 call11,
                       u32 call12, u32 call13);

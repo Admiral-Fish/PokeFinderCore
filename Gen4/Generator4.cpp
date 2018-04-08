@@ -74,6 +74,8 @@ vector<Frame4> Generator4::generate(FrameCompare compare)
             }
         case ChainedShiny:
             return generateChainedShiny(compare);
+        case WondercardIVs:
+            return generateWondercardIVs(compare);
         default:
             return vector<Frame4>();
     }
@@ -855,6 +857,31 @@ vector<Frame4> Generator4::generateChainedShiny(FrameCompare compare)
             continue;
 
         frame.setIVs(rngList[16], rngList[17]);
+        if (!compare.compareIVs(frame))
+            continue;
+
+        frame.frame = cnt;
+        frames.push_back(frame);
+    }
+    rngList.clear();
+
+    return frames;
+}
+
+vector<Frame4> Generator4::generateWondercardIVs(FrameCompare compare)
+{
+    vector<Frame4> frames;
+    Frame4 frame = Frame4(tid, sid, psv);
+
+    for (int i = 0; i < 2; i++)
+        rngList.push_back(rng.nextUShort());
+
+    // Wondercard IVs [SEED] [IVS] [IVS]
+
+    u32 max = initialFrame + maxResults;
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    {
+        frame.setIVs(rngList[0], rngList[1]);
         if (!compare.compareIVs(frame))
             continue;
 
