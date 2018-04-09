@@ -176,7 +176,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (encounterType == RockSmash)
                             {
                                 u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if ((temp % 2880) < rate)
+                                if (((temp >> 16) % 2880) < rate)
                                 {
                                     frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
                                     frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
@@ -209,7 +209,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (encounterType == RockSmash)
                             {
                                 u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if ((temp % 2880) < rate)
+                                if (((temp >> 16) % 2880) < rate)
                                 {
                                     frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
                                     frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
@@ -240,7 +240,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (encounterType == RockSmash)
                             {
                                 u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if ((temp % 2880) < rate)
+                                if (((temp >> 16) % 2880) < rate)
                                 {
                                     frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
                                     frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
@@ -272,7 +272,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (encounterType == RockSmash)
                             {
                                 u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if ((temp % 2880) < rate)
+                                if (((temp >> 16) % 2880) < rate)
                                 {
                                     frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
                                     frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
@@ -305,7 +305,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (encounterType == RockSmash)
                             {
                                 u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if ((temp % 2880) < rate)
+                                if (((temp >> 16) % 2880) < rate)
                                 {
                                     frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
                                     frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
@@ -331,7 +331,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (encounterType == RockSmash)
                             {
                                 u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if ((temp % 2880) < rate)
+                                if (((temp >> 16) % 2880) < rate)
                                 {
                                     frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
                                     frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
@@ -388,7 +388,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (encounterType == RockSmash)
                             {
                                 u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if ((temp % 2880) < rate)
+                                if (((temp >> 16) % 2880) < rate)
                                 {
                                     frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
                                     frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
