@@ -50,7 +50,7 @@ public:
     u32 maxFrame;
 
     Searcher4();
-    Searcher4(u16 tid, u16 sid, u32 ratio, FrameCompare compare, Method method);
+    Searcher4(u16 tid, u16 sid, u32 ratio, u32 minDelay, u32 maxDelay, u32 minFrame, u32 maxFrame, FrameCompare compare, Method method);
     vector<Frame4> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
 
 };
