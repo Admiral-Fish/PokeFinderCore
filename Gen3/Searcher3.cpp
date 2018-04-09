@@ -100,6 +100,8 @@ vector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u3
             if (natureLock.firstShadowNormal(frame.seed))
             {
                 frames.push_back(frame);
+                // If this seed passes it is impossible for the sister spread to generate
+                // Skip since calculating it would be useless
                 continue;
             }
         }
@@ -131,6 +133,8 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
     vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
     u32 seed;
+
+    u32 rate = encounter.getEncounterRate() * 16;
 
     for (auto i = 0; i < size; i++)
     {
@@ -168,12 +172,30 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = None;
                             slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            if (compare.compareSlot(frame))
+
+                            if (encounterType == RockSmash)
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
-                                frames.push_back(frame);
+                                u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
+                                if ((temp % 2880) < rate)
+                                {
+                                    frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                    if (compare.compareSlot(frame))
+                                    {
+                                        frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+                                        frames.push_back(frame);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
+                                frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                if (compare.compareSlot(frame))
+                                {
+                                    frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+                                    frames.push_back(frame);
+                                }
                             }
                         }
                         break;
@@ -183,12 +205,30 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = Synchronize;
                             slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            if (compare.compareSlot(frame))
+
+                            if (encounterType == RockSmash)
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
-                                frames.push_back(frame);
+                                u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
+                                if ((temp % 2880) < rate)
+                                {
+                                    frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                    if (compare.compareSlot(frame))
+                                    {
+                                        frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+                                        frames.push_back(frame);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
+                                frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                if (compare.compareSlot(frame))
+                                {
+                                    frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+                                    frames.push_back(frame);
+                                }
                             }
                         }
                         // Failed synch
@@ -196,12 +236,30 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = Synchronize;
                             slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            if (compare.compareSlot(frame))
+
+                            if (encounterType == RockSmash)
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
-                                frames.push_back(frame);
+                                u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
+                                if ((temp % 2880) < rate)
+                                {
+                                    frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                    if (compare.compareSlot(frame))
+                                    {
+                                        frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+                                        frames.push_back(frame);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
+                                frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                if (compare.compareSlot(frame))
+                                {
+                                    frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+                                    frames.push_back(frame);
+                                }
                             }
                         }
                         break;
@@ -210,12 +268,30 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = CuteCharm;
                             slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            if (compare.compareSlot(frame))
+
+                            if (encounterType == RockSmash)
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
-                                frames.push_back(frame);
+                                u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
+                                if ((temp % 2880) < rate)
+                                {
+                                    frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                    if (compare.compareSlot(frame))
+                                    {
+                                        frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+                                        frames.push_back(frame);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
+                                frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                if (compare.compareSlot(frame))
+                                {
+                                    frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+                                    frames.push_back(frame);
+                                }
                             }
                         }
                         break;
@@ -226,33 +302,80 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = None;
                             slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            if (compare.compareSlot(frame))
+                            if (encounterType == RockSmash)
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
-                                frames.push_back(frame);
+                                u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
+                                if ((temp % 2880) < rate)
+                                {
+                                    frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                    if (compare.compareSlot(frame))
+                                    {
+                                        frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+                                        frames.push_back(frame);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
+                                frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                if (compare.compareSlot(frame))
+                                {
+                                    frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+                                    frames.push_back(frame);
+                                }
                             }
 
                             slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            if (compare.compareSlot(frame))
+                            if (encounterType == RockSmash)
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
-
-                                // Failed synch
-                                if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
+                                u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
+                                if ((temp % 2880) < rate)
                                 {
-                                    frame.leadType = Synchronize;
-                                    frames.push_back(frame);
+                                    frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                    if (compare.compareSlot(frame))
+                                    {
+                                        frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+
+                                        // Failed synch
+                                        if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
+                                        {
+                                            frame.leadType = Synchronize;
+                                            frames.push_back(frame);
+                                        }
+
+                                        // Cute Charm
+                                        if ((nextRNG2 % 3) > 0)
+                                        {
+                                            frame.leadType = CuteCharm;
+                                            frames.push_back(frame);
+                                        }
+                                    }
                                 }
-
-                                // Cute Charm
-                                if ((nextRNG2 % 3) > 0)
+                            }
+                            else
+                            {
+                                frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
+                                frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                if (compare.compareSlot(frame))
                                 {
-                                    frame.leadType = CuteCharm;
-                                    frames.push_back(frame);
+                                    frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+
+                                    // Failed synch
+                                    if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
+                                    {
+                                        frame.leadType = Synchronize;
+                                        frames.push_back(frame);
+                                    }
+
+                                    // Cute Charm
+                                    if ((nextRNG2 % 3) > 0)
+                                    {
+                                        frame.leadType = CuteCharm;
+                                        frames.push_back(frame);
+                                    }
                                 }
                             }
                         }
@@ -261,12 +384,30 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                         {
                             frame.leadType = Synchronize;
                             slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
-                            if (compare.compareSlot(frame))
+
+                            if (encounterType == RockSmash)
                             {
-                                frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
-                                frames.push_back(frame);
+                                u32 temp = slot * 0xeeb9eb65 + 0xa3561a1;
+                                if ((temp % 2880) < rate)
+                                {
+                                    frame.seed = temp * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                    if (compare.compareSlot(frame))
+                                    {
+                                        frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+                                        frames.push_back(frame);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                frame.seed = slot * 0xdc6c95d9 + 0x4d3cb126;
+                                frame.encounterSlot = EncounterSlot::hSlot(slot >> 16, encounterType);
+                                if (compare.compareSlot(frame))
+                                {
+                                    frame.level = encounter.calcLevel(frame.encounterSlot, testRNG.seed >> 16);
+                                    frames.push_back(frame);
+                                }
                             }
                         }
                         break;
@@ -311,6 +452,8 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
                     if (natureLock.singleNL(frame.seed))
                     {
                         frames.push_back(frame);
+                        // If this seed passes it is impossible for the sister spread to generate
+                        // Skip since calculating it would be useless
                         continue;
                     }
                     break;
@@ -318,6 +461,8 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
                     if (natureLock.firstShadowNormal(frame.seed))
                     {
                         frames.push_back(frame);
+                        // If this seed passes it is impossible for the sister spread to generate
+                        // Skip since calculating it would be useless
                         continue;
                     }
                     break;
@@ -326,18 +471,27 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
                     {
                         frame.lockReason = QObject::tr("First shadow unset");
                         frames.push_back(frame);
+                        // If this seed passes it is impossible for the sister spread to generate
+                        // Also unlikely for the other methods of encounter to pass
+                        // Skip since calculating it would be useless
                         continue;
                     }
                     if (natureLock.firstShadowSet(frame.seed))
                     {
                         frame.lockReason = QObject::tr("First shadow set");
                         frames.push_back(frame);
+                        // If this seed passes it is impossible for the sister spread to generate
+                        // Also unlikely for the other methods of encounter to pass
+                        // Skip since calculating it would be useless
                         continue;
                     }
                     if (natureLock.firstShadowShinySkip(frame.seed))
                     {
                         frame.lockReason = QObject::tr("Shiny Skip");
                         frames.push_back(frame);
+                        // If this seed passes it is impossible for the sister spread to generate
+                        // Also unlikely for the other methods of encounter to pass
+                        // Skip since calculating it would be useless
                         continue;
                     }
                     break;
@@ -346,18 +500,27 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
                     {
                         frame.lockReason = QObject::tr("First shadow unset");
                         frames.push_back(frame);
+                        // If this seed passes it is impossible for the sister spread to generate
+                        // Also unlikely for the other methods of encounter to pass
+                        // Skip since calculating it would be useless
                         continue;
                     }
                     if (natureLock.salamenceSet(frame.seed))
                     {
                         frame.lockReason = QObject::tr("First shadow set");
                         frames.push_back(frame);
+                        // If this seed passes it is impossible for the sister spread to generate
+                        // Also unlikely for the other methods of encounter to pass
+                        // Skip since calculating it would be useless
                         continue;
                     }
                     if (natureLock.salamenceShinySkip(frame.seed))
                     {
                         frame.lockReason = QObject::tr("Shiny Skip");
                         frames.push_back(frame);
+                        // If this seed passes it is impossible for the sister spread to generate
+                        // Also unlikely for the other methods of encounter to pass
+                        // Skip since calculating it would be useless
                         continue;
                     }
                     break;
@@ -389,12 +552,16 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
                     {
                         frame.lockReason = QObject::tr("First shadow unset");
                         frames.push_back(frame);
+                        // Unlikely for the other methods of encounter to pass
+                        // Skip since calculating it would be useless
                         continue;
                     }
                     if (natureLock.firstShadowSet(frame.seed))
                     {
                         frame.lockReason = QObject::tr("First shadow set");
                         frames.push_back(frame);
+                        // Unlikely for the other methods of encounter to pass
+                        // Skip since calculating it would be useless
                         continue;
                     }
                     if (natureLock.firstShadowShinySkip(frame.seed))
@@ -408,12 +575,16 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
                     {
                         frame.lockReason = QObject::tr("First shadow unset");
                         frames.push_back(frame);
+                        // Unlikely for the other methods of encounter to pass
+                        // Skip since calculating it would be useless
                         continue;
                     }
                     if (natureLock.salamenceSet(frame.seed))
                     {
                         frame.lockReason = QObject::tr("First shadow set");
                         frames.push_back(frame);
+                        // Unlikely for the other methods of encounter to pass
+                        // Skip since calculating it would be useless
                         continue;
                     }
                     if (natureLock.salamenceShinySkip(frame.seed))

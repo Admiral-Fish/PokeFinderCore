@@ -237,7 +237,7 @@ bool FrameCompare::compareNature(Frame frame)
 
 bool FrameCompare::compareHiddenPower(Frame frame)
 {
-    return power[frame.hidden];
+    return powers[frame.hidden];
 }
 
 bool FrameCompare::compareSlot(Frame frame)

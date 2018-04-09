@@ -113,7 +113,8 @@ u32 EncounterArea3::getEncounterRate()
         case 51: // Safari Zone 4
         case 53: // Safari Zone 6
             return 25;
-        // FRLG doesn't seem to force encounter with encounter rate
+        // FRLG doesn't force encounter
+        // Uses a different RNG to proc the encounter
         case 134: // Rock Tunnel B1F (50)
         case 145: // Cerulean Cave 1F  (50)
         case 146: // Cerulean Cave 2F (50)
