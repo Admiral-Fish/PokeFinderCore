@@ -51,6 +51,8 @@ vector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32
             return searchMethodK(hp, atk, def, spa, spd, spe);
         case ChainedShiny:
             return searchChainedShiny(hp, atk, def, spa, spd, spe);
+        case WondercardIVs:
+            return searchWondercardIVs(hp, atk, def, spa, spd, spe);
         default:
             return vector<Frame4>();
     }
