@@ -238,7 +238,7 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
         high = chainedPIDHigh(calls[13], low, tid, sid);
         frame.setPID(low, high);
 
-        if (!compare.comparePID(frame))
+        if (compare.comparePID(frame))
         {
             backward.nextUInt();
             frame.seed = backward.nextUInt();
