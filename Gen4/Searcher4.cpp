@@ -219,39 +219,50 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                     case SuctionCups:
                         if ((nextRNG / 0xa3e) == frame.nature)
                         {
-                            frame.leadType = SuctionCups;
+                            frame.leadType = None;
 
                             switch (encounterType)
                             {
                                 case Wild:
                                     slot = testRNG.seed;
                                     frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                                    break;
                                 case Surfing:
                                     slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
                                     frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
                                     break;
                                 case OldRod:
-                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;;
                                     nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                                     if (((nibble >> 16) / 656) <= 48)
+                                    {
+                                        if (((nibble >> 16) / 656) > 24)
+                                            frame.leadType = SuctionCups;
                                         frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    }
                                     else
                                         skipFrame = true;
                                     break;
                                 case GoodRod:
-                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;;
                                     nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                                     if (((nibble >> 16) / 656) <= 98)
+                                    {
+                                        if (((nibble >> 16) / 656) > 49)
+                                            frame.leadType = SuctionCups;
                                         frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    }
                                     else
                                         skipFrame = true;
                                     break;
                                 case SuperRod:
-                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;;
                                     nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                    if (((nibble >> 16) / 656) <= 100)
+                                    if (((nibble >> 16) / 656) <= 99)
+                                    {
+                                        if (((nibble >> 16) / 656) > 74)
+                                            frame.leadType = SuctionCups;
                                         frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    }
                                     else
                                         skipFrame = true;
                                     break;
@@ -383,6 +394,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                         // Normal
                         if ((nextRNG / 0xa3e) == frame.nature)
                         {
+                            frame.leadType = None;
                             if (encounterType != Stationary)
                             {
                                 switch (encounterType)
@@ -399,7 +411,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                         nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                                         if (((nibble >> 16) / 656) <= 48)
                                         {
-                                            if (nibble > 24)
+                                            if (((nibble >> 16) / 656) > 24)
                                                 frame.leadType = SuctionCups;
                                             frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
                                         }
@@ -411,7 +423,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                         nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                                         if (((nibble >> 16) / 656) <= 98)
                                         {
-                                            if (nibble > 49)
+                                            if (((nibble >> 16) / 656) > 49)
                                                 frame.leadType = SuctionCups;
                                             frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
                                         }
@@ -423,7 +435,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                         nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                                         if (((nibble >> 16) / 656) <= 99)
                                         {
-                                            if (nibble > 74)
+                                            if (((nibble >> 16) / 656) > 74)
                                                 frame.leadType = SuctionCups;
                                             frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
                                         }
@@ -439,7 +451,6 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 
                             if (!skipFrame)
                             {
-                                frame.leadType = None;
                                 frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
                                     results.push_back(frame);
