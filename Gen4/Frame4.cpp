@@ -77,3 +77,36 @@ void Frame4::setInheritance(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 
     hidden = ((((ivs[0] & 1) + 2 * (ivs[1] & 1) + 4 * (ivs[2] & 1) + 8 * (ivs[5] & 1) + 16 * (ivs[3] & 1) + 32 * (ivs[4] & 1)) * 15) / 63);
     power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
 }
+
+QString Frame4::elmCall()
+{
+    u32 val = seed % 3;
+
+    if (val == 0)
+        return "E";
+    else if (val == 1)
+        return "K";
+    else
+        return "P";
+}
+
+QString Frame4::chatotPitch()
+{
+    u32 val = ((seed & 0x1FFF) * 100) >> 13;
+    QString pitch;
+
+    if (val < 20)
+        pitch = QObject::tr("Low");
+    else if (val < 40)
+        pitch = QObject::tr("Mid-Low");
+    else if (val < 60)
+        pitch = QObject::tr("Mid");
+    else if (val < 80)
+        pitch = QObject::tr("Mid-High");
+    else
+        pitch = QObject::tr("High");
+
+    pitch = pitch + " (" + QString::number(val) + ")";
+
+    return pitch;
+}

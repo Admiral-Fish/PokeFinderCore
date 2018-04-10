@@ -110,6 +110,7 @@ vector<Frame4> Generator4::generateMethod1(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
+        frame.seed = rngList[0];
         frame.frame = cnt;
         frames.push_back(frame);
     }
@@ -212,6 +213,7 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
+        frame.seed = rngList[0];
         frame.frame = cnt;
         frame.occidentary = hunt + cnt - 2;
         frames.push_back(frame);
@@ -319,6 +321,7 @@ vector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
+        frame.seed = rngList[0];
         frame.frame = cnt;
         frame.occidentary = hunt + cnt - 2;
         frames.push_back(frame);
@@ -439,6 +442,7 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
             if (!compare.compareIVs(frame))
                 continue;
 
+            frame.seed = rngList[0];
             frame.frame = cnt;
             frame.occidentary = cnt;
             frames.push_back(frame);
@@ -467,6 +471,7 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
             if (!compare.compareIVs(frame))
                 continue;
 
+            frame.seed = rngList[0];
             frame.frame = cnt;
             frame.occidentary = hunt + cnt - 3;
             frames.push_back(frame);
@@ -569,9 +574,10 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
             refill();
 
         frame.setIVs(rngList[hunt], rngList[hunt + 1]);
-        //if (!compare.compareIVs(frame))
-        //  continue;
+        if (!compare.compareIVs(frame))
+            continue;
 
+        frame.seed = rngList[0];
         frame.frame = cnt;
         frame.occidentary = hunt + cnt - 2;
         frames.push_back(frame);
@@ -603,6 +609,7 @@ vector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
+        frame.seed = rngList[0];
         hunt = 0;
         first = rngList[hunt++];
 
@@ -678,9 +685,10 @@ vector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
             refill();
 
         frame.setIVs(rngList[hunt], rngList[hunt + 1]);
-        //if (!compare.compareIVs(frame))
-        //  continue;
+        if (!compare.compareIVs(frame))
+            continue;
 
+        frame.seed = rngList[0];
         frame.frame = cnt;
         frame.occidentary = hunt + cnt - 2;
         frames.push_back(frame);
@@ -797,6 +805,7 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
             if (!compare.compareIVs(frame))
                 continue;
 
+            frame.seed = rngList[0];
             frame.frame = cnt;
             frame.occidentary = cnt;
             frames.push_back(frame);
@@ -822,9 +831,10 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
                 refill();
 
             frame.setIVs(rngList[hunt], rngList[hunt + 1]);
-            //if (!compare.compareIVs(frame))
-            //  continue;
+            if (!compare.compareIVs(frame))
+                continue;
 
+            frame.seed = rngList[0];
             frame.frame = cnt;
             frame.occidentary = hunt + cnt - 3;
             frames.push_back(frame);
