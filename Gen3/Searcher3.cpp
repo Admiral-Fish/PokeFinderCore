@@ -295,7 +295,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
             {
                 u32 check = (frames[i].seed * 0x41c64e6d + 0x6073) >> 16;
 
-                if (rate >= (check % 2880))
+                if ((check % 2880) >= rate)
                     frames.erase(frames.begin() + i);
                 else
                     i++;
