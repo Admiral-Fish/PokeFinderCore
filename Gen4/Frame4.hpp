@@ -17,35 +17,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PROFILE_HPP
-#define PROFILE_HPP
+#ifndef FRAME4_HPP
+#define FRAME4_HPP
 
-#include <QString>
-#include <QDomDocument>
-#include <QApplication>
-#include <QFile>
-#include <QTextStream>
-#include <PokeFinderCore/Objects/Game.hpp>
+#include <PokeFinderCore/Objects/Frame.hpp>
 
-using std::vector;
-typedef uint32_t u32;
-
-class Profile
+class Frame4 : public Frame
 {
 
 public:
-    QString profileName;
-    Game version;
-    int language;
-    bool valid;
-    u32 tid;
-    u32 sid;
+    u32 occidentary;
+    u32 seed;
 
-    Profile(QString profileName, Game version, u32 tid, u32 sid, int language = 0, bool valid = false);
-    Profile();
-    QString getVersion();
-    QString getLanguage();
+    Frame4(u16 tid, u16 sid, u16 psv);
+    void setInheritance(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1,
+                        u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2);
+    QString elmCall();
+    QString chatotPitch();
 
 };
 
-#endif // PROFILE_HPP
+#endif // FRAME4_HPP

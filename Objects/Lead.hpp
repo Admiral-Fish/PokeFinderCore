@@ -35,7 +35,8 @@ enum Lead
     CuteCharm75F,
     CuteCharm25F,
     CuteCharm125F,
-    Everstone
+    Everstone,
+    SuctionCups
 };
 
 #endif // LEAD_HPP

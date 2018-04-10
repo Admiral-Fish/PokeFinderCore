@@ -60,6 +60,27 @@ QString Frame::getShiny()
     return shiny ? "!!!" : "";
 }
 
+// Change the tid/sid
+void Frame::setIDs(u16 tid, u16 sid, u16 psv)
+{
+    this->tid = tid;
+    this->sid = sid;
+    this->psv = psv;
+}
+
+// Sets IVs for either Channel method or manual input and calculates characteristics based on IVs
+void Frame::setIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6)
+{
+    ivs[0] = iv1;
+    ivs[1] = iv2;
+    ivs[2] = iv3;
+    ivs[3] = iv4;
+    ivs[4] = iv5;
+    ivs[5] = iv6;
+    hidden = ((((ivs[0] & 1) + 2 * (ivs[1] & 1) + 4 * (ivs[2] & 1) + 8 * (ivs[5] & 1) + 16 * (ivs[3] & 1) + 32 * (ivs[4] & 1)) * 15) / 63);
+    power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
+}
+
 // Sets IVs and calculates characteristics based on IVs
 void Frame::setIVs(u32 iv1, u32 iv2)
 {

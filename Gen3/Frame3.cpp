@@ -63,27 +63,6 @@ QString Frame3::getTimeEgg()
     return QString("%1 h %2 m %3.%4 s").arg(hours).arg(minutes).arg(seconds).arg(milliseconds, 2, 10, QChar('0'));
 }
 
-// Change the tid/sid (mostly used for Channel)
-void Frame3::setIDs(u16 tid, u16 sid, u16 psv)
-{
-    this->tid = tid;
-    this->sid = sid;
-    this->psv = psv;
-}
-
-// Sets IVs for either Channel method or manual input and calculates characteristics based on IVs
-void Frame3::setIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6)
-{
-    ivs[0] = iv1;
-    ivs[1] = iv2;
-    ivs[2] = iv3;
-    ivs[3] = iv4;
-    ivs[4] = iv5;
-    ivs[5] = iv6;
-    hidden = ((((ivs[0] & 1) + 2 * (ivs[1] & 1) + 4 * (ivs[2] & 1) + 8 * (ivs[5] & 1) + 16 * (ivs[3] & 1) + 32 * (ivs[4] & 1)) * 15) / 63);
-    power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
-}
-
 void Frame3::setInheritanceEmerald(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1, u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2)
 {
     ivs[0] = iv1 & 0x1f;

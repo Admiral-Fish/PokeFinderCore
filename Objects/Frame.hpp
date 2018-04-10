@@ -69,6 +69,8 @@ public:
     QString getNature();
     QString getPower();
     QString getShiny();
+    void setIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6);
+    void setIDs(u16 tid, u16 sid, u16 psv);
     void setIVs(u32 iv1, u32 iv2);
     void setPID(u32 pid1, u32 pid2);
     void setPID(u32 pid, u32 pid1, u32 pid2);

@@ -86,7 +86,7 @@ int EncounterSlot::hSlot(u32 result, Encounter encounterType)
 // Calcs the encounter slot for Method J (DPPt)
 int EncounterSlot::jSlot(u32 result, Encounter encounterType)
 {
-    u32 compare = (result >> 16) / 656;
+    u32 compare = result / 656;
     vector<Range> ranges;
     switch (encounterType)
     {
@@ -110,7 +110,7 @@ int EncounterSlot::jSlot(u32 result, Encounter encounterType)
 // Calcs the encounter slot for Method K (HGSS)
 int EncounterSlot::kSlot(u32 result, Encounter encounterType)
 {
-    u32 compare = (result >> 16) % 100;
+    u32 compare = result % 100;
     vector<Range> ranges;
     switch (encounterType)
     {
