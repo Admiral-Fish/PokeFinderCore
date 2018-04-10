@@ -218,14 +218,14 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                             skipFrame = true;
                                         break;
                                 }
+                            }
 
-                                if (!skipFrame)
-                                {
-                                    frame.seed = testSeed;
-                                    frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
-                                    if (compare.compareSlot(frame))
-                                        results.push_back(frame);
-                                }
+                            if (!skipFrame)
+                            {
+                                frame.seed = testSeed;
+                                frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
+                                if (encounterType == Stationary || compare.compareSlot(frame))
+                                    results.push_back(frame);
                             }
 
                             if (nextRNG2 >> 15 == 1)
@@ -256,7 +256,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                 {
                                     frame.seed = testSeed;
                                     frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
-                                    if (compare.compareSlot(frame))
+                                    if (encounterType == Stationary || compare.compareSlot(frame))
                                         results.push_back(frame);
                                 }
                             }
@@ -305,14 +305,16 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                         break;
                                 }
 
-                                if (!skipFrame)
-                                {
-                                    frame.seed = testSeed;
-                                    frame.synchable = true;
-                                    frame.leadType = Synchronize;
-                                    frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
-                                }
+                            }
 
+                            if (!skipFrame)
+                            {
+                                frame.seed = testSeed;
+                                frame.synchable = true;
+                                frame.leadType = Synchronize;
+                                frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
+                                if (encounterType == Stationary || compare.compareSlot(frame))
+                                    results.push_back(frame);
                             }
 
                         }
