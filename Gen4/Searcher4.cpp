@@ -134,7 +134,200 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 
     for (auto i = 0; i < size; i++)
     {
-        // TODO
+        // Setup normal frame
+        backward.seed = seeds[i];
+        frame.setPID(backward.nextUShort(), backward.nextUShort());
+        frame.seed = backward.nextUInt();
+
+        for (int i = 0; i < 2; i++)
+        {
+            if (i == 1)
+            {
+                frame.pid ^= 0x80008000;
+                frame.nature = frame.pid % 25;
+                frame.seed ^= 0x80000000;
+            }
+
+            if (!compare.comparePID(frame))
+                continue;
+
+            LCRNG testRNG = PokeRNGR(frame.seed);
+            u32 testPID, slot, testSeed;
+            u32 nextRNG = frame.seed >> 16;
+            u32 nextRNG2 = testRNG.nextUShort();
+
+            do
+            {
+                bool skipFrame = false;
+
+                u32 nibble;
+                switch (leadType)
+                {
+                    case Search:
+                        if (nextRNG / 0xA3E == frame.nature)
+                        {
+                            testSeed = testRNG.seed;
+                            frame.leadType = None;
+                            if (encounterType != Stationary)
+                            {
+                                testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                slot = testRNG.seed;
+                                switch (encounterType)
+                                {
+                                    case Surfing:
+                                        slot = testSeed;
+                                        testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        break;
+                                    case OldRod:
+                                        slot = testSeed;
+                                        testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        nibble = (testSeed >> 16) / 656;
+                                        if (nibble <= 48)
+                                        {
+                                            if (nibble > 24)
+                                                frame.leadType = SuctionCups;
+                                            testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        }
+                                        else
+                                            skipFrame = true;
+                                        break;
+                                    case GoodRod:
+                                        slot = testSeed;
+                                        testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        nibble = (testSeed >> 16) / 656;
+                                        if (nibble <= 98)
+                                        {
+                                            if (nibble > 49)
+                                                frame.leadType = SuctionCups;
+                                            testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        }
+                                        else
+                                            skipFrame = true;
+                                        break;
+                                    case SuperRod:
+                                        slot = testSeed;
+                                        testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        nibble = (testSeed >> 16) / 656;
+                                        if (nibble <= 99)
+                                        {
+                                            if (nibble > 74)
+                                                frame.leadType = SuctionCups;
+                                            testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        }
+                                        else
+                                            skipFrame = true;
+                                        break;
+                                }
+
+                                if (!skipFrame)
+                                {
+                                    frame.seed = testSeed;
+                                    frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
+                                    if (compare.compareSlot(frame))
+                                        results.push_back(frame);
+                                }
+                            }
+
+                            if (nextRNG2 >> 15 == 1)
+                            {
+                                switch (encounterType)
+                                {
+                                    case OldRod:
+                                        nibble = (testSeed >> 16) / 656;
+                                        if (nibble > 24)
+                                            skipFrame = true;
+                                        break;
+                                    case GoodRod:
+                                        nibble = (testSeed >> 16) / 656;
+                                        if (nibble > 49)
+                                            skipFrame = true;
+                                        break;
+                                    case SuperRod:
+                                        nibble = (testSeed >> 16) / 656;
+                                        if (nibble > 74)
+                                            skipFrame = true;
+                                        break;
+                                }
+
+                                slot = slot * 0xeeb9eb65 + 0xa3561a1;
+                                testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+
+                                if (!skipFrame)
+                                {
+                                    frame.seed = testSeed;
+                                    frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
+                                    if (compare.compareSlot(frame))
+                                        results.push_back(frame);
+                                }
+                            }
+
+                        }
+                        else if (nextRNG >> 15 == 0)
+                        {
+                            testSeed = testRNG.seed;
+
+                            if (encounterType != Stationary)
+                            {
+                                testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                slot = testRNG.seed;
+                                switch (encounterType)
+                                {
+                                    case Surfing:
+                                        slot = testSeed;
+                                        testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        break;
+                                    case OldRod:
+                                        slot = testSeed;
+                                        testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        nibble = (testSeed >> 16) / 656;
+                                        if (nibble > 24)
+                                            skipFrame = true;
+                                        else
+                                            testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        break;
+                                    case GoodRod:
+                                        slot = testSeed;
+                                        testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        nibble = (testSeed >> 16) / 656;
+                                        if (nibble > 49)
+                                            skipFrame = true;
+                                        else
+                                            testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        break;
+                                    case SuperRod:
+                                        slot = testSeed;
+                                        testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        nibble = (testSeed >> 16) / 656;
+                                        if (nibble > 74)
+                                            skipFrame = true;
+                                        else
+                                            testSeed = testSeed * 0xeeb9eb65 + 0xa3561a1;
+                                        break;
+                                }
+
+                                if (!skipFrame)
+                                {
+                                    frame.seed = testSeed;
+                                    frame.synchable = true;
+                                    frame.leadType = Synchronize;
+                                    frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
+                                }
+
+                            }
+
+                        }
+                        break;
+                }
+
+                testPID = (nextRNG << 16) | nextRNG2;
+                nextRNG = testRNG.nextUShort();
+                nextRNG2 = testRNG.nextUShort();
+
+            }
+            while (testPID % 25 != frame.nature);
+
+        }
+
     }
 
     vector<Frame4> frames;
