@@ -66,9 +66,12 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 {
     vector<Frame4> results;
 
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+    if (!compare.compareHiddenPower(frame))
+        return results;
+
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    frame.setIVsManual(hp, atk, def, spa, spd, spe);
 
     vector<u32> seeds = cache.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
@@ -125,9 +128,12 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 {
     vector<Frame4> results;
 
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+    if (!compare.compareHiddenPower(frame))
+        return results;
+
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    frame.setIVsManual(hp, atk, def, spa, spd, spe);
 
     vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
@@ -556,7 +562,6 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 
             }
             while (testPID % 25 != frame.nature);
-
         }
     }
 
@@ -594,16 +599,441 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 {
     vector<Frame4> results;
 
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+    if (!compare.compareHiddenPower(frame))
+        return results;
+
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    frame.setIVsManual(hp, atk, def, spa, spd, spe);
 
     vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
-        // TODO
+        // Setup normal frame
+        backward.seed = seeds[i];
+        frame.setPID(backward.nextUShort(), backward.nextUShort());
+        frame.seed = backward.nextUInt();
+
+        for (int i = 0; i < 2; i++)
+        {
+            if (i == 1)
+            {
+                frame.pid ^= 0x80008000;
+                frame.nature = frame.pid % 25;
+                frame.seed ^= 0x80000000;
+            }
+
+            if (!compare.comparePID(frame))
+                continue;
+
+            LCRNG testRNG = PokeRNGR(frame.seed);
+            u32 testPID, slot;
+            u32 nextRNG = frame.seed >> 16;
+            u32 nextRNG2 = testRNG.nextUShort();
+
+            do
+            {
+                bool skipFrame = false;
+
+                u32 nibble;
+                switch (leadType)
+                {
+                    case None:
+                        if ((nextRNG % 25) == frame.nature)
+                        {
+                            frame.leadType = None;
+
+                            switch (encounterType)
+                            {
+                                case Wild:
+                                    slot = testRNG.seed;
+                                    frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    break;
+                                case Surfing:
+                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    break;
+                                case OldRod:
+                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                    nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    if (((nibble >> 16) % 100) <= 24)
+                                        frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    else
+                                        skipFrame = true;
+                                    break;
+                                case GoodRod:
+                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                    nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    if (((nibble >> 16) % 100) <= 49)
+                                        frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    else
+                                        skipFrame = true;
+                                    break;
+                                case SuperRod:
+                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                    nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    if (((nibble >> 16) % 100) <= 74)
+                                        frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    else
+                                        skipFrame = true;
+                                    break;
+                                case Stationary:
+                                default:
+                                    frame.seed = testRNG.seed;
+                                    break;
+                            }
+
+                            if (!skipFrame)
+                            {
+                                frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
+                                if (encounterType == Stationary || compare.compareSlot(frame))
+                                    results.push_back(frame);
+                            }
+                        }
+                        break;
+                    case SuctionCups:
+                        if ((nextRNG % 25) == frame.nature)
+                        {
+                            frame.leadType = None;
+
+                            switch (encounterType)
+                            {
+                                case Wild:
+                                    slot = testRNG.seed;
+                                    frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                case Surfing:
+                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    break;
+                                case OldRod:
+                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;;
+                                    nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    if (((nibble >> 16) % 100) <= 48)
+                                    {
+                                        if (((nibble >> 16) % 100) > 24)
+                                            frame.leadType = SuctionCups;
+                                        frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    }
+                                    else
+                                        skipFrame = true;
+                                    break;
+                                case GoodRod:
+                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;;
+                                    nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    if (((nibble >> 16) % 100) <= 98)
+                                    {
+                                        if (((nibble >> 16) % 100) > 49)
+                                            frame.leadType = SuctionCups;
+                                        frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    }
+                                    else
+                                        skipFrame = true;
+                                    break;
+                                case SuperRod:
+                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;;
+                                    nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    if (((nibble >> 16) % 100) <= 99)
+                                    {
+                                        if (((nibble >> 16) % 100) > 74)
+                                            frame.leadType = SuctionCups;
+                                        frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    }
+                                    else
+                                        skipFrame = true;
+                                    break;
+                                case Stationary:
+                                default:
+                                    frame.seed = testRNG.seed;
+                                    break;
+                            }
+
+                            if (!skipFrame)
+                            {
+                                frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
+                                if (encounterType == Stationary || compare.compareSlot(frame))
+                                    results.push_back(frame);
+                            }
+                        }
+                        break;
+                    case Synchronize:
+                        // Successful synch
+                        if ((nextRNG & 1) == 0)
+                        {
+                            if (encounterType != Stationary)
+                            {
+                                switch (encounterType)
+                                {
+                                    case Wild:
+                                        slot = testRNG.seed;
+                                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        break;
+                                    case Surfing:
+                                        slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        break;
+                                    case OldRod:
+                                        slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                        nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        if (((nibble >> 16) % 100) <= 24)
+                                            frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                        else
+                                            skipFrame = true;
+                                        break;
+                                    case GoodRod:
+                                        slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                        nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        if (((nibble >> 16) % 100) <= 49)
+                                            frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                        else
+                                            skipFrame = true;
+                                        break;
+                                    case SuperRod:
+                                        slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                        nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        if (((nibble >> 16) % 100) <= 74)
+                                            frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                        else
+                                            skipFrame = true;
+                                        break;
+                                    case Stationary:
+                                    default:
+                                        frame.seed = testRNG.seed;
+                                        break;
+                                }
+
+                            }
+
+                            if (!skipFrame)
+                            {
+                                frame.synchable = true;
+                                frame.leadType = Synchronize;
+                                frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
+                                if (encounterType == Stationary || compare.compareSlot(frame))
+                                    results.push_back(frame);
+                            }
+                        }
+                        // Failed Synch
+                        else if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.nature)
+                        {
+                            switch (encounterType)
+                            {
+                                case Wild:
+                                    slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    break;
+                                case Surfing:
+                                    slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
+                                    frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    break;
+                                case OldRod:
+                                    slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
+                                    nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    if (((nibble >> 16) % 100) <= 24)
+                                        frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    else
+                                        skipFrame = true;
+                                    break;
+                                case GoodRod:
+                                    slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
+                                    nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    if (((nibble >> 16) % 100) <= 49)
+                                        frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    else
+                                        skipFrame = true;
+                                    break;
+                                case SuperRod:
+                                    slot = testRNG.seed * 0xdc6c95d9 + 0x4d3cb126;
+                                    nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    if (((nibble >> 16) % 100) <= 74)
+                                        frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    else
+                                        skipFrame = true;
+                                    break;
+                                case Stationary:
+                                default:
+                                    frame.seed = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                    break;
+
+                            }
+
+                            if (!skipFrame)
+                            {
+                                frame.leadType = Synchronize;
+                                frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
+                                if (encounterType == Stationary || compare.compareSlot(frame))
+                                    results.push_back(frame);
+                            }
+                        }
+                        break;
+                    case Search:
+                        // Normal
+                        if ((nextRNG % 25) == frame.nature)
+                        {
+                            frame.leadType = None;
+                            if (encounterType != Stationary)
+                            {
+                                switch (encounterType)
+                                {
+                                    case Wild:
+                                        slot = testRNG.seed;
+                                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                    case Surfing:
+                                        slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        break;
+                                    case OldRod:
+                                        slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;;
+                                        nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        if (((nibble >> 16) % 100) <= 48)
+                                        {
+                                            if (((nibble >> 16) % 100) > 24)
+                                                frame.leadType = SuctionCups;
+                                            frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                        }
+                                        else
+                                            skipFrame = true;
+                                        break;
+                                    case GoodRod:
+                                        slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;;
+                                        nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        if (((nibble >> 16) % 100) <= 98)
+                                        {
+                                            if (((nibble >> 16) % 100) > 49)
+                                                frame.leadType = SuctionCups;
+                                            frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                        }
+                                        else
+                                            skipFrame = true;
+                                        break;
+                                    case SuperRod:
+                                        slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;;
+                                        nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        if (((nibble >> 16) % 100) <= 99)
+                                        {
+                                            if (((nibble >> 16) % 100) > 74)
+                                                frame.leadType = SuctionCups;
+                                            frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                        }
+                                        else
+                                            skipFrame = true;
+                                        break;
+                                    case Stationary:
+                                    default:
+                                        frame.seed = testRNG.seed;
+                                        break;
+                                }
+                            }
+
+                            if (!skipFrame)
+                            {
+                                frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
+                                if (encounterType == Stationary || compare.compareSlot(frame))
+                                    results.push_back(frame);
+                            }
+
+                            // Failed synch
+                            if ((nextRNG2 & 1) == 1)
+                            {
+                                switch (encounterType)
+                                {
+                                    case OldRod:
+                                        nibble = (frame.seed >> 16) % 100;
+                                        if (nibble > 24)
+                                            skipFrame = true;
+                                        break;
+                                    case GoodRod:
+                                        nibble = (frame.seed >> 16) % 100;
+                                        if (nibble > 49)
+                                            skipFrame = true;
+                                        break;
+                                    case SuperRod:
+                                        nibble = (frame.seed >> 16) % 100;
+                                        if (nibble > 74)
+                                            skipFrame = true;
+                                        break;
+                                }
+
+                                slot = frame.seed;
+                                frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+
+                                if (!skipFrame)
+                                {
+                                    frame.leadType = Synchronize;
+                                    frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
+                                    if (encounterType == Stationary || compare.compareSlot(frame))
+                                        results.push_back(frame);
+                                }
+                            }
+                        }
+                        // Successful synch
+                        else if ((nextRNG & 1) == 0)
+                        {
+                            if (encounterType != Stationary)
+                            {
+                                switch (encounterType)
+                                {
+                                    case Wild:
+                                        slot = testRNG.seed;
+                                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        break;
+                                    case Surfing:
+                                        slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        break;
+                                    case OldRod:
+                                        slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                        nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        if (((nibble >> 16) % 100) <= 24)
+                                            frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                        else
+                                            skipFrame = true;
+                                        break;
+                                    case GoodRod:
+                                        slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                        nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        if (((nibble >> 16) % 100) <= 49)
+                                            frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                        else
+                                            skipFrame = true;
+                                        break;
+                                    case SuperRod:
+                                        slot = testRNG.seed * 0xeeb9eb65 + 0xa3561a1;
+                                        nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                        if (((nibble >> 16) % 100) <= 74)
+                                            frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                        else
+                                            skipFrame = true;
+                                        break;
+                                    case Stationary:
+                                    default:
+                                        frame.seed = testRNG.seed;
+                                        break;
+                                }
+
+                            }
+
+                            if (!skipFrame)
+                            {
+                                frame.synchable = true;
+                                frame.leadType = Synchronize;
+                                frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
+                                if (encounterType == Stationary || compare.compareSlot(frame))
+                                    results.push_back(frame);
+                            }
+
+                        }
+                        break;
+                }
+
+                testPID = (nextRNG << 16) | nextRNG2;
+                nextRNG = testRNG.nextUShort();
+                nextRNG2 = testRNG.nextUShort();
+
+            }
+            while (testPID % 25 != frame.nature);
+        }
     }
 
     vector<Frame4> frames;
@@ -640,9 +1070,12 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
 {
     vector<Frame4> results;
 
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+    if (!compare.compareHiddenPower(frame))
+        return results;
+
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    frame.setIVsManual(hp, atk, def, spa, spd, spe);
 
     vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
@@ -707,9 +1140,12 @@ vector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa,
 {
     vector<Frame4> results;
 
+    frame.setIVsManual(hp, atk, def, spa, spd, spe);
+    if (!compare.compareHiddenPower(frame))
+        return results;
+
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    frame.setIVsManual(hp, atk, def, spa, spd, spe);
 
     vector<u32> seeds = cache.recoverLower16BitsIV(first, second);
     auto size = seeds.size();
