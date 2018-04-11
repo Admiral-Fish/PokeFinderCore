@@ -30,6 +30,7 @@ class Utilities
 public:
     static u32 calcGen3Seed(QDate time, u32 h, u32 m);
     static bool shiny(u32 pid, u32 tid, u32  sid);
+    static u32 unbiasedBuffer[] = {0, 0x96, 0xC8, 0x4B, 0x32};
 };
 
 #endif // UTILITIES_HPP

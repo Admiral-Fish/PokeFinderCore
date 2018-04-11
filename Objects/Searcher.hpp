@@ -25,6 +25,7 @@
 #include <PokeFinderCore/Objects/FrameCompare.hpp>
 #include <PokeFinderCore/Objects/Lead.hpp>
 #include <PokeFinderCore/Objects/Method.hpp>
+#include <PokeFinderCore/Objects/Utilities.hpp>
 #include <PokeFinderCore/RNG/LCRNG.hpp>
 #include <vector>
 

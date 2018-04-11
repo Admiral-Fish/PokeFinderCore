@@ -35,6 +35,7 @@ enum Lead
     CuteCharm75F,
     CuteCharm25F,
     CuteCharm125F,
+    CuteCharmFemale,
     Everstone,
     SuctionCups
 };
