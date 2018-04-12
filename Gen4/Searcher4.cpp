@@ -592,12 +592,9 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                     u32 choppedPID = pid2 / 0xA3E;
                     if (!skipFrame && choppedPID % 25 == frame.nature)
                     {
-                        QList<u32> unbiasedBuffer;
-                        unbiasedBuffer << 0 << 0x96  << 0xC8 << 0x4B << 0x32;
-
                         for (int i = 0; i < 5; i++)
                         {
-                            u32 buffer = unbiasedBuffer.at(i);
+                            u32 buffer = unbiasedBuffer[i];
                             switch (buffer)
                             {
                                 case 0x0:
@@ -632,7 +629,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
         }
     }
 
-    return searchInitialSeeds(frames)
+    return searchInitialSeeds(frames);
 }
 
 vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
@@ -1076,7 +1073,7 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
         }
     }
 
-    return searchInitialSeeds(frames)
+    return searchInitialSeeds(frames);
 }
 
 vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
@@ -1119,7 +1116,7 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
         }
     }
 
-    return searchInitialSeeds(frames)
+    return searchInitialSeeds(frames);
 }
 
 vector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
@@ -1148,7 +1145,7 @@ vector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa,
         frames.push_back(frame);
     }
 
-    return searchInitialSeeds(frames)
+    return searchInitialSeeds(frames);
 }
 
 vector<Frame4> Searcher4::searchInitialSeeds(vector<Frame4> results)

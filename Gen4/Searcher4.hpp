@@ -32,6 +32,7 @@ private:
     Frame4 frame = Frame4(0, 0, 0);
     LCRNG backward = PokeRNGR(0);
     FrameCompare compare;
+    u32 unbiasedBuffer[5] = { 0, 0x96, 0xC8, 0x4B, 0x32 };
 
     vector<Frame4> searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     vector<Frame4> searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
