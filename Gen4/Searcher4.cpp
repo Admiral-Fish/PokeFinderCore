@@ -427,7 +427,8 @@ vector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 s
         backward.seed = seeds[i];
         u32 pid2 = backward.nextUShort();
         u32 pid1 = backward.nextUShort();
-        frame.seed = backward.nextUInt();
+        u32 seed = backward.nextUInt();
+        frame.seed = seed;
 
         for (int i = 0; i < 2; i++)
         {
