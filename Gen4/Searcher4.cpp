@@ -679,7 +679,7 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
 
-            frame.setPID(pid2, pid1);
+            frame.setPID(pid1, pid2);
             if (compare.comparePID(frame))
             {
                 do
@@ -1467,7 +1467,7 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
 
-            frame.setPID(pid2, pid1);
+            frame.setPID(pid1, pid2);
             if (compare.comparePID(frame))
             {
                 do
