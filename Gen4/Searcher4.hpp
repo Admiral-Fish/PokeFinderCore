@@ -36,7 +36,15 @@ private:
 
     vector<Frame4> searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     vector<Frame4> searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     vector<Frame4> searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     vector<Frame4> searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     vector<Frame4> searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     vector<Frame4> searchInitialSeeds(vector<Frame4> results);
