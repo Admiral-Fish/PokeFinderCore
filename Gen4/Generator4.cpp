@@ -56,7 +56,7 @@ vector<Frame4> Generator4::generate(FrameCompare compare)
                     return generateMethodJ(compare);
                 case Synchronize:
                     return generateMethodJSynch(compare);
-                // Default to cover all 8 cute charm cases
+                // Default to cover all cute charm cases
                 default:
                     return generateMethodJCuteCharm(compare);
             }
@@ -68,7 +68,7 @@ vector<Frame4> Generator4::generate(FrameCompare compare)
                     return generateMethodK(compare);
                 case Synchronize:
                     return generateMethodKSynch(compare);
-                // Default to cover all 8 cute charm cases
+                // Default to cover all cute charm cases
                 default:
                     return generateMethodKCuteCharm(compare);
             }
@@ -359,10 +359,7 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
 
     switch (leadType)
     {
-        case CuteCharm25F:
-        case CuteCharm50F:
-        case CuteCharm75F:
-        case CuteCharm125F:
+        case CuteCharmFemale:
             buffer = 0;
             break;
         case CuteCharm25M:
@@ -426,7 +423,7 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
                 break;
         }
 
-        // Get hunt nature
+        // Get nature
         frame.nature = rngList[hunt++] / 0xa3e;
 
         if (!compare.compareNature(frame))
@@ -720,10 +717,7 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
 
     switch (leadType)
     {
-        case CuteCharm25F:
-        case CuteCharm50F:
-        case CuteCharm75F:
-        case CuteCharm125F:
+        case CuteCharmFemale:
             buffer = 0;
             break;
         case CuteCharm25M:
