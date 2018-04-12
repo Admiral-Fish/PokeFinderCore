@@ -550,8 +550,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 
                     if (encounterType != Stationary)
                     {
-                        slot = frame.seed;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+
                         switch (encounterType)
                         {
                             case Wild:
@@ -650,8 +649,11 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     {
         // Setup normal frame
         backward.seed = seeds[i];
-        frame.setPID(backward.nextUShort(), backward.nextUShort());
-        frame.seed = backward.nextUInt();
+        u32 pid2 = backward.nextUShort();
+        u32 pid1 = backward.nextUShort();
+        u32 seed = backward.nextUInt();
+        frame.setPID(pid2, pid1);
+        frame.seed = seed;
 
         for (int i = 0; i < 2; i++)
         {
@@ -1070,6 +1072,93 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 
             }
             while (testPID % 25 != frame.nature);
+
+            if (encounterType == Search || encounterType == CuteCharm)
+            {
+                if (pid1 % 3 != 0)
+                {
+                    frame.seed = seed;
+                    u32 slot = 0;
+                    bool skipFrame = false;
+
+                    if (encounterType != Stationary)
+                    {
+                        switch (encounterType)
+                        {
+                            case Wild:
+                                slot = frame.seed;
+                                frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                break;
+                            case Surfing:
+                            case BugCatchingContest:
+                                slot = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                                frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                                break;
+                            case OldRod:
+                                slot = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                                frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                                if ((frame.seed >> 16) % 100 > 24)
+                                    skipFrame = true;
+                                else
+                                    frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                                break;
+                            case GoodRod:
+                                slot = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                                frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                                if ((frame.seed >> 16) % 100 > 49)
+                                    skipFrame = true;
+                                else
+                                    frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                                break;
+                            case SuperRod:
+                                slot = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                                frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                                if ((frame.seed >> 16) % 100 > 74)
+                                    skipFrame = true;
+                                else
+                                    frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                                break;
+                        }
+                    }
+
+                    u32 choppedPID = pid2 % 25;
+                    if (!skipFrame && choppedPID == frame.nature)
+                    {
+                        for (int i = 0; i < 5; i++)
+                        {
+                            u32 buffer = unbiasedBuffer[i];
+                            switch (buffer)
+                            {
+                                case 0x0:
+                                    frame.leadType = CuteCharmFemale;
+                                    break;
+                                case 0x96:
+                                    frame.leadType = CuteCharm50M;
+                                    break;
+                                case 0xC8:
+                                    frame.leadType = CuteCharm25M;
+                                    break;
+                                case 0x4B:
+                                    frame.leadType = CuteCharm75M;
+                                    break;
+                                case 0x32:
+                                    frame.leadType = CuteCharm875M;
+                                    break;
+                                default:
+                                    frame.leadType = CuteCharm;
+                                    break;
+                            }
+
+                            frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
+                            if (encounterType == Stationary || compare.compareSlot(frame))
+                                frames.push_back(frame);
+
+                        }
+                    }
+
+                }
+            }
+
         }
     }
 
