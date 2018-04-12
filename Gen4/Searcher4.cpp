@@ -64,11 +64,11 @@ vector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32
 
 vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> results;
+    vector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
-        return results;
+        return frames;
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -83,7 +83,7 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
         frame.setPID(backward.nextUShort(), backward.nextUShort());
         frame.seed = backward.nextUInt();
         if (compare.comparePID(frame))
-            results.push_back(frame);
+            frames.push_back(frame);
 
         // Setup XORed frame
         frame.pid ^= 0x80008000;
@@ -91,46 +91,20 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
         if (compare.comparePID(frame))
         {
             frame.seed ^= 0x80000000;
-            results.push_back(frame);
+            frames.push_back(frame);
         }
     }
 
-    vector<Frame4> frames;
-
-    for (Frame4 result : results)
-    {
-        backward.seed = result.seed;
-        backward.advanceFrames(minFrame - 1);
-
-        for (u32 cnt = minFrame; cnt < maxFrame; cnt++)
-        {
-            u32 test = backward.seed;
-
-            u32 hour = (test >> 16) & 0xFF;
-            u32 delay = test & 0xFFFF;
-
-            // Check if seed matches a valid gen 4 format
-            if (hour < 24 && delay >= minDelay && delay <= maxDelay)
-            {
-                result.seed = test;
-                result.frame = cnt;
-                frames.push_back(result);
-            }
-
-            backward.nextUInt();
-        }
-    }
-
-    return frames;
+    return searchInitialSeeds(frames);
 }
 
 vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> results;
+    vector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
-        return results;
+        return frames;
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -221,7 +195,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                             {
                                 frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    results.push_back(frame);
+                                    frames.push_back(frame);
                             }
                         }
                         break;
@@ -285,7 +259,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                             {
                                 frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    results.push_back(frame);
+                                    frames.push_back(frame);
                             }
                         }
                         break;
@@ -343,7 +317,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                 frame.leadType = Synchronize;
                                 frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    results.push_back(frame);
+                                    frames.push_back(frame);
                             }
                         }
                         // Failed Synch
@@ -395,7 +369,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                 frame.leadType = Synchronize;
                                 frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    results.push_back(frame);
+                                    frames.push_back(frame);
                             }
                         }
                         break;
@@ -462,7 +436,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                             {
                                 frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    results.push_back(frame);
+                                    frames.push_back(frame);
                             }
 
                             // Failed synch
@@ -495,7 +469,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                     frame.leadType = Synchronize;
                                     frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
                                     if (encounterType == Stationary || compare.compareSlot(frame))
-                                        results.push_back(frame);
+                                        frames.push_back(frame);
                                 }
                             }
                         }
@@ -552,7 +526,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                 frame.leadType = Synchronize;
                                 frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    results.push_back(frame);
+                                    frames.push_back(frame);
                             }
 
                         }
@@ -645,7 +619,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
 
                             frame.encounterSlot = EncounterSlot::jSlot(slot >> 16, encounterType);
                             if (encounterType == Stationary || compare.compareSlot(frame))
-                                results.push_back(frame);
+                                frames.push_back(frame);
 
                         }
                     }
@@ -655,43 +629,16 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
         }
     }
 
-    vector<Frame4> frames;
-
-    // Filter out by user specific min/max frame/delay
-    for (Frame4 result : results)
-    {
-        backward.seed = result.seed;
-        backward.advanceFrames(minFrame - 1);
-
-        for (u32 cnt = minFrame; cnt < maxFrame; cnt++)
-        {
-            u32 test = backward.seed;
-
-            u32 hour = (test >> 16) & 0xFF;
-            u32 delay = test & 0xFFFF;
-
-            // Check if seed matches a valid gen 4 format
-            if (hour < 24 && delay >= minDelay && delay <= maxDelay)
-            {
-                result.seed = test;
-                result.frame = cnt;
-                frames.push_back(result);
-            }
-
-            backward.nextUInt();
-        }
-    }
-
-    return frames;
+    return searchInitialSeeds(frames)
 }
 
 vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> results;
+    vector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
-        return results;
+        return frames;
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -779,7 +726,7 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                             {
                                 frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    results.push_back(frame);
+                                    frames.push_back(frame);
                             }
                         }
                         break;
@@ -843,7 +790,7 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                             {
                                 frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    results.push_back(frame);
+                                    frames.push_back(frame);
                             }
                         }
                         break;
@@ -901,7 +848,7 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                 frame.leadType = Synchronize;
                                 frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    results.push_back(frame);
+                                    frames.push_back(frame);
                             }
                         }
                         // Failed Synch
@@ -953,7 +900,7 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                 frame.leadType = Synchronize;
                                 frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    results.push_back(frame);
+                                    frames.push_back(frame);
                             }
                         }
                         break;
@@ -1020,7 +967,7 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                             {
                                 frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    results.push_back(frame);
+                                    frames.push_back(frame);
                             }
 
                             // Failed synch
@@ -1053,7 +1000,7 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                     frame.leadType = Synchronize;
                                     frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
                                     if (encounterType == Stationary || compare.compareSlot(frame))
-                                        results.push_back(frame);
+                                        frames.push_back(frame);
                                 }
                             }
                         }
@@ -1110,7 +1057,7 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                                 frame.leadType = Synchronize;
                                 frame.encounterSlot = EncounterSlot::kSlot(slot >> 16, encounterType);
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    results.push_back(frame);
+                                    frames.push_back(frame);
                             }
 
                         }
@@ -1126,43 +1073,16 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
         }
     }
 
-    vector<Frame4> frames;
-
-    // Filter out by user specific min/max frame/delay
-    for (Frame4 result : results)
-    {
-        backward.seed = result.seed;
-        backward.advanceFrames(minFrame - 1);
-
-        for (u32 cnt = minFrame; cnt < maxFrame; cnt++)
-        {
-            u32 test = backward.seed;
-
-            u32 hour = (test >> 16) & 0xFF;
-            u32 delay = test & 0xFFFF;
-
-            // Check if seed matches a valid gen 4 format
-            if (hour < 24 && delay >= minDelay && delay <= maxDelay)
-            {
-                result.seed = test;
-                result.frame = cnt;
-                frames.push_back(result);
-            }
-
-            backward.nextUInt();
-        }
-    }
-
-    return frames;
+    return searchInitialSeeds(frames)
 }
 
 vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> results;
+    vector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
-        return results;
+        return frames;
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -1188,51 +1108,24 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
         {
             backward.nextUInt();
             frame.seed = backward.nextUInt();
-            results.push_back(frame);
+            frames.push_back(frame);
 
             // Sister spread shares PID
             frame.seed ^= 0x80000000;
-            results.push_back(frame);
+            frames.push_back(frame);
         }
     }
 
-    vector<Frame4> frames;
-
-    // Filter out by user specific min/max frame/delay
-    for (Frame4 result : results)
-    {
-        backward.seed = result.seed;
-        backward.advanceFrames(minFrame - 1);
-
-        for (u32 cnt = minFrame; cnt <= maxFrame; cnt++)
-        {
-            u32 test = backward.seed;
-
-            u32 hour = (test >> 16) & 0xFF;
-            u32 delay = test & 0xFFFF;
-
-            // Check if seed matches a valid gen 4 format
-            if (hour < 24 && delay >= minDelay && delay <= maxDelay)
-            {
-                result.seed = test;
-                result.frame = cnt;
-                frames.push_back(result);
-            }
-
-            backward.nextUInt();
-        }
-    }
-
-    return frames;
+    return searchInitialSeeds(frames)
 }
 
 vector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> results;
+    vector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
-        return results;
+        return frames;
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -1245,13 +1138,18 @@ vector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa,
         // Setup normal frame
         backward.seed = seeds[i];
         frame.seed = backward.nextUInt();
-        results.push_back(frame);
+        frames.push_back(frame);
 
         // Setup XORed frame
         frame.seed ^= 0x80000000;
-        results.push_back(frame);
+        frames.push_back(frame);
     }
 
+    return searchInitialSeeds(frames)
+}
+
+vector<Frame4> Searcher4::searchInitialSeeds(vector<Frame4> results)
+{
     vector<Frame4> frames;
 
     for (Frame4 result : results)
