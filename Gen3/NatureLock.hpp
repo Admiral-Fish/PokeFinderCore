@@ -31,7 +31,8 @@ enum ShadowType
     SingleLock,
     FirstShadow,
     Salamence,
-    SecondShadow
+    SecondShadow,
+    EReader
 };
 
 class LockInfo
@@ -88,6 +89,7 @@ public:
     bool salamenceShinySkip(u32 seed);
     bool salamenceUnset(u32 seed);
     bool singleNL(u32 seed);
+    bool eReader(u32 seed, u32 val);
     void switchLockColo(int lockNum);
     void switchLockGales(int lockNum);
 

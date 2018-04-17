@@ -221,175 +221,179 @@ void NatureLock::natureLockSetupGales(int lockNum)
             lockInfo = { LockInfo(12, 0, 126), LockInfo(6, 127, 255), LockInfo(24, 127, 255) };
             type = SecondShadow;
             break;
-        case 27: // Magmar
+        case 27: // Mareep E-Reader
+            lockInfo = { LockInfo(16, 0, 126), LockInfo(12, 0, 126), LockInfo(10, 0, 126), LockInfo(4, 0, 190)};
+            type = EReader;
+            break;
+        case 28: // Magmar
             lockInfo = { LockInfo(0, 0, 126), LockInfo(18, 191, 255), LockInfo(18, 127, 255) };
             type = FirstShadow;
             break;
-        case 28: // Magneton
+        case 29: // Magneton
             lockInfo = { LockInfo(12, 0, 126), LockInfo(0, 127, 255), LockInfo(18, 0, 255) };
             type = FirstShadow;
             break;
-        case 29: // Makuhita
+        case 30: // Makuhita
             lockInfo = { LockInfo(18, 0, 126), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 30: // Manectric
+        case 31: // Manectric
             lockInfo = { LockInfo(6, 0, 126) };
             type = SingleLock;
             break;
-        case 31: // Marowak
+        case 32: // Marowak
             lockInfo = { LockInfo(24, 127, 255), LockInfo(500, 500, 500), LockInfo(500, 500, 500), LockInfo(6, 0, 126) };
             type = FirstShadow;
             break;
-        case 32: // Mawile
+        case 33: // Mawile
             lockInfo = { LockInfo(18, 0, 126), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 33: // Meowth
+        case 34: // Meowth
             lockInfo =  { LockInfo(18, 0, 126), LockInfo(0, 0, 126), LockInfo(6, 63, 255) };
             type = FirstShadow;
             break;
-        case 34: // Mr. Mime
+        case 35: // Mr. Mime
             lockInfo = { LockInfo(6, 0, 126), LockInfo(24, 127, 255), LockInfo(18, 127, 255), LockInfo(18, 127, 255) };
             type = SecondShadow;
             break;
-        case 35: // Natu
+        case 36: // Natu
             lockInfo = { LockInfo(0, 0, 126), LockInfo(24, 127, 255) };
             type = FirstShadow;
             break;
-        case 36: // Nosepass
+        case 37: // Nosepass
             lockInfo = { LockInfo(12, 0, 126), LockInfo(18, 127, 255), LockInfo(0, 127, 255) };
             type = FirstShadow;
             break;
-        case 37: // Numel
+        case 38: // Numel
             lockInfo = { LockInfo(24, 0, 126), LockInfo(0, 0, 255), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 38: // Paras
+        case 39: // Paras
             lockInfo = { LockInfo(6, 0, 126), LockInfo(24, 127, 255) };
             type = FirstShadow;
             break;
-        case 39: // Pidgeotto
+        case 40: // Pidgeotto
             lockInfo = { LockInfo(18, 31, 255), LockInfo(12, 127, 255) };
             type = FirstShadow;
             break;
-        case 40: // Pineco
+        case 41: // Pineco
             lockInfo = { LockInfo(6, 127, 255) };
             type = SingleLock;
             break;
-        case 41: // Pinsir
+        case 42: // Pinsir
             lockInfo = { LockInfo(0, 0, 126), LockInfo(18, 191, 255), LockInfo(18, 127, 255) };
             type = SecondShadow;
             break;
-        case 42: // Poliwrath
+        case 43: // Poliwrath
             lockInfo = { LockInfo(6, 0, 126), LockInfo(24, 127, 255), LockInfo(18, 127, 255), LockInfo(18, 127, 255) };
             type = FirstShadow;
             break;
-        case 43: // Poochyena
+        case 44: // Poochyena
             lockInfo = { LockInfo(12, 0, 126) };
             type = SingleLock;
             break;
-        case 44: // Primeape
+        case 45: // Primeape
             lockInfo = { LockInfo(24, 127, 255), LockInfo(6, 0, 126), LockInfo(12, 0, 126), LockInfo(18, 0, 126) };
             type = FirstShadow;
             break;
-        case 45: // Ralts
+        case 46: // Ralts
             lockInfo = { LockInfo(18, 127, 255), LockInfo(6, 0, 126), LockInfo(0, 63, 255) };
             type = FirstShadow;
             break;
-        case 46: // Rapidash
+        case 47: // Rapidash
             lockInfo = { LockInfo(12, 0, 126), LockInfo(6, 127, 255), LockInfo(24, 127, 255) };
             type = FirstShadow;
             break;
-        case 47: // Raticate
+        case 48: // Raticate
             lockInfo = { LockInfo(18, 127, 255), LockInfo(500, 500, 500), LockInfo(18, 0, 126) };
             type = FirstShadow;
             break;
-        case 48: // Roselia
+        case 49: // Roselia
             lockInfo = { LockInfo(18, 127, 255), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 49: // Sableye
+        case 50: // Sableye
             lockInfo = { LockInfo(18, 0, 126), LockInfo(6, 0, 126), LockInfo(24, 127, 255) };
             type = SecondShadow;
             break;
-        case 50: // Salamence
+        case 51: // Salamence
             lockInfo = { LockInfo(6, 0, 126) };
             type = Salamence;
             break;
-        case 51: // Scyther
+        case 52: // Scyther
             lockInfo = { LockInfo(24, 127, 255), LockInfo(6, 0, 126) };
             type = FirstShadow;
             break;
-        case 52: // Seedot 3
+        case 53: // Seedot 3
             lockInfo = { LockInfo(12, 127, 255), LockInfo(0, 127, 255), LockInfo(0, 0, 126), LockInfo(24, 0, 126), LockInfo(6, 127, 255) };
             type = FirstShadow;
-        case 53: // Seedot 1
+        case 54: // Seedot 1
             lockInfo = { LockInfo(12, 127, 255), LockInfo(0, 127, 255), LockInfo(18, 0, 126), LockInfo(24, 0, 126), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 54: // Seedot 2
+        case 55: // Seedot 2
             lockInfo = { LockInfo(6, 127, 255), LockInfo(0, 0, 126), LockInfo(0, 0, 126), LockInfo(24, 0, 126), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 55: // Seel
+        case 56: // Seel
             lockInfo = { LockInfo(18, 0, 126), LockInfo(18, 127, 255), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 56: // Shroomish
+        case 57: // Shroomish
             lockInfo = { LockInfo(0, 0, 126), LockInfo(24, 0, 190) };
             type = FirstShadow;
             break;
-        case 57: // Snorlax
+        case 58: // Snorlax
             lockInfo =  { LockInfo(18, 0, 126), LockInfo(6, 0, 126), LockInfo(24, 63, 255) };
             type = SecondShadow;
             break;
-        case 58: // Snorunt
+        case 59: // Snorunt
             lockInfo = { LockInfo(6, 0, 126) };
             type = SingleLock;
             break;
-        case 59: // Solrock
+        case 60: // Solrock
             lockInfo = { LockInfo(0, 0, 126), LockInfo(6, 127, 255), LockInfo(24, 0, 255) };
             type = FirstShadow;
             break;
-        case 60: // Spearow
+        case 61: // Spearow
             lockInfo = { LockInfo(6, 0, 126), LockInfo(18, 127, 255) };
             type = FirstShadow;
             break;
-        case 61: // Spheal 3
-        case 63: // Spheal 2
+        case 62: // Spheal 3
+        case 64: // Spheal 2
             lockInfo = { LockInfo(0, 0, 255), LockInfo(12, 0, 126), LockInfo(24, 127, 255) };
             type = FirstShadow;
             break;
-        case 62: // Spheal 1
+        case 63: // Spheal 1
             lockInfo = { LockInfo(12, 0, 126), LockInfo(24, 127, 255) };
             type = FirstShadow;
             break;
-        case 64: // Spinarak
+        case 65: // Spinarak
             lockInfo = { LockInfo(6, 127, 255), LockInfo(12, 0, 126) };
             type = FirstShadow;
             break;
-        case 65: // Starmie
+        case 66: // Starmie
             lockInfo = { LockInfo(18, 127, 255), LockInfo(500, 500, 500), LockInfo(0, 0, 126), LockInfo(6, 127, 255), LockInfo(24, 0, 255) };
             type = FirstShadow;
             break;
-        case 66: // Swinub
+        case 67: // Swinub
             lockInfo =  { LockInfo(0, 127, 255), LockInfo(18, 0, 126) };
             type = FirstShadow;
             break;
-        case 67: // Tangela
+        case 68: // Tangela
             lockInfo = { LockInfo(0, 0, 126), LockInfo(6, 127, 255), LockInfo(12, 0, 190) };
             type = FirstShadow;
             break;
-        case 68: // Venomoth
+        case 69: // Venomoth
             lockInfo = { LockInfo(12, 63, 255), LockInfo(24, 0, 255), LockInfo(18, 0, 126) };
             type = FirstShadow;
             break;
-        case 69: // Voltorb
+        case 70: // Voltorb
             lockInfo = { LockInfo(12, 0, 126), LockInfo(18, 127, 255), LockInfo(0, 127, 255) };
             type = FirstShadow;
             break;
-        case 70: // Vulpix
+        case 71: // Vulpix
             lockInfo = { LockInfo(18, 127, 255), LockInfo(6, 0, 126), LockInfo(0, 127, 255) };
             type = FirstShadow;
             break;
@@ -668,6 +672,52 @@ bool NatureLock::singleNL(u32 seed)
     // Backwards nature lock check
     gender = pid & 255;
     return (gender >= genderLower && gender <= genderUpper && pid % 25 == nature);
+}
+
+bool NatureLock::eReader(u32 seed, u32 val)
+{
+    // Check if PID is even valid for E-Reader
+    gender = val % 25;
+    if (!(gender >= lockInfo[0].getGenderLower() && gender <= lockInfo[0].getGenderUpper() && val % 25 == lockInfo[0].getNature()))
+        return false;
+
+    backward.seed = seed * 0xB9B33155 + 0xA170F641; // 1 frame
+
+    // Build temp pid first to not waste time looping if first backwards nl fails
+    pidOriginal = getPIDReverse();
+
+    x = 1;
+    getCurrLock();
+    gender = pidOriginal & 255;
+    if (!(gender >= genderLower && gender <= genderUpper && pidOriginal % 25 == nature))
+        countBackTwo();
+
+    // Backwards nature lock check loop
+    for (x = 2; x < backCount; x++)
+    {
+        backward.seed = backward.seed * 0x396E19ED + 0x777C254F; // 3 frames
+        pid = getPIDReverse();
+        getCurrLock();
+        gender = val & 255;
+        if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
+            countBackTwo();
+    }
+
+    forward.seed = backward.seed * 0x343FD + 0x269EC3; // 1 frame
+
+    // Forwards nature lock check loop
+    for (x = frontCount; x >= 0; x--)
+    {
+        forward.seed = forward.seed * 0x45C82BE5 + 0xD2F65B55; // 3 frames
+        pid = getPIDForward();
+        getCurrLock();
+        gender = val & 255;
+        if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
+            countForwardTwo();
+    }
+
+    // Checks if first NL PID back from target matches
+    return pid == val;
 }
 
 // Changes which lock info is being used for Colo
