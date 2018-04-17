@@ -630,10 +630,10 @@ vector<Frame3> Searcher3::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32
             return searchMethodXD(hp, atk, def, spa, spd, spe);
         case XDColo:
             return searchMethodXDColo(hp, atk, def, spa, spd, spe);
-        // case Channel:
-        // Set to default to avoid compiler warning message
-        default:
+        case Channel:
             return searchMethodChannel(hp, atk, def, spa, spd, spe);
+        default:
+            return vector<Frame3>();
     }
 }
 
@@ -673,10 +673,10 @@ void Searcher3::setup(Method method)
         case XDColo:
             euclidean.switchEuclidean(XDColo);
             break;
-        // case Channel:
-        // Set to default to avoid compiler warning message
-        default:
+        case Channel:
             euclidean.switchEuclidean(Channel);
+            break;
+        default:
             break;
     }
 }

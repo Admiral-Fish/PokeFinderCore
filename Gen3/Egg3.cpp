@@ -319,9 +319,6 @@ vector<Frame3> Egg3::generateUpper(vector<Frame3> lower, FrameCompare compare)
     {
         for (Frame3 up : upper)
         {
-            if (up.occidentary <= low.frame)
-                continue;
-
             up.frame = low.frame;
             frames.push_back(up);
         }
@@ -344,12 +341,15 @@ vector<Frame3> Egg3::generate(FrameCompare compare)
             return generateEmeraldAlternate(compare);
         case RSBred:
         case FRLGBred:
+            {
+                vector<Frame3> lower = generateLower();
+                if (lower.size() == 0)
+                    return lower;
+                else
+                    return generateUpper(lower, compare);
+            }
         default:
-            vector<Frame3> lower = generateLower();
-            if (lower.size() == 0)
-                return lower;
-            else
-                return generateUpper(lower, compare);
+            return vector<Frame3>();
     }
 }
 

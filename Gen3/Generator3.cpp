@@ -473,10 +473,10 @@ vector<Frame3> Generator3::generate(FrameCompare compare)
             }
         case XDColo:
             return generateMethodXDColo(compare);
-        // case Channel:
-        // Set to default to avoid compiler warning message
-        default:
+        case Channel:
             return generateMethodChannel(compare);
+        default:
+            return vector<Frame3>();
     }
 }
 
