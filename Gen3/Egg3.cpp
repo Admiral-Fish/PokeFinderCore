@@ -284,15 +284,11 @@ vector<Frame3> Egg3::generateUpper(vector<Frame3> lower, FrameCompare compare)
     for (int x = 0; x < 14; x++)
         rngList.push_back(rng.nextUShort());
 
-    u32 low = lower[0].pid;
     u32 iv1, iv2, inh1, inh2, inh3, par1, par2, par3;
 
     for (u32 cnt = minPickup; cnt <= maxPickup; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
-        frame.setPID(low, rngList[3]);
-
-        if (!compare.comparePID(frame))
-            continue;
+        frame.pid = rngList[3];
 
         iv1 = rngList[5];
         iv2 = rngList[6];
@@ -319,8 +315,12 @@ vector<Frame3> Egg3::generateUpper(vector<Frame3> lower, FrameCompare compare)
     {
         for (Frame3 up : upper)
         {
-            up.frame = low.frame;
-            frames.push_back(up);
+            up.setPID(low.pid, up.pid);
+            if (compare.comparePID(up))
+            {
+                up.frame = low.frame;
+                frames.push_back(up);
+            }
         }
     }
 
