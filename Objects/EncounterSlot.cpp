@@ -68,7 +68,7 @@ int EncounterSlot::hSlot(u32 result, Encounter encounterType)
             ranges = { Range(0, 59), Range(60, 79), Range(80, 99) };
             return calcSlot(compare, ranges);
         case SuperRod:
-            ranges = { Range(0, 39), Range(40, 69), Range(70, 84), Range(85, 94), Range(95, 99) };
+            ranges = { Range(0, 39), Range(40, 79), Range(80, 94), Range(95, 98), Range(99, 99) };
             return calcSlot(compare, ranges);
         case Surfing:
         case RockSmash:
