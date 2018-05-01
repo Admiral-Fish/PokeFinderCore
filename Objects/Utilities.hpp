@@ -21,6 +21,9 @@
 #define UTILITIES_HPP
 
 #include <QDateTime>
+#include <QString>
+#include <PokeFinderCore/RNG/MTRNG.hpp>
+#include <PokeFinderCore/RNG/LCRNG.hpp>
 
 typedef uint32_t u32;
 
@@ -29,7 +32,10 @@ class Utilities
 
 public:
     static u32 calcGen3Seed(QDate time, u32 h, u32 m);
+    static u32 calcGen4Seed(QDateTime dateTime, u32 delay);
     static bool shiny(u32 pid, u32 tid, u32  sid);
+    static QString coinFlips(u32 seed, int flips);
+    static QString elmCalls(u32 seed, int calls);
 };
 
 #endif // UTILITIES_HPP
