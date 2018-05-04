@@ -69,6 +69,8 @@ vector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32
                 case Search:
                     frames = searchMethodJSearch(hp, atk, def, spa, spd, spe);
                     break;
+                default:
+                    break;
             }
             break;
         case MethodK:
@@ -88,6 +90,8 @@ vector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32
                     break;
                 case Search:
                     frames = searchMethodKSearch(hp, atk, def, spa, spd, spe);
+                    break;
+                default:
                     break;
             }
             break;
@@ -478,6 +482,7 @@ vector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 s
                             frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
                         break;
                     case Stationary:
+                    default:
                         frame.seed = seed;
                         break;
                 }
@@ -769,6 +774,8 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                     if (nibble > 74)
                                         skipFrame = true;
                                     break;
+                                default:
+                                    break;
                             }
 
                             slot = frame.seed;
@@ -883,6 +890,7 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                             frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
                         break;
                     case Stationary:
+                    default:
                         frame.seed = seed;
                 }
 
@@ -1266,6 +1274,7 @@ vector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 s
                             frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
                         break;
                     case Stationary:
+                    default:
                         frame.seed = seed;
                         break;
                 }
@@ -1557,6 +1566,8 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                     if (nibble > 74)
                                         skipFrame = true;
                                     break;
+                                default:
+                                    break;
                             }
 
                             slot = frame.seed;
@@ -1672,6 +1683,8 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 skipFrame = true;
                             else
                                 frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            break;
+                        default:
                             break;
                     }
                 }
@@ -1833,5 +1846,5 @@ u32 Searcher4::chainedPIDLow(u32 low, u32 call1, u32 call2, u32 call3, u32 call4
 
 u32 Searcher4::chainedPIDHigh(u32 high, u32 low, u32 tid, u32 sid)
 {
-    return ((low ^ tid ^ sid) & 0xFFF8 | high & 0x7);
+    return (((low ^ tid ^ sid) & 0xFFF8) | (high & 0x7));
 }

@@ -234,14 +234,7 @@ vector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
     size = 17;
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, hunt, first, thresh;
-
-    if (encounterType == OldRod)
-        thresh = 24;
-    else if (encounterType == GoodRod)
-        thresh = 49;
-    else if (encounterType == SuperRod)
-        thresh = 74;
+    u32 pid, pid1, pid2, hunt, first;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
@@ -261,7 +254,7 @@ vector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item ? not sure if same as fishing
                 break;
             case OldRod:
-                if ((first / 656) > thresh)
+                if ((first / 656) > 24)
                     continue;
 
                 frame.encounterSlot = EncounterSlot::jSlot(rngList[hunt++], OldRod);
@@ -269,7 +262,7 @@ vector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item
                 break;
             case GoodRod:
-                if ((first / 656) > thresh)
+                if ((first / 656) > 49)
                     continue;
 
                 frame.encounterSlot = EncounterSlot::jSlot(rngList[hunt++], GoodRod);
@@ -277,7 +270,7 @@ vector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item
                 break;
             case SuperRod:
-                if ((first / 656) > thresh)
+                if ((first / 656) > 74)
                     continue;
 
                 frame.encounterSlot = EncounterSlot::jSlot(rngList[hunt++], SuperRod);
@@ -342,20 +335,7 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
     size = 17;
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, hunt, first, thresh, buffer;
-
-    switch (encounterType)
-    {
-        case OldRod:
-            thresh = leadType == SuctionCups ? 48 : 24;
-            break;
-        case GoodRod:
-            thresh = leadType == SuctionCups ? 98 : 49;
-            break;
-        case SuperRod:
-            thresh = leadType == SuctionCups ? 100 : 74;
-            break;
-    }
+    u32 pid, pid1, pid2, hunt, first, buffer;
 
     switch (leadType)
     {
@@ -396,7 +376,7 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item ? not sure if same as fishing
                 break;
             case OldRod:
-                if ((first / 656) > thresh)
+                if ((first / 656) > 24)
                     continue;
 
                 frame.encounterSlot = EncounterSlot::jSlot(rngList[hunt++], OldRod);
@@ -404,7 +384,7 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item
                 break;
             case GoodRod:
-                if ((first / 656) > thresh)
+                if ((first / 656) > 49)
                     continue;
 
                 frame.encounterSlot = EncounterSlot::jSlot(rngList[hunt++], OldRod);
@@ -412,7 +392,7 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item
                 break;
             case SuperRod:
-                if ((first / 656) > thresh)
+                if ((first / 656) > 74)
                     continue;
 
                 frame.encounterSlot = EncounterSlot::jSlot(rngList[hunt++], OldRod);
@@ -595,14 +575,7 @@ vector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
     size = 17;
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, hunt, first, thresh;
-
-    if (encounterType == OldRod)
-        thresh = 24;
-    else if (encounterType == GoodRod)
-        thresh = 49;
-    else if (encounterType == SuperRod)
-        thresh = 74;
+    u32 pid, pid1, pid2, hunt, first;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
@@ -625,7 +598,7 @@ vector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item ? not sure if same as fishing
                 break;
             case OldRod:
-                if ((first  % 100) > thresh)
+                if ((first  % 100) > 24)
                     continue;
 
                 frame.encounterSlot = EncounterSlot::kSlot(rngList[hunt++], OldRod);
@@ -633,7 +606,7 @@ vector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item
                 break;
             case GoodRod:
-                if ((first  % 100) > thresh)
+                if ((first  % 100) > 49)
                     continue;
 
                 frame.encounterSlot = EncounterSlot::kSlot(rngList[hunt++], GoodRod);
@@ -641,7 +614,7 @@ vector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item
                 break;
             case SuperRod:
-                if ((first % 100) > thresh)
+                if ((first % 100) > 74)
                     continue;
 
                 frame.encounterSlot = EncounterSlot::kSlot(rngList[hunt++], SuperRod);
@@ -706,14 +679,7 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
     size = 17;
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, hunt, first, thresh, buffer;
-
-    if (encounterType == OldRod)
-        thresh = 24;
-    else if (encounterType == GoodRod)
-        thresh = 49;
-    else if (encounterType == SuperRod)
-        thresh = 74;
+    u32 pid, pid1, pid2, hunt, first, buffer;
 
     switch (leadType)
     {
@@ -756,7 +722,7 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item ? not sure if same as fishing
                 break;
             case OldRod:
-                if ((first  % 100) > thresh)
+                if ((first  % 100) > 24)
                     continue;
 
                 frame.encounterSlot = EncounterSlot::kSlot(rngList[hunt++], OldRod);
@@ -764,7 +730,7 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item
                 break;
             case GoodRod:
-                if ((first  % 100) > thresh)
+                if ((first  % 100) > 49)
                     continue;
 
                 frame.encounterSlot = EncounterSlot::kSlot(rngList[hunt++], GoodRod);
@@ -772,7 +738,7 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item
                 break;
             case SuperRod:
-                if ((first % 100) > thresh)
+                if ((first % 100) > 74)
                     continue;
 
                 frame.encounterSlot = EncounterSlot::kSlot(rngList[hunt++], SuperRod);
@@ -906,5 +872,5 @@ u32 Generator4::chainedPIDLow(u32 low, u32 call1, u32 call2, u32 call3, u32 call
 
 u32 Generator4::chainedPIDHigh(u32 high, u32 low, u32 tid, u32 sid)
 {
-    return ((low ^ tid ^ sid) & 0xFFF8 | high & 0x7);
+    return (((low ^ tid ^ sid) & 0xFFF8) | (high & 0x7));
 }
