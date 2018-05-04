@@ -75,11 +75,7 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
             if (!flag)
             {
                 // Lower PID
-                pid = rngList[i];
-                if (pid > 0xFFFD)
-                    pid -= 0xFFFC;
-                else
-                    pid++;
+                pid = (rngList[i] % 0xFFFE) + 1;
 
                 // Upper PID
                 pid |= trng.nextUInt() & 0xFFFF0000;
@@ -89,7 +85,7 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
 
                 if (compare.comparePID(frame))
                 {
-                    frame.frame = cnt - offset - 18;
+                    frame.frame = cnt - offset;
                     frame.occidentary = redraw;
                     frames.push_back(frame);
                 }
@@ -120,7 +116,7 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
 
                 if (compare.comparePID(frame))
                 {
-                    frame.frame = cnt - offset - 18;
+                    frame.frame = cnt - offset;
                     frame.occidentary = redraw;
                     frames.push_back(frame);
                 }
@@ -246,25 +242,16 @@ vector<Frame3> Egg3::generateLower()
     Frame3 frame = Frame3(tid, sid, psv);
 
     rng.seed = seed;
-    rng.advanceFrames(initialFrame + 17);
+    rng.advanceFrames(initialFrame - 1);
     for (int x = 0; x < 2; x++)
         rngList.push_back(rng.nextUShort());
-
-    u32 pid;
 
     for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
         if (((rngList[0] * 100) / 0xFFFF) >= compatability)
             continue;
 
-        pid = rngList[1];
-
-        if (pid > 0xFFFD)
-        {
-            frame.pid = pid - 0xFFFC;
-        }
-        else
-            frame.pid = pid + 1;
+        frame.pid = (rngList[1] % 0xFFFE) + 1;
 
         frame.frame = cnt;
         frames.push_back(frame);
