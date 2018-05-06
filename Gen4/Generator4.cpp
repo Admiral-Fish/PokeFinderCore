@@ -36,6 +36,7 @@ Generator4::Generator4(u32 maxResults, u32 initialFrame, u32 initialSeed, u16 ti
     this->initialSeed = initialSeed;
     this->tid = tid;
     this->sid = sid;
+    psv = tid ^ sid;
     this->offset = offset;
     frameType = type;
 }
