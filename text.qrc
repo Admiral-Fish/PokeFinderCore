@@ -16,5 +16,13 @@
         <file alias="rsefrlg_ja.txt">Resources/Text/Gen3/rsefrlg_en.txt</file>
         <file alias="rsefrlg_ko.txt">Resources/Text/Gen3/rsefrlg_en.txt</file>
         <file alias="rsefrlg_zh.txt">Resources/Text/Gen3/rsefrlg_en.txt</file>
+        <file alias="dppthgss_de.txt">Resources/Text/Gen4/dppthgss_de.txt</file>
+        <file alias="dppthgss_en.txt">Resources/Text/Gen4/dppthgss_en.txt</file>
+        <file alias="dppthgss_es.txt">Resources/Text/Gen4/dppthgss_es.txt</file>
+        <file alias="dppthgss_fr.txt">Resources/Text/Gen4/dppthgss_fr.txt</file>
+        <file alias="dppthgss_it.txt">Resources/Text/Gen4/dppthgss_it.txt</file>
+        <file alias="dppthgss_ja.txt">Resources/Text/Gen4/dppthgss_ja.txt</file>
+        <file alias="dppthgss_ko.txt">Resources/Text/Gen4/dppthgss_ko.txt</file>
+        <file alias="dppthgss_zh.txt">Resources/Text/Gen4/dppthgss_zh.txt</file>
     </qresource>
 </RCC>

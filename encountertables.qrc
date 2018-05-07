@@ -5,5 +5,10 @@
         <file alias="leafgreen.csv">Resources/Tables/leafgreen.csv</file>
         <file alias="ruby.csv">Resources/Tables/ruby.csv</file>
         <file alias="sapphire.csv">Resources/Tables/sapphire.csv</file>
+        <file alias="diamond.csv">Resources/Tables/diamond.csv</file>
+        <file alias="pearl.csv">Resources/Tables/pearl.csv</file>
+        <file alias="platinum.csv">Resources/Tables/platinum.csv</file>
+        <file alias="heartgold.csv">Resources/Tables/heartgold.csv</file>
+        <file alias="soulsilver.csv">Resources/Tables/soulsilver.csv</file>
     </qresource>
 </RCC>

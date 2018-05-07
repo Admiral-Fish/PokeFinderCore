@@ -17,27 +17,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef TRANSLATOR_HPP
-#define TRANSLATOR_HPP
+#ifndef ENCOUNTERAREA4_HPP
+#define ENCOUNTERAREA4_HPP
 
-#include <vector>
-#include <cstdint>
-#include <QLocale>
 #include <QStringList>
-#include <QFile>
 #include <QTextStream>
+#include <QFile>
+#include <PokeFinderCore/Objects/Game.hpp>
+#include <PokeFinderCore/Objects/EncounterArea.hpp>
+#include <algorithm>
 
-using std::vector;
-typedef uint32_t u32;
-
-class Translator
+class EncounterArea4 : public EncounterArea
 {
 
-public:
-    static QStringList getSpecies(vector<u32> nums);
-    static QStringList getLocations(vector<u32> nums);
-    static QStringList getLocationsGen4(vector<u32> nums);
+private:
+    Game dual;
+    int time; // 0: Any 1: Day, 2: Night
 
+public:
+    EncounterArea4() : EncounterArea() {}
+    EncounterArea4(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, Game dual, int time);
+    EncounterArea4(QStringList data);
+    static vector<EncounterArea4> getEncounters(Encounter type, Game game);
+    QStringList getSpecieNames();
+    u32 calcLevel(u32 index, u32 prng);
+    Game getDual() const;
+    int getTime() const;
 };
 
-#endif // TRANSLATOR_HPP
+#endif // ENCOUNTERAREA4_HPP
