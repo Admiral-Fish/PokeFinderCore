@@ -19,22 +19,31 @@
 
 #include "EncounterArea3.hpp"
 
-EncounterArea3::EncounterArea3(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel)
+u32 EncounterArea3::getDelay() const
+{
+    return delay;
+}
+
+EncounterArea3::EncounterArea3(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, u32 delay)
     : EncounterArea(location, type, species, minLevel, maxLevel)
 {
+    this->delay = delay;
 }
 
 EncounterArea3::EncounterArea3(QStringList data)
 {
     location = data[0].toUInt();
-    type = (Encounter)data[1].toUInt();
+    delay = data[1].toUInt();
+    type = (Encounter)data[2].toUInt();
 
-    int len = (data.length() - 2) / 3;
-    for (int i = 2; i < len + 2; i++)
+    bool flag = type == Wild;
+    int len = (data.length() - 3) / (flag ? 2 : 3);
+
+    for (int i = 3; i < len + 3; i++)
     {
         species.push_back(data[i].toUInt());
         minLevel.push_back(data[i + len].toUInt());
-        maxLevel.push_back(data[i + len * 2].toUInt());
+        maxLevel.push_back(data[i + (flag ? len : len * 2)].toUInt());
     }
 }
 
