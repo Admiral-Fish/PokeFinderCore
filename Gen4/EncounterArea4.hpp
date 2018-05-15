@@ -32,17 +32,21 @@ class EncounterArea4 : public EncounterArea
 
 private:
     Game dual;
-    int time; // 0: Any 1: Day, 2: Night
+    int time; // 0: Any 1: Morning, 2: Day, 3: Night
+    int sound; // 0: None, 1: Hoenn, 2: Sinnoh
 
 public:
     EncounterArea4() : EncounterArea() {}
     EncounterArea4(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, Game dual, int time);
-    EncounterArea4(QStringList data);
+    EncounterArea4(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, int sound, int time);
+    EncounterArea4(QStringList data, Game game);
     static vector<EncounterArea4> getEncounters(Encounter type, Game game);
     QStringList getSpecieNames();
     u32 calcLevel(u32 index, u32 prng);
     Game getDual() const;
     int getTime() const;
+    int getSound() const;
+
 };
 
 #endif // ENCOUNTERAREA4_HPP
