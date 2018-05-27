@@ -1643,46 +1643,44 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                 u32 slot = 0;
                 bool skipFrame = false;
 
-                if (encounterType != Stationary)
+                switch (encounterType)
                 {
-                    switch (encounterType)
-                    {
-                        case Wild:
-                            slot = seed;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                            break;
-                        case Surfing:
-                        case BugCatchingContest:
-                            slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                            break;
-                        case OldRod:
-                            slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if ((frame.seed >> 16) % 100 > 24)
-                                skipFrame = true;
-                            else
-                                frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
-                            break;
-                        case GoodRod:
-                            slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if ((frame.seed >> 16) % 100 > 49)
-                                skipFrame = true;
-                            else
-                                frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
-                            break;
-                        case SuperRod:
-                            slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if ((frame.seed >> 16) % 100 > 74)
-                                skipFrame = true;
-                            else
-                                frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
-                            break;
-                        default:
-                            break;
-                    }
+                    case Wild:
+                        slot = seed;
+                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                        break;
+                    case Surfing:
+                    case BugCatchingContest:
+                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
+                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                        break;
+                    case OldRod:
+                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
+                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                        if ((frame.seed >> 16) % 100 > 24)
+                            skipFrame = true;
+                        else
+                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                        break;
+                    case GoodRod:
+                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
+                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                        if ((frame.seed >> 16) % 100 > 49)
+                            skipFrame = true;
+                        else
+                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                        break;
+                    case SuperRod:
+                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
+                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                        if ((frame.seed >> 16) % 100 > 74)
+                            skipFrame = true;
+                        else
+                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                        break;
+                    case Stationary:
+                    default:
+                        frame.seed = seed;
                 }
 
                 u32 choppedPID = pid2 % 25;
