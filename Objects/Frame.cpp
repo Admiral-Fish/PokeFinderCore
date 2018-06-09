@@ -101,10 +101,7 @@ void Frame::setPID(u32 pid1, u32 pid2)
     nature = pid % 25;
     gender = pid & 255;
     ability = pid & 1;
-    if ((pid1 ^ pid2 ^ psv) < 8)
-        shiny = true;
-    else
-        shiny = false;
+    shiny = (pid1 ^ pid2 ^ psv) < 8;
 }
 
 // Sets PID and calculates characteristics based on PID
@@ -113,8 +110,14 @@ void Frame::setPID(u32 pid, u32 pid1, u32 pid2)
     this->pid = pid;
     gender = pid & 255;
     ability = pid & 1;
-    if ((pid1 ^ pid2 ^ psv) < 8)
-        shiny = true;
-    else
-        shiny = false;
+    shiny = (pid1 ^ pid2 ^ psv) < 8;
+}
+
+void Frame::setPID(u32 pid)
+{
+    this->pid = pid;
+    nature = pid % 25;
+    gender = pid & 255;
+    ability = pid & 1;
+    shiny = ((pid >> 16) ^ (pid & 0xFFFF) ^ psv) < 8;
 }

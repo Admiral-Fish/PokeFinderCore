@@ -31,7 +31,7 @@ Profile::Profile(QString profileName, Game version, u32 tid, u32 sid, int langua
 
 Profile::Profile()
 {
-    profileName = "PokéFinder";
+    profileName = "None";
     version = Emerald;
     language = 0;
     tid = 12345;

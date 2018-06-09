@@ -19,15 +19,8 @@
 
 #include "MTRNG.hpp"
 
-// Mersenne Twister
-
-// Constructor for Mersenne Twister
-MersenneTwister::MersenneTwister(u32 seed)
-{
-    initialize(seed);
-}
-
-void MersenneTwister::advanceFrames(int frames)
+// Shared advance function
+void MT::advanceFrames(int frames)
 {
     index += frames;
     while (index >= 624)
@@ -35,6 +28,15 @@ void MersenneTwister::advanceFrames(int frames)
         index -= 624;
         shuffle();
     }
+}
+
+// Mersenne Twister
+
+// Constructor for Mersenne Twister
+MersenneTwister::MersenneTwister(u32 seed)
+{
+    mt = new u32[624];
+    initialize(seed);
 }
 
 // Initializes
@@ -98,17 +100,8 @@ void MersenneTwister::reseed(u32 seed)
 // Constructor for Mersenne Twister Untempered
 MersenneTwisterUntempered::MersenneTwisterUntempered(u32 seed)
 {
+    mt = new u32[624];
     initialize(seed);
-}
-
-void MersenneTwisterUntempered::advanceFrames(int frames)
-{
-    index += frames;
-    while (index >= 624)
-    {
-        index -= 624;
-        shuffle();
-    }
 }
 
 // Initializes
@@ -174,17 +167,8 @@ MersenneTwisterFast::MersenneTwisterFast(u32 seed, int calls)
         //Throw an error eventually
     }
     max = M + maxCalls;
+    mt = new u32[max];
     initialize(seed);
-}
-
-void MersenneTwisterFast::advanceFrames(int frames)
-{
-    index += frames;
-    while (index >= max)
-    {
-        index -= max;
-        shuffle();
-    }
 }
 
 // Initializes

@@ -25,7 +25,7 @@
 class LCRNG64 : public IRNG64
 {
 
-private:
+protected:
     u64 add;
     u64 mult;
 

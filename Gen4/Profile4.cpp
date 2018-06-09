@@ -23,6 +23,11 @@ Profile4::Profile4(QString profileName, Game version, u32 tid, u32 sid, int lang
 {
 }
 
+Profile4::Profile4() : Profile()
+{
+    this->version = Diamond;
+}
+
 void Profile4::deleteProfile()
 {
     bool exists = false;

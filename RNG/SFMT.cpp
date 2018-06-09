@@ -22,6 +22,7 @@
 // Constructor for SFMT
 SFMT::SFMT(u32 seed)
 {
+    sfmt = new u32[624];
     initialize(seed);
 }
 
@@ -34,7 +35,7 @@ void SFMT::initialize(u32 seed)
         sfmt[index] = 0x6C078965 * (sfmt[index - 1] ^ (sfmt[index - 1] >> 30)) + index;
 
     periodCertificaion();
-    Shuffle();
+    shuffle();
     index = 0;
 }
 
@@ -43,20 +44,18 @@ void SFMT::periodCertificaion()
 {
     u32 inner = 0;
     u32 work;
-    int i, j;
 
-    for (i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
         inner ^= sfmt[i] & parity[i];
-    for (i = 16; i > 0; i >>= 1)
+    for (int i = 16; i > 0; i >>= 1)
         inner ^= inner >> i;
-    inner &= 1;
-    if (inner == 1)
+    if ((inner & 1) == 1)
         return;
 
-    for (i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
     {
         work = 1;
-        for (j = 0; j < 32; j++)
+        for (int j = 0; j < 32; j++)
         {
             if ((work & parity[i]) != 0)
             {
@@ -75,7 +74,7 @@ void SFMT::advanceFrames(int frames)
     while (temp >= 624)
     {
         temp -= 624;
-        Shuffle();
+        shuffle();
     }
     index = temp;
 }
@@ -86,11 +85,10 @@ u32 SFMT::nextUInt()
     // Array reshuffle check
     if (index >= N32)
     {
-        Shuffle();
+        shuffle();
         index = 0;
     }
-    ++index;
-    return getRand();
+    return sfmt[index++];
 }
 
 // Generates the next 64bit psuedo random number
@@ -99,10 +97,12 @@ u64 SFMT::nextULong()
     // Array reshuffle check
     if (index >= N32)
     {
-        Shuffle();
+        shuffle();
         index = 0;
     }
-    return getRand() | ((u64)getRand() << 32);
+    u32 high = sfmt[index++];
+    u32 low = sfmt[index++];
+    return high | ((u64)low << 32);
 }
 
 // Recreates the SFMT with a new seed
@@ -112,7 +112,7 @@ void SFMT::reseed(u64 seed)
 }
 
 // Shuffles the array once all 624 states have been used
-void SFMT::Shuffle()
+void SFMT::shuffle()
 {
     int a = 0;
     int b = 488;

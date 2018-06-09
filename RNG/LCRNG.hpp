@@ -25,7 +25,7 @@
 class LCRNG : public IRNG
 {
 
-private:
+protected:
     u32 add;
     u32 mult;
 

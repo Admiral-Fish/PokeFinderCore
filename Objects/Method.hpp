@@ -44,6 +44,10 @@ enum Method
     MethodK,
     ChainedShiny,
     WondercardIVs,
+    Gen4Normal,
+    Gen4Masuada,
+    DPPtIVs,
+    HGSSIVs
 };
 
 #endif // METHOD_HPP
