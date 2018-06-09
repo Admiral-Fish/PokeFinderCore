@@ -17,27 +17,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef FRAME4_HPP
-#define FRAME4_HPP
+#ifndef HGSSROAMER_HPP
+#define HGSSROAMER_HPP
 
-#include <PokeFinderCore/Objects/Frame.hpp>
+#include <vector>
+#include <cstdint>
+#include <PokeFinderCore/RNG/LCRNG.hpp>
+#include <QString>
 
-class Frame4 : public Frame
+typedef uint32_t u32;
+using std::vector;
+
+class HGSSRoamer
 {
 
-public:
-    u32 occidentary;
-    u32 seed;
-    u32 initialSeed;
+private:
+    u32 getRouteJ(u32 prng);
+    u32 getRouteK(u32 prng);
 
-    Frame4(u16 tid, u16 sid, u16 psv);
-    void setInheritanceHGSS(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1,
-                            u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2);
-    void setInheritanceDPPt(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1,
-                            u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2);
-    QString getCall();
-    QString chatotPitch();
+    u32 skips = 0;
+    u32 raikouRoute;
+    u32 enteiRoute;
+    u32 latiRoute;
+    vector<bool> roamers;
+
+public:
+    HGSSRoamer() {}
+    HGSSRoamer(u32 seed, vector<bool> roamers, vector<u32> routes);
+    u32 getSkips() const;
+    u32 getRaikouRoute() const;
+    u32 getEnteiRoute() const;
+    u32 getLatiRoute() const;
+    QString getRoutes();
 
 };
 
-#endif // FRAME4_HPP
+#endif // HGSSROAMER_HPP

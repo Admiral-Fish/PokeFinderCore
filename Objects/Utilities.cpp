@@ -60,25 +60,35 @@ QString Utilities::coinFlips(u32 seed, int flips)
     return coins;
 }
 
-QString Utilities::elmCalls(u32 seed, int calls)
+QString Utilities::getCalls(u32 seed, int num, HGSSRoamer info)
 {
-    QString elm = "";
+    QString calls = "";
+
+    u32 skips = info.getSkips();
+
+    if (skips > 0)
+        calls += "(";
 
     LCRNG rng = PokeRNG(seed);
 
-    for (int i = 0; i < calls; i++)
+    for (int i = 0; i < num + skips; i++)
     {
         u32 call = rng.nextUShort() % 3;
 
         if (call == 0)
-            elm += "E";
+            calls += "E";
         else if (call == 1)
-            elm += "K";
+            calls += "K";
         else
-            elm += "P";
+            calls += "P";
 
-        if (i != (calls - 1))
-            elm += ", ";
+        if (i != (num + skips - 1))
+        {
+            if (skips != 0 && skips == i + 1)
+                calls += " skipped)  ";
+            else
+                calls += ", ";
+        }
     }
-    return elm;
+    return calls;
 }

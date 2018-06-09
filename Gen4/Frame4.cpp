@@ -148,7 +148,7 @@ void Frame4::setInheritanceDPPt(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, 
     power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
 }
 
-QString Frame4::elmCall()
+QString Frame4::getCall()
 {
     u32 val = seed % 3;
 

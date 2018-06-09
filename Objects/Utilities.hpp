@@ -22,10 +22,13 @@
 
 #include <QDateTime>
 #include <QString>
+#include <vector>
 #include <PokeFinderCore/RNG/MTRNG.hpp>
 #include <PokeFinderCore/RNG/LCRNG.hpp>
+#include <PokeFinderCore/Gen4/HGSSRoamer.hpp>
 
 typedef uint32_t u32;
+using std::vector;
 
 class Utilities
 {
@@ -35,7 +38,8 @@ public:
     static u32 calcGen4Seed(QDateTime dateTime, u32 delay);
     static bool shiny(u32 pid, u32 tid, u32  sid);
     static QString coinFlips(u32 seed, int flips);
-    static QString elmCalls(u32 seed, int calls);
+    static QString getCalls(u32 seed, int num, HGSSRoamer info);
+
 };
 
 #endif // UTILITIES_HPP
