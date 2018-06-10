@@ -27,6 +27,7 @@ EncounterArea4::EncounterArea4(u32 location, Encounter type, vector<u32> species
 }
 
 EncounterArea4::EncounterArea4(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, int sound, int time)
+    : EncounterArea(location, type, species, minLevel, maxLevel)
 {
     this->sound = sound;
     this->time = time;
@@ -37,9 +38,15 @@ EncounterArea4::EncounterArea4(QStringList data, Game game)
     location = data[0].toUInt();
     time = data[1].toInt();
     if (game == HeartGold || game == SoulSilver)
+    {
         sound = data[2].toInt();
+        dual = Blank;
+    }
     else
+    {
         dual = (Game)data[2].toInt();
+        sound = 0;
+    }
     type = (Encounter)data[3].toInt();
 
     bool flag = type == Wild || type == Swarm || type == PokeRadar;
@@ -53,7 +60,7 @@ EncounterArea4::EncounterArea4(QStringList data, Game game)
     }
 }
 
-vector<EncounterArea4> EncounterArea4::getEncounters(Encounter type, Game game)
+vector<EncounterArea4> EncounterArea4::getEncounters(Encounter type, Game game, int time)
 {
     QString path;
     switch (game)
@@ -88,8 +95,14 @@ vector<EncounterArea4> EncounterArea4::getEncounters(Encounter type, Game game)
             QString in = ts.readLine();
             EncounterArea4 area = EncounterArea4(in.split(","), game);
 
-            if (area.getType() == type)
+            // Temp remove all slots related to sound and dual
+            // Implement later
+            if (area.type == type && area.sound == 0 && area.dual == 0)
+            {
+                if (area.type == Wild && !(area.time == 0 || area.time == time))
+                    continue;
                 areas.push_back(area);
+            }
         }
     }
     file.close();

@@ -40,7 +40,7 @@ public:
     EncounterArea4(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, Game dual, int time);
     EncounterArea4(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, int sound, int time);
     EncounterArea4(QStringList data, Game game);
-    static vector<EncounterArea4> getEncounters(Encounter type, Game game);
+    static vector<EncounterArea4> getEncounters(Encounter type, Game game, int time);
     QStringList getSpecieNames();
     u32 calcLevel(u32 index, u32 prng);
     Game getDual() const;
