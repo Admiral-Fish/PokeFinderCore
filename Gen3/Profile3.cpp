@@ -19,9 +19,15 @@
 
 #include "Profile3.hpp"
 
-Profile3::Profile3(QString profileName, Game version, u32 tid, u32 sid, int language, bool deadBattery, bool valid) : Profile(profileName, version, tid, sid, language, valid)
+Profile3::Profile3(QString profileName, Game version, u32 tid, u32 sid, int language, bool deadBattery) : Profile(profileName, version, tid, sid, language)
 {
     this->deadBattery = deadBattery;
+}
+
+Profile3::Profile3()
+{
+    this->deadBattery = false;
+    this->version = Emerald;
 }
 
 void Profile3::deleteProfile()
@@ -238,7 +244,7 @@ vector<Profile3> Profile3::loadProfileList()
                             info = info.nextSibling();
                         }
                     }
-                    Profile3 profile(profileName, (Game)version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language, deadBattery, true);
+                    Profile3 profile(profileName, (Game)version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language, deadBattery);
                     profileList.push_back(profile);
                 }
             }
@@ -248,4 +254,9 @@ vector<Profile3> Profile3::loadProfileList()
     }
 
     return profileList;
+}
+
+bool Profile3::getDeadBattery() const
+{
+    return deadBattery;
 }

@@ -19,27 +19,24 @@
 
 #include "Profile.hpp"
 
-Profile::Profile(QString profileName, Game version, u32 tid, u32 sid, int language, bool valid)
+Profile::Profile(QString profileName, Game version, u32 tid, u32 sid, int language)
 {
     this->profileName = profileName;
     this->version = version;
     this->tid = tid;
     this->sid = sid;
     this->language = language;
-    this->valid = valid;
 }
 
 Profile::Profile()
 {
     profileName = "None";
-    version = Emerald;
     language = 0;
     tid = 12345;
     sid = 54321;
-    valid = false;
 }
 
-QString Profile::getVersion()
+QString Profile::getVersionString() const
 {
     switch (version)
     {
@@ -72,7 +69,7 @@ QString Profile::getVersion()
     }
 }
 
-QString Profile::getLanguage()
+QString Profile::getLanguageString() const
 {
     switch (language)
     {
@@ -91,4 +88,29 @@ QString Profile::getLanguage()
         default:
             return "-";
     }
+}
+
+Game Profile::getVersion() const
+{
+    return version;
+}
+
+int Profile::getLanguage() const
+{
+    return language;
+}
+
+QString Profile::getProfileName() const
+{
+    return profileName;
+}
+
+u32 Profile::getTid() const
+{
+    return tid;
+}
+
+u32 Profile::getSid() const
+{
+    return sid;
 }

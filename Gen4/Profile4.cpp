@@ -19,7 +19,7 @@
 
 #include "Profile4.hpp"
 
-Profile4::Profile4(QString profileName, Game version, u32 tid, u32 sid, int language, bool valid) : Profile(profileName, version, tid, sid, language, valid)
+Profile4::Profile4(QString profileName, Game version, u32 tid, u32 sid, int language) : Profile(profileName, version, tid, sid, language)
 {
 }
 
@@ -232,7 +232,7 @@ vector<Profile4> Profile4::loadProfileList()
                             info = info.nextSibling();
                         }
                     }
-                    Profile4 profile(profileName, (Game)version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language, true);
+                    Profile4 profile(profileName, (Game)version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language);
                     profileList.push_back(profile);
                 }
             }

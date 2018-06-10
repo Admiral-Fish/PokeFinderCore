@@ -26,7 +26,7 @@ class Profile4 : public Profile
 {
 
 public:
-    Profile4(QString profileName, Game version, u32 tid, u32 sid, int language = 0, bool valid = false);
+    Profile4(QString profileName, Game version, u32 tid, u32 sid, int language = 0);
     Profile4();
     static vector<Profile4> loadProfileList();
     void saveProfile();

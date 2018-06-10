@@ -19,11 +19,6 @@
 
 #include "EncounterArea3.hpp"
 
-u32 EncounterArea3::getDelay() const
-{
-    return delay;
-}
-
 EncounterArea3::EncounterArea3(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, u32 delay)
     : EncounterArea(location, type, species, minLevel, maxLevel)
 {
@@ -110,7 +105,7 @@ u32 EncounterArea3::calcLevel(u32 index, u32 prng)
 }
 
 // Only for Rock Smash since all other encounters can be forced
-u32 EncounterArea3::getEncounterRate()
+u32 EncounterArea3::getEncounterRate(void) const
 {
     switch (location)
     {
@@ -142,4 +137,9 @@ u32 EncounterArea3::getEncounterRate()
         default:
             return 0;
     }
+}
+
+u32 EncounterArea3::getDelay(void) const
+{
+    return delay;
 }

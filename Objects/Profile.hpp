@@ -33,18 +33,23 @@ typedef uint32_t u32;
 class Profile
 {
 
-public:
+protected:
     QString profileName;
     Game version;
     int language;
-    bool valid;
     u32 tid;
     u32 sid;
 
-    Profile(QString profileName, Game version, u32 tid, u32 sid, int language = 0, bool valid = false);
+public:
+    Profile(QString profileName, Game version, u32 tid, u32 sid, int language = 0);
     Profile();
-    QString getVersion();
-    QString getLanguage();
+    QString getVersionString() const;
+    QString getLanguageString() const;
+    Game getVersion() const;
+    int getLanguage() const;
+    QString getProfileName() const;
+    u32 getTid() const;
+    u32 getSid() const;
 
 };
 

@@ -25,16 +25,18 @@
 class Profile3 : public Profile
 {
 
-public:
+private:
     bool deadBattery;
 
-    Profile3(QString profileName, Game version, u32 tid, u32 sid, int language = 0, bool deadBattery = false, bool valid = false);
-    Profile3() : Profile() {}
+public:
+
+    Profile3(QString profileName, Game version, u32 tid, u32 sid, int language = 0, bool deadBattery = false);
+    Profile3();
     static vector<Profile3> loadProfileList();
     void saveProfile();
     void deleteProfile();
     void updateProfile(Profile3 original);
-
+    bool getDeadBattery() const;
 };
 
 #endif // PROFILE3_HPP
