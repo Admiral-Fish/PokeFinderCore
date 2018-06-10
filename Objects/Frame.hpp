@@ -74,6 +74,7 @@ public:
     void setIVs(u32 iv1, u32 iv2);
     void setPID(u32 pid1, u32 pid2);
     void setPID(u32 pid, u32 pid1, u32 pid2);
+    void setPID(u32 pid);
 
 };
 

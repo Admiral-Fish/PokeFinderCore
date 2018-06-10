@@ -29,6 +29,8 @@ enum Encounter
     OldRod,
     GoodRod,
     SuperRod,
+    Swarm,
+    PokeRadar,
     Stationary,
     SafariZone,
     BugCatchingContest,

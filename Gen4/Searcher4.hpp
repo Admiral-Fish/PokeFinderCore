@@ -32,12 +32,22 @@ private:
     Frame4 frame = Frame4(0, 0, 0);
     LCRNG backward = PokeRNGR(0);
     FrameCompare compare;
+    u32 unbiasedBuffer[5] = { 0, 0x96, 0xC8, 0x4B, 0x32 };
 
     vector<Frame4> searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     vector<Frame4> searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     vector<Frame4> searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     vector<Frame4> searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     vector<Frame4> searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    vector<Frame4> searchInitialSeeds(vector<Frame4> results);
     u32 chainedPIDLow(u32 low, u32 call1, u32 call2, u32 call3, u32 call4, u32 call5,
                       u32 call6, u32 call7, u32 call8, u32 call9, u32 call10, u32 call11,
                       u32 call12, u32 call13);

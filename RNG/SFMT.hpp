@@ -35,19 +35,19 @@ private:
     static const int N32 = 624;
     int index;
     const u32 parity[4] = { 0x1, 0x0, 0x0, 0x13c9e684 };
-    u32 sfmt[624];
+    u32 *sfmt;
 
     void initialize(u32 seed);
     void periodCertificaion();
-    inline u32 getRand() { return sfmt[index++]; }
 
 public:
     SFMT(u32 seed);
+    ~SFMT() override { delete sfmt; }
     void advanceFrames(int frames) override;
     u32 nextUInt() override;
     u64 nextULong() override;
     void reseed(u64 seed) override;
-    void Shuffle();
+    void shuffle();
 
 };
 

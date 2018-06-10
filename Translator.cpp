@@ -64,3 +64,26 @@ QStringList Translator::getLocations(vector<u32> nums)
 
     return locations;
 }
+
+QStringList Translator::getLocationsGen4(vector<u32> nums)
+{
+    QStringList locations;
+
+    QString locale = QLocale().name().left(2);
+    QFile file(QString(":/dppthgss_%1.txt").arg(locale));
+
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QTextStream ts(&file);
+        ts.setCodec("UTF-8");
+        QStringList input;
+        while (!ts.atEnd())
+            input << ts.readLine();
+
+        for (u32 x : nums)
+            locations.push_back(input[x]);
+    }
+    file.close();
+
+    return locations;
+}

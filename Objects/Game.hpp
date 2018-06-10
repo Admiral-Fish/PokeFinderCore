@@ -22,6 +22,7 @@
 
 enum Game
 {
+    Blank, // Placeholder
     Ruby,
     Sapphire,
     Emerald,

@@ -28,14 +28,12 @@ class TinyMT : public IRNG
 private:
     static const u32 MAT1 = 0x8f7011ee;
     static const u32 MAT2 = 0xfc78ff1f;
-    static const int MINLOOP = 8;
-    static const int PRELOOP = 8;
     static const u32 TMAT = 0x3793fdff;
     static const u32 TINYMT32MASK = 0x7FFFFFFF;
     static const int TINYMT32SH0 = 1;
     static const int TINYMT32SH1 = 10;
     static const int TINYMT32SH8 = 8;
-    u32 state[4];
+    u32 *state;
 
     void initialize(u32 seed);
     void periodCertification();
@@ -43,6 +41,7 @@ private:
 public:
     TinyMT(u32 seed);
     TinyMT(u32 st[]);
+    ~TinyMT() override { delete state; }
     void advanceFrames(int frames) override;
     void nextState();
     u32 nextUInt() override;

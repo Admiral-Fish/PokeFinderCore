@@ -21,15 +21,25 @@
 #define UTILITIES_HPP
 
 #include <QDateTime>
+#include <QString>
+#include <vector>
+#include <PokeFinderCore/RNG/MTRNG.hpp>
+#include <PokeFinderCore/RNG/LCRNG.hpp>
+#include <PokeFinderCore/Gen4/HGSSRoamer.hpp>
 
 typedef uint32_t u32;
+using std::vector;
 
 class Utilities
 {
 
 public:
     static u32 calcGen3Seed(QDate time, u32 h, u32 m);
+    static u32 calcGen4Seed(QDateTime dateTime, u32 delay);
     static bool shiny(u32 pid, u32 tid, u32  sid);
+    static QString coinFlips(u32 seed, int flips);
+    static QString getCalls(u32 seed, int num, HGSSRoamer info);
+
 };
 
 #endif // UTILITIES_HPP

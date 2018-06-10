@@ -17,48 +17,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef LCRNG64_HPP
-#define LCRNG64_HPP
+#ifndef HGSSROAMER_HPP
+#define HGSSROAMER_HPP
 
-#include <PokeFinderCore/RNG/IRNG64.hpp>
+#include <vector>
+#include <cstdint>
+#include <PokeFinderCore/RNG/LCRNG.hpp>
+#include <QString>
 
-class LCRNG64 : public IRNG64
+typedef uint32_t u32;
+using std::vector;
+
+class HGSSRoamer
 {
 
-protected:
-    u64 add;
-    u64 mult;
+private:
+    u32 getRouteJ(u32 prng);
+    u32 getRouteK(u32 prng);
+
+    u32 skips = 0;
+    u32 raikouRoute;
+    u32 enteiRoute;
+    u32 latiRoute;
+    vector<bool> roamers;
 
 public:
-    u64 seed;
-
-    LCRNG64(u64 add, u64 mult, u64 seed);
-    void advanceFrames(int frames) override;
-    u32 nextUInt(u32 max);
-    u64 nextULong() override;
-    u32 nextUInt() override;
-    void reseed(u64 seed) override;
+    HGSSRoamer() {}
+    HGSSRoamer(u32 seed, vector<bool> roamers, vector<u32> routes);
+    u32 getSkips() const;
+    u32 getRaikouRoute() const;
+    u32 getEnteiRoute() const;
+    u32 getLatiRoute() const;
+    QString getRoutes();
 
 };
 
-class BWRNG : public LCRNG64
-{
-
-public:
-    BWRNG(u64 seed) : LCRNG64(0x269ec3, 0x5d588b656c078965, seed)
-    {
-    }
-
-};
-
-class BWRNGR : public LCRNG64
-{
-
-public:
-    BWRNGR(u64 seed) : LCRNG64(0x9b1ae6e9a384e6f9, 0xdedcedae9638806d, seed)
-    {
-    }
-
-};
-
-#endif // LCRNG64_HPP
+#endif // HGSSROAMER_HPP

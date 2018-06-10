@@ -22,12 +22,14 @@
 // Constructor
 TinyMT::TinyMT(u32 seed)
 {
+    state = new u32[4];
     initialize(seed);
 }
 
 // Constructor given Tiny states
 TinyMT::TinyMT(u32 st[])
 {
+    state = new u32[4];
     for (int i = 0; i < 4; i++)
         state[i] = st[i];
     periodCertification();
@@ -47,13 +49,12 @@ void TinyMT::initialize(u32 seed)
     state[2] = MAT2;
     state[3] = TMAT;
 
-    int i;
-    for (i = 1; i < MINLOOP; i++)
+    for (int i = 1; i < 8; i++)
         state[i & 3] ^= i + 0x6c078965 * (state[(i - 1) & 3] ^ (state[(i - 1) & 3] >> 30));
 
     periodCertification();
 
-    for (i = 0; i < PRELOOP; i++)
+    for (int i = 0; i < 8; i++)
         nextState();
 }
 
