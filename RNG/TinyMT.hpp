@@ -34,6 +34,7 @@ private:
     static const int TINYMT32SH1 = 10;
     static const int TINYMT32SH8 = 8;
     u32 *state;
+    u32 seed;
 
     void initialize(u32 seed);
     void periodCertification();
@@ -46,7 +47,9 @@ public:
     void nextState();
     u32 nextUInt() override;
     u32 temper();
-    void reseed(u32 seed) override;
+    void setSeed(u32 seed) override;
+    u32 getSeed() override;
+    u32 *getState();
 
 };
 

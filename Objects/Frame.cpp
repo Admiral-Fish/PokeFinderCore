@@ -20,7 +20,7 @@
 #include "Frame.hpp"
 
 // Gets gender based on gender ratio
-QString Frame::getGender()
+QString Frame::getGenderString()
 {
     switch (genderRatio)
     {
@@ -43,19 +43,19 @@ QString Frame::getGender()
 }
 
 // Returns string equivalent of nature
-QString Frame::getNature()
+QString Frame::getNatureString()
 {
     return natures[nature];
 }
 
 // Returns string equivalent of hidden power
-QString Frame::getPower()
+QString Frame::getPowerString()
 {
     return powers[hidden];
 }
 
 // Returns !!! if shiny or blank if not
-QString Frame::getShiny()
+QString Frame::getShinyString()
 {
     return shiny ? "!!!" : "";
 }
@@ -120,4 +120,104 @@ void Frame::setPID(u32 pid)
     gender = pid & 255;
     ability = pid & 1;
     shiny = ((pid >> 16) ^ (pid & 0xFFFF) ^ psv) < 8;
+}
+
+u32 Frame::getFrame() const
+{
+    return frame;
+}
+
+u32 Frame::getIV(int index) const
+{
+    return ivs[index];
+}
+
+u32 Frame::getPower() const
+{
+    return power;
+}
+
+u32 Frame::getPid() const
+{
+    return pid;
+}
+
+void Frame::setPid(const u32 &value)
+{
+    pid = value;
+}
+
+u32 Frame::getAbility() const
+{
+    return ability;
+}
+
+Lead Frame::getLeadType() const
+{
+    return leadType;
+}
+
+u32 Frame::getEncounterSlot() const
+{
+    return encounterSlot;
+}
+
+void Frame::setEncounterSlot(const u32 &value)
+{
+    encounterSlot = value;
+}
+
+u32 Frame::getLevel() const
+{
+    return level;
+}
+
+void Frame::setLevel(const u32 &value)
+{
+    level = value;
+}
+
+bool Frame::getShiny() const
+{
+    return shiny;
+}
+
+u32 Frame::getNature() const
+{
+    return nature;
+}
+
+void Frame::setNature(const u32 &value)
+{
+    nature = value;
+}
+
+u32 Frame::getHidden() const
+{
+    return hidden;
+}
+
+u32 Frame::getGender() const
+{
+    return gender;
+}
+
+u32 Frame::getGenderRatio() const
+{
+    return genderRatio;
+}
+
+void Frame::setGenderRatio(const u32 &value)
+{
+    genderRatio = value;
+}
+
+void Frame::setFrame(const u32 &value)
+{
+    frame = value;
+}
+
+void Frame::setLeadType(const Lead &value)
+{
+    leadType = value;
 }

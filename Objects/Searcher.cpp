@@ -17,45 +17,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "LCRNG.hpp"
+#include "Searcher.hpp"
 
-// LCRNG is used for Gen 3 and 4
-
-// Default constructor for LCRNG
-LCRNG::LCRNG(u32 add, u32 mult, u32 seed)
+Encounter Searcher::getEncounterType() const
 {
-    this->add = add;
-    this->mult = mult;
-    this->seed = seed;
+    return encounterType;
 }
 
-// Method for advancing seed by a given number of frames
-void LCRNG::advanceFrames(int frames)
+void Searcher::setEncounterType(const Encounter &value)
 {
-    for (int i = 0; i < frames; i++)
-        seed = seed * mult + add;
+    encounterType = value;
 }
 
-// Method for finding next 16 bit seed
-u32 LCRNG::nextUShort()
+Method Searcher::getFrameType() const
 {
-    return (nextUInt() >> 16);
+    return frameType;
 }
 
-// IRNG Member
-u32 LCRNG::nextUInt()
+void Searcher::setFrameType(const Method &value)
 {
-    seed = seed * mult + add;
-    return seed;
+    frameType = value;
 }
 
-// IRNG Member
-void LCRNG::setSeed(u32 seed)
+Lead Searcher::getLeadType() const
 {
-    this->seed = seed;
+    return leadType;
 }
 
-u32 LCRNG::getSeed()
+void Searcher::setLeadType(const Lead &value)
 {
-    return seed;
+    leadType = value;
 }

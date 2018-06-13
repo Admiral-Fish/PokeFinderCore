@@ -90,13 +90,13 @@ bool FrameCompare::comparePID(Frame frame)
     if (skip)
         return true;
 
-    if (shiny && !frame.shiny)
+    if (shiny && !frame.getShiny())
         return false;
 
-    if (!natures[frame.nature])
+    if (!natures[frame.getNature()])
         return false;
 
-    if (ability != 0 && ability - 1 != frame.ability)
+    if (ability != 0 && ability - 1 != frame.getAbility())
         return false;
 
     switch (genderRatio)
@@ -105,12 +105,12 @@ bool FrameCompare::comparePID(Frame frame)
             switch (gender)
             {
                 case 1:
-                    if (frame.gender < 127)
+                    if (frame.getGender() < 127)
                         return false;
 
                     break;
                 case 2:
-                    if (frame.gender >= 127)
+                    if (frame.getGender() >= 127)
                         return false;
 
                     break;
@@ -122,12 +122,12 @@ bool FrameCompare::comparePID(Frame frame)
             switch (gender)
             {
                 case 1:
-                    if (frame.gender < 191)
+                    if (frame.getGender() < 191)
                         return false;
 
                     break;
                 case 2:
-                    if (frame.gender >= 191)
+                    if (frame.getGender() >= 191)
                         return false;
 
                     break;
@@ -139,12 +139,12 @@ bool FrameCompare::comparePID(Frame frame)
             switch (gender)
             {
                 case 1:
-                    if (frame.gender < 63)
+                    if (frame.getGender() < 63)
                         return false;
 
                     break;
                 case 2:
-                    if (frame.gender >= 63)
+                    if (frame.getGender() >= 63)
                         return false;
 
                     break;
@@ -156,12 +156,12 @@ bool FrameCompare::comparePID(Frame frame)
             switch (gender)
             {
                 case 1:
-                    if (frame.gender < 31)
+                    if (frame.getGender() < 31)
                         return false;
 
                     break;
                 case 2:
-                    if (frame.gender >= 31)
+                    if (frame.getGender() >= 31)
                         return false;
 
                     break;
@@ -199,7 +199,7 @@ bool FrameCompare::compareIVs(Frame frame)
     if (skip)
         return true;
 
-    if (!powers[frame.hidden])
+    if (!powers[frame.getHidden()])
         return false;
 
     for (int i = 0; i < 6; i++)
@@ -207,19 +207,19 @@ bool FrameCompare::compareIVs(Frame frame)
         switch (eval[i])
         {
             case 1:
-                if (frame.ivs[i] != val[i])
+                if (frame.getIV(i) != val[i])
                     return false;
                 break;
             case 2:
-                if (frame.ivs[i] < val[i])
+                if (frame.getIV(i) < val[i])
                     return false;
                 break;
             case 3:
-                if (frame.ivs[i] > val[i])
+                if (frame.getIV(i) > val[i])
                     return false;
                 break;
             case 4:
-                if (frame.ivs[i] == val[i])
+                if (frame.getIV(i) == val[i])
                     return false;
                 break;
             default:
@@ -232,17 +232,17 @@ bool FrameCompare::compareIVs(Frame frame)
 
 bool FrameCompare::compareNature(Frame frame)
 {
-    return natures[frame.nature];
+    return natures[frame.getNature()];
 }
 
 bool FrameCompare::compareHiddenPower(Frame frame)
 {
-    return powers[frame.hidden];
+    return powers[frame.getHidden()];
 }
 
 bool FrameCompare::compareSlot(Frame frame)
 {
-    return encounterSlots[frame.encounterSlot];
+    return encounterSlots[frame.getEncounterSlot()];
 }
 
 u32 FrameCompare::getGenderRatio()

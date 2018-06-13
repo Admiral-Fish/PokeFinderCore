@@ -32,12 +32,12 @@ class Searcher3: public Searcher
 {
 
 private:
-    RNGCache cache;
-    RNGEuclidean euclidean = RNGEuclidean(XDColo);
+    RNGCache *cache = NULL;
+    RNGEuclidean *euclidean = NULL;
     Frame3 frame = Frame3(0, 0, 0);
-    LCRNG forward = PokeRNG(0);
-    LCRNG backward = PokeRNGR(0);
-    NatureLock natureLock;
+    LCRNG *forward = NULL;
+    LCRNG *backward = NULL;
+    NatureLock *natureLock = NULL;
     ShadowType type;
     FrameCompare compare;
 
@@ -54,6 +54,7 @@ public:
 
     Searcher3();
     Searcher3(u16 tid, u16 sid, u32 ratio, FrameCompare compare);
+    ~Searcher3();
     vector<Frame3> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     void setup(Method method);
     void setupNatureLock(int num);

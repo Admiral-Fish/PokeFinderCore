@@ -28,15 +28,16 @@ class LCRNG : public IRNG
 protected:
     u32 add;
     u32 mult;
+    u32 seed;
 
 public:
-    u32 seed;
 
     LCRNG(u32 add, u32 mult, u32 seed);
     void advanceFrames(int frames) override;
     u32 nextUShort();
     u32 nextUInt() override;
-    void reseed(u32 seed) override;
+    void setSeed(u32 seed) override;
+    u32 getSeed() override;
 
 };
 

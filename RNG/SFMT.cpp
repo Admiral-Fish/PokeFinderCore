@@ -29,6 +29,7 @@ SFMT::SFMT(u32 seed)
 // Initializes
 void SFMT::initialize(u32 seed)
 {
+    this->seed = seed;
     sfmt[0] = seed;
 
     for (index = 1; index < N32; index++)
@@ -106,9 +107,14 @@ u64 SFMT::nextULong()
 }
 
 // Recreates the SFMT with a new seed
-void SFMT::reseed(u64 seed)
+void SFMT::setSeed(u64 seed)
 {
     initialize((u32)seed);
+}
+
+u64 SFMT::getSeed()
+{
+    return seed;
 }
 
 // Shuffles the array once all 624 states have been used

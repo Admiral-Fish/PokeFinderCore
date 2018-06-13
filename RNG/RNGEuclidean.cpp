@@ -37,8 +37,8 @@ void RNGEuclidean::setupEuclidean(Method FrameType)
         // Channel is a unique situation having 6 rng calls with each call 5 bits known
         // It is unable to use the cache method and uses a modified Euclidean approach to keep kmax as low as possible
         // Using the first and last calls we can produce a modified adder and multiplier
-        // Multj = Mult^j
-        // Addj = Add * (1 + Mult + ... + Mult^(j-1))
+        // Mult-j = Mult^j
+        // Add-j = Add * (1 + Mult + ... + Mult^(j-1))
         // Using j = 5 and XDRNG gives Mult = 0x284A930D and Add = 0xa2974c77
         sub1 = 0x284A930D; // Modified mult
         sub2 = 0x9A974C78; // -Modified add + 0x8000000 - 1

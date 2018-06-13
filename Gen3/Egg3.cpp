@@ -38,19 +38,19 @@ Egg3::Egg3(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 
     this->sid = sid;
     psv = tid ^ sid;
     frameType = method;
-    rng.seed = seed;
+    rng.setSeed(seed);
 }
 
 vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
-    frame.genderRatio = compare.getGenderRatio();
+    frame.setGenderRatio(compare.getGenderRatio());
 
     int i;
     u32 pid;
 
-    rng.seed = 0;
+    rng.setSeed(0);
     rng.advanceFrames(initialFrame - 1);
     for (int x = 0; x < 19; x++)
         rngList.push_back(rng.nextUShort());
@@ -81,11 +81,11 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
                 pid |= trng.nextUInt() & 0xFFFF0000;
 
                 frame.setPID(pid, pid >> 16, pid & 0xFFFF);
-                frame.nature = pid % 25;
+                frame.setNature(pid % 25);
 
                 if (compare.comparePID(frame))
                 {
-                    frame.frame = cnt - offset;
+                    frame.setFrame(cnt - offset);
                     frame.occidentary = redraw;
                     frames.push_back(frame);
                 }
@@ -112,11 +112,11 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
                     continue;
 
                 frame.setPID(pid, pid >> 16, pid & 0xFFFF);
-                frame.nature = everstoneNature;
+                frame.setNature(everstoneNature);
 
                 if (compare.comparePID(frame))
                 {
-                    frame.frame = cnt - offset;
+                    frame.setFrame(cnt - offset);
                     frame.occidentary = redraw;
                     frames.push_back(frame);
                 }
@@ -126,7 +126,7 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
 
     sort(frames.begin(), frames.end(), [](const Frame3 & frame1, const Frame3 & frame2)
     {
-        return frame1.frame < frame2.frame;
+        return frame1.getFrame() < frame2.getFrame();
     });
 
     return frames;
@@ -137,7 +137,7 @@ vector<Frame3> Egg3::generateEmerald(FrameCompare compare)
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
-    rng.seed = 0;
+    rng.setSeed(0);
     rng.advanceFrames(initialFrame - 1);
     for (int x = 0; x < 13; x++)
         rngList.push_back(rng.nextUShort());
@@ -159,7 +159,7 @@ vector<Frame3> Egg3::generateEmerald(FrameCompare compare)
 
         if (compare.compareIVs(frame))
         {
-            frame.frame = cnt;
+            frame.setFrame(cnt);
             frames.push_back(frame);
         }
     }
@@ -172,7 +172,7 @@ vector<Frame3> Egg3::generateEmeraldSplit(FrameCompare compare)
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
-    rng.seed = 0;
+    rng.setSeed(0);
     rng.advanceFrames(initialFrame - 1);
     for (int x = 0; x < 14; x++)
         rngList.push_back(rng.nextUShort());
@@ -194,7 +194,7 @@ vector<Frame3> Egg3::generateEmeraldSplit(FrameCompare compare)
 
         if (compare.compareIVs(frame))
         {
-            frame.frame = cnt;
+            frame.setFrame(cnt);
             frames.push_back(frame);
         }
     }
@@ -206,7 +206,7 @@ vector<Frame3> Egg3::generateEmeraldAlternate(FrameCompare compare)
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
-    rng.seed = 0;
+    rng.setSeed(0);
     rng.advanceFrames(initialFrame - 1);
     for (int x = 0; x < 14; x++)
         rngList.push_back(rng.nextUShort());
@@ -228,7 +228,7 @@ vector<Frame3> Egg3::generateEmeraldAlternate(FrameCompare compare)
 
         if (compare.compareIVs(frame))
         {
-            frame.frame = cnt;
+            frame.setFrame(cnt);
             frames.push_back(frame);
         }
     }
@@ -241,7 +241,7 @@ vector<Frame3> Egg3::generateLower()
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
-    rng.seed = seed;
+    rng.setSeed(0);
     rng.advanceFrames(initialFrame - 1);
     for (int x = 0; x < 2; x++)
         rngList.push_back(rng.nextUShort());
@@ -251,9 +251,9 @@ vector<Frame3> Egg3::generateLower()
         if (((rngList[0] * 100) / 0xFFFF) >= compatability)
             continue;
 
-        frame.pid = (rngList[1] % 0xFFFE) + 1;
+        frame.setPID((rngList[1] % 0xFFFE) + 1);
 
-        frame.frame = cnt;
+        frame.setFrame(cnt);
         frames.push_back(frame);
     }
 
@@ -265,7 +265,7 @@ vector<Frame3> Egg3::generateUpper(vector<Frame3> lower, FrameCompare compare)
     vector<Frame3> upper;
     Frame3 frame = Frame3(tid, sid, psv);
 
-    rng.seed = seed;
+    rng.setSeed(0);
     rng.advanceFrames(minPickup - 1);
     rngList.clear();
     for (int x = 0; x < 14; x++)
@@ -275,7 +275,7 @@ vector<Frame3> Egg3::generateUpper(vector<Frame3> lower, FrameCompare compare)
 
     for (u32 cnt = minPickup; cnt <= maxPickup; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
     {
-        frame.pid = rngList[3];
+        frame.setPID(rngList[3]);
 
         iv1 = rngList[5];
         iv2 = rngList[6];
@@ -302,10 +302,10 @@ vector<Frame3> Egg3::generateUpper(vector<Frame3> lower, FrameCompare compare)
     {
         for (Frame3 up : upper)
         {
-            up.setPID(low.pid, up.pid);
+            up.setPID(low.getPid(), up.getPid());
             if (compare.comparePID(up))
             {
-                up.frame = low.frame;
+                up.setFrame(low.getFrame());
                 frames.push_back(up);
             }
         }

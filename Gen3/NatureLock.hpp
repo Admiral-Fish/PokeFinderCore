@@ -21,6 +21,7 @@
 #define NATURELOCK_HPP
 
 #include <PokeFinderCore/RNG/LCRNG.hpp>
+#include <PokeFinderCore/Objects/Method.hpp>
 #include <vector>
 
 using std::vector;
@@ -79,7 +80,7 @@ private:
     void natureLockSetupGales(int lockNum);
 
 public:
-    NatureLock();
+    NatureLock(int num, Method version);
     ShadowType getType();
     bool firstShadowNormal(u32 seed);
     bool firstShadowSet(u32 seed);

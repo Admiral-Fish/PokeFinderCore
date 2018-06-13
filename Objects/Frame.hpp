@@ -37,14 +37,6 @@ class Frame
 {
 
 protected:
-    vector<QString> natures = Nature::getFrameNatures();
-    vector<QString> powers = Power::getPowers();
-    QString getFemale125();
-    QString getFemale25();
-    QString getFemale50();
-    QString getFemale75();
-
-public:
     u32 ivs[6];
     u32 ability;
     u32 encounterSlot;
@@ -61,20 +53,47 @@ public:
     u16 psv;
     bool shiny;
     u16 sid;
-    bool synchable;
     u16 tid;
     u32 level;
 
-    QString getGender();
-    QString getNature();
-    QString getPower();
-    QString getShiny();
+    vector<QString> natures = Nature::getFrameNatures();
+    vector<QString> powers = Power::getPowers();
+    QString getFemale125();
+    QString getFemale25();
+    QString getFemale50();
+    QString getFemale75();
+
+public:
+    QString getGenderString();
+    QString getNatureString();
+    QString getPowerString();
+    QString getShinyString();
     void setIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6);
     void setIDs(u16 tid, u16 sid, u16 psv);
     void setIVs(u32 iv1, u32 iv2);
     void setPID(u32 pid1, u32 pid2);
     void setPID(u32 pid, u32 pid1, u32 pid2);
     void setPID(u32 pid);
+    u32 getFrame() const;
+    u32 getIV(int index) const;
+    u32 getPower() const;
+    u32 getPid() const;
+    void setPid(const u32 &value);
+    u32 getAbility() const;
+    Lead getLeadType() const;
+    u32 getEncounterSlot() const;
+    void setEncounterSlot(const u32 &value);
+    u32 getLevel() const;
+    void setLevel(const u32 &value);
+    bool getShiny() const;
+    u32 getNature() const;
+    void setNature(const u32 &value);
+    u32 getHidden() const;
+    u32 getGender() const;
+    u32 getGenderRatio() const;
+    void setGenderRatio(const u32 &value);
+    void setFrame(const u32 &value);
+    void setLeadType(const Lead &value);
 
 };
 

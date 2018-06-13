@@ -42,6 +42,7 @@ MersenneTwister::MersenneTwister(u32 seed)
 // Initializes
 void MersenneTwister::initialize(u32 seed)
 {
+    this->seed = seed;
     mt[0] = seed;
 
     for (index = 1; index < N; index++)
@@ -89,9 +90,14 @@ u32 MersenneTwister::nextUInt()
 }
 
 // Recreates the Mersenne Twister with a new seed
-void MersenneTwister::reseed(u32 seed)
+void MersenneTwister::setSeed(u32 seed)
 {
     initialize(seed);
+}
+
+u32 MersenneTwister::getSeed()
+{
+    return seed;
 }
 
 
@@ -107,6 +113,7 @@ MersenneTwisterUntempered::MersenneTwisterUntempered(u32 seed)
 // Initializes
 void MersenneTwisterUntempered::initialize(u32 seed)
 {
+    this->seed = seed;
     mt[0] = seed;
 
     for (index = 1; index < N; index++)
@@ -148,9 +155,14 @@ u32 MersenneTwisterUntempered::nextUInt()
 }
 
 // Recreates the Mersenne Twister Untempered with a new seed
-void MersenneTwisterUntempered::reseed(u32 seed)
+void MersenneTwisterUntempered::setSeed(u32 seed)
 {
     initialize(seed);
+}
+
+u32 MersenneTwisterUntempered::getSeed()
+{
+    return seed;
 }
 
 
@@ -174,6 +186,7 @@ MersenneTwisterFast::MersenneTwisterFast(u32 seed, int calls)
 // Initializes
 void MersenneTwisterFast::initialize(u32 seed)
 {
+    this->seed = seed;
     mt[0] = seed;
 
     for (index = 1; index < max; ++index)
@@ -211,7 +224,12 @@ u32 MersenneTwisterFast::nextUInt()
 }
 
 // Recreates the Mersenne Twister Fast with a new seed
-void MersenneTwisterFast::reseed(u32 seed)
+void MersenneTwisterFast::setSeed(u32 seed)
 {
     initialize(seed);
+}
+
+u32 MersenneTwisterFast::getSeed()
+{
+    return seed;
 }

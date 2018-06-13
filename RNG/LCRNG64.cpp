@@ -54,7 +54,12 @@ u32 LCRNG64::nextUInt()
 }
 
 // IRNG64 Member
-void LCRNG64::reseed(u64 seed)
+void LCRNG64::setSeed(u64 seed)
 {
     this->seed = seed;
+}
+
+u64 LCRNG64::getSeed()
+{
+    return seed;
 }

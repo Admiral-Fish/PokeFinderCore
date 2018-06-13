@@ -31,7 +31,8 @@ class IRNG64
 public:
     virtual u64 nextULong() = 0;
     virtual u32 nextUInt() = 0;
-    virtual void reseed(u64 seed) = 0;
+    virtual void setSeed(u64 seed) = 0;
+    virtual u64 getSeed() = 0;
     virtual void advanceFrames(int frames) = 0;
     virtual ~IRNG64() { }
 

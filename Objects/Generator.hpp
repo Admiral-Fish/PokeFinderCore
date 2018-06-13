@@ -41,8 +41,6 @@ protected:
     u16 sid;
     u16 tid;
     u32 offset;
-
-public:
     Method frameType = Method1;
     Encounter encounterType = Stationary;
     Lead leadType = None;
@@ -51,6 +49,14 @@ public:
     u32 maxResults;
     u32 synchNature;
     u32 cuteCharm;
+
+public:
+    Encounter getEncounterType() const;
+    void setEncounterType(const Encounter &value);
+    Lead getLeadType() const;
+    void setLeadType(const Lead &value);
+    u32 getSynchNature() const;
+    void setSynchNature(const u32 &value);
 
 };
 

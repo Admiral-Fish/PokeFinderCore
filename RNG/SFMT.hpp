@@ -33,12 +33,14 @@ private:
     static const int CSL1 = 18;
     static const int CSR1 = 11;
     static const int N32 = 624;
-    int index;
     const u32 parity[4] = { 0x1, 0x0, 0x0, 0x13c9e684 };
     u32 *sfmt;
+    u32 seed;
+    int index;
 
     void initialize(u32 seed);
     void periodCertificaion();
+    void shuffle();
 
 public:
     SFMT(u32 seed);
@@ -46,8 +48,8 @@ public:
     void advanceFrames(int frames) override;
     u32 nextUInt() override;
     u64 nextULong() override;
-    void reseed(u64 seed) override;
-    void shuffle();
+    void setSeed(u64 seed) override;
+    u64 getSeed() override;
 
 };
 

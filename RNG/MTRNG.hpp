@@ -34,6 +34,7 @@ protected:
     static const u32 TEMPERINGMASKC = 0xEFC60000;
     const u32 mag01[2] = { 0x0, 0x9908B0DF };
     u32 *mt;
+    u32 seed;
     int index;
 
     inline u32 temperingShiftL(u32 y) { return (y >> 18); }
@@ -59,7 +60,8 @@ private:
 public:
     MersenneTwister(u32 seed);
     u32 nextUInt() override;
-    void reseed(u32 seed) override;
+    void setSeed(u32 seed) override;
+    u32 getSeed() override;
 
 };
 
@@ -72,8 +74,9 @@ private:
 
 public:
     MersenneTwisterUntempered(u32 seed);
-    void reseed(u32 seed) override;
     u32 nextUInt() override;
+    void setSeed(u32 seed) override;
+    u32 getSeed() override;
 
 };
 
@@ -91,7 +94,8 @@ private:
 public:
     MersenneTwisterFast(u32 seed, int calls);
     u32 nextUInt() override;
-    void reseed(u32 seed) override;
+    void setSeed(u32 seed) override;
+    u32 getSeed() override;
 
 };
 

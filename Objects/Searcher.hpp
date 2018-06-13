@@ -40,13 +40,19 @@ protected:
     u16 psv;
     u16 sid;
     u16 tid;
-
-public:
     u32 cuteCharm;
     Encounter encounterType = Stationary;
     Method frameType = Method1;
     Lead leadType = None;
     u32 synchNature;
+
+public:
+    Encounter getEncounterType() const;
+    void setEncounterType(const Encounter &value);
+    Method getFrameType() const;
+    void setFrameType(const Method &value);
+    Lead getLeadType() const;
+    void setLeadType(const Lead &value);
 
 };
 

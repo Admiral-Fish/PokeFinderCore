@@ -44,6 +44,7 @@ void TinyMT::advanceFrames(int frames)
 // Creates Tiny state given seed
 void TinyMT::initialize(u32 seed)
 {
+    this->seed = seed;
     state[0] = seed;
     state[1] = MAT1;
     state[2] = MAT2;
@@ -109,7 +110,17 @@ u32 TinyMT::temper()
 }
 
 // IRNG Memeber
-void TinyMT::reseed(u32 seed)
+void TinyMT::setSeed(u32 seed)
 {
     initialize(seed);
+}
+
+u32 *TinyMT::getState()
+{
+    return state;
+}
+
+u32 TinyMT::getSeed()
+{
+    return seed;
 }

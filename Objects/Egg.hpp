@@ -37,13 +37,14 @@ protected:
     vector<u32> rngList;
     u16 sid;
     u16 tid;
-
-public:
     Method frameType = EBred;
     u32 initialSeed;
     u32 initialFrame;
     u32 maxResults;
     u32 everstoneNature;
+
+public:
+    void setEverstoneNature(const u32 &value);
 
 };
 

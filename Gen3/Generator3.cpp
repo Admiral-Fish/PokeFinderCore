@@ -47,7 +47,7 @@ vector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
-    frame.genderRatio = compare.getGenderRatio();
+    frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 12; i++)
         rngList.push_back(rng.nextUShort());
@@ -69,7 +69,7 @@ vector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.frame = cnt;
+        frame.setFrame(cnt);
         frames.push_back(frame);
     }
     rngList.clear();
@@ -82,7 +82,7 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
-    frame.genderRatio = compare.getGenderRatio();
+    frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 20; i++)
         rngList.push_back(rng.nextUShort());
@@ -102,15 +102,15 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
         }
 
         hunt = 1;
-        frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
+        frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], encounterType));
         if (!compare.compareSlot(frame))
             continue;
 
-        frame.level = encounter.calcLevel(frame.encounterSlot, rngList[hunt++]);
+        frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[hunt++]));
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Grab the hunt nature
-        frame.nature = rngList[hunt] % 25;
+        frame.setNature(rngList[hunt] % 25);
         if (!compare.compareNature(frame))
             continue;
 
@@ -123,7 +123,7 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
             pid1 = rngList[++hunt];
             pid = (pid1 << 16) | pid2;
         }
-        while (pid % 25 != frame.nature);
+        while (pid % 25 != frame.getNature());
 
         frame.setPID(pid, pid1, pid2);
         if (!compare.comparePID(frame))
@@ -137,7 +137,7 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.frame = cnt;
+        frame.setEncounterSlot(cnt);
         frame.occidentary = hunt + cnt - 1;
         frames.push_back(frame);
     }
@@ -151,7 +151,7 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
-    frame.genderRatio = compare.getGenderRatio();
+    frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 20; i++)
         rngList.push_back(rng.nextUShort());
@@ -171,11 +171,11 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         }
 
         hunt = 1;
-        frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
+        frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], encounterType));
         if (!compare.compareSlot(frame))
             continue;
 
-        frame.level = encounter.calcLevel(frame.encounterSlot, rngList[hunt++]);
+        frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[hunt++]));
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Check by seeing if frame can synch
@@ -183,12 +183,12 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         if ((first & 1) == 0)
         {
             // Frame is synchable so set nature to synch nature
-            frame.nature = synchNature;
+            frame.setNature(synchNature);
         }
         else
         {
             // Synch failed so grab hunt nature from next RNG call
-            frame.nature = rngList[++hunt] % 25;
+            frame.setNature(rngList[++hunt] % 25);
         }
         if (!compare.compareNature(frame))
             continue;
@@ -202,7 +202,7 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
             pid1 = rngList[++hunt];
             pid = (pid1 << 16) | pid2;
         }
-        while (pid % 25 != frame.nature);
+        while (pid % 25 != frame.getNature());
 
         frame.setPID(pid, pid1, pid2);
         if (!compare.comparePID(frame))
@@ -216,7 +216,7 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.frame = cnt;
+        frame.setFrame(cnt);
         frame.occidentary = hunt + cnt - 1;
         frames.push_back(frame);
     }
@@ -230,7 +230,7 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
-    frame.genderRatio = compare.getGenderRatio();
+    frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 20; i++)
         rngList.push_back(rng.nextUShort());
@@ -281,18 +281,18 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
         }
 
         hunt = 1;
-        frame.encounterSlot = EncounterSlot::hSlot(rngList[hunt++], encounterType);
+        frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], encounterType));
         if (!compare.compareSlot(frame))
             continue;
 
-        frame.level = encounter.calcLevel(frame.encounterSlot, rngList[hunt++]);
+        frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[hunt++]));
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         first = rngList[hunt];
 
         // Cute charm uses first call
         // Call next RNG to determine hunt nature
-        frame.nature = rngList[++hunt] % 25;
+        frame.setNature(rngList[++hunt] % 25);
         if (!compare.compareNature(frame))
             continue;
 
@@ -308,7 +308,7 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
                 pid1 = rngList[++hunt];
                 pid = (pid1 << 16) | pid2;
             }
-            while (pid % 25 != frame.nature || !cuteCharm(pid));
+            while (pid % 25 != frame.getNature() || !cuteCharm(pid));
         }
         else
         {
@@ -322,7 +322,7 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
                 pid1 = rngList[++hunt];
                 pid = (pid1 << 16) | pid2;
             }
-            while (pid % 25 != frame.nature);
+            while (pid % 25 != frame.getNature());
         }
 
         frame.setPID(pid, pid1, pid2);
@@ -337,7 +337,7 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.frame = cnt;
+        frame.setFrame(cnt);
         frame.occidentary = hunt + cnt - 1;
         frames.push_back(frame);
     }
@@ -351,7 +351,7 @@ vector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
-    frame.genderRatio = compare.getGenderRatio();
+    frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 5; i++)
         rngList.push_back(rng.nextUShort());
@@ -369,7 +369,7 @@ vector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.frame = cnt;
+        frame.setFrame(cnt);
         frames.push_back(frame);
     }
     rngList.clear();
@@ -381,7 +381,7 @@ vector<Frame3> Generator3::generateMethod124(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
-    frame.genderRatio = compare.getGenderRatio();
+    frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 5; i++)
         rngList.push_back(rng.nextUShort());
@@ -401,7 +401,7 @@ vector<Frame3> Generator3::generateMethod124(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.frame = cnt;
+        frame.setFrame(cnt);
         frames.push_back(frame);
     }
     rngList.clear();
@@ -413,7 +413,7 @@ vector<Frame3> Generator3::generateMethod1Reverse(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
-    frame.genderRatio = compare.getGenderRatio();
+    frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 4; i++)
         rngList.push_back(rng.nextUShort());
@@ -431,7 +431,7 @@ vector<Frame3> Generator3::generateMethod1Reverse(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.frame = cnt;
+        frame.setFrame(cnt);
         frames.push_back(frame);
     }
     rngList.clear();
