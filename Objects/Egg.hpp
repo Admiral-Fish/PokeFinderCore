@@ -38,13 +38,15 @@ protected:
     u16 sid;
     u16 tid;
     Method frameType = EBred;
-    u32 initialSeed;
+    u32 seed;
     u32 initialFrame;
     u32 maxResults;
     u32 everstoneNature;
 
 public:
     void setEverstoneNature(const u32 &value);
+    u32 getSeed() const;
+    void setSeed(const u32 &value);
 
 };
 

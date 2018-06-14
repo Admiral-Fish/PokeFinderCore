@@ -40,6 +40,7 @@ private:
     NatureLock *natureLock = NULL;
     ShadowType type;
     FrameCompare compare;
+    EncounterArea3 encounter;
 
     vector<Frame3> searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     vector<Frame3> searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
@@ -50,14 +51,13 @@ private:
     vector<Frame3> searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
 
 public:
-    EncounterArea3 encounter;
-
     Searcher3();
     Searcher3(u16 tid, u16 sid, u32 ratio, FrameCompare compare);
     ~Searcher3();
     vector<Frame3> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     void setup(Method method);
     void setupNatureLock(int num);
+    void setEncounter(const EncounterArea3 &value);
 
 };
 

@@ -41,6 +41,14 @@ Searcher4::Searcher4(u16 tid, u16 sid, u32 ratio, u32 minDelay, u32 maxDelay, u3
     this->maxDelay = maxDelay;
     this->minFrame = minFrame;
     this->maxFrame = maxFrame;
+    cache = new RNGCache(method);
+    backward = new PokeRNGR(0);
+}
+
+Searcher4::~Searcher4()
+{
+    delete cache;
+    delete backward;
 }
 
 vector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
@@ -118,15 +126,15 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<u32> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<u32> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward.setSeed(seeds[i]);
-        frame.setPID(backward.nextUShort(), backward.nextUShort());
-        frame.seed = backward.nextUInt();
+        backward->setSeed(seeds[i]);
+        frame.setPID(backward->nextUShort(), backward->nextUShort());
+        frame.setSeed(backward->nextUInt());
         if (compare.comparePID(frame))
             frames.push_back(frame);
 
@@ -135,7 +143,7 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
         frame.setNature(frame.getPid() % 25);
         if (compare.comparePID(frame))
         {
-            frame.seed ^= 0x80000000;
+            frame.setSeed(frame.getSeed() ^ 0x80000000);
             frames.push_back(frame);
         }
     }
@@ -154,15 +162,15 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward.setSeed(seeds[i]);
-        frame.setPID(backward.nextUShort(), backward.nextUShort());
-        u32 seed = backward.nextUInt();
+        backward->setSeed(seeds[i]);
+        frame.setPID(backward->nextUShort(), backward->nextUShort());
+        u32 seed = backward->nextUInt();
 
         for (int i = 0; i < 2; i++)
         {
@@ -194,17 +202,17 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                     {
                         case Wild:
                             slot = testRNG.getSeed();
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case Surfing:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) / 656) <= 24)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
@@ -212,7 +220,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) / 656) <= 49)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
@@ -220,13 +228,13 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) / 656) <= 74)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
                         case Stationary:
                         default:
-                            frame.seed = testRNG.getSeed();
+                            frame.setSeed(testRNG.getSeed());
                             break;
                     }
 
@@ -260,15 +268,15 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward.setSeed(seeds[i]);
-        frame.setPID(backward.nextUShort(), backward.nextUShort());
-        u32 seed = backward.nextUInt();
+        backward->setSeed(seeds[i]);
+        frame.setPID(backward->nextUShort(), backward->nextUShort());
+        u32 seed = backward->nextUInt();
 
         for (int i = 0; i < 2; i++)
         {
@@ -299,17 +307,17 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                     {
                         case Wild:
                             slot = testRNG.getSeed();
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case Surfing:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) / 656) <= 24)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
@@ -317,7 +325,7 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) / 656) <= 49)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
@@ -325,13 +333,13 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) / 656) <= 74)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
                         case Stationary:
                         default:
-                            frame.seed = testRNG.getSeed();
+                            frame.setSeed(testRNG.getSeed());
                             break;
                     }
 
@@ -350,17 +358,17 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                     {
                         case Wild:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case Surfing:
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) / 656) <= 24)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
@@ -368,7 +376,7 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) / 656) <= 49)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
@@ -376,13 +384,13 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) / 656) <= 74)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
                         case Stationary:
                         default:
-                            frame.seed = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                             break;
                     }
 
@@ -417,16 +425,16 @@ vector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 s
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward.setSeed(seeds[i]);
-        u32 pid2 = backward.nextUShort();
-        u32 pid1 = backward.nextUShort();
-        u32 seed = backward.nextUInt();
+        backward->setSeed(seeds[i]);
+        u32 pid2 = backward->nextUShort();
+        u32 pid1 = backward->nextUShort();
+        u32 seed = backward->nextUInt();
 
         for (int i = 0; i < 2; i++)
         {
@@ -446,39 +454,39 @@ vector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 s
                 {
                     case Wild:
                         slot = seed;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case Surfing:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case OldRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if ((frame.seed >> 16) / 656 > 24)
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                        if ((frame.getSeed() >> 16) / 656 > 24)
                             skipFrame = true;
                         else
-                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case GoodRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if ((frame.seed >> 16) / 656 > 49)
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                        if ((frame.getSeed() >> 16) / 656 > 49)
                             skipFrame = true;
                         else
-                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case SuperRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if ((frame.seed >> 16) / 656 > 74)
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                        if ((frame.getSeed() >> 16) / 656 > 74)
                             skipFrame = true;
                         else
-                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case Stationary:
                     default:
-                        frame.seed = seed;
+                        frame.setSeed(seed);
                         break;
                 }
 
@@ -537,15 +545,15 @@ vector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward.setSeed(seeds[i]);
-        frame.setPID(backward.nextUShort(), backward.nextUShort());
-        u32 seed = backward.nextUInt();
+        backward->setSeed(seeds[i]);
+        frame.setPID(backward->nextUShort(), backward->nextUShort());
+        u32 seed = backward->nextUInt();
 
         for (int i = 0; i < 2; i++)
         {
@@ -577,10 +585,10 @@ vector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32
                     {
                         case Wild:
                             slot = testRNG.getSeed();
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         case Surfing:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
@@ -589,7 +597,7 @@ vector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32
                             {
                                 if (((nibble >> 16) / 656) > 24)
                                     frame.setLeadType(SuctionCups);
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
                                 skipFrame = true;
@@ -601,7 +609,7 @@ vector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32
                             {
                                 if (((nibble >> 16) / 656) > 49)
                                     frame.setLeadType(SuctionCups);
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
                                 skipFrame = true;
@@ -613,14 +621,14 @@ vector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32
                             {
                                 if (((nibble >> 16) / 656) > 74)
                                     frame.setLeadType(SuctionCups);
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
                                 skipFrame = true;
                             break;
                         case Stationary:
                         default:
-                            frame.seed = testRNG.getSeed();
+                            frame.setSeed(testRNG.getSeed());
                             break;
                     }
 
@@ -654,16 +662,16 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward.setSeed(seeds[i]);
-        u32 pid2 = backward.nextUShort();
-        u32 pid1 = backward.nextUShort();
-        u32 seed = backward.nextUInt();
+        backward->setSeed(seeds[i]);
+        u32 pid2 = backward->nextUShort();
+        u32 pid1 = backward->nextUShort();
+        u32 seed = backward->nextUInt();
 
         for (int i = 0; i < 2; i++)
         {
@@ -695,10 +703,10 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                         {
                             case Wild:
                                 slot = testRNG.getSeed();
-                                frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             case Surfing:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                                frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                 break;
                             case OldRod:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
@@ -707,7 +715,7 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 {
                                     if (((nibble >> 16) / 656) > 24)
                                         frame.setLeadType(SuctionCups);
-                                    frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
                                     skipFrame = true;
@@ -719,7 +727,7 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 {
                                     if (((nibble >> 16) / 656) > 49)
                                         frame.setLeadType(SuctionCups);
-                                    frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
                                     skipFrame = true;
@@ -731,14 +739,14 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 {
                                     if (((nibble >> 16) / 656) > 74)
                                         frame.setLeadType(SuctionCups);
-                                    frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
                                     skipFrame = true;
                                 break;
                             case Stationary:
                             default:
-                                frame.seed = testRNG.getSeed();
+                                frame.setSeed(testRNG.getSeed());
                                 break;
                         }
 
@@ -755,17 +763,17 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                             switch (encounterType)
                             {
                                 case OldRod:
-                                    nibble = (frame.seed >> 16) / 656;
+                                    nibble = (frame.getSeed() >> 16) / 656;
                                     if (nibble > 24)
                                         skipFrame = true;
                                     break;
                                 case GoodRod:
-                                    nibble = (frame.seed >> 16) / 656;
+                                    nibble = (frame.getSeed() >> 16) / 656;
                                     if (nibble > 49)
                                         skipFrame = true;
                                     break;
                                 case SuperRod:
-                                    nibble = (frame.seed >> 16) / 656;
+                                    nibble = (frame.getSeed() >> 16) / 656;
                                     if (nibble > 74)
                                         skipFrame = true;
                                     break;
@@ -773,8 +781,8 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                     break;
                             }
 
-                            slot = frame.seed;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            slot = frame.getSeed();
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
 
                             if (!skipFrame)
                             {
@@ -792,17 +800,17 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                         {
                             case Wild:
                                 slot = testRNG.getSeed();
-                                frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                 break;
                             case Surfing:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                                frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                 break;
                             case OldRod:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                                 if (((nibble >> 16) / 656) <= 24)
-                                    frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 else
                                     skipFrame = true;
                                 break;
@@ -810,7 +818,7 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                                 if (((nibble >> 16) / 656) <= 49)
-                                    frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 else
                                     skipFrame = true;
                                 break;
@@ -818,13 +826,13 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                                 if (((nibble >> 16) / 656) <= 74)
-                                    frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 else
                                     skipFrame = true;
                                 break;
                             case Stationary:
                             default:
-                                frame.seed = testRNG.getSeed();
+                                frame.setSeed(testRNG.getSeed());
                                 break;
                         }
 
@@ -853,39 +861,39 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                 {
                     case Wild:
                         slot = seed;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case Surfing:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case OldRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if ((frame.seed >> 16) / 656 > 24)
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                        if ((frame.getSeed() >> 16) / 656 > 24)
                             skipFrame = true;
                         else
-                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case GoodRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if ((frame.seed >> 16) / 656 > 49)
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                        if ((frame.getSeed() >> 16) / 656 > 49)
                             skipFrame = true;
                         else
-                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case SuperRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if ((frame.seed >> 16) / 656 > 74)
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                        if ((frame.getSeed() >> 16) / 656 > 74)
                             skipFrame = true;
                         else
-                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case Stationary:
                     default:
-                        frame.seed = seed;
+                        frame.setSeed(seed);
                 }
 
                 u32 choppedPID = pid2 / 0xA3E;
@@ -943,15 +951,15 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward.setSeed(seeds[i]);
-        frame.setPID(backward.nextUShort(), backward.nextUShort());
-        u32 seed = backward.nextUInt();
+        backward->setSeed(seeds[i]);
+        frame.setPID(backward->nextUShort(), backward->nextUShort());
+        u32 seed = backward->nextUInt();
 
         for (int i = 0; i < 2; i++)
         {
@@ -983,17 +991,17 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                     {
                         case Wild:
                             slot = testRNG.getSeed();
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case Surfing:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) % 100) <= 24)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
@@ -1001,7 +1009,7 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) % 100) <= 49)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
@@ -1009,13 +1017,13 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) % 100) <= 74)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
                         case Stationary:
                         default:
-                            frame.seed = testRNG.getSeed();
+                            frame.setSeed(testRNG.getSeed());
                             break;
                     }
 
@@ -1049,15 +1057,15 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward.setSeed(seeds[i]);
-        frame.setPID(backward.nextUShort(), backward.nextUShort());
-        u32 seed = backward.nextUInt();
+        backward->setSeed(seeds[i]);
+        frame.setPID(backward->nextUShort(), backward->nextUShort());
+        u32 seed = backward->nextUInt();
 
         for (int i = 0; i < 2; i++)
         {
@@ -1088,17 +1096,17 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                     {
                         case Wild:
                             slot = testRNG.getSeed();
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case Surfing:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) % 100) <= 24)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
@@ -1106,7 +1114,7 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) % 100) <= 49)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
@@ -1114,13 +1122,13 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) % 100) <= 74)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
                         case Stationary:
                         default:
-                            frame.seed = testRNG.getSeed();
+                            frame.setSeed(testRNG.getSeed());
                             break;
                     }
 
@@ -1139,17 +1147,17 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                     {
                         case Wild:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case Surfing:
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) % 100) <= 24)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
@@ -1157,7 +1165,7 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) % 100) <= 49)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
@@ -1165,13 +1173,13 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) % 100) <= 74)
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
                             break;
                         case Stationary:
                         default:
-                            frame.seed = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                             break;
                     }
 
@@ -1206,16 +1214,16 @@ vector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 s
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward.setSeed(seeds[i]);
-        u32 pid2 = backward.nextUShort();
-        u32 pid1 = backward.nextUShort();
-        u32 seed = backward.nextUInt();
+        backward->setSeed(seeds[i]);
+        u32 pid2 = backward->nextUShort();
+        u32 pid1 = backward->nextUShort();
+        u32 seed = backward->nextUInt();
 
         for (int i = 0; i < 2; i++)
         {
@@ -1235,40 +1243,40 @@ vector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 s
                 {
                     case Wild:
                         slot = seed;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case Surfing:
                     case BugCatchingContest:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                        frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case OldRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
-                        if ((frame.seed >> 16) % 100 > 24)
+                        frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
+                        if ((frame.getSeed() >> 16) % 100 > 24)
                             skipFrame = true;
                         else
-                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case GoodRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
-                        if ((frame.seed >> 16) % 100 > 49)
+                        frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
+                        if ((frame.getSeed() >> 16) % 100 > 49)
                             skipFrame = true;
                         else
-                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case SuperRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
-                        if ((frame.seed >> 16) % 100 > 74)
+                        frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
+                        if ((frame.getSeed() >> 16) % 100 > 74)
                             skipFrame = true;
                         else
-                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case Stationary:
                     default:
-                        frame.seed = seed;
+                        frame.setSeed(seed);
                         break;
                 }
 
@@ -1327,15 +1335,15 @@ vector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward.setSeed(seeds[i]);
-        frame.setPID(backward.nextUShort(), backward.nextUShort());
-        u32 seed = backward.nextUInt();
+        backward->setSeed(seeds[i]);
+        frame.setPID(backward->nextUShort(), backward->nextUShort());
+        u32 seed = backward->nextUInt();
 
         for (int i = 0; i < 2; i++)
         {
@@ -1367,10 +1375,10 @@ vector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32
                     {
                         case Wild:
                             slot = testRNG.getSeed();
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         case Surfing:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
@@ -1379,7 +1387,7 @@ vector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32
                             {
                                 if (((nibble >> 16) % 100) > 24)
                                     frame.setLeadType(SuctionCups);
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
                                 skipFrame = true;
@@ -1391,7 +1399,7 @@ vector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32
                             {
                                 if (((nibble >> 16) % 100) > 49)
                                     frame.setLeadType(SuctionCups);
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
                                 skipFrame = true;
@@ -1403,14 +1411,14 @@ vector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32
                             {
                                 if (((nibble >> 16) % 100) > 74)
                                     frame.setLeadType(SuctionCups);
-                                frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
                                 skipFrame = true;
                             break;
                         case Stationary:
                         default:
-                            frame.seed = testRNG.getSeed();
+                            frame.setSeed(testRNG.getSeed());
                             break;
                     }
 
@@ -1444,16 +1452,16 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward.setSeed(seeds[i]);
-        u32 pid2 = backward.nextUShort();
-        u32 pid1 = backward.nextUShort();
-        u32 seed = backward.nextUInt();
+        backward->setSeed(seeds[i]);
+        u32 pid2 = backward->nextUShort();
+        u32 pid1 = backward->nextUShort();
+        u32 seed = backward->nextUInt();
 
         for (int i = 0; i < 2; i++)
         {
@@ -1485,10 +1493,10 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                         {
                             case Wild:
                                 slot = testRNG.getSeed();
-                                frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             case Surfing:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                                frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                 break;
                             case OldRod:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
@@ -1497,7 +1505,7 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 {
                                     if (((nibble >> 16) % 100) > 24)
                                         frame.setLeadType(SuctionCups);
-                                    frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
                                     skipFrame = true;
@@ -1509,7 +1517,7 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 {
                                     if (((nibble >> 16) % 100) > 49)
                                         frame.setLeadType(SuctionCups);
-                                    frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
                                     skipFrame = true;
@@ -1521,14 +1529,14 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 {
                                     if (((nibble >> 16) % 100) > 74)
                                         frame.setLeadType(SuctionCups);
-                                    frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
                                     skipFrame = true;
                                 break;
                             case Stationary:
                             default:
-                                frame.seed = testRNG.getSeed();
+                                frame.setSeed(testRNG.getSeed());
                                 break;
                         }
 
@@ -1545,17 +1553,17 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                             switch (encounterType)
                             {
                                 case OldRod:
-                                    nibble = (frame.seed >> 16) % 100;
+                                    nibble = (frame.getSeed() >> 16) % 100;
                                     if (nibble > 24)
                                         skipFrame = true;
                                     break;
                                 case GoodRod:
-                                    nibble = (frame.seed >> 16) % 100;
+                                    nibble = (frame.getSeed() >> 16) % 100;
                                     if (nibble > 49)
                                         skipFrame = true;
                                     break;
                                 case SuperRod:
-                                    nibble = (frame.seed >> 16) % 100;
+                                    nibble = (frame.getSeed() >> 16) % 100;
                                     if (nibble > 74)
                                         skipFrame = true;
                                     break;
@@ -1563,8 +1571,8 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                     break;
                             }
 
-                            slot = frame.seed;
-                            frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                            slot = frame.getSeed();
+                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
 
                             if (!skipFrame)
                             {
@@ -1582,17 +1590,17 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                         {
                             case Wild:
                                 slot = testRNG.getSeed();
-                                frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                 break;
                             case Surfing:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                                frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                 break;
                             case OldRod:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                                 if (((nibble >> 16) % 100) <= 24)
-                                    frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 else
                                     skipFrame = true;
                                 break;
@@ -1600,7 +1608,7 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                                 if (((nibble >> 16) % 100) <= 49)
-                                    frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 else
                                     skipFrame = true;
                                 break;
@@ -1608,13 +1616,13 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                                 if (((nibble >> 16) % 100) <= 74)
-                                    frame.seed = nibble * 0xeeb9eb65 + 0xa3561a1;
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 else
                                     skipFrame = true;
                                 break;
                             case Stationary:
                             default:
-                                frame.seed = testRNG.getSeed();
+                                frame.setSeed(testRNG.getSeed());
                                 break;
                         }
 
@@ -1643,40 +1651,40 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                 {
                     case Wild:
                         slot = seed;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case Surfing:
                     case BugCatchingContest:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case OldRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if ((frame.seed >> 16) % 100 > 24)
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                        if ((frame.getSeed() >> 16) % 100 > 24)
                             skipFrame = true;
                         else
-                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case GoodRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if ((frame.seed >> 16) % 100 > 49)
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                        if ((frame.getSeed() >> 16) % 100 > 49)
                             skipFrame = true;
                         else
-                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case SuperRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.seed = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if ((frame.seed >> 16) % 100 > 74)
+                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                        if ((frame.getSeed() >> 16) % 100 > 74)
                             skipFrame = true;
                         else
-                            frame.seed = frame.seed * 0xeeb9eb65 + 0xa3561a1;
+                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case Stationary:
                     default:
-                        frame.seed = seed;
+                        frame.setSeed(seed);
                 }
 
                 u32 choppedPID = pid2 % 25;
@@ -1734,7 +1742,7 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     u32 calls[15];
@@ -1742,10 +1750,10 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
 
     for (auto i = 0; i < size; i++)
     {
-        backward.setSeed(seeds[i]);
+        backward->setSeed(seeds[i]);
 
         for (int i = 0; i < 15; i++)
-            calls[i] = backward.nextUShort();
+            calls[i] = backward->nextUShort();
 
         low = chainedPIDLow(calls[14], calls[0], calls[1], calls[2], calls[3], calls[4], calls[5], calls[6], calls[7], calls[8], calls[9], calls[10], calls[11], calls[12]);
         high = chainedPIDHigh(calls[13], low, tid, sid);
@@ -1753,12 +1761,12 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
 
         if (compare.comparePID(frame))
         {
-            backward.nextUInt();
-            frame.seed = backward.nextUInt();
+            backward->nextUInt();
+            frame.setSeed(backward->nextUInt());
             frames.push_back(frame);
 
             // Sister spread shares PID
-            frame.seed ^= 0x80000000;
+            frame.setSeed(frame.getSeed() ^ 0x80000000);
             frames.push_back(frame);
         }
     }
@@ -1777,18 +1785,18 @@ vector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa,
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<u32> seeds = cache.recoverLower16BitsIV(first, second);
+    vector<u32> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward.setSeed(seeds[i]);
-        frame.seed = backward.nextUInt();
+        backward->setSeed(seeds[i]);
+        frame.setSeed(backward->nextUInt());
         frames.push_back(frame);
 
         // Setup XORed frame
-        frame.seed ^= 0x80000000;
+        frame.setSeed(frame.getSeed() ^ 0x80000000);
         frames.push_back(frame);
     }
 
@@ -1801,9 +1809,9 @@ vector<Frame4> Searcher4::searchInitialSeeds(vector<Frame4> results)
 
     for (Frame4 result : results)
     {
-        backward.setSeed(result.seed);
-        backward.advanceFrames(minFrame - 1);
-        u32 test = backward.getSeed();
+        backward->setSeed(result.getSeed());
+        backward->advanceFrames(minFrame - 1);
+        u32 test = backward->getSeed();
 
         for (u32 cnt = minFrame; cnt <= maxFrame; cnt++)
         {
@@ -1813,12 +1821,12 @@ vector<Frame4> Searcher4::searchInitialSeeds(vector<Frame4> results)
             // Check if seed matches a valid gen 4 format
             if (hour < 24 && delay >= minDelay && delay <= maxDelay)
             {
-                result.seed = test;
+                result.setSeed(test);
                 result.setFrame(cnt);
                 frames.push_back(result);
             }
 
-            test = backward.nextUInt();
+            test = backward->nextUInt();
         }
     }
 

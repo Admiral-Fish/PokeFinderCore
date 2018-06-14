@@ -25,11 +25,12 @@
 class Frame4 : public Frame
 {
 
-public:
+private:
     u32 occidentary;
     u32 seed;
     u32 initialSeed;
 
+public:
     Frame4(u16 tid, u16 sid, u16 psv);
     void setInheritanceHGSS(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1,
                             u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2);
@@ -37,6 +38,12 @@ public:
                             u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2);
     QString getCall();
     QString chatotPitch();
+    u32 getInitialSeed() const;
+    void setInitialSeed(const u32 &value);
+    u32 getSeed() const;
+    void setSeed(const u32 &value);
+    u32 getOccidentary() const;
+    void setOccidentary(const u32 &value);
 
 };
 

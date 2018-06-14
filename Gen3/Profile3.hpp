@@ -29,7 +29,6 @@ private:
     bool deadBattery;
 
 public:
-
     Profile3(QString profileName, Game version, u32 tid, u32 sid, int language = 0, bool deadBattery = false);
     Profile3();
     static vector<Profile3> loadProfileList();
@@ -37,6 +36,7 @@ public:
     void deleteProfile();
     void updateProfile(Profile3 original);
     bool getDeadBattery() const;
+
 };
 
 #endif // PROFILE3_HPP

@@ -41,10 +41,15 @@ Generator4::Generator4(u32 maxResults, u32 initialFrame, u32 initialSeed, u16 ti
     frameType = type;
 }
 
+Generator4::~Generator4()
+{
+    delete rng;
+}
+
 vector<Frame4> Generator4::generate(FrameCompare compare)
 {
-    rng.setSeed(initialSeed);
-    rng.advanceFrames(initialFrame - 1 + offset);
+    rng = new PokeRNG(initialSeed);
+    rng->advanceFrames(initialFrame - 1 + offset);
     switch (frameType)
     {
         case Method1:
@@ -85,7 +90,7 @@ vector<Frame4> Generator4::generate(FrameCompare compare)
 void Generator4::refill()
 {
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
     size += 20;
 }
 
@@ -96,12 +101,12 @@ vector<Frame4> Generator4::generateMethod1(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 4; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
 
     // Method 1 [SEED] [PID] [PID] [IVS] [IVS]
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         frame.setPID(rngList[0], rngList[1]);
         if (!compare.comparePID(frame))
@@ -111,7 +116,7 @@ vector<Frame4> Generator4::generateMethod1(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.seed = rngList[0];
+        frame.setSeed(rngList[0]);
         frame.setFrame(cnt);
         frames.push_back(frame);
     }
@@ -127,7 +132,7 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
     size = 17;
 
     u32 max = initialFrame + maxResults;
@@ -140,7 +145,7 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
     else if (encounterType == SuperRod)
         thresh = leadType == SuctionCups ? 100 : 74;
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         hunt = 0;
         first = rngList[hunt++];
@@ -214,9 +219,9 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.seed = rngList[0];
+        frame.setSeed(rngList[0]);
         frame.setFrame(cnt);
-        frame.occidentary = hunt + cnt - 2;
+        frame.setOccidentary(hunt + cnt - 2);
         frames.push_back(frame);
     }
     rngList.clear();
@@ -231,13 +236,13 @@ vector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
     size = 17;
 
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first;
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         hunt = 0;
         first = rngList[hunt++];
@@ -315,9 +320,9 @@ vector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.seed = rngList[0];
+        frame.setSeed(rngList[0]);
         frame.setFrame(cnt);
-        frame.occidentary = hunt + cnt - 2;
+        frame.setOccidentary(hunt + cnt - 2);
         frames.push_back(frame);
     }
     rngList.clear();
@@ -332,7 +337,7 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
     size = 17;
 
     u32 max = initialFrame + maxResults;
@@ -359,7 +364,7 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
             break;
     }
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         hunt = 0;
         first = rngList[hunt++];
@@ -420,9 +425,9 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
             if (!compare.compareIVs(frame))
                 continue;
 
-            frame.seed = rngList[0];
+            frame.setSeed(rngList[0]);
             frame.setFrame(cnt);
-            frame.occidentary = cnt;
+            frame.setOccidentary(cnt);
             frames.push_back(frame);
         }
         else
@@ -449,9 +454,9 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
             if (!compare.compareIVs(frame))
                 continue;
 
-            frame.seed = rngList[0];
+            frame.setSeed(rngList[0]);
             frame.setFrame(cnt);
-            frame.occidentary = hunt + cnt - 3;
+            frame.setOccidentary(hunt + cnt - 3);
             frames.push_back(frame);
         }
     }
@@ -467,7 +472,7 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
     size = 17;
 
     u32 max = initialFrame + maxResults;
@@ -480,7 +485,7 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
     else if (encounterType == SuperRod)
         thresh = leadType == SuctionCups ? 100 : 74;
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         hunt = 0;
         first = rngList[hunt++];
@@ -555,9 +560,9 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.seed = rngList[0];
+        frame.setSeed(rngList[0]);
         frame.setFrame(cnt);
-        frame.occidentary = hunt + cnt - 2;
+        frame.setOccidentary(hunt + cnt - 2);
         frames.push_back(frame);
     }
     rngList.clear();
@@ -572,15 +577,14 @@ vector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
     size = 17;
 
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first;
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
-        frame.seed = rngList[0];
         hunt = 0;
         first = rngList[hunt++];
 
@@ -659,9 +663,9 @@ vector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.seed = rngList[0];
+        frame.setSeed(rngList[0]);
         frame.setFrame(cnt);
-        frame.occidentary = hunt + cnt - 2;
+        frame.setOccidentary(hunt + cnt - 2);
         frames.push_back(frame);
     }
     rngList.clear();
@@ -676,7 +680,7 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
     size = 17;
 
     u32 max = initialFrame + maxResults;
@@ -703,7 +707,7 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
             break;
     }
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         hunt = 0;
         first = rngList[hunt++];
@@ -766,9 +770,9 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
             if (!compare.compareIVs(frame))
                 continue;
 
-            frame.seed = rngList[0];
+            frame.setSeed(rngList[0]);
             frame.setFrame(cnt);
-            frame.occidentary = cnt;
+            frame.setOccidentary(cnt);
             frames.push_back(frame);
         }
         else
@@ -795,9 +799,9 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
             if (!compare.compareIVs(frame))
                 continue;
 
-            frame.seed = rngList[0];
+            frame.setSeed(rngList[0]);
             frame.setFrame(cnt);
-            frame.occidentary = hunt + cnt - 3;
+            frame.setOccidentary(hunt + cnt - 3);
             frames.push_back(frame);
         }
     }
@@ -813,12 +817,12 @@ vector<Frame4> Generator4::generateChainedShiny(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 18; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
 
     u32 low, high;
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         low = chainedPIDLow(rngList[1], rngList[15], rngList[14], rngList[13], rngList[12], rngList[11], rngList[10], rngList[9], rngList[8], rngList[7], rngList[6], rngList[5], rngList[4], rngList[3]);
         high = chainedPIDHigh(rngList[2], low, tid, sid);
@@ -845,12 +849,12 @@ vector<Frame4> Generator4::generateWondercardIVs(FrameCompare compare)
     Frame4 frame = Frame4(tid, sid, psv);
 
     for (int i = 0; i < 2; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
 
     // Wondercard IVs [SEED] [IVS] [IVS]
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         frame.setIVs(rngList[0], rngList[1]);
         if (!compare.compareIVs(frame))

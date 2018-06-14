@@ -105,7 +105,7 @@ u32 EncounterArea3::calcLevel(u32 index, u32 prng)
 }
 
 // Only for Rock Smash since all other encounters can be forced
-u32 EncounterArea3::getEncounterRate(void) const
+u32 EncounterArea3::getEncounterRate() const
 {
     switch (location)
     {
@@ -139,7 +139,7 @@ u32 EncounterArea3::getEncounterRate(void) const
     }
 }
 
-u32 EncounterArea3::getDelay(void) const
+u32 EncounterArea3::getDelay() const
 {
     return delay;
 }

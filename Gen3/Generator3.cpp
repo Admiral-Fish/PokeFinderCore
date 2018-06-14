@@ -42,6 +42,11 @@ Generator3::Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u16 ti
     psv = tid ^ sid;
 }
 
+Generator3::~Generator3()
+{
+    delete rng;
+}
+
 // Returns vector of frames for Method Channel
 vector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
 {
@@ -50,12 +55,12 @@ vector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 12; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
 
     // Method Channel [SEED] [SID] [PID] [PID] [BERRY] [GAME ORIGIN] [OT GENDER] [IV] [IV] [IV] [IV] [IV] [IV]
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         frame.setIDs(40122, rngList[0], 40122 ^ rngList[0]);
         if ((rngList[2] > 7 ? 0 : 1) != (rngList[1] ^ 40122 ^ rngList[0]))
@@ -85,7 +90,7 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
     size = 18;
 
     u32 max = initialFrame + maxResults;
@@ -93,7 +98,7 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
 
     u32 rate = encounter.getEncounterRate() * 16;
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         if (encounterType == RockSmash)
         {
@@ -138,7 +143,7 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
             continue;
 
         frame.setEncounterSlot(cnt);
-        frame.occidentary = hunt + cnt - 1;
+        frame.setOccidentary(hunt + cnt - 1);
         frames.push_back(frame);
     }
     rngList.clear();
@@ -154,7 +159,7 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
     size = 18;
 
     u32 max = initialFrame + maxResults;
@@ -162,7 +167,7 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
 
     u32 rate = encounter.getEncounterRate() * 16;
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         if (encounterType == RockSmash)
         {
@@ -217,7 +222,7 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
             continue;
 
         frame.setFrame(cnt);
-        frame.occidentary = hunt + cnt - 1;
+        frame.setOccidentary(hunt + cnt - 1);
         frames.push_back(frame);
     }
     rngList.clear();
@@ -233,7 +238,7 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
     size = 18;
 
     u32 max = initialFrame + maxResults;
@@ -272,7 +277,7 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
 
     u32 rate = encounter.getEncounterRate() * 16;
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         if (encounterType == RockSmash)
         {
@@ -338,7 +343,7 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
             continue;
 
         frame.setFrame(cnt);
-        frame.occidentary = hunt + cnt - 1;
+        frame.setOccidentary(hunt + cnt - 1);
         frames.push_back(frame);
     }
     rngList.clear();
@@ -354,12 +359,12 @@ vector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 5; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
 
     // Method XD/Colo [SEED] [IVS] [IVS] [BLANK] [PID] [PID]
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         frame.setPID(rngList[4], rngList[3]);
         if (!compare.comparePID(frame))
@@ -384,14 +389,14 @@ vector<Frame3> Generator3::generateMethod124(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 5; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
 
     // Method 1 [SEED] [PID] [PID] [IVS] [IVS]
     // Method 2 [SEED] [PID] [PID] [BLANK] [IVS] [IVS]
     // Method 4 [SEED] [PID] [PID] [IVS] [BLANK] [IVS]
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         frame.setPID(rngList[0], rngList[1]);
         if (!compare.comparePID(frame))
@@ -416,12 +421,12 @@ vector<Frame3> Generator3::generateMethod1Reverse(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     for (int i = 0; i < 4; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
 
     // Method 1 Reverse [SEED] [PID] [PID] [IVS] [IVS]
 
     u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng.nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         frame.setPID(rngList[1], rngList[0]);
         if (!compare.comparePID(frame))
@@ -442,7 +447,7 @@ vector<Frame3> Generator3::generateMethod1Reverse(FrameCompare compare)
 void Generator3::refill()
 {
     for (int i = 0; i < 20; i++)
-        rngList.push_back(rng.nextUShort());
+        rngList.push_back(rng->nextUShort());
     size += 20;
 }
 
@@ -485,11 +490,11 @@ void Generator3::setup(Method method)
 {
     frameType = method;
     if (frameType == XDColo || frameType == Channel)
-        rng = XDRNG(initialSeed);
+        rng = new XDRNG(initialSeed);
     else
-        rng = PokeRNG(initialSeed);
+        rng = new PokeRNG(initialSeed);
 
-    rng.advanceFrames(initialFrame - 1 + offset);
+    rng->advanceFrames(initialFrame - 1 + offset);
 
     if (frameType == Method1 || frameType == MethodH1)
     {
@@ -506,4 +511,9 @@ void Generator3::setup(Method method)
         iv1 = frameType == MethodH4 ? 1 : 2;
         iv2 = frameType == MethodH4 ? 3 : 4;
     }
+}
+
+void Generator3::setEncounter(const EncounterArea3 &value)
+{
+    encounter = value;
 }

@@ -28,11 +28,15 @@ class Searcher4 : public Searcher
 {
 
 private:
-    RNGCache cache = RNGCache(Method1);
+    RNGCache *cache = NULL;
     Frame4 frame = Frame4(0, 0, 0);
-    LCRNG backward = PokeRNGR(0);
+    PokeRNGR *backward = NULL;
     FrameCompare compare;
     u32 unbiasedBuffer[5] = { 0, 0x96, 0xC8, 0x4B, 0x32 };
+    u32 minDelay;
+    u32 maxDelay;
+    u32 minFrame;
+    u32 maxFrame;
 
     vector<Frame4> searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     vector<Frame4> searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
@@ -54,13 +58,9 @@ private:
     u32 chainedPIDHigh(u32 high, u32 low, u32 tid, u32 sid);
 
 public:
-    u32 minDelay;
-    u32 maxDelay;
-    u32 minFrame;
-    u32 maxFrame;
-
     Searcher4();
     Searcher4(u16 tid, u16 sid, u32 ratio, u32 minDelay, u32 maxDelay, u32 minFrame, u32 maxFrame, FrameCompare compare, Method method);
+    ~Searcher4();
     vector<Frame4> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
 
 };

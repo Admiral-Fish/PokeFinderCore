@@ -29,7 +29,7 @@ class Generator4 : public Generator
 {
 
 private:
-    LCRNG rng = PokeRNG(0);
+    PokeRNG *rng = NULL;
     u32 size;
 
     vector<Frame4> generateMethod1(FrameCompare compare);
@@ -50,6 +50,7 @@ private:
 public:
     Generator4();
     Generator4(u32 maxResults, u32 initialFrame, u32 initialSeed, u16 tid, u16 sid, u32 offset, Method type);
+    ~Generator4();
     vector<Frame4> generate(FrameCompare compare);
 
 };

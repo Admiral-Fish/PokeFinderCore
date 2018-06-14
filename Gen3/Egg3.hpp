@@ -29,12 +29,19 @@ class Egg3 : public Egg
 {
 
 private:
-    LCRNG rng = PokeRNG(0);
+    PokeRNG *rng;
     vector<u32> parent1;
     vector<u32> parent2;
     const u32 HABCDS[6] = { 0, 1, 2, 5, 3, 4 };
     const u32 ABCDS[5] = { 1, 2, 5, 3, 4 };
     const u32 ACDS[4] = { 1, 5, 3, 4 };
+    u32 calibration;
+    u32 minRedraw;
+    u32 maxRedraw;
+    u32 compatability;
+    u32 minPickup;
+    u32 maxPickup;
+    bool everstone;
 
     vector<Frame3> generateEmeraldPID(FrameCompare compare);
     vector<Frame3> generateEmerald(FrameCompare compare);
@@ -46,17 +53,18 @@ private:
 public:
     Egg3();
     Egg3(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 seed = 0);
+    ~Egg3();
     vector<Frame3> generate(FrameCompare compare);
     void setParents(vector<u32> parent1, vector<u32> parent2);
-
-    u32 calibration;
-    u32 minRedraw;
-    u32 maxRedraw;
-    u32 compatability;
-    u32 minPickup;
-    u32 maxPickup;
-    u32 seed;
-    bool everstone;
+    void setMinRedraw(const u32 &value);
+    void setMaxRedraw(const u32 &value);
+    void setCompatability(const u32 &value);
+    void setCalibration(const u32 &value);
+    void setEverstone(bool value);
+    void setMinPickup(const u32 &value);
+    void setMaxPickup(const u32 &value);
+    u32 getSeed() const;
+    void setSeed(const u32 &value);
 
 };
 

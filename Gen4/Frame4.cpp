@@ -19,6 +19,36 @@
 
 #include "Frame4.hpp"
 
+u32 Frame4::getInitialSeed() const
+{
+    return initialSeed;
+}
+
+void Frame4::setInitialSeed(const u32 &value)
+{
+    initialSeed = value;
+}
+
+u32 Frame4::getSeed() const
+{
+    return seed;
+}
+
+void Frame4::setSeed(const u32 &value)
+{
+    seed = value;
+}
+
+u32 Frame4::getOccidentary() const
+{
+    return occidentary;
+}
+
+void Frame4::setOccidentary(const u32 &value)
+{
+    occidentary = value;
+}
+
 Frame4::Frame4(u16 tid, u16 sid, u16 psv)
 {
     this->tid = tid;

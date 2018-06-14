@@ -42,8 +42,9 @@ public:
     static vector<EncounterArea3> getEncounters(Encounter type, Game game);
     QStringList getSpecieNames();
     u32 calcLevel(u32 index, u32 prng);
-    u32 getEncounterRate(void) const;
-    u32 getDelay(void) const;
+    u32 getEncounterRate() const;
+    u32 getDelay() const;
+
 };
 
 #endif // ENCOUNTERAREA3_HPP

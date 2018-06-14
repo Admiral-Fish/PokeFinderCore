@@ -184,3 +184,33 @@ void Frame3::setInheritance(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 
     hidden = ((((ivs[0] & 1) + 2 * (ivs[1] & 1) + 4 * (ivs[2] & 1) + 8 * (ivs[5] & 1) + 16 * (ivs[3] & 1) + 32 * (ivs[4] & 1)) * 15) / 63);
     power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
 }
+
+QString Frame3::getLockReason() const
+{
+    return lockReason;
+}
+
+void Frame3::setLockReason(const QString &value)
+{
+    lockReason = value;
+}
+
+u32 Frame3::getOccidentary() const
+{
+    return occidentary;
+}
+
+void Frame3::setOccidentary(const u32 &value)
+{
+    occidentary = value;
+}
+
+u32 Frame3::getSeed() const
+{
+    return seed;
+}
+
+void Frame3::setSeed(const u32 &value)
+{
+    seed = value;
+}

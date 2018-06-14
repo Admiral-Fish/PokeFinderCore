@@ -49,9 +49,6 @@ public:
     ~Egg4();
     vector<Frame4> generate(FrameCompare compare);
     void setParents(vector<u32> parent1, vector<u32> parent2);
-    void setSeed(u32 seed);
-
-    u32 seed;
 
 };
 

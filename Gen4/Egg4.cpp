@@ -23,7 +23,7 @@ Egg4::Egg4()
 {
     maxResults = 100000;
     initialFrame = 1;
-    initialSeed = 0;
+    seed = 0;
     tid = 12345;
     sid = 54321;
     psv = tid ^ sid;
@@ -33,12 +33,11 @@ Egg4::Egg4(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 
 {
     maxResults = maxFrame;
     this->initialFrame = initialFrame;
-    initialSeed = seed;
+    this->seed = seed;
     this->tid = tid;
     this->sid = sid;
     psv = tid ^ sid;
     frameType = method;
-    this->seed = seed;
 
     if (frameType == Gen4Normal || frameType == Gen4Masuada)
         mt = new MersenneTwister(seed);
@@ -48,10 +47,8 @@ Egg4::Egg4(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 
 
 Egg4::~Egg4()
 {
-    if (rng != NULL)
-        delete rng;
-    if (mt != NULL)
-        delete mt;
+    delete rng;
+    delete mt;
 }
 
 vector<Frame4> Egg4::generatePID(FrameCompare compare)
@@ -59,7 +56,7 @@ vector<Frame4> Egg4::generatePID(FrameCompare compare)
     vector<Frame4> frames;
     Frame4 frame = Frame4(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
-    frame.initialSeed = seed;
+    frame.setInitialSeed(seed);
 
     mt->advanceFrames(initialFrame - 1);
 
@@ -82,7 +79,7 @@ vector<Frame4> Egg4::generatePIDMasuada(FrameCompare compare)
     vector<Frame4> frames;
     Frame4 frame = Frame4(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
-    frame.initialSeed = seed;
+    frame.setInitialSeed(seed);
 
     mt->advanceFrames(initialFrame - 1);
 
@@ -116,7 +113,7 @@ vector<Frame4> Egg4::generateIVsDPPt(FrameCompare compare)
 {
     vector<Frame4> frames;
     Frame4 frame = Frame4(tid, sid, psv);
-    frame.initialSeed = seed;
+    frame.setInitialSeed(seed);
 
     for (int x = 0; x < 8; x++)
         rngList.push_back(rng->nextUShort());
@@ -139,7 +136,7 @@ vector<Frame4> Egg4::generateIVsDPPt(FrameCompare compare)
 
         if (compare.compareIVs(frame))
         {
-            frame.seed = rngList[0];
+            frame.setSeed(rngList[0]);
             frame.setFrame(cnt);
             frames.push_back(frame);
         }
@@ -152,7 +149,7 @@ vector<Frame4> Egg4::generateIVsHGSS(FrameCompare compare)
 {
     vector<Frame4> frames;
     Frame4 frame = Frame4(tid, sid, psv);
-    frame.initialSeed = seed;
+    frame.setInitialSeed(seed);
 
     for (int x = 0; x < 8; x++)
         rngList.push_back(rng->nextUShort());
@@ -175,7 +172,7 @@ vector<Frame4> Egg4::generateIVsHGSS(FrameCompare compare)
 
         if (compare.compareIVs(frame))
         {
-            frame.seed = rngList[0];
+            frame.setSeed(rngList[0]);
             frame.setFrame(cnt);
             frames.push_back(frame);
         }
@@ -205,13 +202,4 @@ void Egg4::setParents(vector<u32> parent1, vector<u32> parent2)
 {
     this->parent1 = parent1;
     this->parent2 = parent2;
-}
-
-void Egg4::setSeed(u32 seed)
-{
-    this->seed = seed;
-    if (frameType == Gen4Normal || frameType == Gen4Masuada)
-        mt->setSeed(seed);
-    else
-        rng->setSeed(seed);
 }
