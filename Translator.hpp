@@ -35,7 +35,7 @@ class Translator
 
 public:
     static QStringList getSpecies(vector<u32> nums);
-    static QStringList getLocations(vector<u32> nums);
+    static QStringList getLocationsGen3(vector<u32> nums);
     static QStringList getLocationsGen4(vector<u32> nums);
 
 };

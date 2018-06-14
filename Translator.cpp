@@ -42,7 +42,7 @@ QStringList Translator::getSpecies(vector<u32> nums)
     return species;
 }
 
-QStringList Translator::getLocations(vector<u32> nums)
+QStringList Translator::getLocationsGen3(vector<u32> nums)
 {
     QStringList locations;
 
