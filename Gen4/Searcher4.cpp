@@ -165,6 +165,8 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
@@ -209,25 +211,11 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                             frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= 24)
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            else
-                                skipFrame = true;
-                            break;
                         case GoodRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= 49)
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            else
-                                skipFrame = true;
-                            break;
                         case SuperRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= 74)
+                            if (((nibble >> 16) / 656) <= thresh)
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
@@ -270,6 +258,8 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
 
     vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
+
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
 
     for (auto i = 0; i < size; i++)
     {
@@ -314,25 +304,11 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                             frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= 24)
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            else
-                                skipFrame = true;
-                            break;
                         case GoodRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= 49)
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            else
-                                skipFrame = true;
-                            break;
                         case SuperRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= 74)
+                            if (((nibble >> 16) / 656) <= thresh)
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
@@ -365,25 +341,11 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                             frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
-                            slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= 24)
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            else
-                                skipFrame = true;
-                            break;
                         case GoodRod:
-                            slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= 49)
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            else
-                                skipFrame = true;
-                            break;
                         case SuperRod:
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= 74)
+                            if (((nibble >> 16) / 656) <= thresh)
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
@@ -428,6 +390,8 @@ vector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 s
     vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
@@ -461,25 +425,11 @@ vector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 s
                         frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case OldRod:
-                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) / 656 > 24)
-                            skipFrame = true;
-                        else
-                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
-                        break;
                     case GoodRod:
-                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) / 656 > 49)
-                            skipFrame = true;
-                        else
-                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
-                        break;
                     case SuperRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
                         frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) / 656 > 74)
+                        if ((frame.getSeed() >> 16) / 656 > thresh)
                             skipFrame = true;
                         else
                             frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
@@ -548,6 +498,9 @@ vector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32
     vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+    u32 adjustedThresh = encounterType == OldRod ? 48 : encounterType == GoodRod ? 98 : encounterType == SuperRod ? 99 : 0;
+
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
@@ -591,35 +544,13 @@ vector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32
                             frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= 48)
-                            {
-                                if (((nibble >> 16) / 656) > 24)
-                                    frame.setLeadType(SuctionCups);
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            }
-                            else
-                                skipFrame = true;
-                            break;
                         case GoodRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= 98)
-                            {
-                                if (((nibble >> 16) / 656) > 49)
-                                    frame.setLeadType(SuctionCups);
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            }
-                            else
-                                skipFrame = true;
-                            break;
                         case SuperRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= 99)
+                            if (((nibble >> 16) / 656) <= adjustedThresh)
                             {
-                                if (((nibble >> 16) / 656) > 74)
+                                if (((nibble >> 16) / 656) > thresh)
                                     frame.setLeadType(SuctionCups);
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
@@ -665,6 +596,9 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
     vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+    u32 adjustedThresh = encounterType == OldRod ? 48 : encounterType == GoodRod ? 98 : encounterType == SuperRod ? 99 : 0;
+
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
@@ -709,35 +643,13 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                 break;
                             case OldRod:
-                                slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
-                                nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) / 656) <= 48)
-                                {
-                                    if (((nibble >> 16) / 656) > 24)
-                                        frame.setLeadType(SuctionCups);
-                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                                }
-                                else
-                                    skipFrame = true;
-                                break;
                             case GoodRod:
-                                slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
-                                nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) / 656) <= 98)
-                                {
-                                    if (((nibble >> 16) / 656) > 49)
-                                        frame.setLeadType(SuctionCups);
-                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                                }
-                                else
-                                    skipFrame = true;
-                                break;
                             case SuperRod:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) / 656) <= 99)
+                                if (((nibble >> 16) / 656) <= adjustedThresh)
                                 {
-                                    if (((nibble >> 16) / 656) > 74)
+                                    if (((nibble >> 16) / 656) > thresh)
                                         frame.setLeadType(SuctionCups);
                                     frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
@@ -763,18 +675,10 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                             switch (encounterType)
                             {
                                 case OldRod:
-                                    nibble = (frame.getSeed() >> 16) / 656;
-                                    if (nibble > 24)
-                                        skipFrame = true;
-                                    break;
                                 case GoodRod:
-                                    nibble = (frame.getSeed() >> 16) / 656;
-                                    if (nibble > 49)
-                                        skipFrame = true;
-                                    break;
                                 case SuperRod:
                                     nibble = (frame.getSeed() >> 16) / 656;
-                                    if (nibble > 74)
+                                    if (nibble > thresh)
                                         skipFrame = true;
                                     break;
                                 default:
@@ -807,25 +711,11 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                 break;
                             case OldRod:
-                                slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                                nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) / 656) <= 24)
-                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                                else
-                                    skipFrame = true;
-                                break;
                             case GoodRod:
-                                slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                                nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) / 656) <= 49)
-                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                                else
-                                    skipFrame = true;
-                                break;
                             case SuperRod:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) / 656) <= 74)
+                                if (((nibble >> 16) / 656) <= thresh)
                                     frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 else
                                     skipFrame = true;
@@ -868,25 +758,11 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                         frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case OldRod:
-                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) / 656 > 24)
-                            skipFrame = true;
-                        else
-                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
-                        break;
                     case GoodRod:
-                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) / 656 > 49)
-                            skipFrame = true;
-                        else
-                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
-                        break;
                     case SuperRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
                         frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) / 656 > 74)
+                        if ((frame.getSeed() >> 16) / 656 > thresh)
                             skipFrame = true;
                         else
                             frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
@@ -954,6 +830,8 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
@@ -998,25 +876,11 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                             frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= 24)
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            else
-                                skipFrame = true;
-                            break;
                         case GoodRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= 49)
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            else
-                                skipFrame = true;
-                            break;
                         case SuperRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= 74)
+                            if (((nibble >> 16) % 100) <= thresh)
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
@@ -1059,6 +923,8 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
 
     vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
+
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
 
     for (auto i = 0; i < size; i++)
     {
@@ -1103,25 +969,11 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                             frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= 24)
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            else
-                                skipFrame = true;
-                            break;
                         case GoodRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= 49)
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            else
-                                skipFrame = true;
-                            break;
                         case SuperRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= 74)
+                            if (((nibble >> 16) % 100) <= thresh)
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
@@ -1154,25 +1006,11 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                             frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
-                            slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= 24)
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            else
-                                skipFrame = true;
-                            break;
                         case GoodRod:
-                            slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= 49)
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            else
-                                skipFrame = true;
-                            break;
                         case SuperRod:
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= 74)
+                            if (((nibble >> 16) % 100) <= thresh)
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             else
                                 skipFrame = true;
@@ -1217,6 +1055,8 @@ vector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 s
     vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
@@ -1251,25 +1091,11 @@ vector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 s
                         frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case OldRod:
-                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) % 100 > 24)
-                            skipFrame = true;
-                        else
-                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
-                        break;
                     case GoodRod:
-                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) % 100 > 49)
-                            skipFrame = true;
-                        else
-                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
-                        break;
                     case SuperRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
                         frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) % 100 > 74)
+                        if ((frame.getSeed() >> 16) % 100 > thresh)
                             skipFrame = true;
                         else
                             frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
@@ -1338,6 +1164,9 @@ vector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32
     vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+    u32 adjustedThresh = encounterType == OldRod ? 48 : encounterType == GoodRod ? 98 : encounterType == SuperRod ? 99 : 0;
+
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
@@ -1381,35 +1210,13 @@ vector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32
                             frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                             break;
                         case OldRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= 48)
-                            {
-                                if (((nibble >> 16) % 100) > 24)
-                                    frame.setLeadType(SuctionCups);
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            }
-                            else
-                                skipFrame = true;
-                            break;
                         case GoodRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= 98)
-                            {
-                                if (((nibble >> 16) % 100) > 49)
-                                    frame.setLeadType(SuctionCups);
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            }
-                            else
-                                skipFrame = true;
-                            break;
                         case SuperRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= 99)
+                            if (((nibble >> 16) % 100) <= adjustedThresh)
                             {
-                                if (((nibble >> 16) % 100) > 74)
+                                if (((nibble >> 16) % 100) > thresh)
                                     frame.setLeadType(SuctionCups);
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
@@ -1455,6 +1262,9 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
     vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+    u32 adjustedThresh = encounterType == OldRod ? 48 : encounterType == GoodRod ? 98 : encounterType == SuperRod ? 99 : 0;
+
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
@@ -1499,35 +1309,13 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                 break;
                             case OldRod:
-                                slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
-                                nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) % 100) <= 48)
-                                {
-                                    if (((nibble >> 16) % 100) > 24)
-                                        frame.setLeadType(SuctionCups);
-                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                                }
-                                else
-                                    skipFrame = true;
-                                break;
                             case GoodRod:
-                                slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
-                                nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) % 100) <= 98)
-                                {
-                                    if (((nibble >> 16) % 100) > 49)
-                                        frame.setLeadType(SuctionCups);
-                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                                }
-                                else
-                                    skipFrame = true;
-                                break;
                             case SuperRod:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) % 100) <= 99)
+                                if (((nibble >> 16) % 100) <= adjustedThresh)
                                 {
-                                    if (((nibble >> 16) % 100) > 74)
+                                    if (((nibble >> 16) % 100) > thresh)
                                         frame.setLeadType(SuctionCups);
                                     frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
@@ -1553,18 +1341,10 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                             switch (encounterType)
                             {
                                 case OldRod:
-                                    nibble = (frame.getSeed() >> 16) % 100;
-                                    if (nibble > 24)
-                                        skipFrame = true;
-                                    break;
                                 case GoodRod:
-                                    nibble = (frame.getSeed() >> 16) % 100;
-                                    if (nibble > 49)
-                                        skipFrame = true;
-                                    break;
                                 case SuperRod:
                                     nibble = (frame.getSeed() >> 16) % 100;
-                                    if (nibble > 74)
+                                    if (nibble > thresh)
                                         skipFrame = true;
                                     break;
                                 default:
@@ -1597,25 +1377,11 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                 break;
                             case OldRod:
-                                slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                                nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) % 100) <= 24)
-                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                                else
-                                    skipFrame = true;
-                                break;
                             case GoodRod:
-                                slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                                nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) % 100) <= 49)
-                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                                else
-                                    skipFrame = true;
-                                break;
                             case SuperRod:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) % 100) <= 74)
+                                if (((nibble >> 16) % 100) <= thresh)
                                     frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 else
                                     skipFrame = true;
@@ -1659,25 +1425,11 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                         frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case OldRod:
-                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) % 100 > 24)
-                            skipFrame = true;
-                        else
-                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
-                        break;
                     case GoodRod:
-                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) % 100 > 49)
-                            skipFrame = true;
-                        else
-                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
-                        break;
                     case SuperRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
                         frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) % 100 > 74)
+                        if ((frame.getSeed() >> 16) % 100 > thresh)
                             skipFrame = true;
                         else
                             frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);

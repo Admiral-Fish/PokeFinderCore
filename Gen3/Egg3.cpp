@@ -84,13 +84,6 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
 
                 frame.setPID(pid, pid >> 16, pid & 0xFFFF);
                 frame.setNature(pid % 25);
-
-                if (compare.comparePID(frame))
-                {
-                    frame.setFrame(cnt - offset);
-                    frame.setOccidentary(redraw);
-                    frames.push_back(frame);
-                }
             }
             else
             {
@@ -115,13 +108,13 @@ vector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
 
                 frame.setPID(pid, pid >> 16, pid & 0xFFFF);
                 frame.setNature(everstoneNature);
+            }
 
-                if (compare.comparePID(frame))
-                {
-                    frame.setFrame(cnt - offset);
-                    frame.setOccidentary(redraw);
-                    frames.push_back(frame);
-                }
+            if (compare.comparePID(frame))
+            {
+                frame.setFrame(cnt - offset);
+                frame.setOccidentary(redraw);
+                frames.push_back(frame);
             }
         }
     }
@@ -232,7 +225,7 @@ vector<Frame3> Egg3::generateEmeraldAlternate(FrameCompare compare)
     return frames;
 }
 
-vector<Frame3> Egg3::generateLower()
+vector<Frame3> Egg3::generateLower(FrameCompare compare)
 {
     vector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
@@ -247,8 +240,11 @@ vector<Frame3> Egg3::generateLower()
 
         frame.setPID((rngList[1] % 0xFFFE) + 1);
 
-        frame.setFrame(cnt);
-        frames.push_back(frame);
+        if (compare.compareGender(frame))
+        {
+            frame.setFrame(cnt);
+            frames.push_back(frame);
+        }
     }
 
     return frames;
@@ -324,7 +320,7 @@ vector<Frame3> Egg3::generate(FrameCompare compare)
         case RSBred:
         case FRLGBred:
             {
-                vector<Frame3> lower = generateLower();
+                vector<Frame3> lower = generateLower(compare);
                 if (lower.size() == 0)
                     return lower;
                 else

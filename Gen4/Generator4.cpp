@@ -163,26 +163,12 @@ vector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item ? not sure if same as fishing
                 break;
             case OldRod:
-                if ((first / 656) > thresh)
-                    continue;
-
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], OldRod));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
-                break;
             case GoodRod:
-                if ((first / 656) > thresh)
-                    continue;
-
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], GoodRod));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
-                break;
             case SuperRod:
                 if ((first / 656) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], SuperRod));
+                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], encounterType));
                 hunt++; // Level/item
                 first = rngList[hunt++]; // Level/item
                 break;
@@ -242,6 +228,8 @@ vector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first;
 
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         hunt = 0;
@@ -260,26 +248,12 @@ vector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item ? not sure if same as fishing
                 break;
             case OldRod:
-                if ((first / 656) > 24)
-                    continue;
-
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], OldRod));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
-                break;
             case GoodRod:
-                if ((first / 656) > 49)
-                    continue;
-
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], GoodRod));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
-                break;
             case SuperRod:
-                if ((first / 656) > 74)
+                if ((first / 656) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], SuperRod));
+                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], encounterType));
                 hunt++; // Level/item
                 first = rngList[hunt++]; // Level/item
                 break;
@@ -343,6 +317,8 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first, buffer;
 
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+
     switch (leadType)
     {
         case CuteCharmFemale:
@@ -382,26 +358,12 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item ? not sure if same as fishing
                 break;
             case OldRod:
-                if ((first / 656) > 24)
-                    continue;
-
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], OldRod));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
-                break;
             case GoodRod:
-                if ((first / 656) > 49)
-                    continue;
-
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], OldRod));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
-                break;
             case SuperRod:
-                if ((first / 656) > 74)
+                if ((first / 656) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], OldRod));
+                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], encounterType));
                 hunt++; // Level/item
                 first = rngList[hunt++]; // Level/item
                 break;
@@ -418,17 +380,7 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
         if ((first / 0x5556) != 0)
         {
             frame.setPID(buffer + frame.getNature(), 0, buffer + frame.getNature());
-            if (!compare.comparePID(frame))
-                continue;
-
-            frame.setIVs(rngList[hunt], rngList[hunt + 1]);
-            if (!compare.compareIVs(frame))
-                continue;
-
-            frame.setSeed(rngList[0]);
-            frame.setFrame(cnt);
             frame.setOccidentary(cnt);
-            frames.push_back(frame);
         }
         else
         {
@@ -444,21 +396,22 @@ vector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
             while (pid % 25 != frame.getNature());
 
             frame.setPID(pid, pid2, pid1);
-            if (!compare.comparePID(frame))
-                continue;
-
-            if (hunt >= size)
-                refill();
-
-            frame.setIVs(rngList[hunt], rngList[hunt + 1]);
-            if (!compare.compareIVs(frame))
-                continue;
-
-            frame.setSeed(rngList[0]);
-            frame.setFrame(cnt);
-            frame.setOccidentary(hunt + cnt - 3);
-            frames.push_back(frame);
+            frame.setOccidentary(hunt + cnt - 2);
         }
+
+        if (!compare.comparePID(frame))
+            continue;
+
+        if (hunt >= size)
+            refill();
+
+        frame.setIVs(rngList[hunt], rngList[hunt + 1]);
+        if (!compare.compareIVs(frame))
+            continue;
+
+        frame.setSeed(rngList[0]);
+        frame.setFrame(cnt);
+        frames.push_back(frame);
     }
     rngList.clear();
 
@@ -505,26 +458,12 @@ vector<Frame4> Generator4::generateMethodK(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item ? not sure if same as fishing
                 break;
             case OldRod:
-                if ((first  % 100) > thresh)
-                    continue;
-
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], OldRod));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
-                break;
             case GoodRod:
-                if ((first  % 100) > thresh)
-                    continue;
-
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], GoodRod));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
-                break;
             case SuperRod:
                 if ((first % 100) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], SuperRod));
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], encounterType));
                 hunt++; // Level/item
                 first = rngList[hunt++]; // Level/item
                 break;
@@ -583,6 +522,8 @@ vector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first;
 
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         hunt = 0;
@@ -603,26 +544,12 @@ vector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item ? not sure if same as fishing
                 break;
             case OldRod:
-                if ((first  % 100) > 24)
-                    continue;
-
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], OldRod));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
-                break;
             case GoodRod:
-                if ((first  % 100) > 49)
-                    continue;
-
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], GoodRod));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
-                break;
             case SuperRod:
-                if ((first % 100) > 74)
+                if ((first % 100) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], SuperRod));
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], encounterType));
                 hunt++; // Level/item
                 first = rngList[hunt++]; // Level/item
                 break;
@@ -686,6 +613,8 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt, first, buffer;
 
+    u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+
     switch (leadType)
     {
         case CuteCharmFemale:
@@ -727,26 +656,12 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
                 first = rngList[hunt++]; // Level/item ? not sure if same as fishing
                 break;
             case OldRod:
-                if ((first  % 100) > 24)
-                    continue;
-
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], OldRod));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
-                break;
             case GoodRod:
-                if ((first  % 100) > 49)
-                    continue;
-
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], GoodRod));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
-                break;
             case SuperRod:
-                if ((first % 100) > 74)
+                if ((first % 100) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], SuperRod));
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], encounterType));
                 hunt++; // Level/item
                 first = rngList[hunt++]; // Level/item
                 break;
@@ -763,17 +678,7 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
         if ((first % 3) != 0)
         {
             frame.setPID(buffer + frame.getNature(), 0, buffer + frame.getNature());
-            if (!compare.comparePID(frame))
-                continue;
-
-            frame.setIVs(rngList[hunt], rngList[hunt + 1]);
-            if (!compare.compareIVs(frame))
-                continue;
-
-            frame.setSeed(rngList[0]);
-            frame.setFrame(cnt);
             frame.setOccidentary(cnt);
-            frames.push_back(frame);
         }
         else
         {
@@ -789,21 +694,22 @@ vector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
             while (pid % 25 != frame.getNature());
 
             frame.setPID(pid, pid2, pid1);
-            if (!compare.comparePID(frame))
-                continue;
-
-            if (hunt >= size)
-                refill();
-
-            frame.setIVs(rngList[hunt], rngList[hunt + 1]);
-            if (!compare.compareIVs(frame))
-                continue;
-
-            frame.setSeed(rngList[0]);
-            frame.setFrame(cnt);
             frame.setOccidentary(hunt + cnt - 3);
-            frames.push_back(frame);
         }
+
+        if (!compare.comparePID(frame))
+            continue;
+
+        if (hunt >= size)
+            refill();
+
+        frame.setIVs(rngList[hunt], rngList[hunt + 1]);
+        if (!compare.compareIVs(frame))
+            continue;
+
+        frame.setSeed(rngList[0]);
+        frame.setFrame(cnt);
+        frames.push_back(frame);
     }
     rngList.clear();
 

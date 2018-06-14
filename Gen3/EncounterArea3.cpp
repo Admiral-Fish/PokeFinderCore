@@ -84,18 +84,6 @@ vector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Game game)
     return areas;
 }
 
-QStringList EncounterArea3::getSpecieNames()
-{
-    vector<u32> nums;
-
-    nums.push_back(species[0]);
-    for (int i = 1; i < species.size(); i++)
-        if (std::find(nums.begin(), nums.end(), species[i]) == nums.end())
-            nums.push_back(species[i]);
-
-    return Translator::getSpecies(nums);
-}
-
 u32 EncounterArea3::calcLevel(u32 index, u32 prng)
 {
     if (levelLocked(index))

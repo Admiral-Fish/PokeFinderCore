@@ -47,7 +47,7 @@ private:
     vector<Frame3> generateEmerald(FrameCompare compare);
     vector<Frame3> generateEmeraldSplit(FrameCompare compare);
     vector<Frame3> generateEmeraldAlternate(FrameCompare compare);
-    vector<Frame3> generateLower();
+    vector<Frame3> generateLower(FrameCompare compare);
     vector<Frame3> generateUpper(vector<Frame3> lower, FrameCompare compare);
 
 public:

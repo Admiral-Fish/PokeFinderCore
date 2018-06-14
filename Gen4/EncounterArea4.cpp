@@ -109,11 +109,6 @@ vector<EncounterArea4> EncounterArea4::getEncounters(Encounter type, Game game, 
     return areas;
 }
 
-QStringList EncounterArea4::getSpecieNames()
-{
-    return Translator::getSpecies(getUniqueSpecies());
-}
-
 u32 EncounterArea4::calcLevel(u32 index, u32 prng)
 {
     if (levelLocked(index))

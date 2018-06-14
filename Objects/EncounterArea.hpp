@@ -49,6 +49,7 @@ public:
     vector<u32> getSpecies();
     vector<u32> getUniqueSpecies();
     vector<bool> getSlots(u32 num);
+    QStringList getSpecieNames();
 
 };
 
