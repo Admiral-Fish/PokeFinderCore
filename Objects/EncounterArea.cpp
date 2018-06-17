@@ -82,12 +82,5 @@ vector<bool> EncounterArea::getSlots(u32 num)
 
 QStringList EncounterArea::getSpecieNames()
 {
-    vector<u32> nums;
-
-    nums.push_back(species[0]);
-    for (int i = 1; i < species.size(); i++)
-        if (std::find(nums.begin(), nums.end(), species[i]) == nums.end())
-            nums.push_back(species[i]);
-
-    return Translator::getSpecies(nums);
+    return Translator::getSpecies(getUniqueSpecies());
 }

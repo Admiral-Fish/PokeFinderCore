@@ -58,6 +58,7 @@ vector<Frame4> Egg4::generatePID(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
     frame.setInitialSeed(seed);
 
+    mt->setSeed(seed);
     mt->advanceFrames(initialFrame - 1);
 
     for (u32 cnt = initialFrame; cnt <= maxResults; cnt++)
@@ -81,6 +82,7 @@ vector<Frame4> Egg4::generatePIDMasuada(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
     frame.setInitialSeed(seed);
 
+    mt->setSeed(seed);
     mt->advanceFrames(initialFrame - 1);
 
     for (u32 cnt = initialFrame; cnt <= maxResults; cnt++)
@@ -114,6 +116,9 @@ vector<Frame4> Egg4::generateIVsDPPt(FrameCompare compare)
     vector<Frame4> frames;
     Frame4 frame = Frame4(tid, sid, psv);
     frame.setInitialSeed(seed);
+
+    rng->setSeed(seed);
+    rng->advanceFrames(initialFrame - 1);
 
     for (int x = 0; x < 8; x++)
         rngList.push_back(rng->nextUShort());
@@ -150,6 +155,9 @@ vector<Frame4> Egg4::generateIVsHGSS(FrameCompare compare)
     vector<Frame4> frames;
     Frame4 frame = Frame4(tid, sid, psv);
     frame.setInitialSeed(seed);
+
+    rng->setSeed(seed);
+    rng->advanceFrames(initialFrame - 1);
 
     for (int x = 0; x < 8; x++)
         rngList.push_back(rng->nextUShort());
