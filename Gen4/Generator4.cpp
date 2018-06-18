@@ -766,6 +766,7 @@ vector<Frame4> Generator4::generateWondercardIVs(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
+        frame.setSeed(rngList[0]);
         frame.setFrame(cnt);
         frames.push_back(frame);
     }
