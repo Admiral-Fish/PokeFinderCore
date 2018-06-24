@@ -142,7 +142,7 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.setEncounterSlot(cnt);
+        frame.setFrame(cnt);
         frame.setOccidentary(hunt + cnt - 1);
         frames.push_back(frame);
     }
