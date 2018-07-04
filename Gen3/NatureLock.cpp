@@ -43,9 +43,8 @@ void NatureLock::countBackTwo()
     do
     {
         pid = getPIDReverse();
-        gender = pid & 255;
     }
-    while (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature));
+    while (!currLock.compare(pid));
 }
 
 // Keeps rerolling PID forward by 2 until it finds a match for current lock
@@ -54,17 +53,14 @@ void NatureLock::countForwardTwo()
     do
     {
         pid = getPIDForward();
-        gender = pid & 255;
     }
-    while (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature));
+    while (!currLock.compare(pid));
 }
 
 // Quick sets the values of the current lock
 void NatureLock::getCurrLock()
 {
-    nature = lockInfo[x].getNature();
-    genderLower = lockInfo[x].getGenderLower();
-    genderUpper = lockInfo[x].getGenderUpper();
+    currLock = lockInfo[x];
 }
 
 // Generates the next PID forwards
@@ -205,7 +201,7 @@ void NatureLock::natureLockSetupGales(int lockNum)
             type = FirstShadow;
             break;
         case 22: // Lapras
-            lockInfo = { LockInfo(24, 127, 255), LockInfo(500, 500, 500), LockInfo(500, 500, 500), LockInfo(6, 0, 126) };
+            lockInfo = { LockInfo(24, 127, 255), LockInfo(500, 500, 500, true), LockInfo(500, 500, 500, true), LockInfo(6, 0, 126) };
             type = SecondShadow;
             break;
         case 23: // Ledyba
@@ -224,179 +220,175 @@ void NatureLock::natureLockSetupGales(int lockNum)
             lockInfo = { LockInfo(12, 0, 126), LockInfo(6, 127, 255), LockInfo(24, 127, 255) };
             type = SecondShadow;
             break;
-        case 27: // Mareep E-Reader
-            lockInfo = { LockInfo(16, 0, 126), LockInfo(12, 0, 126), LockInfo(10, 0, 126), LockInfo(4, 0, 190)};
-            type = EReader;
-            break;
-        case 28: // Magmar
+        case 27: // Magmar
             lockInfo = { LockInfo(0, 0, 126), LockInfo(18, 191, 255), LockInfo(18, 127, 255) };
             type = FirstShadow;
             break;
-        case 29: // Magneton
+        case 28: // Magneton
             lockInfo = { LockInfo(12, 0, 126), LockInfo(0, 127, 255), LockInfo(18, 0, 255) };
             type = FirstShadow;
             break;
-        case 30: // Makuhita
+        case 29: // Makuhita
             lockInfo = { LockInfo(18, 0, 126), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 31: // Manectric
+        case 30: // Manectric
             lockInfo = { LockInfo(6, 0, 126) };
             type = SingleLock;
             break;
-        case 32: // Marowak
-            lockInfo = { LockInfo(24, 127, 255), LockInfo(500, 500, 500), LockInfo(500, 500, 500), LockInfo(6, 0, 126) };
+        case 31: // Marowak
+            lockInfo = { LockInfo(24, 127, 255), LockInfo(500, 500, 500, true), LockInfo(500, 500, 500, true), LockInfo(6, 0, 126) };
             type = FirstShadow;
             break;
-        case 33: // Mawile
+        case 32: // Mawile
             lockInfo = { LockInfo(18, 0, 126), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 34: // Meowth
+        case 33: // Meowth
             lockInfo =  { LockInfo(18, 0, 126), LockInfo(0, 0, 126), LockInfo(6, 63, 255) };
             type = FirstShadow;
             break;
-        case 35: // Mr. Mime
+        case 34: // Mr. Mime
             lockInfo = { LockInfo(6, 0, 126), LockInfo(24, 127, 255), LockInfo(18, 127, 255), LockInfo(18, 127, 255) };
             type = SecondShadow;
             break;
-        case 36: // Natu
+        case 35: // Natu
             lockInfo = { LockInfo(0, 0, 126), LockInfo(24, 127, 255) };
             type = FirstShadow;
             break;
-        case 37: // Nosepass
+        case 36: // Nosepass
             lockInfo = { LockInfo(12, 0, 126), LockInfo(18, 127, 255), LockInfo(0, 127, 255) };
             type = FirstShadow;
             break;
-        case 38: // Numel
+        case 37: // Numel
             lockInfo = { LockInfo(24, 0, 126), LockInfo(0, 0, 255), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 39: // Paras
+        case 38: // Paras
             lockInfo = { LockInfo(6, 0, 126), LockInfo(24, 127, 255) };
             type = FirstShadow;
             break;
-        case 40: // Pidgeotto
+        case 39: // Pidgeotto
             lockInfo = { LockInfo(18, 31, 255), LockInfo(12, 127, 255) };
             type = FirstShadow;
             break;
-        case 41: // Pineco
+        case 40: // Pineco
             lockInfo = { LockInfo(6, 127, 255) };
             type = SingleLock;
             break;
-        case 42: // Pinsir
+        case 41: // Pinsir
             lockInfo = { LockInfo(0, 0, 126), LockInfo(18, 191, 255), LockInfo(18, 127, 255) };
             type = SecondShadow;
             break;
-        case 43: // Poliwrath
+        case 42: // Poliwrath
             lockInfo = { LockInfo(6, 0, 126), LockInfo(24, 127, 255), LockInfo(18, 127, 255), LockInfo(18, 127, 255) };
             type = FirstShadow;
             break;
-        case 44: // Poochyena
+        case 43: // Poochyena
             lockInfo = { LockInfo(12, 0, 126) };
             type = SingleLock;
             break;
-        case 45: // Primeape
+        case 44: // Primeape
             lockInfo = { LockInfo(24, 127, 255), LockInfo(6, 0, 126), LockInfo(12, 0, 126), LockInfo(18, 0, 126) };
             type = FirstShadow;
             break;
-        case 46: // Ralts
+        case 45: // Ralts
             lockInfo = { LockInfo(18, 127, 255), LockInfo(6, 0, 126), LockInfo(0, 63, 255) };
             type = FirstShadow;
             break;
-        case 47: // Rapidash
+        case 46: // Rapidash
             lockInfo = { LockInfo(12, 0, 126), LockInfo(6, 127, 255), LockInfo(24, 127, 255) };
             type = FirstShadow;
             break;
-        case 48: // Raticate
-            lockInfo = { LockInfo(18, 127, 255), LockInfo(500, 500, 500), LockInfo(18, 0, 126) };
+        case 47: // Raticate
+            lockInfo = { LockInfo(18, 127, 255), LockInfo(500, 500, 500, true), LockInfo(18, 0, 126) };
             type = FirstShadow;
             break;
-        case 49: // Roselia
+        case 48: // Roselia
             lockInfo = { LockInfo(18, 127, 255), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 50: // Sableye
+        case 49: // Sableye
             lockInfo = { LockInfo(18, 0, 126), LockInfo(6, 0, 126), LockInfo(24, 127, 255) };
             type = SecondShadow;
             break;
-        case 51: // Salamence
+        case 50: // Salamence
             lockInfo = { LockInfo(6, 0, 126) };
             type = Salamence;
             break;
-        case 52: // Scyther
+        case 51: // Scyther
             lockInfo = { LockInfo(24, 127, 255), LockInfo(6, 0, 126) };
             type = FirstShadow;
             break;
-        case 53: // Seedot 3
+        case 52: // Seedot 3
             lockInfo = { LockInfo(12, 127, 255), LockInfo(0, 127, 255), LockInfo(0, 0, 126), LockInfo(24, 0, 126), LockInfo(6, 127, 255) };
             type = FirstShadow;
-        case 54: // Seedot 1
+        case 53: // Seedot 1
             lockInfo = { LockInfo(12, 127, 255), LockInfo(0, 127, 255), LockInfo(18, 0, 126), LockInfo(24, 0, 126), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 55: // Seedot 2
+        case 54: // Seedot 2
             lockInfo = { LockInfo(6, 127, 255), LockInfo(0, 0, 126), LockInfo(0, 0, 126), LockInfo(24, 0, 126), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 56: // Seel
+        case 55: // Seel
             lockInfo = { LockInfo(18, 0, 126), LockInfo(18, 127, 255), LockInfo(6, 127, 255) };
             type = FirstShadow;
             break;
-        case 57: // Shroomish
+        case 56: // Shroomish
             lockInfo = { LockInfo(0, 0, 126), LockInfo(24, 0, 190) };
             type = FirstShadow;
             break;
-        case 58: // Snorlax
+        case 57: // Snorlax
             lockInfo =  { LockInfo(18, 0, 126), LockInfo(6, 0, 126), LockInfo(24, 63, 255) };
             type = SecondShadow;
             break;
-        case 59: // Snorunt
+        case 58: // Snorunt
             lockInfo = { LockInfo(6, 0, 126) };
             type = SingleLock;
             break;
-        case 60: // Solrock
+        case 59: // Solrock
             lockInfo = { LockInfo(0, 0, 126), LockInfo(6, 127, 255), LockInfo(24, 0, 255) };
             type = FirstShadow;
             break;
-        case 61: // Spearow
+        case 60: // Spearow
             lockInfo = { LockInfo(6, 0, 126), LockInfo(18, 127, 255) };
             type = FirstShadow;
             break;
-        case 62: // Spheal 3
-        case 64: // Spheal 2
+        case 61: // Spheal 3
+        case 63: // Spheal 2
             lockInfo = { LockInfo(0, 0, 255), LockInfo(12, 0, 126), LockInfo(24, 127, 255) };
             type = FirstShadow;
             break;
-        case 63: // Spheal 1
+        case 62: // Spheal 1
             lockInfo = { LockInfo(12, 0, 126), LockInfo(24, 127, 255) };
             type = FirstShadow;
             break;
-        case 65: // Spinarak
+        case 64: // Spinarak
             lockInfo = { LockInfo(6, 127, 255), LockInfo(12, 0, 126) };
             type = FirstShadow;
             break;
-        case 66: // Starmie
-            lockInfo = { LockInfo(18, 127, 255), LockInfo(500, 500, 500), LockInfo(0, 0, 126), LockInfo(6, 127, 255), LockInfo(24, 0, 255) };
+        case 65: // Starmie
+            lockInfo = { LockInfo(18, 127, 255), LockInfo(500, 500, 500, true), LockInfo(0, 0, 126), LockInfo(6, 127, 255), LockInfo(24, 0, 255) };
             type = FirstShadow;
             break;
-        case 67: // Swinub
+        case 66: // Swinub
             lockInfo =  { LockInfo(0, 127, 255), LockInfo(18, 0, 126) };
             type = FirstShadow;
             break;
-        case 68: // Tangela
+        case 67: // Tangela
             lockInfo = { LockInfo(0, 0, 126), LockInfo(6, 127, 255), LockInfo(12, 0, 190) };
             type = FirstShadow;
             break;
-        case 69: // Venomoth
+        case 68: // Venomoth
             lockInfo = { LockInfo(12, 63, 255), LockInfo(24, 0, 255), LockInfo(18, 0, 126) };
             type = FirstShadow;
             break;
-        case 70: // Voltorb
+        case 69: // Voltorb
             lockInfo = { LockInfo(12, 0, 126), LockInfo(18, 127, 255), LockInfo(0, 127, 255) };
             type = FirstShadow;
             break;
-        case 71: // Vulpix
+        case 70: // Vulpix
             lockInfo = { LockInfo(18, 127, 255), LockInfo(6, 0, 126), LockInfo(0, 127, 255) };
             type = FirstShadow;
             break;
@@ -422,8 +414,7 @@ bool NatureLock::firstShadowNormal(u32 seed)
     pidOriginal = getPIDReverse();
 
     // Backwards nature lock check
-    gender = pidOriginal & 255;
-    if (!(gender >= lockInfo[0].getGenderLower() && gender <= lockInfo[0].getGenderUpper() && pidOriginal % 25 == lockInfo[0].getNature()))
+    if (!lockInfo[0].compare(pidOriginal))
         return false;
 
     // Backwards nature lock check loop
@@ -432,12 +423,8 @@ bool NatureLock::firstShadowNormal(u32 seed)
         backward.setSeed(backward.getSeed() * 0x2D4673C5 + 0x16AEB36D); // 5 frames
         pid = getPIDReverse();
         getCurrLock();
-        if (nature != 500)
-        {
-            gender = pid & 255;
-            if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countBackTwo();
-        }
+        if (!currLock.compare(pid))
+            countBackTwo();
     }
 
     forward.setSeed(backward.getSeed() * 0x343FD + 0x269EC3); // 1 frame
@@ -448,12 +435,8 @@ bool NatureLock::firstShadowNormal(u32 seed)
         forward.setSeed(forward.getSeed() * 0x284A930D + 0xA2974C77); // 5 frames
         pid = getPIDForward();
         getCurrLock();
-        if (nature != 500)
-        {
-            gender = pid & 255;
-            if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countForwardTwo();
-        }
+        if (!currLock.compare(pid))
+            countForwardTwo();
     }
 
     // Checks if first NL PID back from target matches
@@ -469,8 +452,7 @@ bool NatureLock::firstShadowSet(u32 seed)
     pidOriginal = getPIDReverse();
 
     // Backwards nature lock check
-    gender = pidOriginal & 255;
-    if (!(gender >= lockInfo[0].getGenderLower() && gender <= lockInfo[0].getGenderUpper() && pidOriginal % 25 == lockInfo[0].getNature()))
+    if (!lockInfo[0].compare(pidOriginal))
         return false;
 
     // Backwards nature lock check loop
@@ -479,12 +461,8 @@ bool NatureLock::firstShadowSet(u32 seed)
         backward.setSeed(backward.getSeed() * 0x2D4673C5 + 0x16AEB36D); // 5 frames
         pid = getPIDReverse();
         getCurrLock();
-        if (nature != 500)
-        {
-            gender = pid & 255;
-            if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countBackTwo();
-        }
+        if (!currLock.compare(pid))
+            countBackTwo();
     }
 
     forward.setSeed(backward.getSeed() * 0x343FD + 0x269EC3); // 1 frame
@@ -495,12 +473,8 @@ bool NatureLock::firstShadowSet(u32 seed)
         forward.setSeed(forward.getSeed() * 0x284A930D + 0xA2974C77); // 5 frames
         pid = getPIDForward();
         getCurrLock();
-        if (nature != 500)
-        {
-            gender = pid & 255;
-            if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countForwardTwo();
-        }
+        if (!currLock.compare(pid))
+            countForwardTwo();
     }
 
     // Checks if first NL PID back from target matches
@@ -527,8 +501,7 @@ bool NatureLock::firstShadowShinySkip(u32 seed)
     pidOriginal = getPIDReverse();
 
     // Backwards nature lock check
-    gender = pidOriginal & 255;
-    if (!(gender >= lockInfo[0].getGenderLower() && gender <= lockInfo[0].getGenderUpper() && pidOriginal % 25 == lockInfo[0].getNature()))
+    if (!lockInfo[0].compare(pidOriginal))
         return false;
 
     // Backwards nature lock check loop
@@ -537,12 +510,8 @@ bool NatureLock::firstShadowShinySkip(u32 seed)
         backward.setSeed(backward.getSeed() * 0x2D4673C5 + 0x16AEB36D); // 5 frames
         pid = getPIDReverse();
         getCurrLock();
-        if (nature != 500)
-        {
-            gender = pid & 255;
-            if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countBackTwo();
-        }
+        if (!currLock.compare(pid))
+            countBackTwo();
     }
 
     forward.setSeed(backward.getSeed() * 0x343FD + 0x269EC3); // 1 frame
@@ -553,12 +522,8 @@ bool NatureLock::firstShadowShinySkip(u32 seed)
         forward.setSeed(forward.getSeed() * 0x284A930D + 0xA2974C77); // 5 frames
         pid = getPIDForward();
         getCurrLock();
-        if (nature != 500)
-        {
-            gender = pid & 255;
-            if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countForwardTwo();
-        }
+        if (!currLock.compare(pid))
+            countForwardTwo();
     }
 
     // Checks if first NL PID back from target matches
@@ -574,8 +539,7 @@ bool NatureLock::firstShadowUnset(u32 seed)
     pidOriginal = getPIDReverse();
 
     // Backwards nature lock check
-    gender = pidOriginal & 255;
-    if (!(gender >= lockInfo[0].getGenderLower() && gender <= lockInfo[0].getGenderUpper() && pidOriginal % 25 == lockInfo[0].getNature()))
+    if (!lockInfo[0].compare(pidOriginal))
         return false;
 
     // Backwards nature lock check loop
@@ -584,12 +548,8 @@ bool NatureLock::firstShadowUnset(u32 seed)
         backward.setSeed(backward.getSeed() * 0x2D4673C5 + 0x16AEB36D); // 5 frames
         pid = getPIDReverse();
         getCurrLock();
-        if (nature != 500)
-        {
-            gender = pid & 255;
-            if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countBackTwo();
-        }
+        if (!currLock.compare(pid))
+            countBackTwo();
     }
 
     forward.setSeed(backward.getSeed() * 0x343FD + 0x269EC3); // 1 frame
@@ -600,12 +560,8 @@ bool NatureLock::firstShadowUnset(u32 seed)
         forward.setSeed(forward.getSeed() * 0x284A930D + 0xA2974C77); // 5 frames
         pid = getPIDForward();
         getCurrLock();
-        if (nature != 500)
-        {
-            gender = pid & 255;
-            if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
-                countForwardTwo();
-        }
+        if (!currLock.compare(pid))
+            countForwardTwo();
     }
 
     // Checks if first NL PID back from target matches
@@ -621,8 +577,7 @@ bool NatureLock::salamenceSet(u32 seed)
     pid = getPIDReverse();
 
     // Backwards nature lock check
-    gender = pid & 255;
-    return (gender >= genderLower && gender <= genderUpper && pid % 25 == nature);
+    return currLock.compare(pid);
 }
 
 // Checks if seed is valid for 1st shadow unset and antishiny(aka Shiny Skip) for Salamence
@@ -646,8 +601,7 @@ bool NatureLock::salamenceShinySkip(u32 seed)
     pid = getPIDReverse();
 
     // Backwards nature lock check
-    gender = pid & 255;
-    return (gender > genderLower && gender < genderUpper && pid % 25 == nature);
+    return currLock.compare(pid);
 }
 
 // Salamence is a special case of single nature lock and second shadow
@@ -660,8 +614,7 @@ bool NatureLock::salamenceUnset(u32 seed)
     pid = getPIDReverse();
 
     // Backwards nature lock check
-    gender = pid & 255;
-    return (gender >= genderLower && gender <= genderUpper && pid % 25 == nature);
+    return currLock.compare(pid);
 }
 
 // Checks if seed is valid for single nature lock
@@ -673,15 +626,14 @@ bool NatureLock::singleNL(u32 seed)
     pid = getPIDReverse();
 
     // Backwards nature lock check
-    gender = pid & 255;
-    return (gender >= genderLower && gender <= genderUpper && pid % 25 == nature);
+    return currLock.compare(pid);
 }
 
-bool NatureLock::eReader(u32 seed, u32 val)
+// Needs more research
+bool NatureLock::eReader(u32 seed, u32 readerPID)
 {
     // Check if PID is even valid for E-Reader
-    gender = val % 25;
-    if (!(gender >= lockInfo[0].getGenderLower() && gender <= lockInfo[0].getGenderUpper() && val % 25 == lockInfo[0].getNature()))
+    if (!lockInfo[0].compare(readerPID))
         return false;
 
     backward.setSeed(seed * 0xB9B33155 + 0xA170F641); // 1 frame
@@ -691,8 +643,7 @@ bool NatureLock::eReader(u32 seed, u32 val)
 
     x = 1;
     getCurrLock();
-    gender = pidOriginal & 255;
-    if (!(gender >= genderLower && gender <= genderUpper && pidOriginal % 25 == nature))
+    if (!currLock.compare(pid))
         countBackTwo();
 
     // Backwards nature lock check loop
@@ -701,8 +652,7 @@ bool NatureLock::eReader(u32 seed, u32 val)
         backward.setSeed(backward.getSeed() * 0x2D4673C5 + 0x16AEB36D); // 5 frames
         pid = getPIDReverse();
         getCurrLock();
-        gender = val & 255;
-        if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
+        if (!currLock.compare(pid))
             countBackTwo();
     }
 
@@ -714,13 +664,12 @@ bool NatureLock::eReader(u32 seed, u32 val)
         forward.setSeed(forward.getSeed() * 0x284A930D + 0xA2974C77); // 5 frames
         pid = getPIDForward();
         getCurrLock();
-        gender = val & 255;
-        if (!(gender >= genderLower && gender <= genderUpper && pid % 25 == nature))
+        if (!currLock.compare(pid))
             countForwardTwo();
     }
 
     // Checks if first NL PID back from target matches
-    return pid == val;
+    return pid == pidOriginal;
 }
 
 // Changes which lock info is being used for Colo
@@ -748,28 +697,30 @@ void NatureLock::switchLockGales(int lockNum)
 
 // LockInfo
 
+// Dummy constructor
+LockInfo::LockInfo()
+{
+    nature = 0;
+    genderLower = 0;
+    genderUpper = 255;
+    free = false;
+}
+
 // Constructor for LockInfo
-LockInfo::LockInfo(u32 nature, u32 genderLower, u32 genderUpper)
+LockInfo::LockInfo(u32 nature, u32 genderLower, u32 genderUpper, bool free)
 {
     this->nature = nature;
     this->genderLower = genderLower;
     this->genderUpper = genderUpper;
+    this->free = free;
 }
 
-// Gets lower gender thresh value
-u32 LockInfo::getGenderLower()
+// Checks if a PID matches its values
+bool LockInfo::compare(u32 pid)
 {
-    return genderLower;
-}
+    if (free)
+        return true;
 
-// Gets upper gender thresh value
-u32 LockInfo::getGenderUpper()
-{
-    return genderUpper;
-}
-
-// Gets nature value
-u32 LockInfo::getNature()
-{
-    return nature;
+    u32 gender = pid & 255;
+    return gender >= genderLower && gender <= genderUpper && nature == (pid % 25);
 }

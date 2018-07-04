@@ -63,6 +63,7 @@ vector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
     {
         frame.setIDs(40122, rngList[0], 40122 ^ rngList[0]);
+
         if ((rngList[2] > 7 ? 0 : 1) != (rngList[1] ^ 40122 ^ rngList[0]))
             frame.setPID(rngList[2], rngList[1] ^ 0x8000);
         else
@@ -107,6 +108,7 @@ vector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
         }
 
         hunt = 1;
+
         frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], encounterType));
         if (!compare.compareSlot(frame))
             continue;
@@ -176,6 +178,7 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         }
 
         hunt = 1;
+
         frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], encounterType));
         if (!compare.compareSlot(frame))
             continue;
@@ -185,16 +188,10 @@ vector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Check by seeing if frame can synch
         first = rngList[hunt];
-        if ((first & 1) == 0)
-        {
-            // Frame is synchable so set nature to synch nature
+        if ((first & 1) == 0) // Frame is synchable so set nature to synch nature
             frame.setNature(synchNature);
-        }
-        else
-        {
-            // Synch failed so grab hunt nature from next RNG call
+        else // Synch failed so grab hunt nature from next RNG call
             frame.setNature(rngList[++hunt] % 25);
-        }
         if (!compare.compareNature(frame))
             continue;
 
@@ -286,6 +283,7 @@ vector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
         }
 
         hunt = 1;
+
         frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], encounterType));
         if (!compare.compareSlot(frame))
             continue;

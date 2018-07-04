@@ -41,6 +41,7 @@ public:
     EncounterArea3(QStringList data);
     static vector<EncounterArea3> getEncounters(Encounter type, Game game);
     u32 calcLevel(u32 index, u32 prng);
+    u32 calcLevel(u32 index);
     u32 getEncounterRate() const;
     u32 getDelay() const;
 

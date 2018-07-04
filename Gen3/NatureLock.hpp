@@ -43,12 +43,12 @@ private:
     u32 genderUpper;
     u32 genderLower;
     u32 nature;
+    bool free;
 
 public:
-    LockInfo(u32 nature, u32 genderLower, u32 genderUpper);
-    u32 getGenderLower();
-    u32 getGenderUpper();
-    u32 getNature();
+    LockInfo();
+    LockInfo(u32 nature, u32 genderLower, u32 genderUpper, bool free = false);
+    bool compare(u32 pid);
 
 };
 
@@ -58,11 +58,8 @@ class NatureLock
 private:
     int backCount;
     int frontCount;
-    u32 gender;
-    u32 genderLower;
-    u32 genderUpper;
     vector<LockInfo> lockInfo;
-    u32 nature;
+    LockInfo currLock;
     u32 pid;
     u32 pidOriginal;
     LCRNG forward = XDRNG(0);
@@ -90,7 +87,7 @@ public:
     bool salamenceShinySkip(u32 seed);
     bool salamenceUnset(u32 seed);
     bool singleNL(u32 seed);
-    bool eReader(u32 seed, u32 val);
+    bool eReader(u32 seed, u32 readerPID);
     void switchLockColo(int lockNum);
     void switchLockGales(int lockNum);
 

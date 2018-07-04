@@ -416,15 +416,6 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
                         continue;
                     }
                     break;
-                case EReader:
-                    if (natureLock->eReader(frame.getSeed(), frame.getPid()))
-                    {
-                        frames.push_back(frame);
-                        // If this seed passes it is impossible for the sister spread to generate
-                        // Skip since calculating it would be useless
-                        continue;
-                    }
-                    break;
             }
         }
 
@@ -492,14 +483,6 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
                     {
                         frame.setLockReason(QObject::tr("Shiny Skip"));
                         frames.push_back(frame);
-                    }
-                    break;
-                case EReader:
-                    if (natureLock->eReader(frame.getSeed(), frame.getPid()))
-                    {
-                        frames.push_back(frame);
-                        // If this seed passes it is impossible for the sister spread to generate
-                        // Skip since calculating it would be useless
                     }
                     break;
             }

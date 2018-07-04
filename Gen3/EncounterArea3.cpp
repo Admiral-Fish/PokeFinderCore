@@ -92,6 +92,11 @@ u32 EncounterArea3::calcLevel(u32 index, u32 prng)
     return (prng % (maxLevel[index] - minLevel[index] + 1)) + minLevel[index];
 }
 
+u32 EncounterArea3::calcLevel(u32 index)
+{
+    return maxLevel[index];
+}
+
 // Only for Rock Smash since all other encounters can be forced
 u32 EncounterArea3::getEncounterRate() const
 {
