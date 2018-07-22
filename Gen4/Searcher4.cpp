@@ -187,7 +187,7 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
                 continue;
 
             LCRNG testRNG = PokeRNGR(seed);
-            u32 testPID, slot;
+            u32 testPID, slot = 0;
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
 
@@ -281,7 +281,7 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
                 continue;
 
             LCRNG testRNG = PokeRNGR(seed);
-            u32 testPID, slot;
+            u32 testPID, slot = 0;
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
 
@@ -521,7 +521,7 @@ QVector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u3
                 continue;
 
             LCRNG testRNG = PokeRNGR(seed);
-            u32 testPID, slot;
+            u32 testPID, slot = 0;
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
 
@@ -539,6 +539,7 @@ QVector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u3
                         case Wild:
                             slot = testRNG.getSeed();
                             frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                            break;
                         case Surfing:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
@@ -617,7 +618,7 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
             }
 
             LCRNG testRNG = PokeRNGR(seed);
-            u32 testPID, slot;
+            u32 testPID, slot = 0;
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
 
@@ -638,6 +639,7 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                             case Wild:
                                 slot = testRNG.getSeed();
                                 frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                                break;
                             case Surfing:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                                 frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
@@ -852,7 +854,7 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
                 continue;
 
             LCRNG testRNG = PokeRNGR(seed);
-            u32 testPID, slot;
+            u32 testPID, slot = 0;
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
 
@@ -946,7 +948,7 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                 continue;
 
             LCRNG testRNG = PokeRNGR(seed);
-            u32 testPID, slot;
+            u32 testPID, slot = 0;
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
 
@@ -1187,7 +1189,7 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
                 continue;
 
             LCRNG testRNG = PokeRNGR(seed);
-            u32 testPID, slot;
+            u32 testPID, slot = 0;
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
 
@@ -1205,6 +1207,7 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
                         case Wild:
                             slot = testRNG.getSeed();
                             frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                            break;
                         case Surfing:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
@@ -1283,7 +1286,7 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
             }
 
             LCRNG testRNG = PokeRNGR(seed);
-            u32 testPID, slot;
+            u32 testPID, slot = 0;
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
 
@@ -1304,6 +1307,7 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                             case Wild:
                                 slot = testRNG.getSeed();
                                 frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                                break;
                             case Surfing:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                                 frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);

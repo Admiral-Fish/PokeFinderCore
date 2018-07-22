@@ -44,12 +44,12 @@ class EncounterSlot
 {
 
 private:
-    static int calcSlot(u32 compare, QVector<Range> ranges);
+    static u32 calcSlot(u32 compare, QVector<Range> ranges);
 
 public:
-    static int hSlot(u32 result, Encounter encounterType);
-    static int jSlot(u32 result, Encounter encounterType);
-    static int kSlot(u32 result, Encounter encounterType);
+    static u32 hSlot(u32 result, Encounter encounterType);
+    static u32 jSlot(u32 result, Encounter encounterType);
+    static u32 kSlot(u32 result, Encounter encounterType);
 };
 
 #endif // ENCOUNTERSLOT_HPP
