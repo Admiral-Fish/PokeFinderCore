@@ -20,7 +20,7 @@
 #include "MTRNG.hpp"
 
 // Shared advance function
-void MT::advanceFrames(int frames)
+void MT::advanceFrames(u32 frames)
 {
     index += frames;
     while (index >= 624)
@@ -89,6 +89,11 @@ u32 MersenneTwister::nextUInt()
     return y;
 }
 
+u16 MersenneTwister::nextUShort()
+{
+    return static_cast<u16>(nextUInt() >> 16);
+}
+
 // Recreates the Mersenne Twister with a new seed
 void MersenneTwister::setSeed(u32 seed)
 {
@@ -154,6 +159,11 @@ u32 MersenneTwisterUntempered::nextUInt()
     return mt[index++];
 }
 
+u16 MersenneTwisterUntempered::nextUShort()
+{
+    return static_cast<u16>(nextUInt() >> 16);
+}
+
 // Recreates the Mersenne Twister Untempered with a new seed
 void MersenneTwisterUntempered::setSeed(u32 seed)
 {
@@ -169,7 +179,7 @@ u32 MersenneTwisterUntempered::getSeed()
 // Mersenne Twister Fast
 
 // Constructor for Mersenne Twister Fast
-MersenneTwisterFast::MersenneTwisterFast(u32 seed, int calls)
+MersenneTwisterFast::MersenneTwisterFast(u32 seed, u32 calls)
 {
     maxCalls = calls;
 
@@ -196,9 +206,8 @@ void MersenneTwisterFast::initialize(u32 seed)
 void MersenneTwisterFast::shuffle()
 {
     u32 y;
-    int kk = 0;
 
-    for (; kk < maxCalls; ++kk)
+    for (u32 kk = 0; kk < maxCalls; ++kk)
     {
         y = (mt[kk] & UPPERMASK) | (mt[kk + 1] & LOWERMASK);
         mt[kk] = mt[kk + M] ^ (y >> 1) ^ mag01[y & 0x1];
@@ -221,6 +230,11 @@ u32 MersenneTwisterFast::nextUInt()
     y ^= temperingShiftT(y) & TEMPERINGMASKC2;
 
     return y;
+}
+
+u16 MersenneTwisterFast::nextUShort()
+{
+    return static_cast<u16>(nextUInt() >> 16);
 }
 
 // Recreates the Mersenne Twister Fast with a new seed

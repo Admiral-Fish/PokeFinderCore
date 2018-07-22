@@ -27,9 +27,8 @@
 #include <PokeFinderCore/Objects/Method.hpp>
 #include <PokeFinderCore/Objects/Utilities.hpp>
 #include <PokeFinderCore/RNG/LCRNG.hpp>
-#include <vector>
+#include <QVector>
 
-using std::vector;
 typedef uint32_t u32;
 typedef uint16_t u16;
 

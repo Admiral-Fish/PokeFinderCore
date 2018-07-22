@@ -51,9 +51,9 @@ Searcher4::~Searcher4()
     delete backward;
 }
 
-vector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
     switch (frameType)
     {
         case Method1:
@@ -115,9 +115,9 @@ vector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32
     return searchInitialSeeds(frames);
 }
 
-vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -126,7 +126,7 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<u32> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
@@ -136,7 +136,7 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         frame.setSeed(backward->nextUInt());
         if (compare.comparePID(frame))
-            frames.push_back(frame);
+            frames.append(frame);
 
         // Setup XORed frame
         frame.setPID(frame.getPid() ^ 0x80008000);
@@ -144,16 +144,16 @@ vector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 s
         if (compare.comparePID(frame))
         {
             frame.setSeed(frame.getSeed() ^ 0x80000000);
-            frames.push_back(frame);
+            frames.append(frame);
         }
     }
 
     return frames;
 }
 
-vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -162,7 +162,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
@@ -230,7 +230,7 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                     {
                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                         if (encounterType == Stationary || compare.compareSlot(frame))
-                            frames.push_back(frame);
+                            frames.append(frame);
                     }
                 }
 
@@ -245,9 +245,9 @@ vector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     return frames;
 }
 
-vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -256,7 +256,7 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
@@ -324,7 +324,7 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                         frame.setLeadType(Synchronize);
                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                         if (encounterType == Stationary || compare.compareSlot(frame))
-                            frames.push_back(frame);
+                            frames.append(frame);
                     }
                 }
                 // Failed Synch
@@ -361,7 +361,7 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                         frame.setLeadType(Synchronize);
                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                         if (encounterType == Stationary || compare.compareSlot(frame))
-                            frames.push_back(frame);
+                            frames.append(frame);
                     }
                 }
 
@@ -376,9 +376,9 @@ vector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, 
     return frames;
 }
 
-vector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -387,7 +387,7 @@ vector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 s
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
@@ -474,7 +474,7 @@ vector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 s
 
                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                         if (encounterType == Stationary || compare.compareSlot(frame))
-                            frames.push_back(frame);
+                            frames.append(frame);
                     }
                 }
             }
@@ -484,9 +484,9 @@ vector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 s
     return frames;
 }
 
-vector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -495,7 +495,7 @@ vector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
@@ -567,7 +567,7 @@ vector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32
                     {
                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                         if (encounterType == Stationary || compare.compareSlot(frame))
-                            frames.push_back(frame);
+                            frames.append(frame);
                     }
                 }
 
@@ -582,9 +582,9 @@ vector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32
     return frames;
 }
 
-vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -593,7 +593,7 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
@@ -666,7 +666,7 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                         {
                             frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                             if (encounterType == Stationary || compare.compareSlot(frame))
-                                frames.push_back(frame);
+                                frames.append(frame);
                         }
 
                         // Failed synch
@@ -693,7 +693,7 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 frame.setLeadType(Synchronize);
                                 frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    frames.push_back(frame);
+                                    frames.append(frame);
                             }
                         }
                     }
@@ -731,7 +731,7 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
                             frame.setLeadType(Synchronize);
                             frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                             if (encounterType == Stationary || compare.compareSlot(frame))
-                                frames.push_back(frame);
+                                frames.append(frame);
                         }
                     }
 
@@ -806,7 +806,7 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
 
                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                         if (encounterType == Stationary || compare.compareSlot(frame))
-                            frames.push_back(frame);
+                            frames.append(frame);
                     }
                 }
             }
@@ -816,9 +816,9 @@ vector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa,
     return frames;
 }
 
-vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -827,7 +827,7 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
@@ -895,7 +895,7 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
                     {
                         frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                         if (encounterType == Stationary || compare.compareSlot(frame))
-                            frames.push_back(frame);
+                            frames.append(frame);
                     }
                 }
 
@@ -910,9 +910,9 @@ vector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 s
     return frames;
 }
 
-vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -921,7 +921,7 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
@@ -989,7 +989,7 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                         frame.setLeadType(Synchronize);
                         frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                         if (encounterType == Stationary || compare.compareSlot(frame))
-                            frames.push_back(frame);
+                            frames.append(frame);
                     }
                 }
                 // Failed Synch
@@ -1026,7 +1026,7 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
                         frame.setLeadType(Synchronize);
                         frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                         if (encounterType == Stationary || compare.compareSlot(frame))
-                            frames.push_back(frame);
+                            frames.append(frame);
                     }
                 }
 
@@ -1041,9 +1041,9 @@ vector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, 
     return frames;
 }
 
-vector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -1052,7 +1052,7 @@ vector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 s
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
@@ -1140,7 +1140,7 @@ vector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 s
 
                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                         if (encounterType == Stationary || compare.compareSlot(frame))
-                            frames.push_back(frame);
+                            frames.append(frame);
                     }
                 }
             }
@@ -1150,9 +1150,9 @@ vector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 s
     return frames;
 }
 
-vector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -1161,7 +1161,7 @@ vector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
@@ -1233,7 +1233,7 @@ vector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32
                     {
                         frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                         if (encounterType == Stationary || compare.compareSlot(frame))
-                            frames.push_back(frame);
+                            frames.append(frame);
                     }
                 }
 
@@ -1248,9 +1248,9 @@ vector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32
     return frames;
 }
 
-vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -1259,7 +1259,7 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     u32 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
@@ -1332,7 +1332,7 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                         {
                             frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                             if (encounterType == Stationary || compare.compareSlot(frame))
-                                frames.push_back(frame);
+                                frames.append(frame);
                         }
 
                         // Failed synch
@@ -1359,7 +1359,7 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                                 frame.setLeadType(Synchronize);
                                 frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                 if (encounterType == Stationary || compare.compareSlot(frame))
-                                    frames.push_back(frame);
+                                    frames.append(frame);
                             }
                         }
                     }
@@ -1397,7 +1397,7 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
                             frame.setLeadType(Synchronize);
                             frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                             if (encounterType == Stationary || compare.compareSlot(frame))
-                                frames.push_back(frame);
+                                frames.append(frame);
                         }
                     }
 
@@ -1473,7 +1473,7 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
 
                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                         if (encounterType == Stationary || compare.compareSlot(frame))
-                            frames.push_back(frame);
+                            frames.append(frame);
                     }
                 }
             }
@@ -1483,9 +1483,9 @@ vector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa,
     return frames;
 }
 
-vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -1494,7 +1494,7 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     u32 calls[15];
@@ -1515,20 +1515,20 @@ vector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, 
         {
             backward->nextUInt();
             frame.setSeed(backward->nextUInt());
-            frames.push_back(frame);
+            frames.append(frame);
 
             // Sister spread shares PID
             frame.setSeed(frame.getSeed() ^ 0x80000000);
-            frames.push_back(frame);
+            frames.append(frame);
         }
     }
 
     return frames;
 }
 
-vector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -1537,7 +1537,7 @@ vector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa,
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
-    vector<u32> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
@@ -1545,19 +1545,19 @@ vector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa,
         // Setup normal frame
         backward->setSeed(seeds[i]);
         frame.setSeed(backward->nextUInt());
-        frames.push_back(frame);
+        frames.append(frame);
 
         // Setup XORed frame
         frame.setSeed(frame.getSeed() ^ 0x80000000);
-        frames.push_back(frame);
+        frames.append(frame);
     }
 
     return frames;
 }
 
-vector<Frame4> Searcher4::searchInitialSeeds(vector<Frame4> results)
+QVector<Frame4> Searcher4::searchInitialSeeds(QVector<Frame4> results)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
 
     for (Frame4 result : results)
     {
@@ -1575,7 +1575,7 @@ vector<Frame4> Searcher4::searchInitialSeeds(vector<Frame4> results)
             {
                 result.setSeed(test);
                 result.setFrame(cnt);
-                frames.push_back(result);
+                frames.append(result);
             }
 
             test = backward->nextUInt();

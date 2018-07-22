@@ -24,6 +24,12 @@
  */
 
 // Constructor for Range
+Range::Range()
+{
+    min = 0;
+    max = 99;
+}
+
 Range::Range(u32 min, u32 max)
 {
     this->min = min;
@@ -46,9 +52,10 @@ u32 Range::getMin()
 // Encounter slot calculations
 
 // Runs through ranges and compare value to get the encounter slot
-int EncounterSlot::calcSlot(u32 compare, vector<Range> ranges)
+int EncounterSlot::calcSlot(u32 compare, QVector<Range> ranges)
 {
-    for (auto i = 0; i < ranges.size(); i++)
+    auto size = ranges.size();
+    for (auto i = 0; i < size; i++)
         if (compare >= ranges[i].getMin() && compare <= ranges[i].getMax())
             return i;
     return -1;
@@ -58,7 +65,7 @@ int EncounterSlot::calcSlot(u32 compare, vector<Range> ranges)
 int EncounterSlot::hSlot(u32 result, Encounter encounterType)
 {
     u32 compare = result % 100;
-    vector<Range> ranges;
+    QVector<Range> ranges;
     switch (encounterType)
     {
         case OldRod:
@@ -87,7 +94,7 @@ int EncounterSlot::hSlot(u32 result, Encounter encounterType)
 int EncounterSlot::jSlot(u32 result, Encounter encounterType)
 {
     u32 compare = result / 656;
-    vector<Range> ranges;
+    QVector<Range> ranges;
     switch (encounterType)
     {
         case GoodRod:
@@ -111,7 +118,7 @@ int EncounterSlot::jSlot(u32 result, Encounter encounterType)
 int EncounterSlot::kSlot(u32 result, Encounter encounterType)
 {
     u32 compare = result % 100;
-    vector<Range> ranges;
+    QVector<Range> ranges;
     switch (encounterType)
     {
         case OldRod:
@@ -128,7 +135,7 @@ int EncounterSlot::kSlot(u32 result, Encounter encounterType)
                  };
             return calcSlot(compare, ranges);
         case SafariZone:
-            return (int) (compare % 10);
+            return static_cast<int>(compare % 10);
         case HeadButt:
             ranges = { Range(0, 49), Range(50, 64), Range(65, 79), Range(80, 89), Range(90, 94),
                        Range(95, 99)

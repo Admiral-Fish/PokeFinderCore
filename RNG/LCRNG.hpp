@@ -33,8 +33,8 @@ protected:
 public:
 
     LCRNG(u32 add, u32 mult, u32 seed);
-    void advanceFrames(int frames) override;
-    u32 nextUShort();
+    void advanceFrames(u32 frames) override;
+    u16 nextUShort() override;
     u32 nextUInt() override;
     void setSeed(u32 seed) override;
     u32 getSeed() override;

@@ -20,12 +20,9 @@
 #ifndef NATURE_HPP
 #define NATURE_HPP
 
-#include <QString>
 #include <QStringList>
 #include <QTranslator>
-#include <vector>
 
-using std::vector;
 typedef uint32_t u32;
 
 class Nature
@@ -33,7 +30,7 @@ class Nature
 
 public:
     static QStringList getNatures();
-    static vector<QString> getFrameNatures();
+    static QStringList getFrameNatures();
     static u32 getAdjustedNature(u32 nature);
     static u32 getReversedNature(u32 nature);
 

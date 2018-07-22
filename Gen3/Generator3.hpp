@@ -32,17 +32,18 @@ class Generator3: public Generator
 private:
     int iv1;
     int iv2;
-    LCRNG *rng = NULL;
-    u32 size;
+    LCRNG *rng = nullptr;
+    QVector<u16> rngList;
+    int size;
     EncounterArea3 encounter;
 
-    vector<Frame3> generateMethodChannel(FrameCompare compare);
-    vector<Frame3> generateMethodH124(FrameCompare compare);
-    vector<Frame3> generateMethodH124Synch(FrameCompare compare);
-    vector<Frame3> generateMethodH124CuteCharm(FrameCompare compare);
-    vector<Frame3> generateMethodXDColo(FrameCompare compare);
-    vector<Frame3> generateMethod124(FrameCompare compare);
-    vector<Frame3> generateMethod1Reverse(FrameCompare compare);
+    QVector<Frame3> generateMethodChannel(FrameCompare compare);
+    QVector<Frame3> generateMethodH124(FrameCompare compare);
+    QVector<Frame3> generateMethodH124Synch(FrameCompare compare);
+    QVector<Frame3> generateMethodH124CuteCharm(FrameCompare compare);
+    QVector<Frame3> generateMethodXDColo(FrameCompare compare);
+    QVector<Frame3> generateMethod124(FrameCompare compare);
+    QVector<Frame3> generateMethod1Reverse(FrameCompare compare);
     void refill();
     static inline bool cuteCharm125F(u32 pid) { return (pid & 0xff) < 31; }
     static inline bool cuteCharm875M(u32 pid) { return (pid & 0xff) >= 31; }
@@ -57,7 +58,7 @@ public:
     Generator3();
     Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u16 tid, u16 sid, u32 offset);
     ~Generator3();
-    vector<Frame3> generate(FrameCompare compare);
+    QVector<Frame3> generate(FrameCompare compare);
     void setup(Method method);
     void setEncounter(const EncounterArea3 &value);
 

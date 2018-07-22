@@ -19,7 +19,7 @@
 
 #include "Profile4.hpp"
 
-Profile4::Profile4(QString profileName, Game version, u32 tid, u32 sid, int language) : Profile(profileName, version, tid, sid, language)
+Profile4::Profile4(QString profileName, Game version, u16 tid, u16 sid, int language) : Profile(profileName, version, tid, sid, language)
 {
 }
 
@@ -98,10 +98,10 @@ void Profile4::updateProfile(Profile4 original)
             if (!domElement.isNull() && domElement.tagName() == "Gen4")
             {
                 QString name = domElement.childNodes().at(0).toElement().text();
-                int ver = domElement.childNodes().at(1).toElement().text().toUInt(NULL, 10);
-                int lang = domElement.childNodes().at(2).toElement().text().toUInt(NULL, 10);
-                u32 id = domElement.childNodes().at(3).toElement().text().toUInt(NULL, 10);
-                u32 id2 = domElement.childNodes().at(4).toElement().text().toInt(NULL, 10);
+                int ver = domElement.childNodes().at(1).toElement().text().toInt();
+                int lang = domElement.childNodes().at(2).toElement().text().toInt();
+                u16 id = domElement.childNodes().at(3).toElement().text().toUShort();
+                u16 id2 = domElement.childNodes().at(4).toElement().text().toUShort();
 
                 if (original.profileName == name && original.version == ver && original.language == lang && original.tid == id && original.sid == id2)
                 {
@@ -176,9 +176,9 @@ void Profile4::saveProfile()
     }
 }
 
-vector<Profile4> Profile4::loadProfileList()
+QVector<Profile4> Profile4::loadProfileList()
 {
-    static vector<Profile4> profileList;
+    static QVector<Profile4> profileList;
     profileList.clear();
 
     QDomDocument doc;
@@ -198,10 +198,10 @@ vector<Profile4> Profile4::loadProfileList()
                 {
                     QDomNode info = domElement.firstChild();
                     QString profileName;
-                    int version;
-                    int language;
-                    QString tid;
-                    QString sid;
+                    int version = 0;
+                    int language = 0;
+                    u16 tid = 0;
+                    u16 sid = 0;
                     while (!info.isNull())
                     {
                         QDomElement infoElement = info.toElement();
@@ -214,26 +214,25 @@ vector<Profile4> Profile4::loadProfileList()
                             }
                             else if (tagName == "version")
                             {
-                                version = infoElement.text().toInt(NULL, 10);
+                                version = infoElement.text().toInt();
                             }
                             else if (tagName == "language")
                             {
-                                language = infoElement.text().toInt(NULL, 10);
+                                language = infoElement.text().toInt();
                             }
                             else if (tagName == "tid")
                             {
-                                tid = infoElement.text();
+                                tid = infoElement.text().toUShort();
                             }
                             else if (tagName == "sid")
                             {
-                                sid = infoElement.text();
+                                sid = infoElement.text().toUShort();
                             }
 
                             info = info.nextSibling();
                         }
                     }
-                    Profile4 profile(profileName, (Game)version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language);
-                    profileList.push_back(profile);
+                    profileList.append(Profile4(profileName, static_cast<Game>(version), tid, sid, language));
                 }
             }
             domNode = domNode.nextSibling();

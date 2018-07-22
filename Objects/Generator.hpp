@@ -26,9 +26,8 @@
 #include <PokeFinderCore/Objects/Lead.hpp>
 #include <PokeFinderCore/Objects/Method.hpp>
 #include <PokeFinderCore/RNG/IRNG.hpp>
-#include <vector>
+#include <QVector>
 
-using std::vector;
 typedef uint32_t u32;
 typedef uint16_t u16;
 
@@ -37,7 +36,6 @@ class Generator
 
 protected:
     u16 psv;
-    vector<u32> rngList;
     u16 sid;
     u16 tid;
     u32 offset;

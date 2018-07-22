@@ -22,9 +22,7 @@
 
 #include <PokeFinderCore/RNG/LCRNG.hpp>
 #include <PokeFinderCore/Objects/Method.hpp>
-#include <vector>
-
-using std::vector;
+#include <QVector>
 
 // Defines the different types of shadows
 enum ShadowType
@@ -58,12 +56,12 @@ class NatureLock
 private:
     int backCount;
     int frontCount;
-    vector<LockInfo> lockInfo;
+    QVector<LockInfo> lockInfo;
     LockInfo currLock;
     u32 pid;
     u32 pidOriginal;
-    LCRNG forward = XDRNG(0);
-    LCRNG backward = XDRNGR(0);
+    XDRNG *forward = nullptr;
+    XDRNGR *backward = nullptr;
     ShadowType type;
     int x;
 
@@ -78,6 +76,7 @@ private:
 
 public:
     NatureLock(int num, Method version);
+    ~NatureLock();
     ShadowType getType();
     bool firstShadowNormal(u32 seed);
     bool firstShadowSet(u32 seed);

@@ -24,23 +24,26 @@
 #include <PokeFinderCore/Objects/Generator.hpp>
 #include <PokeFinderCore/Objects/FrameCompare.hpp>
 #include <PokeFinderCore/RNG/LCRNG.hpp>
+#include <PokeFinderCore/Gen4/EncounterArea4.hpp>
 
 class Generator4 : public Generator
 {
 
 private:
-    PokeRNG *rng = NULL;
-    u32 size;
+    PokeRNG *rng = nullptr;
+    int size;
+    QVector<u16> rngList;
+    EncounterArea4 encounter;
 
-    vector<Frame4> generateMethod1(FrameCompare compare);
-    vector<Frame4> generateMethodJ(FrameCompare compare);
-    vector<Frame4> generateMethodJSynch(FrameCompare compare);
-    vector<Frame4> generateMethodJCuteCharm(FrameCompare compare);
-    vector<Frame4> generateMethodK(FrameCompare compare);
-    vector<Frame4> generateMethodKSynch(FrameCompare compare);
-    vector<Frame4> generateMethodKCuteCharm(FrameCompare compare);
-    vector<Frame4> generateChainedShiny(FrameCompare compare);
-    vector<Frame4> generateWondercardIVs(FrameCompare compare);
+    QVector<Frame4> generateMethod1(FrameCompare compare);
+    QVector<Frame4> generateMethodJ(FrameCompare compare);
+    QVector<Frame4> generateMethodJSynch(FrameCompare compare);
+    QVector<Frame4> generateMethodJCuteCharm(FrameCompare compare);
+    QVector<Frame4> generateMethodK(FrameCompare compare);
+    QVector<Frame4> generateMethodKSynch(FrameCompare compare);
+    QVector<Frame4> generateMethodKCuteCharm(FrameCompare compare);
+    QVector<Frame4> generateChainedShiny(FrameCompare compare);
+    QVector<Frame4> generateWondercardIVs(FrameCompare compare);
     u32 chainedPIDLow(u32 low, u32 call1, u32 call2, u32 call3, u32 call4, u32 call5,
                       u32 call6, u32 call7, u32 call8, u32 call9, u32 call10, u32 call11,
                       u32 call12, u32 call13);
@@ -51,8 +54,8 @@ public:
     Generator4();
     Generator4(u32 maxResults, u32 initialFrame, u32 initialSeed, u16 tid, u16 sid, u32 offset, Method type);
     ~Generator4();
-    vector<Frame4> generate(FrameCompare compare);
-
+    QVector<Frame4> generate(FrameCompare compare);
+    void setEncounter(const EncounterArea4 &value);
 };
 
 #endif // GENERATOR4_HPP

@@ -30,25 +30,26 @@ class Egg4 : public Egg
 {
 
 private:
-    PokeRNG *rng = NULL;
-    MersenneTwister *mt = NULL;
-    vector<u32> parent1;
-    vector<u32> parent2;
+    PokeRNG *rng = nullptr;
+    MersenneTwister *mt = nullptr;
+    QVector<u32> rngList;
+    QVector<u32> parent1;
+    QVector<u32> parent2;
     const u32 HABCDS[6] = { 0, 1, 2, 5, 3, 4 };
     const u32 ABCDS[5] = { 1, 2, 5, 3, 4 };
     const u32 ACDS[4] = { 1, 5, 3, 4 };
 
-    vector<Frame4> generatePID(FrameCompare compare);
-    vector<Frame4> generatePIDMasuada(FrameCompare compare);
-    vector<Frame4> generateIVsDPPt(FrameCompare compare);
-    vector<Frame4> generateIVsHGSS(FrameCompare compare);
+    QVector<Frame4> generatePID(FrameCompare compare);
+    QVector<Frame4> generatePIDMasuada(FrameCompare compare);
+    QVector<Frame4> generateIVsDPPt(FrameCompare compare);
+    QVector<Frame4> generateIVsHGSS(FrameCompare compare);
 
 public:
     Egg4();
     Egg4(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 seed);
     ~Egg4();
-    vector<Frame4> generate(FrameCompare compare);
-    void setParents(vector<u32> parent1, vector<u32> parent2);
+    QVector<Frame4> generate(FrameCompare compare);
+    void setParents(QVector<u32> parent1, QVector<u32> parent2);
 
 };
 

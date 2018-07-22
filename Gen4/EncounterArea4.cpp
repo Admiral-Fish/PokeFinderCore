@@ -19,14 +19,14 @@
 
 #include "EncounterArea4.hpp"
 
-EncounterArea4::EncounterArea4(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, Game dual, int time)
+EncounterArea4::EncounterArea4(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel, Game dual, int time)
     : EncounterArea(location, type, species, minLevel, maxLevel)
 {
     this->dual = dual;
     this->time = time;
 }
 
-EncounterArea4::EncounterArea4(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, int sound, int time)
+EncounterArea4::EncounterArea4(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel, int sound, int time)
     : EncounterArea(location, type, species, minLevel, maxLevel)
 {
     this->sound = sound;
@@ -35,7 +35,7 @@ EncounterArea4::EncounterArea4(u32 location, Encounter type, vector<u32> species
 
 EncounterArea4::EncounterArea4(QStringList data, Game game)
 {
-    location = data[0].toUInt();
+    location = data[0].toInt();
     time = data[1].toInt();
     if (game == HeartGold || game == SoulSilver)
     {
@@ -44,23 +44,23 @@ EncounterArea4::EncounterArea4(QStringList data, Game game)
     }
     else
     {
-        dual = (Game)data[2].toInt();
+        dual = static_cast<Game>(data[2].toInt());
         sound = 0;
     }
-    type = (Encounter)data[3].toInt();
+    type = static_cast<Encounter>(data[3].toInt());
 
     bool flag = type == Wild || type == Swarm || type == PokeRadar;
 
     int len = (data.length() - 4) / (flag ? 2 : 3);
     for (int i = 4; i < len + 4; i++)
     {
-        species.push_back(data[i].toUInt());
-        minLevel.push_back(data[i + len].toUInt());
-        maxLevel.push_back(data[i + (flag ? len : len * 2)].toUInt());
+        species.append(data[i].toInt());
+        minLevel.append(data[i + len].toUInt());
+        maxLevel.append(data[i + (flag ? len : len * 2)].toUInt());
     }
 }
 
-vector<EncounterArea4> EncounterArea4::getEncounters(Encounter type, Game game, int time)
+QVector<EncounterArea4> EncounterArea4::getEncounters(Encounter type, Game game, int time)
 {
     QString path;
     switch (game)
@@ -85,7 +85,7 @@ vector<EncounterArea4> EncounterArea4::getEncounters(Encounter type, Game game, 
 
     QFile file(path);
 
-    vector<EncounterArea4> areas;
+    QVector<EncounterArea4> areas;
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream ts(&file);
@@ -101,7 +101,7 @@ vector<EncounterArea4> EncounterArea4::getEncounters(Encounter type, Game game, 
             {
                 if (area.type == Wild && !(area.time == 0 || area.time == time))
                     continue;
-                areas.push_back(area);
+                areas.append(area);
             }
         }
     }
@@ -112,9 +112,14 @@ vector<EncounterArea4> EncounterArea4::getEncounters(Encounter type, Game game, 
 u32 EncounterArea4::calcLevel(u32 index, u32 prng)
 {
     if (levelLocked(index))
-        return minLevel[index];
+        return minLevel[static_cast<int>(index)];
 
-    return (prng % (maxLevel[index] - minLevel[index] + 1)) + minLevel[index];
+    return (prng % (maxLevel[static_cast<int>(index)] - minLevel[static_cast<int>(index)] + 1)) + minLevel[static_cast<int>(index)];
+}
+
+u32 EncounterArea4::calcLevel(u32 index)
+{
+    return maxLevel[static_cast<int>(index)];
 }
 
 Game EncounterArea4::getDual() const

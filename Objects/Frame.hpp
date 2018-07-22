@@ -26,9 +26,8 @@
 #include <PokeFinderCore/Objects/Nature.hpp>
 #include <PokeFinderCore/Objects/Power.hpp>
 #include <QString>
-#include <vector>
+#include <QVector>
 
-using std::vector;
 typedef uint64_t u64;
 typedef uint32_t u32;
 typedef uint16_t u16;
@@ -56,8 +55,8 @@ protected:
     u16 tid;
     u32 level;
 
-    vector<QString> natures = Nature::getFrameNatures();
-    vector<QString> powers = Power::getPowers();
+    QStringList natures = Nature::getFrameNatures();
+    QStringList powers = Power::getPowers();
     QString getFemale125();
     QString getFemale25();
     QString getFemale50();

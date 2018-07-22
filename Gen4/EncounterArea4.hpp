@@ -25,7 +25,6 @@
 #include <QFile>
 #include <PokeFinderCore/Objects/Game.hpp>
 #include <PokeFinderCore/Objects/EncounterArea.hpp>
-#include <algorithm>
 
 class EncounterArea4 : public EncounterArea
 {
@@ -37,11 +36,12 @@ private:
 
 public:
     EncounterArea4() : EncounterArea() {}
-    EncounterArea4(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, Game dual, int time);
-    EncounterArea4(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, int sound, int time);
+    EncounterArea4(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel, Game dual, int time);
+    EncounterArea4(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel, int sound, int time);
     EncounterArea4(QStringList data, Game game);
-    static vector<EncounterArea4> getEncounters(Encounter type, Game game, int time);
+    static QVector<EncounterArea4> getEncounters(Encounter type, Game game, int time);
     u32 calcLevel(u32 index, u32 prng);
+    u32 calcLevel(u32 index);
     Game getDual() const;
     int getTime() const;
     int getSound() const;

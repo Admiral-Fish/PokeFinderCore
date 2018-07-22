@@ -22,9 +22,8 @@
 
 #include <PokeFinderCore/Objects/Method.hpp>
 #include <cstdint>
-#include <vector>
+#include <QVector>
 
-using std::vector;
 typedef uint64_t u64;
 typedef uint32_t u32;
 
@@ -42,9 +41,9 @@ private:
 
 public:
     RNGEuclidean(Method FrameType);
-    vector<u32> recoverLower16BitsIV(u32 first, u32 second);
-    vector<u32> recoverLower16BitsPID(u32 first, u32 second);
-    vector<u32> recoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    QVector<u32> recoverLower16BitsIV(u32 first, u32 second);
+    QVector<u32> recoverLower16BitsPID(u32 first, u32 second);
+    QVector<u32> recoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     void switchEuclidean(Method FrameType);
 
 };

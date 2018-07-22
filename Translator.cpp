@@ -19,7 +19,7 @@
 
 #include "Translator.hpp"
 
-QStringList Translator::getSpecies(vector<u32> nums)
+QStringList Translator::getSpecies(QVector<int> nums)
 {
     QStringList species;
 
@@ -34,15 +34,15 @@ QStringList Translator::getSpecies(vector<u32> nums)
         while (!ts.atEnd())
             input << ts.readLine();
 
-        for (u32 x : nums)
-            species.push_back(input[x - 1]);
+        for (int x : nums)
+            species.append(input[x - 1]);
     }
     file.close();
 
     return species;
 }
 
-QStringList Translator::getLocationsGen3(vector<u32> nums)
+QStringList Translator::getLocationsGen3(QVector<int> nums)
 {
     QStringList locations;
 
@@ -57,15 +57,15 @@ QStringList Translator::getLocationsGen3(vector<u32> nums)
         while (!ts.atEnd())
             input << ts.readLine();
 
-        for (u32 x : nums)
-            locations.push_back(input[x]);
+        for (int x : nums)
+            locations.append(input[x]);
     }
     file.close();
 
     return locations;
 }
 
-QStringList Translator::getLocationsGen4(vector<u32> nums)
+QStringList Translator::getLocationsGen4(QVector<int> nums)
 {
     QStringList locations;
 
@@ -80,8 +80,8 @@ QStringList Translator::getLocationsGen4(vector<u32> nums)
         while (!ts.atEnd())
             input << ts.readLine();
 
-        for (u32 x : nums)
-            locations.push_back(input[x]);
+        for (int x : nums)
+            locations.append(input[x]);
     }
     file.close();
 

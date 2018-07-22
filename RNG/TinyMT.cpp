@@ -35,9 +35,9 @@ TinyMT::TinyMT(u32 st[])
     periodCertification();
 }
 
-void TinyMT::advanceFrames(int frames)
+void TinyMT::advanceFrames(u32 frames)
 {
-    for (int i = 0; i < frames; i++)
+    for (u32 i = 0; i < frames; i++)
         nextState();
 }
 
@@ -50,7 +50,7 @@ void TinyMT::initialize(u32 seed)
     state[2] = MAT2;
     state[3] = TMAT;
 
-    for (int i = 1; i < 8; i++)
+    for (u32 i = 1; i < 8; i++)
         state[i & 3] ^= i + 0x6c078965 * (state[(i - 1) & 3] ^ (state[(i - 1) & 3] >> 30));
 
     periodCertification();
@@ -83,7 +83,7 @@ void TinyMT::nextState()
     state[2] = x ^ (y << TINYMT32SH1);
     state[3] = y;
 
-    if ((y & 1) == 1)
+    if (y & 1)
     {
         state[1] ^= MAT1;
         state[2] ^= MAT2;
@@ -97,6 +97,11 @@ u32 TinyMT::nextUInt()
     return temper();
 }
 
+u16 TinyMT::nextUShort()
+{
+    return static_cast<u16>(nextUInt() >> 16);
+}
+
 // Generates the psuedo random number from the Tiny state
 u32 TinyMT::temper()
 {
@@ -104,7 +109,7 @@ u32 TinyMT::temper()
     u32 t1 = state[0] + (state[2] >> TINYMT32SH8);
 
     t0 ^= t1;
-    if ((t1 & 1) == 1)
+    if (t1 & 1)
         t0 ^= TMAT;
     return t0;
 }

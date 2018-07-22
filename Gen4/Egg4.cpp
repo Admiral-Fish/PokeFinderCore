@@ -51,9 +51,9 @@ Egg4::~Egg4()
     delete mt;
 }
 
-vector<Frame4> Egg4::generatePID(FrameCompare compare)
+QVector<Frame4> Egg4::generatePID(FrameCompare compare)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
     Frame4 frame = Frame4(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
     frame.setInitialSeed(seed);
@@ -68,16 +68,16 @@ vector<Frame4> Egg4::generatePID(FrameCompare compare)
         if (compare.comparePID(frame))
         {
             frame.setFrame(cnt);
-            frames.push_back(frame);
+            frames.append(frame);
         }
     }
 
     return frames;
 }
 
-vector<Frame4> Egg4::generatePIDMasuada(FrameCompare compare)
+QVector<Frame4> Egg4::generatePIDMasuada(FrameCompare compare)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
     Frame4 frame = Frame4(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
     frame.setInitialSeed(seed);
@@ -104,16 +104,16 @@ vector<Frame4> Egg4::generatePIDMasuada(FrameCompare compare)
         if (compare.comparePID(frame))
         {
             frame.setFrame(cnt);
-            frames.push_back(frame);
+            frames.append(frame);
         }
     }
 
     return frames;
 }
 
-vector<Frame4> Egg4::generateIVsDPPt(FrameCompare compare)
+QVector<Frame4> Egg4::generateIVsDPPt(FrameCompare compare)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
     Frame4 frame = Frame4(tid, sid, psv);
     frame.setInitialSeed(seed);
 
@@ -121,11 +121,11 @@ vector<Frame4> Egg4::generateIVsDPPt(FrameCompare compare)
     rng->advanceFrames(initialFrame - 1);
 
     for (int x = 0; x < 8; x++)
-        rngList.push_back(rng->nextUShort());
+        rngList.append(rng->nextUShort());
 
     u32 iv1, iv2, inh1, inh2, inh3, par1, par2, par3;
 
-    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
+    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
     {
         iv1 = rngList[0];
         iv2 = rngList[1];
@@ -143,16 +143,16 @@ vector<Frame4> Egg4::generateIVsDPPt(FrameCompare compare)
         {
             frame.setSeed(rngList[0]);
             frame.setFrame(cnt);
-            frames.push_back(frame);
+            frames.append(frame);
         }
     }
 
     return frames;
 }
 
-vector<Frame4> Egg4::generateIVsHGSS(FrameCompare compare)
+QVector<Frame4> Egg4::generateIVsHGSS(FrameCompare compare)
 {
-    vector<Frame4> frames;
+    QVector<Frame4> frames;
     Frame4 frame = Frame4(tid, sid, psv);
     frame.setInitialSeed(seed);
 
@@ -160,11 +160,11 @@ vector<Frame4> Egg4::generateIVsHGSS(FrameCompare compare)
     rng->advanceFrames(initialFrame - 1);
 
     for (int x = 0; x < 8; x++)
-        rngList.push_back(rng->nextUShort());
+        rngList.append(rng->nextUShort());
 
     u32 iv1, iv2, inh1, inh2, inh3, par1, par2, par3;
 
-    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.erase(rngList.begin()), rngList.push_back(rng->nextUShort()))
+    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
     {
         iv1 = rngList[0];
         iv2 = rngList[1];
@@ -182,14 +182,14 @@ vector<Frame4> Egg4::generateIVsHGSS(FrameCompare compare)
         {
             frame.setSeed(rngList[0]);
             frame.setFrame(cnt);
-            frames.push_back(frame);
+            frames.append(frame);
         }
     }
 
     return frames;
 }
 
-vector<Frame4> Egg4::generate(FrameCompare compare)
+QVector<Frame4> Egg4::generate(FrameCompare compare)
 {
     switch (frameType)
     {
@@ -202,11 +202,11 @@ vector<Frame4> Egg4::generate(FrameCompare compare)
         case HGSSIVs:
             return generateIVsHGSS(compare);
         default:
-            return vector<Frame4>();
+            return QVector<Frame4>();
     }
 }
 
-void Egg4::setParents(vector<u32> parent1, vector<u32> parent2)
+void Egg4::setParents(QVector<u32> parent1, QVector<u32> parent2)
 {
     this->parent1 = parent1;
     this->parent2 = parent2;

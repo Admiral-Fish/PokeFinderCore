@@ -45,13 +45,13 @@ QString Frame::getGenderString()
 // Returns string equivalent of nature
 QString Frame::getNatureString()
 {
-    return natures[nature];
+    return natures[static_cast<int>(nature)];
 }
 
 // Returns string equivalent of hidden power
 QString Frame::getPowerString()
 {
-    return powers[hidden];
+    return powers[static_cast<int>(hidden)];
 }
 
 // Returns !!! if shiny or blank if not

@@ -23,18 +23,13 @@
 #include <PokeFinderCore/Objects/FrameCompare.hpp>
 #include <PokeFinderCore/Objects/Method.hpp>
 #include <PokeFinderCore/RNG/IRNG.hpp>
-#include <vector>
-
-using std::vector;
-typedef uint32_t u32;
-typedef uint16_t u16;
+#include <QVector>
 
 class Egg
 {
 
 protected:
     u16 psv;
-    vector<u32> rngList;
     u16 sid;
     u16 tid;
     Method frameType = EBred;

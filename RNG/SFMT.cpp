@@ -69,9 +69,9 @@ void SFMT::periodCertificaion()
 }
 
 // Advances by n frames shuffling the correct amount of times
-void SFMT::advanceFrames(int frames)
+void SFMT::advanceFrames(u32 frames)
 {
-    int temp = index + (frames * 2);
+    u32 temp = index + (frames * 2);
     while (temp >= 624)
     {
         temp -= 624;
@@ -103,13 +103,13 @@ u64 SFMT::nextULong()
     }
     u32 high = sfmt[index++];
     u32 low = sfmt[index++];
-    return high | ((u64)low << 32);
+    return high | (static_cast<u64>(low) << 32);
 }
 
 // Recreates the SFMT with a new seed
 void SFMT::setSeed(u64 seed)
 {
-    initialize((u32)seed);
+    initialize(static_cast<u32>(seed));
 }
 
 u64 SFMT::getSeed()

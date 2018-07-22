@@ -20,23 +20,22 @@
 #ifndef TRANSLATOR_HPP
 #define TRANSLATOR_HPP
 
-#include <vector>
+#include <QVector>
 #include <cstdint>
 #include <QLocale>
 #include <QStringList>
 #include <QFile>
 #include <QTextStream>
 
-using std::vector;
 typedef uint32_t u32;
 
 class Translator
 {
 
 public:
-    static QStringList getSpecies(vector<u32> nums);
-    static QStringList getLocationsGen3(vector<u32> nums);
-    static QStringList getLocationsGen4(vector<u32> nums);
+    static QStringList getSpecies(QVector<int> nums);
+    static QStringList getLocationsGen3(QVector<int> nums);
+    static QStringList getLocationsGen4(QVector<int> nums);
 
 };
 

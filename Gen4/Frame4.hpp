@@ -31,11 +31,12 @@ private:
     u32 initialSeed;
 
 public:
+    Frame4();
     Frame4(u16 tid, u16 sid, u16 psv);
     void setInheritanceHGSS(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1,
-                            u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2);
+                            u32 inh2, u32 inh3, QVector<u32> parent1, QVector<u32> parent2);
     void setInheritanceDPPt(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1,
-                            u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2);
+                            u32 inh2, u32 inh3, QVector<u32> parent1, QVector<u32> parent2);
     QString getCall();
     QString chatotPitch();
     u32 getInitialSeed() const;

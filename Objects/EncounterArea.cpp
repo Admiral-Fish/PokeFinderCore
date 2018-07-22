@@ -19,7 +19,7 @@
 
 #include "EncounterArea.hpp"
 
-EncounterArea::EncounterArea(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel)
+EncounterArea::EncounterArea(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel)
 {
     this->type = type;
     this->location = location;
@@ -30,7 +30,7 @@ EncounterArea::EncounterArea(u32 location, Encounter type, vector<u32> species, 
 
 bool EncounterArea::levelLocked(u32 slot)
 {
-    return minLevel[slot] == maxLevel[slot];
+    return minLevel[static_cast<int>(slot)] == maxLevel[static_cast<int>(slot)];
 }
 
 Encounter EncounterArea::getType()
@@ -38,44 +38,44 @@ Encounter EncounterArea::getType()
     return type;
 }
 
-u32 EncounterArea::getLocation()
+int EncounterArea::getLocation()
 {
     return location;
 }
 
-vector<u32> EncounterArea::getMinLevel()
+QVector<u32> EncounterArea::getMinLevel()
 {
     return minLevel;
 }
 
-vector<u32> EncounterArea::getMaxLevel()
+QVector<u32> EncounterArea::getMaxLevel()
 {
     return maxLevel;
 }
 
-vector<u32> EncounterArea::getSpecies()
+QVector<int> EncounterArea::getSpecies()
 {
     return species;
 }
 
-vector<u32> EncounterArea::getUniqueSpecies()
+QVector<int> EncounterArea::getUniqueSpecies()
 {
-    vector<u32> nums;
+    QVector<int> nums;
 
-    nums.push_back(species[0]);
+    nums.append(species[0]);
     for (int i = 1; i < species.size(); i++)
-        if (std::find(nums.begin(), nums.end(), species[i]) == nums.end())
-            nums.push_back(species[i]);
+        if (!nums.contains(species[i]))
+            nums.append(species[i]);
 
     return nums;
 }
 
-vector<bool> EncounterArea::getSlots(u32 num)
+QVector<bool> EncounterArea::getSlots(u32 num)
 {
-    vector<bool> flags;
+    QVector<bool> flags;
 
     for (int i = 0; i < species.size(); i++)
-        flags.push_back(species[i] == num);
+        flags.append(species[i] == static_cast<int>(num));
 
     return flags;
 }

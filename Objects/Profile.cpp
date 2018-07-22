@@ -19,7 +19,7 @@
 
 #include "Profile.hpp"
 
-Profile::Profile(QString profileName, Game version, u32 tid, u32 sid, int language)
+Profile::Profile(QString profileName, Game version, u16 tid, u16 sid, int language)
 {
     this->profileName = profileName;
     this->version = version;

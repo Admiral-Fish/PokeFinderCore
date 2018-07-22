@@ -29,36 +29,37 @@ class Egg3 : public Egg
 {
 
 private:
-    PokeRNG *rng;
-    vector<u32> parent1;
-    vector<u32> parent2;
+    PokeRNG *rng = nullptr;
+    QVector<u16> rngList;
+    QVector<u32> parent1;
+    QVector<u32> parent2;
     const u32 HABCDS[6] = { 0, 1, 2, 5, 3, 4 };
     const u32 ABCDS[5] = { 1, 2, 5, 3, 4 };
     const u32 ACDS[4] = { 1, 5, 3, 4 };
     u32 calibration;
     u32 minRedraw;
     u32 maxRedraw;
-    u32 compatability;
+    u16 compatability;
     u32 minPickup;
     u32 maxPickup;
     bool everstone;
 
-    vector<Frame3> generateEmeraldPID(FrameCompare compare);
-    vector<Frame3> generateEmerald(FrameCompare compare);
-    vector<Frame3> generateEmeraldSplit(FrameCompare compare);
-    vector<Frame3> generateEmeraldAlternate(FrameCompare compare);
-    vector<Frame3> generateLower(FrameCompare compare);
-    vector<Frame3> generateUpper(vector<Frame3> lower, FrameCompare compare);
+    QVector<Frame3> generateEmeraldPID(FrameCompare compare);
+    QVector<Frame3> generateEmerald(FrameCompare compare);
+    QVector<Frame3> generateEmeraldSplit(FrameCompare compare);
+    QVector<Frame3> generateEmeraldAlternate(FrameCompare compare);
+    QVector<Frame3> generateLower(FrameCompare compare);
+    QVector<Frame3> generateUpper(QVector<Frame3> lower, FrameCompare compare);
 
 public:
     Egg3();
     Egg3(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 seed = 0);
     ~Egg3();
-    vector<Frame3> generate(FrameCompare compare);
-    void setParents(vector<u32> parent1, vector<u32> parent2);
+    QVector<Frame3> generate(FrameCompare compare);
+    void setParents(QVector<u32> parent1, QVector<u32> parent2);
     void setMinRedraw(const u32 &value);
     void setMaxRedraw(const u32 &value);
-    void setCompatability(const u32 &value);
+    void setCompatability(const u16 &value);
     void setCalibration(const u32 &value);
     void setEverstone(bool value);
     void setMinPickup(const u32 &value);

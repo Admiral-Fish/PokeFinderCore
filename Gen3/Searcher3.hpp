@@ -32,29 +32,29 @@ class Searcher3: public Searcher
 {
 
 private:
-    RNGCache *cache = NULL;
-    RNGEuclidean *euclidean = NULL;
+    RNGCache *cache = nullptr;
+    RNGEuclidean *euclidean = nullptr;
     Frame3 frame = Frame3(0, 0, 0);
-    LCRNG *forward = NULL;
-    LCRNG *backward = NULL;
-    NatureLock *natureLock = NULL;
+    LCRNG *forward = nullptr;
+    LCRNG *backward = nullptr;
+    NatureLock *natureLock = nullptr;
     ShadowType type;
     FrameCompare compare;
     EncounterArea3 encounter;
 
-    vector<Frame3> searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
-    vector<Frame3> searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
-    vector<Frame3> searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
-    vector<Frame3> searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
-    vector<Frame3> searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
-    vector<Frame3> searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
-    vector<Frame3> searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    QVector<Frame3> searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    QVector<Frame3> searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    QVector<Frame3> searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    QVector<Frame3> searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    QVector<Frame3> searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    QVector<Frame3> searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    QVector<Frame3> searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
 
 public:
     Searcher3();
     Searcher3(u16 tid, u16 sid, u32 ratio, FrameCompare compare);
     ~Searcher3();
-    vector<Frame3> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    QVector<Frame3> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     void setup(Method method);
     void setupNatureLock(int num);
     void setEncounter(const EncounterArea3 &value);

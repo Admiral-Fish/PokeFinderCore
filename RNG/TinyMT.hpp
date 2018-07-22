@@ -33,7 +33,7 @@ private:
     static const int TINYMT32SH0 = 1;
     static const int TINYMT32SH1 = 10;
     static const int TINYMT32SH8 = 8;
-    u32 *state;
+    u32 *state = nullptr;
     u32 seed;
 
     void initialize(u32 seed);
@@ -43,9 +43,10 @@ public:
     TinyMT(u32 seed);
     TinyMT(u32 st[]);
     ~TinyMT() override { delete state; }
-    void advanceFrames(int frames) override;
+    void advanceFrames(u32 frames) override;
     void nextState();
     u32 nextUInt() override;
+    u16 nextUShort() override;
     u32 temper();
     void setSeed(u32 seed) override;
     u32 getSeed() override;

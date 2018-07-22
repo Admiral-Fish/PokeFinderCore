@@ -23,15 +23,17 @@
 #include <cstdint>
 
 typedef uint32_t u32;
+typedef uint16_t u16;
 
 class IRNG
 {
 
 public:
     virtual u32 nextUInt() = 0;
+    virtual u16 nextUShort() = 0;
     virtual void setSeed(u32 seed) = 0;
     virtual u32 getSeed() = 0;
-    virtual void advanceFrames(int frames) = 0;
+    virtual void advanceFrames(u32 frames) = 0;
     virtual ~IRNG() { }
 
 };

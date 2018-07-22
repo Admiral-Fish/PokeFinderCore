@@ -19,7 +19,7 @@
 
 #include "EncounterArea3.hpp"
 
-EncounterArea3::EncounterArea3(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, u32 delay)
+EncounterArea3::EncounterArea3(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel, u32 delay)
     : EncounterArea(location, type, species, minLevel, maxLevel)
 {
     this->delay = delay;
@@ -27,22 +27,22 @@ EncounterArea3::EncounterArea3(u32 location, Encounter type, vector<u32> species
 
 EncounterArea3::EncounterArea3(QStringList data)
 {
-    location = data[0].toUInt();
+    location = data[0].toInt();
     delay = data[1].toUInt();
-    type = (Encounter)data[2].toUInt();
+    type = static_cast<Encounter>(data[2].toUInt());
 
-    bool flag = type == Wild;
+    bool flag = type == Wild || type == SafariZone;
     int len = (data.length() - 3) / (flag ? 2 : 3);
 
     for (int i = 3; i < len + 3; i++)
     {
-        species.push_back(data[i].toUInt());
-        minLevel.push_back(data[i + len].toUInt());
-        maxLevel.push_back(data[i + (flag ? len : len * 2)].toUInt());
+        species.append(data[i].toInt());
+        minLevel.append(data[i + len].toUInt());
+        maxLevel.append(data[i + (flag ? len : len * 2)].toUInt());
     }
 }
 
-vector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Game game)
+QVector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Game game)
 {
     QString path;
     switch (game)
@@ -67,7 +67,7 @@ vector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Game game)
 
     QFile file(path);
 
-    vector<EncounterArea3> areas;
+    QVector<EncounterArea3> areas;
     if (file.open(QIODevice::ReadOnly))
     {
         QTextStream ts(&file);
@@ -77,7 +77,7 @@ vector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Game game)
             EncounterArea3 area = EncounterArea3(ts.readLine().split(","));
 
             if (area.getType() == type)
-                areas.push_back(area);
+                areas.append(area);
         }
     }
     file.close();
@@ -87,18 +87,18 @@ vector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Game game)
 u32 EncounterArea3::calcLevel(u32 index, u32 prng)
 {
     if (levelLocked(index))
-        return minLevel[index];
+        return minLevel[static_cast<int>(index)];
 
-    return (prng % (maxLevel[index] - minLevel[index] + 1)) + minLevel[index];
+    return (prng % (maxLevel[static_cast<int>(index)] - minLevel[static_cast<int>(index)] + 1)) + minLevel[static_cast<int>(index)];
 }
 
 u32 EncounterArea3::calcLevel(u32 index)
 {
-    return maxLevel[index];
+    return maxLevel[static_cast<int>(index)];
 }
 
 // Only for Rock Smash since all other encounters can be forced
-u32 EncounterArea3::getEncounterRate() const
+u16 EncounterArea3::getEncounterRate() const
 {
     switch (location)
     {

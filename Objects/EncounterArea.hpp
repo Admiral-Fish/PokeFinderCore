@@ -20,35 +20,31 @@
 #ifndef ENCOUNTERAREA_HPP
 #define ENCOUNTERAREA_HPP
 
-#include <vector>
-#include <cstdint>
+#include <QVector>
 #include <PokeFinderCore/Objects/Encounter.hpp>
 #include <PokeFinderCore/Translator.hpp>
-
-using std::vector;
-typedef uint32_t u32;
 
 class EncounterArea
 {
 
 protected:
-    vector<u32> minLevel;
-    vector<u32> maxLevel;
-    vector<u32> species;
-    u32 location;
+    QVector<u32> minLevel;
+    QVector<u32> maxLevel;
+    QVector<int> species;
+    int location;
     Encounter type;
 
 public:
     EncounterArea() {}
-    EncounterArea(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel);
+    EncounterArea(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel);
     bool levelLocked(u32 slot);
     Encounter getType();
-    u32 getLocation();
-    vector<u32> getMinLevel();
-    vector<u32> getMaxLevel();
-    vector<u32> getSpecies();
-    vector<u32> getUniqueSpecies();
-    vector<bool> getSlots(u32 num);
+    int getLocation();
+    QVector<u32> getMinLevel();
+    QVector<u32> getMaxLevel();
+    QVector<int> getSpecies();
+    QVector<int> getUniqueSpecies();
+    QVector<bool> getSlots(u32 num);
     QStringList getSpecieNames();
 
 };

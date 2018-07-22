@@ -22,7 +22,7 @@
 // Returns initial seed for Ruby/Sapphire live battery given date and time
 u32 Utilities::calcGen3Seed(QDate time, u32 h, u32 m)
 {
-    u32 d = QDate(time.year() == 2000 ? 1999 : 2000, 12, 31).daysTo(time);
+    u32 d = static_cast<u32>(QDate(time.year() == 2000 ? 1999 : 2000, 12, 31).daysTo(time));
 
     u32 seed = 1440 * d + 960 * (h / 10) + 60 * (h % 10) + 16 * (m / 10) + m % 10;
     return (seed >> 16) ^ (seed & 0xFFFF);
@@ -33,10 +33,10 @@ u32 Utilities::calcGen4Seed(QDateTime dateTime, u32 delay)
     QDate date = dateTime.date();
     QTime time = dateTime.time();
 
-    u32 ab = date.month() * date.day() + time.minute() + time.second();
-    u32 cd = time.hour();
+    u32 ab = static_cast<u32>(date.month() * date.day() + time.minute() + time.second());
+    u32 cd = static_cast<u32>(time.hour());
 
-    return (ab << 24) | (cd << 16) | delay;
+    return ((ab << 24) | (cd << 16)) + delay;
 }
 
 bool Utilities::shiny(u32 pid, u32 tid, u32 sid)
@@ -48,7 +48,7 @@ QString Utilities::coinFlips(u32 seed, int flips)
 {
     QString coins = "";
 
-    MersenneTwister rng = MersenneTwister(seed);
+    MersenneTwister rng(seed);
 
     for (int i = 0; i < flips; i++)
     {
@@ -64,12 +64,12 @@ QString Utilities::getCalls(u32 seed, int num, HGSSRoamer info)
 {
     QString calls = "";
 
-    u32 skips = info.getSkips();
+    int skips = info.getSkips();
 
     if (skips > 0)
         calls += "(";
 
-    LCRNG rng = PokeRNG(seed);
+    PokeRNG rng(seed);
 
     for (int i = 0; i < num + skips; i++)
     {

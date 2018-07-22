@@ -19,6 +19,13 @@
 
 #include "Frame3.hpp"
 
+Frame3::Frame3()
+{
+    tid = 12345;
+    sid = 54321;
+    psv = 12345 ^ 54321;
+}
+
 Frame3::Frame3(u16 tid, u16 sid, u16 psv)
 {
     this->tid = tid;
@@ -63,7 +70,7 @@ QString Frame3::getTimeEgg()
     return QString("%1 h %2 m %3.%4 s").arg(hours).arg(minutes).arg(seconds).arg(milliseconds, 2, 10, QChar('0'));
 }
 
-void Frame3::setInheritanceEmerald(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1, u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2)
+void Frame3::setInheritanceEmerald(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1, u32 inh2, u32 inh3, QVector<u32> parent1, QVector<u32> parent2)
 {
     ivs[0] = iv1 & 0x1f;
     ivs[1] = (iv1 >> 5) & 0x1f;
@@ -133,7 +140,7 @@ void Frame3::setInheritanceEmerald(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par
     power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
 }
 
-void Frame3::setInheritance(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1, u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2)
+void Frame3::setInheritance(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1, u32 inh2, u32 inh3, QVector<u32> parent1, QVector<u32> parent2)
 {
     ivs[0] = iv1 & 0x1f;
     ivs[1] = (iv1 >> 5) & 0x1f;
@@ -145,7 +152,7 @@ void Frame3::setInheritance(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 
     u32 available[6] =  { 0, 1, 2, 3, 4, 5 };
     u32 val[6] = { inh1, inh2, inh3, par1, par2, par3 };
 
-    for (int cnt = 0; cnt < 3; cnt++)
+    for (u32 cnt = 0; cnt < 3; cnt++)
     {
         // Decide which parent (1 or 2) from which we'll pick an IV
         u32 par = val[3 + cnt] & 1;
@@ -176,7 +183,7 @@ void Frame3::setInheritance(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 
         }
 
         // Avoids repeat IV inheritance
-        for (int j = 0; j < 5 - cnt; j++)
+        for (u32 j = 0; j < 5 - cnt; j++)
             if (ivslot <= available[j])
                 available[j] = available[j + 1];
     }

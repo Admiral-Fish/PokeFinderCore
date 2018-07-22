@@ -19,58 +19,43 @@
 
 #include "HGSSRoamer.hpp"
 
-HGSSRoamer::HGSSRoamer(u32 seed, vector<bool> roamers, vector<u32> routes)
+HGSSRoamer::HGSSRoamer(u32 seed, QVector<bool> roamers, QVector<u32> routes)
 {
     PokeRNG rng(seed);
     this->roamers = roamers;
 
     if (roamers[0])
     {
-        while (true)
+        do
         {
             skips++;
-            u32 route = getRouteJ(rng.nextUShort());
-
-            if (routes[0] != route)
-            {
-                raikouRoute = route;
-                break;
-            }
+            raikouRoute = getRouteJ(rng.nextUShort());
         }
+        while (routes[0] != raikouRoute);
     }
 
     if (roamers[1])
     {
-        while (true)
+        do
         {
             skips++;
-            u32 route = getRouteJ(rng.nextUShort());
-
-            if (routes[1] != route)
-            {
-                enteiRoute = route;
-                break;
-            }
+            enteiRoute = getRouteJ(rng.nextUShort());
         }
+        while (routes[1] != enteiRoute);
     }
 
     if (roamers[2])
     {
-        while (true)
+        do
         {
             skips++;
-            u32 route = getRouteK(rng.nextUShort());
-
-            if (routes[2] != route)
-            {
-                latiRoute = route;
-                break;
-            }
+            latiRoute = getRouteK(rng.nextUShort());
         }
+        while (routes[2] != latiRoute);
     }
 }
 
-u32 HGSSRoamer::getSkips() const
+int HGSSRoamer::getSkips() const
 {
     return skips;
 }
@@ -106,39 +91,28 @@ QString HGSSRoamer::getRoutes()
 
 u32 HGSSRoamer::getRouteJ(u32 prng)
 {
-    u32 route = 0;
-
     u32 val = prng & 15;
 
     if (val < 11)
-        route = val + 29;
+        return val + 29;
     else
-        route = val + 31;
-
-    return route;
+        return val + 31;
 }
 
 u32 HGSSRoamer::getRouteK(u32 prng)
 {
-    u32 route = 0;
-
     u32 val = prng % 25;
 
-    if (val < 22)
-        route = val + 1;
-    else
+    if (val > 21)
         switch (val)
         {
             case 22:
-                route = 24;
-                break;
+                return 24;
             case 23:
-                route = 26;
-                break;
+                return 26;
             case 24:
-                route = 28;
-                break;
+                return 28;
         }
 
-    return route;
+    return val + 1;
 }

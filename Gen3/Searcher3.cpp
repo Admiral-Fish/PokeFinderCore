@@ -48,16 +48,16 @@ Searcher3::~Searcher3()
     delete natureLock;
 }
 
-// Returns vector of frames for Channel Method
-vector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+// Returns QVector of frames for Channel Method
+QVector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame3> frames;
+    QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
         return frames;
 
-    vector<uint> seeds = euclidean->recoverLower27BitsChannel(hp, atk, def, spa, spd, spe);
+    QVector<u32> seeds = euclidean->recoverLower27BitsChannel(hp, atk, def, spa, spd, spe);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
@@ -68,25 +68,27 @@ vector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa,
         backward->advanceFrames(3);
         u32 pid2 = backward->nextUShort();
         u32 pid1 = backward->nextUShort();
+        u16 sid = backward->nextUShort();
 
         // Determine if PID needs to be XORed
-        if ((pid2 > 7 ? 0 : 1) != (pid1 ^ backward->nextUShort() ^ 40122))
+        if ((pid2 > 7 ? 0 : 1) != (pid1 ^ sid ^ 40122))
             pid1 ^= 0x8000;
+        frame.setIDs(40122, sid, 40122 ^ sid);
         frame.setPID(pid2, pid1);
 
         if (compare.comparePID(frame))
         {
             frame.setSeed(backward->nextUInt());
-            frames.push_back(frame);
+            frames.append(frame);
         }
     }
     return frames;
 }
 
-// Returns vector of frames for Method Colo Shadows
-vector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+// Returns QVector of frames for Method Colo Shadows
+QVector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame3> frames;
+    QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -94,7 +96,7 @@ vector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u3
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    vector<uint> seeds = euclidean->recoverLower16BitsIV(first, second);
+    QVector<u32> seeds = euclidean->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i += 2)
@@ -108,9 +110,7 @@ vector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u3
         {
             if (natureLock->firstShadowNormal(frame.getSeed()))
             {
-                frames.push_back(frame);
-                // If this seed passes it is impossible for the sister spread to generate
-                // Skip since calculating it would be useless
+                frames.append(frame); // If this seed passes it is impossible for the sister spread to generate
                 continue;
             }
         }
@@ -122,16 +122,16 @@ vector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u3
         {
             frame.setSeed(frame.getSeed() ^ 0x80000000);
             if (natureLock->firstShadowNormal(frame.getSeed()))
-                frames.push_back(frame);
+                frames.append(frame);
         }
     }
     return frames;
 }
 
-// Returns vector of frames for Method H1/H2/H4
-vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+// Returns QVector of frames for Method H1/H2/H4
+QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame3> frames;
+    QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -139,7 +139,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
     u32 seed;
 
@@ -184,7 +184,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (compare.compareSlot(frame))
                             {
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
-                                frames.push_back(frame);
+                                frames.append(frame);
                             }
                         }
                         break;
@@ -199,7 +199,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (compare.compareSlot(frame))
                             {
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
-                                frames.push_back(frame);
+                                frames.append(frame);
                             }
                         }
                         // Failed synch
@@ -212,7 +212,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (compare.compareSlot(frame))
                             {
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
-                                frames.push_back(frame);
+                                frames.append(frame);
                             }
                         }
                         break;
@@ -226,7 +226,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (compare.compareSlot(frame))
                             {
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
-                                frames.push_back(frame);
+                                frames.append(frame);
                             }
                         }
                         break;
@@ -242,7 +242,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (compare.compareSlot(frame))
                             {
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
-                                frames.push_back(frame);
+                                frames.append(frame);
                             }
 
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
@@ -256,14 +256,14 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                                 if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.getNature())
                                 {
                                     frame.setLeadType(Synchronize);
-                                    frames.push_back(frame);
+                                    frames.append(frame);
                                 }
 
                                 // Cute Charm
                                 if ((nextRNG2 % 3) > 0)
                                 {
                                     frame.setLeadType(CuteCharm);
-                                    frames.push_back(frame);
+                                    frames.append(frame);
                                 }
                             }
                         }
@@ -277,7 +277,7 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
                             if (compare.compareSlot(frame))
                             {
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
-                                frames.push_back(frame);
+                                frames.append(frame);
                             }
 
                         }
@@ -315,10 +315,10 @@ vector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u3
     return frames;
 }
 
-// Returns vector of frames for Method Gales Shadows
-vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+// Returns QVector of frames for Method Gales Shadows
+QVector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame3> frames;
+    QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -326,7 +326,7 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    vector<u32> seeds = euclidean->recoverLower16BitsIV(first, second);
+    QVector<u32> seeds = euclidean->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i += 2)
@@ -343,78 +343,58 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
                 case SingleLock:
                     if (natureLock->singleNL(frame.getSeed()))
                     {
-                        frames.push_back(frame);
-                        // If this seed passes it is impossible for the sister spread to generate
-                        // Skip since calculating it would be useless
+                        frames.append(frame); // If this seed passes it is impossible for the sister spread to generate
                         continue;
                     }
                     break;
                 case FirstShadow:
                     if (natureLock->firstShadowNormal(frame.getSeed()))
                     {
-                        frames.push_back(frame);
-                        // If this seed passes it is impossible for the sister spread to generate
-                        // Skip since calculating it would be useless
+                        frames.append(frame); // If this seed passes it is impossible for the sister spread to generate
                         continue;
                     }
                     break;
                 case SecondShadow:
                     if (natureLock->firstShadowUnset(frame.getSeed()))
                     {
-                        frame.setLockReason(QObject::tr("First shadow unset"));
-                        frames.push_back(frame);
-                        // If this seed passes it is impossible for the sister spread to generate
-                        // Also unlikely for the other methods of encounter to pass
-                        // Skip since calculating it would be useless
+                        frame.setLockReason(QObject::tr("First shadow unset")); // Also unlikely for the other methods of encounter to pass
+                        frames.append(frame); // If this seed passes it is impossible for the sister spread to generate
                         continue;
                     }
                     if (natureLock->firstShadowSet(frame.getSeed()))
                     {
-                        frame.setLockReason(QObject::tr("First shadow set"));
-                        frames.push_back(frame);
-                        // If this seed passes it is impossible for the sister spread to generate
-                        // Also unlikely for the other methods of encounter to pass
-                        // Skip since calculating it would be useless
+                        frame.setLockReason(QObject::tr("First shadow set")); // Also unlikely for the other methods of encounter to pass
+                        frames.append(frame); // If this seed passes it is impossible for the sister spread to generate
                         continue;
                     }
                     if (natureLock->firstShadowShinySkip(frame.getSeed()))
                     {
-                        frame.setLockReason(QObject::tr("Shiny Skip"));
-                        frames.push_back(frame);
-                        // If this seed passes it is impossible for the sister spread to generate
-                        // Also unlikely for the other methods of encounter to pass
-                        // Skip since calculating it would be useless
+                        frame.setLockReason(QObject::tr("Shiny Skip")); // Also unlikely for the other methods of encounter to pass
+                        frames.append(frame); // If this seed passes it is impossible for the sister spread to generate
                         continue;
                     }
                     break;
                 case Salamence:
                     if (natureLock->salamenceUnset(frame.getSeed()))
                     {
-                        frame.setLockReason(QObject::tr("First shadow unset"));
-                        frames.push_back(frame);
-                        // If this seed passes it is impossible for the sister spread to generate
-                        // Also unlikely for the other methods of encounter to pass
-                        // Skip since calculating it would be useless
+                        frame.setLockReason(QObject::tr("First shadow unset")); // Also unlikely for the other methods of encounter to pass
+                        frames.append(frame); // If this seed passes it is impossible for the sister spread to generate
                         continue;
                     }
                     if (natureLock->salamenceSet(frame.getSeed()))
                     {
-                        frame.setLockReason(QObject::tr("First shadow set"));
-                        frames.push_back(frame);
-                        // If this seed passes it is impossible for the sister spread to generate
-                        // Also unlikely for the other methods of encounter to pass
-                        // Skip since calculating it would be useless
+                        frame.setLockReason(QObject::tr("First shadow set")); // Also unlikely for the other methods of encounter to pass
+                        frames.append(frame); // If this seed passes it is impossible for the sister spread to generate
                         continue;
                     }
                     if (natureLock->salamenceShinySkip(frame.getSeed()))
                     {
-                        frame.setLockReason(QObject::tr("Shiny Skip"));
-                        frames.push_back(frame);
-                        // If this seed passes it is impossible for the sister spread to generate
-                        // Also unlikely for the other methods of encounter to pass
-                        // Skip since calculating it would be useless
+                        frame.setLockReason(QObject::tr("Shiny Skip")); // Also unlikely for the other methods of encounter to pass
+                        frames.append(frame); // If this seed passes it is impossible for the sister spread to generate
                         continue;
                     }
+                    break;
+                default:
                     break;
             }
         }
@@ -430,60 +410,50 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
                 case SingleLock:
                     if (natureLock->singleNL(frame.getSeed()))
                     {
-                        frames.push_back(frame);
+                        frames.append(frame);
                     }
                     break;
                 case FirstShadow:
                     if (natureLock->firstShadowNormal(frame.getSeed()))
                     {
-                        frames.push_back(frame);
+                        frames.append(frame);
                     }
                     break;
                 case SecondShadow:
                     if (natureLock->firstShadowUnset(frame.getSeed()))
                     {
                         frame.setLockReason(QObject::tr("First shadow unset"));
-                        frames.push_back(frame);
-                        // Unlikely for the other methods of encounter to pass
-                        // Skip since calculating it would be useless
-                        continue;
+                        frames.append(frame);
                     }
-                    if (natureLock->firstShadowSet(frame.getSeed()))
+                    else if (natureLock->firstShadowSet(frame.getSeed()))
                     {
                         frame.setLockReason(QObject::tr("First shadow set"));
-                        frames.push_back(frame);
-                        // Unlikely for the other methods of encounter to pass
-                        // Skip since calculating it would be useless
-                        continue;
+                        frames.append(frame);
                     }
-                    if (natureLock->firstShadowShinySkip(frame.getSeed()))
+                    else if (natureLock->firstShadowShinySkip(frame.getSeed()))
                     {
                         frame.setLockReason(QObject::tr("Shiny Skip"));
-                        frames.push_back(frame);
+                        frames.append(frame);
                     }
                     break;
                 case Salamence:
                     if (natureLock->salamenceUnset(frame.getSeed()))
                     {
                         frame.setLockReason(QObject::tr("First shadow unset"));
-                        frames.push_back(frame);
-                        // Unlikely for the other methods of encounter to pass
-                        // Skip since calculating it would be useless
-                        continue;
+                        frames.append(frame);
                     }
-                    if (natureLock->salamenceSet(frame.getSeed()))
+                    else if (natureLock->salamenceSet(frame.getSeed()))
                     {
                         frame.setLockReason(QObject::tr("First shadow set"));
-                        frames.push_back(frame);
-                        // Unlikely for the other methods of encounter to pass
-                        // Skip since calculating it would be useless
-                        continue;
+                        frames.append(frame);
                     }
-                    if (natureLock->salamenceShinySkip(frame.getSeed()))
+                    else if (natureLock->salamenceShinySkip(frame.getSeed()))
                     {
                         frame.setLockReason(QObject::tr("Shiny Skip"));
-                        frames.push_back(frame);
+                        frames.append(frame);
                     }
+                    break;
+                default:
                     break;
             }
         }
@@ -491,10 +461,10 @@ vector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 
     return frames;
 }
 
-// Return vector of frames for Method XDColo
-vector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+// Return QVector of frames for Method XDColo
+QVector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame3> frames;
+    QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -502,7 +472,7 @@ vector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, 
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    vector<uint> seeds = euclidean->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = euclidean->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i += 2)
@@ -513,7 +483,7 @@ vector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, 
         frame.setPID(forward->nextUShort(), forward->nextUShort());
         frame.setSeed(seeds[i] * 0xB9B33155 + 0xA170F641);
         if (compare.comparePID(frame))
-            frames.push_back(frame);
+            frames.append(frame);
 
         // Setup XORed frame
         frame.setPID(frame.getPid() ^ 0x80008000);
@@ -521,16 +491,16 @@ vector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, 
         if (compare.comparePID(frame))
         {
             frame.setSeed(frame.getSeed() ^ 0x80000000);
-            frames.push_back(frame);
+            frames.append(frame);
         }
     }
     return frames;
 }
 
-// Returns vector of frames for Method 1/2/4
-vector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+// Returns QVector of frames for Method 1/2/4
+QVector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame3> frames;
+    QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -538,7 +508,7 @@ vector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
     for (auto i = 0; i < size; i++)
@@ -550,7 +520,7 @@ vector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         frame.setSeed(backward->nextUInt());
         if (compare.comparePID(frame))
-            frames.push_back(frame);
+            frames.append(frame);
 
         // Setup XORed frame
         frame.setPID(frame.getPid() ^ 0x80008000);
@@ -558,16 +528,16 @@ vector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32
         if (compare.comparePID(frame))
         {
             frame.setSeed(frame.getSeed() ^ 0x80000000);
-            frames.push_back(frame);
+            frames.append(frame);
         }
     }
     return frames;
 }
 
-// Returns vector of frames for Method 1 Reverse
-vector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+// Returns QVector of frames for Method 1 Reverse
+QVector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<Frame3> frames;
+    QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
@@ -575,7 +545,7 @@ vector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    vector<uint> seeds = cache->recoverLower16BitsIV(first, second);
+    QVector<uint> seeds = cache->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
     u32 temp;
 
@@ -587,7 +557,7 @@ vector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa
         frame.setPID(temp, backward->nextUShort());
         frame.setSeed(backward->nextUInt());
         if (compare.comparePID(frame))
-            frames.push_back(frame);
+            frames.append(frame);
 
         // Setup XORed frame
         frame.setPID(frame.getPid() ^ 0x80008000);
@@ -595,14 +565,14 @@ vector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa
         if (compare.comparePID(frame))
         {
             frame.setSeed(frame.getSeed() ^ 0x80000000);
-            frames.push_back(frame);
+            frames.append(frame);
         }
     }
     return frames;
 }
 
 // Determines which generational method to return
-vector<Frame3> Searcher3::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame3> Searcher3::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     switch (frameType)
     {
@@ -625,7 +595,7 @@ vector<Frame3> Searcher3::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32
         case Channel:
             return searchMethodChannel(hp, atk, def, spa, spd, spe);
         default:
-            return vector<Frame3>();
+            return QVector<Frame3>();
     }
 }
 

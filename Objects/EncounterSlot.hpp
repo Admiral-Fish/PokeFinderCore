@@ -21,10 +21,8 @@
 #define ENCOUNTERSLOT_HPP
 
 #include <PokeFinderCore/Objects/Encounter.hpp>
-#include <cstdint>
-#include <vector>
+#include <QVector>
 
-using std::vector;
 typedef uint32_t u32;
 
 class Range
@@ -35,6 +33,7 @@ private:
     u32 min;
 
 public:
+    Range();
     Range(u32 min, u32 max);
     u32 getMax();
     u32 getMin();
@@ -45,7 +44,7 @@ class EncounterSlot
 {
 
 private:
-    static int calcSlot(u32 compare, vector<Range> ranges);
+    static int calcSlot(u32 compare, QVector<Range> ranges);
 
 public:
     static int hSlot(u32 result, Encounter encounterType);

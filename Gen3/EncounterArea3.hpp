@@ -25,9 +25,9 @@
 #include <QFile>
 #include <PokeFinderCore/Objects/Game.hpp>
 #include <PokeFinderCore/Objects/EncounterArea.hpp>
-#include <algorithm>
 
 typedef uint32_t u32;
+typedef uint16_t u16;
 
 class EncounterArea3 : public EncounterArea
 {
@@ -37,12 +37,12 @@ private:
 
 public:
     EncounterArea3() : EncounterArea() {}
-    EncounterArea3(u32 location, Encounter type, vector<u32> species, vector<u32> minLevel, vector<u32> maxLevel, u32 delay);
+    EncounterArea3(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel, u32 delay);
     EncounterArea3(QStringList data);
-    static vector<EncounterArea3> getEncounters(Encounter type, Game game);
+    static QVector<EncounterArea3> getEncounters(Encounter type, Game game);
     u32 calcLevel(u32 index, u32 prng);
     u32 calcLevel(u32 index);
-    u32 getEncounterRate() const;
+    u16 getEncounterRate() const;
     u32 getDelay() const;
 
 };

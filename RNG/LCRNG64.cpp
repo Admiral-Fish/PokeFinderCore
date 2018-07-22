@@ -28,16 +28,16 @@ LCRNG64::LCRNG64(u64 add, u64 mult, u64 seed)
 }
 
 // Method for advancing seed by a given number of frames
-void LCRNG64::advanceFrames(int frames)
+void LCRNG64::advanceFrames(u32 frames)
 {
-    for (int i = 0; i < frames; i++)
+    for (u32 i = 0; i < frames; i++)
         seed = seed * mult + add;
 }
 
 // Method for finding next modified 32 bit seed
 u32 LCRNG64::nextUInt(u32 max)
 {
-    return (u32) (((nextULong() >> 32) * max) >> 32);
+    return static_cast<u32>((((nextULong() >> 32) * max) >> 32));
 }
 
 // IRNG64 Member
@@ -50,7 +50,7 @@ u64 LCRNG64::nextULong()
 // IRNG64 Memeber
 u32 LCRNG64::nextUInt()
 {
-    return (u32)(nextULong() >> 32);
+    return static_cast<u32>((nextULong() >> 32));
 }
 
 // IRNG64 Member

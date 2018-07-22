@@ -31,13 +31,14 @@ private:
     u32 seed;
 
 public:
+    Frame3();
     Frame3(u16 tid, u16 sid, u16 psv);
     QString getTime();
     QString getTimeEgg();
     void setInheritanceEmerald(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1,
-                               u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2);
+                               u32 inh2, u32 inh3, QVector<u32> parent1, QVector<u32> parent2);
     void setInheritance(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1,
-                        u32 inh2, u32 inh3, vector<u32> parent1, vector<u32> parent2);
+                        u32 inh2, u32 inh3, QVector<u32> parent1, QVector<u32> parent2);
     QString getLockReason() const;
     void setLockReason(const QString &value);
     u32 getOccidentary() const;

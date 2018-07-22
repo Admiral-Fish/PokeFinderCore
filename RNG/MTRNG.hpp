@@ -33,9 +33,9 @@ protected:
     static const u32 TEMPERINGMASKB = 0x9D2C5680;
     static const u32 TEMPERINGMASKC = 0xEFC60000;
     const u32 mag01[2] = { 0x0, 0x9908B0DF };
-    u32 *mt;
+    u32 *mt = nullptr;
     u32 seed;
-    int index;
+    u32 index;
 
     inline u32 temperingShiftL(u32 y) { return (y >> 18); }
     inline u32 temperingShiftS(u32 y) { return (y << 7); }
@@ -46,7 +46,7 @@ protected:
 
 public:
     ~MT() override { delete mt; }
-    void advanceFrames(int frames) override;
+    void advanceFrames(u32 frames) override;
 
 };
 
@@ -60,6 +60,7 @@ private:
 public:
     MersenneTwister(u32 seed);
     u32 nextUInt() override;
+    u16 nextUShort() override;
     void setSeed(u32 seed) override;
     u32 getSeed() override;
 
@@ -75,6 +76,7 @@ private:
 public:
     MersenneTwisterUntempered(u32 seed);
     u32 nextUInt() override;
+    u16 nextUShort() override;
     void setSeed(u32 seed) override;
     u32 getSeed() override;
 
@@ -85,15 +87,16 @@ class MersenneTwisterFast : public MT
 
 private:
     static const u32 TEMPERINGMASKC2 = 0xEF000000;
-    int max;
-    int maxCalls;
+    u32 max;
+    u32 maxCalls;
 
     void initialize(u32 seed) override;
     void shuffle() override;
 
 public:
-    MersenneTwisterFast(u32 seed, int calls);
+    MersenneTwisterFast(u32 seed, u32 calls);
     u32 nextUInt() override;
+    u16 nextUShort() override;
     void setSeed(u32 seed) override;
     u32 getSeed() override;
 

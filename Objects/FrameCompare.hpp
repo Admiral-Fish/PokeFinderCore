@@ -22,30 +22,31 @@
 
 #include <PokeFinderCore/Objects/Nature.hpp>
 #include <PokeFinderCore/Objects/Frame.hpp>
+#include <QVector>
 
 class FrameCompare
 {
 
 private:
-    vector<u32> eval;
-    vector<u32> val;
+    QVector<u32> eval;
+    QVector<u32> val;
     u32 gender;
     u32 genderRatio;
     u32 ability;
-    vector<bool> natures;
-    vector<bool> powers;
-    vector<bool> encounterSlots;
+    QVector<bool> natures;
+    QVector<bool> powers;
+    QVector<bool> encounterSlots;
     bool shiny;
     bool skip;
 
 public:
     FrameCompare() {}
-    FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
-                 vector<bool> nature, vector<bool> power, bool onlyShiny, bool skipCompare);
-    FrameCompare(vector<u32> eval, vector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
-                 vector<bool> nature, vector<bool> power, bool onlyShiny, bool skipCompare, vector<bool> encounter);
-    FrameCompare(int genderIndex, int genderRatioIndex, int abilityIndex, vector<bool> nature, bool onlyShiny);
-    FrameCompare(vector<u32> eval, vector<u32> values, vector<bool> power);
+    FrameCompare(QVector<u32> eval, QVector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
+                 QVector<bool> nature, QVector<bool> power, bool onlyShiny, bool skipCompare);
+    FrameCompare(QVector<u32> eval, QVector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
+                 QVector<bool> nature, QVector<bool> power, bool onlyShiny, bool skipCompare, QVector<bool> encounter);
+    FrameCompare(int genderIndex, int genderRatioIndex, int abilityIndex, QVector<bool> nature, bool onlyShiny);
+    FrameCompare(QVector<u32> eval, QVector<u32> values, QVector<bool> power);
     bool comparePID(Frame frame);
     bool compareIVs(Frame frame);
     bool compareNature(Frame frame);

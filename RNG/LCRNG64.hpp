@@ -33,7 +33,7 @@ protected:
 public:
 
     LCRNG64(u64 add, u64 mult, u64 seed);
-    void advanceFrames(int frames) override;
+    void advanceFrames(u32 frames) override;
     u32 nextUInt(u32 max);
     u64 nextULong() override;
     u32 nextUInt() override;

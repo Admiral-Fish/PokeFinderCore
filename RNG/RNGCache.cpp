@@ -25,6 +25,7 @@
 // Constructor for RNGCache
 RNGCache::RNGCache(Method MethodType)
 {
+    keys.reserve(512);
     setupCache(MethodType);
 }
 
@@ -62,33 +63,33 @@ void RNGCache::setupCache(Method MethodType)
 }
 
 // Recovers origin seeds for two 16 bit calls(15 bits known) with or without gap based on the cache
-vector<u32> RNGCache::recoverLower16BitsIV(u32 first, u32 second)
+QVector<u32> RNGCache::recoverLower16BitsIV(u32 first, u32 second)
 {
-    vector<u32> origin;
+    QVector<u32> origin;
 
     // Check with the top bit of the first call both
     // flipped and unflipped to account for only knowing 15 bits
     u32 search1 = second - first * mult;
     u32 search2 = second - (first ^ 0x80000000) * mult;
-    unordered_map<u32, u32>::const_iterator locate;
+    QHash<u32, u32>::const_iterator locate;
     for (u32 i = 0; i < 256; i++, search1 -= k, search2 -= k)
     {
         locate = keys.find(search1 >> 16);
         if (locate != keys.end())
         {
-            u32 test = first | (i << 8) | locate->second;
+            u32 test = first | (i << 8) | locate.value();
             // Verify IV calls line up
             if (((test * mult + add) & 0x7fff0000) == second)
-                origin.push_back(test);
+                origin.append(test);
         }
 
         locate = keys.find(search2 >> 16);
         if (locate != keys.end())
         {
-            u32 test = first | (i << 8) | locate->second;
+            u32 test = first | (i << 8) | locate.value();
             // Verify IV calls line up
             if (((test * mult + add) & 0x7fff0000) == second)
-                origin.push_back(test);
+                origin.append(test);
         }
     }
 
@@ -96,20 +97,20 @@ vector<u32> RNGCache::recoverLower16BitsIV(u32 first, u32 second)
 }
 
 // Recovers origin seeds for two 16 bit calls based on the cache
-vector<u32> RNGCache::recoverLower16BitsPID(u32 first, u32 second)
+QVector<u32> RNGCache::recoverLower16BitsPID(u32 first, u32 second)
 {
-    vector<u32> origin;
+    QVector<u32> origin;
     u32 search = second - first * mult;
-    unordered_map<u32, u32>::const_iterator locate;
+    QHash<u32, u32>::const_iterator locate;
     for (u32 i = 0; i < 256; i++, search -= k)
     {
         locate = keys.find(search >> 16);
         if (locate != keys.end())
         {
-            u32 test = first | (i << 8) | locate->second;
+            u32 test = first | (i << 8) | locate.value();
             // Verify PID calls line up
             if (((test * mult + add) & 0xffff0000) == second)
-                origin.push_back(test);
+                origin.append(test);
         }
     }
     return origin;

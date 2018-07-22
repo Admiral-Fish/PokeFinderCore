@@ -19,7 +19,7 @@
 
 #include "Profile3.hpp"
 
-Profile3::Profile3(QString profileName, Game version, u32 tid, u32 sid, int language, bool deadBattery) : Profile(profileName, version, tid, sid, language)
+Profile3::Profile3(QString profileName, Game version, u16 tid, u16 sid, int language, bool deadBattery) : Profile(profileName, version, tid, sid, language)
 {
     this->deadBattery = deadBattery;
 }
@@ -100,10 +100,10 @@ void Profile3::updateProfile(Profile3 original)
             if (!domElement.isNull() && domElement.tagName() == "Gen3")
             {
                 QString name = domElement.childNodes().at(0).toElement().text();
-                int ver = domElement.childNodes().at(1).toElement().text().toUInt(NULL, 10);
-                int lang = domElement.childNodes().at(2).toElement().text().toUInt(NULL, 10);
-                u32 id = domElement.childNodes().at(3).toElement().text().toUInt(NULL, 10);
-                u32 id2 = domElement.childNodes().at(4).toElement().text().toInt(NULL, 10);
+                int ver = domElement.childNodes().at(1).toElement().text().toInt();
+                int lang = domElement.childNodes().at(2).toElement().text().toInt();
+                u32 id = domElement.childNodes().at(3).toElement().text().toUInt();
+                u32 id2 = domElement.childNodes().at(4).toElement().text().toUInt();
                 bool flag = domElement.childNodes().at(5).toElement().text() == "0" ? false : true;
 
                 if (original.profileName == name && original.version == ver && original.language == lang && original.tid == id && original.sid == id2 && original.deadBattery == flag)
@@ -183,9 +183,9 @@ void Profile3::saveProfile()
     }
 }
 
-vector<Profile3> Profile3::loadProfileList()
+QVector<Profile3> Profile3::loadProfileList()
 {
-    static vector<Profile3> profileList;
+    static QVector<Profile3> profileList;
     profileList.clear();
 
     QDomDocument doc;
@@ -205,11 +205,11 @@ vector<Profile3> Profile3::loadProfileList()
                 {
                     QDomNode info = domElement.firstChild();
                     QString profileName;
-                    int version;
-                    int language;
-                    QString tid;
-                    QString sid;
-                    bool deadBattery;
+                    int version = 0;
+                    int language = 0;
+                    u16 tid = 0;
+                    u16 sid = 0;
+                    bool deadBattery = false;
                     while (!info.isNull())
                     {
                         QDomElement infoElement = info.toElement();
@@ -222,19 +222,19 @@ vector<Profile3> Profile3::loadProfileList()
                             }
                             else if (tagName == "version")
                             {
-                                version = infoElement.text().toInt(NULL, 10);
+                                version = infoElement.text().toInt();
                             }
                             else if (tagName == "language")
                             {
-                                language = infoElement.text().toInt(NULL, 10);
+                                language = infoElement.text().toInt();
                             }
                             else if (tagName == "tid")
                             {
-                                tid = infoElement.text();
+                                tid = infoElement.text().toUShort();
                             }
                             else if (tagName == "sid")
                             {
-                                sid = infoElement.text();
+                                sid = infoElement.text().toUShort();
                             }
                             else if (tagName == "deadBattery")
                             {
@@ -244,8 +244,7 @@ vector<Profile3> Profile3::loadProfileList()
                             info = info.nextSibling();
                         }
                     }
-                    Profile3 profile(profileName, (Game)version, tid.toUInt(NULL, 10), sid.toUInt(NULL, 10), language, deadBattery);
-                    profileList.push_back(profile);
+                    profileList.append(Profile3(profileName, static_cast<Game>(version), tid, sid, language, deadBattery));
                 }
             }
             domNode = domNode.nextSibling();

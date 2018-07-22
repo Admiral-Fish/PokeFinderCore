@@ -22,13 +22,12 @@
 
 #include <QDateTime>
 #include <QString>
-#include <vector>
+#include <QVector>
 #include <PokeFinderCore/RNG/MTRNG.hpp>
 #include <PokeFinderCore/RNG/LCRNG.hpp>
 #include <PokeFinderCore/Gen4/HGSSRoamer.hpp>
 
 typedef uint32_t u32;
-using std::vector;
 
 class Utilities
 {

@@ -54,70 +54,64 @@ void RNGEuclidean::setupEuclidean(Method FrameType)
 }
 
 // Recovers origin seeds for two 16 bit calls(15 bits known)
-vector<u32> RNGEuclidean::recoverLower16BitsIV(u32 first, u32 second)
+QVector<u32> RNGEuclidean::recoverLower16BitsIV(u32 first, u32 second)
 {
-    vector<u32> origin;
+    QVector<u32> origin;
     u32 fullFirst, fullSecond;
 
-    u32 t = ((second - sub1 * first) - sub2);
-    auto kmax = (base - t) / 0x80000000;
+    u64 t = static_cast<u32>(((second - sub1 * first) - sub2));
+    u32 kmax = static_cast<u32>((base - t) >> 31);
 
-    u64 test = t;
-
-    for (auto k = 0; k <= kmax; k++, test += 0x80000000)
+    for (u32 k = 0; k <= kmax; k++, t += 0x80000000)
     {
-        if ((test % sub1) < 0x10000)
+        if ((t % sub1) < 0x10000)
         {
-            fullFirst = first | (u32)(test / sub1);
+            fullFirst = first | static_cast<u32>((t / sub1));
             fullSecond = fullFirst * MULT + ADD;
-            origin.push_back(fullFirst);
-            origin.push_back(fullSecond);
+            origin.append(fullFirst);
+            origin.append(fullSecond);
         }
     }
     return origin;
 }
 
 // Recovers origin seeds for two 16 bit calls
-vector<u32> RNGEuclidean::recoverLower16BitsPID(u32 first, u32 second)
+QVector<u32> RNGEuclidean::recoverLower16BitsPID(u32 first, u32 second)
 {
-    vector<u32> origin;
+    QVector<u32> origin;
     u32 fullFirst, fullSecond;
 
-    u32 t = ((second - sub1 * first) - sub2);
-    auto kmax = (base - t) / 0x100000000;
+    u64 t = static_cast<u32>(((second - sub1 * first) - sub2));
+    u32 kmax = static_cast<u32>((base - t) >> 32);
 
-    u64 test = t;
-
-    for (auto k = 0; k <= kmax; k++, test += 0x100000000)
+    for (u32 k = 0; k <= kmax; k++, t += 0x100000000)
     {
-        if ((test % sub1) < 0x10000)
+        if ((t % sub1) < 0x10000)
         {
-            fullFirst = first | (u32)(test / sub1);
+            fullFirst = first | static_cast<u32>((t / sub1));
             fullSecond = fullFirst * MULT + ADD;
-            origin.push_back(fullFirst);
-            origin.push_back(fullSecond);
+            origin.append(fullFirst);
+            origin.append(fullSecond);
         }
     }
     return origin;
 }
 
 // Recovers origin seeds for six 5 bit calls
-vector<u32> RNGEuclidean::recoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<u32> RNGEuclidean::recoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
-    vector<u32> origin;
+    QVector<u32> origin;
     u32 first = hp << 27, fullFirst;
 
-    u32 t = (((spd << 27) - sub1 * first) - sub2);
-    auto kmax = (base - t) / 0x100000000;
+    u64 t = static_cast<u32>((((spd << 27) - sub1 * first) - sub2));
+    u32 kmax = static_cast<u32>((base - t) >> 32);
 
-    u64 test = t;
-
-    for (auto k = 0; k <= kmax; k++, test += 0x100000000)
+    for (u32 k = 0; k <= kmax; k++, t += 0x100000000)
     {
-        if ((test % sub1) >= 0x8000000)
+        if ((t % sub1) >= 0x8000000)
             continue;
 
-        fullFirst = first | (u32)(test / sub1);
+        fullFirst = first | static_cast<u32>((t / sub1));
         // Check if the next 4 IVs lineup
         // The euclidean divisor assures the first and last call match up
         // so there is no need to check if the last call lines up
@@ -137,7 +131,7 @@ vector<u32> RNGEuclidean::recoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u3
         if ((call >> 27) != spa)
             continue;
 
-        origin.push_back(fullFirst);
+        origin.append(fullFirst);
     }
     return origin;
 }

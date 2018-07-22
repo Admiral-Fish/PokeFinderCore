@@ -29,9 +29,9 @@ private:
     bool deadBattery;
 
 public:
-    Profile3(QString profileName, Game version, u32 tid, u32 sid, int language = 0, bool deadBattery = false);
+    Profile3(QString profileName, Game version, u16 tid, u16 sid, int language = 0, bool deadBattery = false);
     Profile3();
-    static vector<Profile3> loadProfileList();
+    static QVector<Profile3> loadProfileList();
     void saveProfile();
     void deleteProfile();
     void updateProfile(Profile3 original);

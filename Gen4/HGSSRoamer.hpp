@@ -20,13 +20,12 @@
 #ifndef HGSSROAMER_HPP
 #define HGSSROAMER_HPP
 
-#include <vector>
+#include <QVector>
 #include <cstdint>
 #include <PokeFinderCore/RNG/LCRNG.hpp>
 #include <QString>
 
 typedef uint32_t u32;
-using std::vector;
 
 class HGSSRoamer
 {
@@ -35,16 +34,16 @@ private:
     u32 getRouteJ(u32 prng);
     u32 getRouteK(u32 prng);
 
-    u32 skips = 0;
+    int skips = 0;
     u32 raikouRoute;
     u32 enteiRoute;
     u32 latiRoute;
-    vector<bool> roamers;
+    QVector<bool> roamers;
 
 public:
     HGSSRoamer() {}
-    HGSSRoamer(u32 seed, vector<bool> roamers, vector<u32> routes);
-    u32 getSkips() const;
+    HGSSRoamer(u32 seed, QVector<bool> roamers, QVector<u32> routes);
+    int getSkips() const;
     u32 getRaikouRoute() const;
     u32 getEnteiRoute() const;
     u32 getLatiRoute() const;
