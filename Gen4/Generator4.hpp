@@ -44,10 +44,10 @@ private:
     QVector<Frame4> generateMethodKCuteCharm(FrameCompare compare);
     QVector<Frame4> generateChainedShiny(FrameCompare compare);
     QVector<Frame4> generateWondercardIVs(FrameCompare compare);
-    u32 chainedPIDLow(u32 low, u32 call1, u32 call2, u32 call3, u32 call4, u32 call5,
-                      u32 call6, u32 call7, u32 call8, u32 call9, u32 call10, u32 call11,
-                      u32 call12, u32 call13);
-    u32 chainedPIDHigh(u32 high, u32 low, u32 tid, u32 sid);
+    u16 chainedPIDLow(u16 low, u16 call1, u16 call2, u16 call3, u16 call4, u16 call5,
+                      u16 call6, u16 call7, u16 call8, u16 call9, u16 call10, u16 call11,
+                      u16 call12, u16 call13);
+    u16 chainedPIDHigh(u16 high, u16 low, u16 tid, u16 sid);
     void refill();
 
 public:

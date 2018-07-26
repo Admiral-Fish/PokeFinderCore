@@ -49,6 +49,14 @@ void Frame4::setOccidentary(const u32 &value)
     occidentary = value;
 }
 
+void Frame4::xorFrame(bool flag)
+{
+    pid ^= 0x80008000;
+    nature = pid % 25;
+    if (flag)
+        seed ^= 0x80000000;
+}
+
 Frame4::Frame4()
 {
     tid = 12345;

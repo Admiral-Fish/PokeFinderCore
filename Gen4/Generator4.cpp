@@ -169,7 +169,7 @@ QVector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
-                hunt = 3; // Blank call - maybe item?
+                hunt = 2;
                 break;
             case OldRod:
             case GoodRod:
@@ -180,8 +180,8 @@ QVector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
                 frame.setEncounterSlot(EncounterSlot::jSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
-                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
-                hunt = 2; // Blank call - maybe item?
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
+                hunt = 2;
                 break;
             default:
                 break;
@@ -236,45 +236,48 @@ QVector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
     size = 17;
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, first;
+    u32 pid, pid1, pid2;
     int hunt = 0;
 
     u16 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
     {
-        hunt = 0;
-        first = rngList[hunt++];
-
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
             case Wild:
-                frame.setEncounterSlot(EncounterSlot::jSlot(first, Wild));
-                first = rngList[hunt++]; // Probably level call
+                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], Wild));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
+                hunt = 1;
                 break;
             case Surfing:
-                frame.setEncounterSlot(EncounterSlot::jSlot(first, Surfing));
-                hunt++; // Level/item ? not sure if same as fishing
-                first = rngList[hunt++]; // Level/item ? not sure if same as fishing
+                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], encounterType));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
+                hunt = 2;
                 break;
             case OldRod:
             case GoodRod:
             case SuperRod:
-                if ((first / 656) > thresh)
+                if ((rngList[0] / 656) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], encounterType));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
+                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[1], encounterType));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
+                hunt = 2;
                 break;
             default:
                 break;
         }
 
-        // Get hunt nature
         // Successful synch
-        if ((first >> 15) == 0)
+        if ((rngList[hunt++] >> 15) == 0)
             frame.setNature(synchNature);
         // Failed synch
         else
@@ -326,7 +329,7 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
     size = 17;
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, buffer = 0, first;
+    u32 pid, pid1, pid2, buffer = 0;
     int hunt = 0;
 
     u16 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
@@ -354,48 +357,61 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
     {
-        hunt = 0;
-        first = rngList[hunt++];
-
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
             case Wild:
-                frame.setEncounterSlot(EncounterSlot::jSlot(first, Wild));
-                first = rngList[hunt++]; // Probably level call
+                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], Wild));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
+                hunt = 1;
                 break;
             case Surfing:
-                frame.setEncounterSlot(EncounterSlot::jSlot(first, Surfing));
-                hunt++; // Level/item ? not sure if same as fishing
-                first = rngList[hunt++]; // Level/item ? not sure if same as fishing
+                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], encounterType));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
+                hunt = 2; // Blank call - maybe item?
                 break;
             case OldRod:
             case GoodRod:
             case SuperRod:
-                if ((first / 656) > thresh)
+                if ((rngList[0] / 656) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[hunt++], encounterType));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
+                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[1], encounterType));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
+                hunt = 2; // Blank call - maybe item?
                 break;
             default:
                 break;
         }
 
-        // Get nature
-        frame.setNature(rngList[hunt++] / 0xa3e);
-
-        if (!compare.compareNature(frame))
-            continue;
-
-        if ((first / 0x5556) != 0)
+        // Successful cute charm
+        if ((rngList[hunt++] / 0x5556) != 0)
         {
+            // Get nature
+            frame.setNature(rngList[hunt++] / 0xa3e);
+
+            if (!compare.compareNature(frame))
+                continue;
+
+            // Cute charm doesn't hunt for a valid PID, just uses buffer and target nature
             frame.setPID(buffer + frame.getNature(), 0, buffer + frame.getNature());
             frame.setOccidentary(cnt);
         }
+        // Failed cute charm
         else
         {
+            // Get nature
+            frame.setNature(rngList[hunt++] / 0xa3e);
+
+            if (!compare.compareNature(frame))
+                continue;
+
             // Begin search for valid pid
             do
             {
@@ -538,47 +554,51 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
     size = 17;
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, first;
+    u32 pid, pid1, pid2;
     int hunt = 0;
 
     u16 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
     {
-        hunt = 0;
-        first = rngList[hunt++];
-
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
             case Wild:
-                frame.setEncounterSlot(EncounterSlot::kSlot(first, Wild));
-                first = rngList[hunt++]; // Probably level call
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], Wild));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
+                hunt = 1;
                 break;
             case Surfing:
-            case HeadButt:
-            case BugCatchingContest:
-                frame.setEncounterSlot(EncounterSlot::kSlot(first, encounterType));
-                hunt++; // Level/item ? not sure if same as fishing
-                first = rngList[hunt++]; // Level/item ? not sure if same as fishing
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
+                hunt = 3; // Blank call - maybe item?
                 break;
             case OldRod:
             case GoodRod:
             case SuperRod:
-                if ((first % 100) > thresh)
+                if ((rngList[2] % 100) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], encounterType));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
+                hunt = 3; // Blank call - maybe item?
                 break;
+            case HeadButt: // TODO
+            case BugCatchingContest: // TODO
             default:
                 break;
         }
 
         // Get hunt nature
         // Successful synch
-        if ((first >> 15) == 0)
+        if ((rngList[hunt++] >> 15) == 0)
             frame.setNature(synchNature);
         // Failed synch
         else
@@ -630,7 +650,7 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
     size = 17;
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, first, buffer = 0;
+    u32 pid, pid1, pid2, buffer = 0;
     int hunt = 0;
 
     u16 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
@@ -658,33 +678,37 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
     {
-        hunt = 0;
-        first = rngList[hunt++];
-
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
             case Wild:
-                frame.setEncounterSlot(EncounterSlot::kSlot(first, Wild));
-                first = rngList[hunt++]; // Probably level call
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], Wild));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
+                hunt = 1;
                 break;
             case Surfing:
-            case HeadButt:
-            case BugCatchingContest:
-                frame.setEncounterSlot(EncounterSlot::kSlot(first, encounterType));
-                hunt++; // Level/item ? not sure if same as fishing
-                first = rngList[hunt++]; // Level/item ? not sure if same as fishing
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
+                hunt = 3; // Blank call - maybe item?
                 break;
             case OldRod:
             case GoodRod:
             case SuperRod:
-                if ((first % 100) > thresh)
+                if ((rngList[2] % 100) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[hunt++], encounterType));
-                hunt++; // Level/item
-                first = rngList[hunt++]; // Level/item
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
+                hunt = 3; // Blank call - maybe item?
                 break;
+            case HeadButt: // TODO
+            case BugCatchingContest: // TODO
             default:
                 break;
         }
@@ -695,7 +719,7 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
         if (!compare.compareNature(frame))
             continue;
 
-        if ((first % 3) != 0)
+        if ((rngList[hunt] % 3) != 0)
         {
             frame.setPID(buffer + frame.getNature(), 0, buffer + frame.getNature());
             frame.setOccidentary(cnt);
@@ -745,7 +769,7 @@ QVector<Frame4> Generator4::generateChainedShiny(FrameCompare compare)
     for (int i = 0; i < 18; i++)
         rngList.append(rng->nextUShort());
 
-    u32 low, high;
+    u16 low, high;
 
     u32 max = initialFrame + maxResults;
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
@@ -795,14 +819,14 @@ QVector<Frame4> Generator4::generateWondercardIVs(FrameCompare compare)
     return frames;
 }
 
-u32 Generator4::chainedPIDLow(u32 low, u32 call1, u32 call2, u32 call3, u32 call4, u32 call5, u32 call6, u32 call7, u32 call8, u32 call9, u32 call10, u32 call11, u32 call12, u32 call13)
+u16 Generator4::chainedPIDLow(u16 low, u16 call1, u16 call2, u16 call3, u16 call4, u16 call5, u16 call6, u16 call7, u16 call8, u16 call9, u16 call10, u16 call11, u16 call12, u16 call13)
 {
-    return (low & 0x7) | (call13 & 1) << 3 | (call12 & 1) << 4 | (call11 & 1) << 5 | (call10 & 1) << 6 |
-           (call9 & 1) << 7 | (call8 & 1) << 8 | (call7 & 1) << 9 | (call6 & 1) << 10 | (call5 & 1) << 11 |
-           (call4 & 1) << 12 | (call3 & 1) << 13 | (call2 & 1) << 14 | (call1 & 1) << 15;
+    return static_cast<u16>((low & 7) | (call13 & 1) << 3 | (call12 & 1) << 4 | (call11 & 1) << 5 | (call10 & 1) << 6 |
+                            (call9 & 1) << 7 | (call8 & 1) << 8 | (call7 & 1) << 9 | (call6 & 1) << 10 | (call5 & 1) << 11 |
+                            (call4 & 1) << 12 | (call3 & 1) << 13 | (call2 & 1) << 14 | (call1 & 1) << 15);
 }
 
-u32 Generator4::chainedPIDHigh(u32 high, u32 low, u32 tid, u32 sid)
+u16 Generator4::chainedPIDHigh(u16 high, u16 low, u16 tid, u16 sid)
 {
-    return (((low ^ tid ^ sid) & 0xFFF8) | (high & 0x7));
+    return (((low ^ tid ^ sid) & 0xFFF8) | (high & 7));
 }

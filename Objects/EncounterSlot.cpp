@@ -52,17 +52,17 @@ u32 Range::getMin()
 // Encounter slot calculations
 
 // Runs through ranges and compare value to get the encounter slot
-int EncounterSlot::calcSlot(u32 compare, QVector<Range> ranges)
+u32 EncounterSlot::calcSlot(u32 compare, QVector<Range> ranges)
 {
-    auto size = ranges.size();
-    for (auto i = 0; i < size; i++)
+    int size = ranges.size();
+    for (int i = 0; i < size; i++)
         if (compare >= ranges[i].getMin() && compare <= ranges[i].getMax())
-            return i;
-    return -1;
+            return static_cast<u32>(i);
+    return 0;
 }
 
 // Calcs the encounter slot for Method H 1/2/4 (Emerald, FRLG, RS)
-int EncounterSlot::hSlot(u32 result, Encounter encounterType)
+u32 EncounterSlot::hSlot(u32 result, Encounter encounterType)
 {
     u32 compare = result % 100;
     QVector<Range> ranges;
@@ -91,7 +91,7 @@ int EncounterSlot::hSlot(u32 result, Encounter encounterType)
 }
 
 // Calcs the encounter slot for Method J (DPPt)
-int EncounterSlot::jSlot(u32 result, Encounter encounterType)
+u32 EncounterSlot::jSlot(u32 result, Encounter encounterType)
 {
     u32 compare = result / 656;
     QVector<Range> ranges;
@@ -115,7 +115,7 @@ int EncounterSlot::jSlot(u32 result, Encounter encounterType)
 }
 
 // Calcs the encounter slot for Method K (HGSS)
-int EncounterSlot::kSlot(u32 result, Encounter encounterType)
+u32 EncounterSlot::kSlot(u32 result, Encounter encounterType)
 {
     u32 compare = result % 100;
     QVector<Range> ranges;
@@ -135,7 +135,7 @@ int EncounterSlot::kSlot(u32 result, Encounter encounterType)
                  };
             return calcSlot(compare, ranges);
         case SafariZone:
-            return static_cast<int>(compare % 10);
+            return compare % 10;
         case HeadButt:
             ranges = { Range(0, 49), Range(50, 64), Range(65, 79), Range(80, 89), Range(90, 94),
                        Range(95, 99)
