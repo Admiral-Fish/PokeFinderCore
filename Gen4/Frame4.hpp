@@ -45,7 +45,7 @@ public:
     void setSeed(const u32 &value);
     u32 getOccidentary() const;
     void setOccidentary(const u32 &value);
-    void xorFrame(bool flag = true);
+    void xorFrame();
 
 };
 

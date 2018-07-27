@@ -485,22 +485,23 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
-                hunt = 3; // Blank call - maybe item?
+                hunt = 2;
                 break;
             case OldRod:
             case GoodRod:
             case SuperRod:
-                if ((rngList[2] % 100) > thresh)
+                if ((rngList[0] % 100) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
-                hunt = 3; // Blank call - maybe item?
+                hunt = 3;
                 break;
             case HeadButt: // TODO
             case BugCatchingContest: // TODO
+            case RockSmash: // TODO
             default:
                 break;
         }
@@ -576,29 +577,30 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
-                hunt = 3; // Blank call - maybe item?
+                hunt = 2;
                 break;
             case OldRod:
             case GoodRod:
             case SuperRod:
-                if ((rngList[2] % 100) > thresh)
+                if ((rngList[0] % 100) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
-                hunt = 3; // Blank call - maybe item?
+                hunt = 3;
                 break;
             case HeadButt: // TODO
             case BugCatchingContest: // TODO
+            case RockSmash: // TODO
             default:
                 break;
         }
 
         // Get hunt nature
         // Successful synch
-        if ((rngList[hunt++] >> 15) == 0)
+        if ((rngList[hunt++] & 1) == 0)
             frame.setNature(synchNature);
         // Failed synch
         else
@@ -693,39 +695,48 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
-                hunt = 3; // Blank call - maybe item?
+                hunt = 2;
                 break;
             case OldRod:
             case GoodRod:
             case SuperRod:
-                if ((rngList[2] % 100) > thresh)
+                if ((rngList[0] % 100) > thresh)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
-                hunt = 3; // Blank call - maybe item?
+                hunt = 3;
                 break;
             case HeadButt: // TODO
             case BugCatchingContest: // TODO
+            case RockSmash: // TODO
             default:
                 break;
         }
 
-        // Get hunt nature
-        frame.setNature(rngList[hunt++] % 25);
-
-        if (!compare.compareNature(frame))
-            continue;
-
-        if ((rngList[hunt] % 3) != 0)
+        // Successfull cute charm
+        if ((rngList[hunt++] % 3) != 0)
         {
+            // Get hunt nature
+            frame.setNature(rngList[hunt++] % 25);
+
+            if (!compare.compareNature(frame))
+                continue;
+
             frame.setPID(buffer + frame.getNature(), 0, buffer + frame.getNature());
             frame.setOccidentary(cnt);
         }
+        // Failed cutecharm
         else
         {
+            // Get hunt nature
+            frame.setNature(rngList[hunt++] % 25);
+
+            if (!compare.compareNature(frame))
+                continue;
+
             // Begin search for valid pid
             do
             {

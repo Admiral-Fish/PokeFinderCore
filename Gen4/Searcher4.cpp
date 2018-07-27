@@ -183,7 +183,7 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
         {
             if (i == 1)
             {
-                frame.xorFrame(false);
+                frame.xorFrame();
                 seed ^= 0x80000000;
             }
 
@@ -278,7 +278,7 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
         {
             if (i == 1)
             {
-                frame.xorFrame(false);
+                frame.xorFrame();
                 seed ^= 0x80000000;
             }
 
@@ -527,7 +527,7 @@ QVector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u3
         {
             if (i == 1)
             {
-                frame.xorFrame(false);
+                frame.xorFrame();
                 seed ^= 0x80000000;
             }
 
@@ -893,7 +893,10 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
         for (int i = 0; i < 2; i++)
         {
             if (i == 1)
+            {
                 frame.xorFrame();
+                seed ^= 0x80000000;
+            }
 
             if (!compare.comparePID(frame))
                 continue;
