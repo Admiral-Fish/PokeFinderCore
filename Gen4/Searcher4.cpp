@@ -202,8 +202,6 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
 
                 if ((nextRNG / 0xa3e) == frame.getNature())
                 {
-                    frame.setLeadType(None);
-
                     switch (encounterType)
                     {
                         case Wild:
@@ -639,6 +637,7 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
             u32 testPID, slot = 0;
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
+            u32 nibble = 0;
 
             frame.setPID(pid1, pid2);
             if (compare.comparePID(frame))
@@ -646,7 +645,6 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                 do
                 {
                     bool skip = false;
-                    u32 nibble;
 
                     // Normal
                     if ((nextRNG / 0xa3e) == frame.getNature())
@@ -695,20 +693,41 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                         if ((nextRNG2 >> 15) == 1)
                         {
                             frame.setLeadType(Synchronize);
+                            u32 level;
                             switch (encounterType)
                             {
                                 case Wild:
+                                    slot = frame.getSeed();
+                                    frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
+                                    frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
+                                    frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                     break;
                                 case Surfing:
+                                    level = slot;
+                                    slot = frame.getSeed();
+                                    frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
+                                    frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), level >> 16));
+                                    frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                     break;
                                 case OldRod:
                                 case GoodRod:
                                 case SuperRod:
-                                    nibble = (frame.getSeed() >> 16) / 656;
-                                    skip = nibble > thresh;
+                                    slot = nibble;
+                                    nibble = frame.getSeed();
+                                    if (((nibble >> 16) / 656) <= adjustedThresh)
+                                    {
+                                        if (((nibble >> 16) / 656) > thresh)
+                                            frame.setLeadType(SuctionCups);
+                                        frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
+                                        frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), slot >> 16));
+                                        frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
+                                    }
+                                    else
+                                        skip = true;
                                     break;
                                 case Stationary:
                                 default:
+                                    frame.setSeed(testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1);
                                     break;
                             }
 
@@ -719,25 +738,34 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                     // Successful synch
                     else if ((nextRNG >> 15) == 0)
                     {
+                        frame.setLeadType(Synchronize);
                         switch (encounterType)
                         {
                             case Wild:
                                 slot = testRNG.getSeed();
+                                frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
+                                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                                 frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                 break;
                             case Surfing:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
+                                frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
+                                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
                                 frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                                 break;
                             case OldRod:
                             case GoodRod:
                             case SuperRod:
-                                slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
+                                slot = testRNG.getSeed();
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                                 if (((nibble >> 16) / 656) <= thresh)
+                                {
+                                    frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
+                                    frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), slot >> 16));
                                     frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
+                                }
                                 else
-                                    goto Next;
+                                    skip = true;
                                 break;
                             case Stationary:
                             default:
@@ -745,13 +773,10 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                                 break;
                         }
 
-                        frame.setLeadType(Synchronize);
-                        frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
-                        if (encounterType == Stationary || compare.compareSlot(frame))
+                        if (!skip && (encounterType == Stationary || compare.compareSlot(frame)))
                             frames.append(frame);
                     }
 
-Next:
                     testPID = (nextRNG << 16) | nextRNG2;
                     nextRNG = testRNG.nextUShort();
                     nextRNG2 = testRNG.nextUShort();
@@ -768,25 +793,34 @@ Next:
                 {
                     case Wild:
                         slot = seed;
+                        frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
+                        frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                         frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case Surfing:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
+                        frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
+                        frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), seed >> 16));
                         frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
                         break;
                     case OldRod:
                     case GoodRod:
                     case SuperRod:
-                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
-                        frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
-                        if ((frame.getSeed() >> 16) / 656 <= thresh)
-                            frame.setSeed(frame.getSeed() * 0xeeb9eb65 + 0xa3561a1);
+                        slot = seed;
+                        nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                        if ((nibble >> 16) / 656 <= thresh)
+                        {
+                            frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
+                            frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), slot >> 16));
+                            frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
+                        }
                         else
                             continue;
                         break;
                     case Stationary:
                     default:
                         frame.setSeed(seed);
+                        break;
                 }
 
                 u32 choppedPID = pid2 / 0xA3E;
