@@ -302,12 +302,15 @@ QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u
         {
             for (int i = 0; i < frames.size();)
             {
-                u32 check = (frames[i].getSeed() * 0x41c64e6d + 0x6073) >> 16;
+                u32 check = frames[i].getSeed() * 0x41c64e6d + 0x6073;
 
-                if ((check % 2880) >= rate)
+                if (((check >> 16) % 2880) >= rate)
                     frames.erase(frames.begin() + i);
                 else
+                {
+                    frames[i].setSeed(frames[i].getSeed() * 0xeeb9eb65 + 0xa3561a1);
                     i++;
+                }
             }
         }
     }
