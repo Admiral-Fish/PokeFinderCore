@@ -372,7 +372,7 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
-                hunt = 2; // Blank call - maybe item?
+                hunt = 2;
                 break;
             case OldRod:
             case GoodRod:
@@ -384,7 +384,7 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
-                hunt = 2; // Blank call - maybe item?
+                hunt = 2;
                 break;
             default:
                 break;
