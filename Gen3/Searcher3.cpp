@@ -62,10 +62,9 @@ QVector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa
 
     for (auto i = 0; i < size; i++)
     {
-        backward->setSeed(seeds[i]);
+        backward->setSeed(seeds[i], 3);
 
         // Calculate PID
-        backward->advanceFrames(3);
         u32 pid2 = backward->nextUShort();
         u32 pid1 = backward->nextUShort();
         u16 sid = backward->nextUShort();
@@ -102,8 +101,7 @@ QVector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u
     for (auto i = 0; i < size; i += 2)
     {
         // Setup normal frame
-        forward->setSeed(seeds[i + 1]);
-        forward->nextUInt();
+        forward->setSeed(seeds[i + 1], 1);
         frame.setPID(forward->nextUShort(), forward->nextUShort());
         frame.setSeed(seeds[i] * 0xB9B33155 + 0xA170F641);
         if (compare.comparePID(frame))
@@ -130,19 +128,16 @@ QVector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u
         }
 
         // Setup XORed frame
-        frame.setPID(frame.getPid() ^ 0x80008000);
-        frame.setNature(frame.getPid() % 25);
+        frame.xorFrame(true);
         if (compare.comparePID(frame))
         {
             switch (type)
             {
                 case FirstShadow:
-                    frame.setSeed(frame.getSeed() ^ 0x80000000);
                     if (natureLock->firstShadowNormal(frame.getSeed()))
                         frames.append(frame);
                     break;
                 case EReader:
-                    frame.setSeed(frame.getSeed() ^ 0x80000000);
                     if (natureLock->eReader(frame.getSeed(), frame.getPid()))
                         frames.append(frame);
                     break;
@@ -172,9 +167,7 @@ QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
-        if (frameType == MethodH2)
-            backward->advanceFrames(1);
+        backward->setSeed(seeds[i], frameType == MethodH2 ? 1 : 0);
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         seed = backward->nextUInt();
 
@@ -183,8 +176,7 @@ QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u
         {
             if (i == 1)
             {
-                frame.setPID(frame.getPid() ^ 0x80008000);
-                frame.setNature(frame.getPid() % 25);
+                frame.xorFrame();
                 seed ^= 0x80000000;
             }
 
@@ -361,8 +353,7 @@ QVector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32
     for (auto i = 0; i < size; i += 2)
     {
         // Setup normal frame
-        forward->setSeed(seeds[i + 1]);
-        forward->nextUInt();
+        forward->setSeed(seeds[i + 1], 1);
         frame.setPID(forward->nextUShort(), forward->nextUShort());
         frame.setSeed(seeds[i] * 0xB9B33155 + 0xA170F641);
         if (compare.comparePID(frame))
@@ -429,11 +420,9 @@ QVector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32
         }
 
         // Setup XORed frame
-        frame.setPID(frame.getPid() ^ 0x80008000);
-        frame.setNature(frame.getPid() % 25);
+        frame.xorFrame(true);
         if (compare.comparePID(frame))
         {
-            frame.setSeed(frame.getSeed() ^ 0x80000000);
             switch (type)
             {
                 case SingleLock:
@@ -507,21 +496,16 @@ QVector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa,
     for (auto i = 0; i < size; i += 2)
     {
         // Setup normal frame
-        forward->setSeed(seeds[i + 1]);
-        forward->nextUInt();
+        forward->setSeed(seeds[i + 1], 1);
         frame.setPID(forward->nextUShort(), forward->nextUShort());
         frame.setSeed(seeds[i] * 0xB9B33155 + 0xA170F641);
         if (compare.comparePID(frame))
             frames.append(frame);
 
         // Setup XORed frame
-        frame.setPID(frame.getPid() ^ 0x80008000);
-        frame.setNature(frame.getPid() % 25);
+        frame.xorFrame(true);
         if (compare.comparePID(frame))
-        {
-            frame.setSeed(frame.getSeed() ^ 0x80000000);
             frames.append(frame);
-        }
     }
     return frames;
 }
@@ -543,22 +527,16 @@ QVector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u3
     for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
-        if (frameType == Method2)
-            backward->advanceFrames(1);
+        backward->setSeed(seeds[i], frameType == Method2 ? 1 : 0);
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         frame.setSeed(backward->nextUInt());
         if (compare.comparePID(frame))
             frames.append(frame);
 
         // Setup XORed frame
-        frame.setPID(frame.getPid() ^ 0x80008000);
-        frame.setNature(frame.getPid() % 25);
+        frame.xorFrame(true);
         if (compare.comparePID(frame))
-        {
-            frame.setSeed(frame.getSeed() ^ 0x80000000);
             frames.append(frame);
-        }
     }
     return frames;
 }
@@ -589,13 +567,9 @@ QVector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 sp
             frames.append(frame);
 
         // Setup XORed frame
-        frame.setPID(frame.getPid() ^ 0x80008000);
-        frame.setNature(frame.getPid() % 25);
+        frame.xorFrame(true);
         if (compare.comparePID(frame))
-        {
-            frame.setSeed(frame.getSeed() ^ 0x80000000);
             frames.append(frame);
-        }
     }
     return frames;
 }

@@ -48,8 +48,7 @@ Generator4::~Generator4()
 
 QVector<Frame4> Generator4::generate(FrameCompare compare)
 {
-    rng = new PokeRNG(initialSeed);
-    rng->advanceFrames(initialFrame - 1 + offset);
+    rng = new PokeRNG(initialSeed, initialFrame - 1 + offset);
     switch (frameType)
     {
         case Method1:

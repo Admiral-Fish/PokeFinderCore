@@ -581,11 +581,9 @@ void Generator3::setup(Method method)
 {
     frameType = method;
     if (frameType == XDColo || frameType == Channel)
-        rng = new XDRNG(initialSeed);
+        rng = new XDRNG(initialSeed, initialFrame - 1 + offset);
     else
-        rng = new PokeRNG(initialSeed);
-
-    rng->advanceFrames(initialFrame - 1 + offset);
+        rng = new PokeRNG(initialSeed, initialFrame - 1 + offset);
 
     if (frameType == Method1 || frameType == MethodH1)
     {

@@ -22,11 +22,12 @@
 // LCRNG is used for Gen 3 and 4
 
 // Default constructor for LCRNG
-LCRNG::LCRNG(u32 add, u32 mult, u32 seed)
+LCRNG::LCRNG(u32 add, u32 mult, u32 seed, u32 frames)
 {
     this->add = add;
     this->mult = mult;
     this->seed = seed;
+    advanceFrames(frames);
 }
 
 // Method for advancing seed by a given number of frames
@@ -55,6 +56,14 @@ void LCRNG::setSeed(u32 seed)
     this->seed = seed;
 }
 
+// IRNG Member
+void LCRNG::setSeed(u32 seed, u32 frames)
+{
+    this->seed = seed;
+    advanceFrames(frames);
+}
+
+// IRNG Member
 u32 LCRNG::getSeed()
 {
     return seed;

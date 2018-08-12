@@ -20,10 +20,11 @@
 #include "SFMT.hpp"
 
 // Constructor for SFMT
-SFMT::SFMT(u32 seed)
+SFMT::SFMT(u32 seed, u32 frames)
 {
     sfmt = new u32[624];
     initialize(seed);
+    advanceFrames(frames);
 }
 
 // Initializes
@@ -80,7 +81,7 @@ void SFMT::advanceFrames(u32 frames)
     index = temp;
 }
 
-// Generates the next psuedo random number
+// Generates the next 32bit number
 u32 SFMT::nextUInt()
 {
     // Array reshuffle check
@@ -92,7 +93,7 @@ u32 SFMT::nextUInt()
     return sfmt[index++];
 }
 
-// Generates the next 64bit psuedo random number
+// Generates the next 64bit number
 u64 SFMT::nextULong()
 {
     // Array reshuffle check
@@ -112,6 +113,14 @@ void SFMT::setSeed(u64 seed)
     initialize(static_cast<u32>(seed));
 }
 
+// Recreates the SFMT with a new seed and advances frames
+void SFMT::setSeed(u64 seed, u32 frames)
+{
+    initialize(static_cast<u32>(seed));
+    advanceFrames(frames);
+}
+
+// Get seed that started SFMT
 u64 SFMT::getSeed()
 {
     return seed;

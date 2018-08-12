@@ -20,19 +20,21 @@
 #include "TinyMT.hpp"
 
 // Constructor
-TinyMT::TinyMT(u32 seed)
+TinyMT::TinyMT(u32 seed, u32 frames)
 {
     state = new u32[4];
     initialize(seed);
+    advanceFrames(frames);
 }
 
 // Constructor given Tiny states
-TinyMT::TinyMT(u32 st[])
+TinyMT::TinyMT(u32 st[], u32 frames)
 {
     state = new u32[4];
     for (int i = 0; i < 4; i++)
         state[i] = st[i];
     periodCertification();
+    advanceFrames(frames);
 }
 
 void TinyMT::advanceFrames(u32 frames)
@@ -114,10 +116,17 @@ u32 TinyMT::temper()
     return t0;
 }
 
-// IRNG Memeber
+// IRNG Member
 void TinyMT::setSeed(u32 seed)
 {
     initialize(seed);
+}
+
+// IRNG Member
+void TinyMT::setSeed(u32 seed, u32 frames)
+{
+    initialize(seed);
+    advanceFrames(frames);
 }
 
 u32 *TinyMT::getState()

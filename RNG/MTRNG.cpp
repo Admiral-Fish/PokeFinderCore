@@ -33,10 +33,11 @@ void MT::advanceFrames(u32 frames)
 // Mersenne Twister
 
 // Constructor for Mersenne Twister
-MersenneTwister::MersenneTwister(u32 seed)
+MersenneTwister::MersenneTwister(u32 seed, u32 frames)
 {
     mt = new u32[624];
     initialize(seed);
+    advanceFrames(frames);
 }
 
 // Initializes
@@ -49,6 +50,7 @@ void MersenneTwister::initialize(u32 seed)
         mt[index] = (0x6C078965 * (mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
 }
 
+// Generates new array state after all 624 values have been consumed
 void MersenneTwister::shuffle()
 {
     u32 y;
@@ -70,7 +72,7 @@ void MersenneTwister::shuffle()
     mt[623] = mt[396] ^ (y >> 1) ^ mag01[y & 0x1];
 }
 
-// Calls the next psuedo-random number
+// Gets next 32bit number
 u32 MersenneTwister::nextUInt()
 {
     // Array reshuffle check
@@ -89,6 +91,7 @@ u32 MersenneTwister::nextUInt()
     return y;
 }
 
+// Gets next 16bit number
 u16 MersenneTwister::nextUShort()
 {
     return static_cast<u16>(nextUInt() >> 16);
@@ -100,6 +103,14 @@ void MersenneTwister::setSeed(u32 seed)
     initialize(seed);
 }
 
+// Recreates the Mersenne Twister with a new seed and advances frames
+void MersenneTwister::setSeed(u32 seed, u32 frames)
+{
+    initialize(seed);
+    advanceFrames(frames);
+}
+
+// Get seed that started the Mersenne Twister
 u32 MersenneTwister::getSeed()
 {
     return seed;
@@ -109,10 +120,11 @@ u32 MersenneTwister::getSeed()
 // Mersenne Twister Untempered
 
 // Constructor for Mersenne Twister Untempered
-MersenneTwisterUntempered::MersenneTwisterUntempered(u32 seed)
+MersenneTwisterUntempered::MersenneTwisterUntempered(u32 seed, u32 frames)
 {
     mt = new u32[624];
     initialize(seed);
+    advanceFrames(frames);
 }
 
 // Initializes
@@ -125,6 +137,7 @@ void MersenneTwisterUntempered::initialize(u32 seed)
         mt[index] = (0x6C078965 * (mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
 }
 
+// Generates new array state after all 624 values have been consumed
 void MersenneTwisterUntempered::shuffle()
 {
     int kk = 0;
@@ -146,7 +159,7 @@ void MersenneTwisterUntempered::shuffle()
     mt[623] = mt[396] ^ (y >> 1) ^ mag01[y & 0x1];
 }
 
-// Calls the next psuedo-random number
+// Gets next 32bit number
 u32 MersenneTwisterUntempered::nextUInt()
 {
     // Array reshuffle check
@@ -159,6 +172,7 @@ u32 MersenneTwisterUntempered::nextUInt()
     return mt[index++];
 }
 
+// Gets next 16bit number
 u16 MersenneTwisterUntempered::nextUShort()
 {
     return static_cast<u16>(nextUInt() >> 16);
@@ -170,6 +184,14 @@ void MersenneTwisterUntempered::setSeed(u32 seed)
     initialize(seed);
 }
 
+// Recreates the Mersenne Twister Untempered with a new seed and advances frames
+void MersenneTwisterUntempered::setSeed(u32 seed, u32 frames)
+{
+    initialize(seed);
+    advanceFrames(frames);
+}
+
+// Get seed that started Mersenne Twister Untempered
 u32 MersenneTwisterUntempered::getSeed()
 {
     return seed;
@@ -179,7 +201,7 @@ u32 MersenneTwisterUntempered::getSeed()
 // Mersenne Twister Fast
 
 // Constructor for Mersenne Twister Fast
-MersenneTwisterFast::MersenneTwisterFast(u32 seed, u32 calls)
+MersenneTwisterFast::MersenneTwisterFast(u32 seed, u32 calls, u32 frames)
 {
     maxCalls = calls;
 
@@ -191,6 +213,7 @@ MersenneTwisterFast::MersenneTwisterFast(u32 seed, u32 calls)
     max = M + maxCalls;
     mt = new u32[max];
     initialize(seed);
+    advanceFrames(frames);
 }
 
 // Initializes
@@ -203,6 +226,7 @@ void MersenneTwisterFast::initialize(u32 seed)
         mt[index] = (0x6C078965 * (mt[index - 1] ^ (mt[index - 1] >> 30)) + index);
 }
 
+// Generates new array state after all values have been consumed
 void MersenneTwisterFast::shuffle()
 {
     u32 y;
@@ -214,7 +238,7 @@ void MersenneTwisterFast::shuffle()
     }
 }
 
-// Calls the next psuedo-random number
+// Gets next 32bit number
 u32 MersenneTwisterFast::nextUInt()
 {
     // Array reshuffle check
@@ -232,6 +256,7 @@ u32 MersenneTwisterFast::nextUInt()
     return y;
 }
 
+// Gets next 16bit number
 u16 MersenneTwisterFast::nextUShort()
 {
     return static_cast<u16>(nextUInt() >> 16);
@@ -243,6 +268,14 @@ void MersenneTwisterFast::setSeed(u32 seed)
     initialize(seed);
 }
 
+// Recreates the Mersenne Twister Fast with a new seed and advances frames
+void MersenneTwisterFast::setSeed(u32 seed, u32 frames)
+{
+    initialize(seed);
+    advanceFrames(frames);
+}
+
+// Get seed that started Mersenne Twister Fast
 u32 MersenneTwisterFast::getSeed()
 {
     return seed;

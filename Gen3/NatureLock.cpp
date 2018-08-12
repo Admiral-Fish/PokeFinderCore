@@ -429,87 +429,84 @@ ShadowType NatureLock::getType()
 // Checks if seed is valid for single shadow case
 bool NatureLock::firstShadowNormal(u32 seed)
 {
-    backward->setSeed(seed * 0xB9B33155 + 0xA170F641); // 1 frame
+    backward->setSeed(seed, 1);
 
-    // Build temp pid first to not waste time looping if first backwards nl fails
+    // Grab PID from first non-shadow going backwards
+    // If it doesn't match spread fails
     pidOriginal = getPIDReverse();
-
-    // Backwards nature lock check
     if (!lockInfo[0].compare(pidOriginal))
         return false;
 
     // Backwards nature lock check loop
     for (x = 1; x < backCount; x++)
     {
-        backward->setSeed(backward->getSeed() * 0x2D4673C5 + 0x16AEB36D); // 5 frames
+        backward->advanceFrames(5);
         pid = getPIDReverse();
         getCurrLock();
         if (!currLock.compare(pid))
             countBackTwo();
     }
 
-    forward->setSeed(backward->getSeed() * 0x343FD + 0x269EC3); // 1 frame
-
+    forward->setSeed(backward->getSeed(), 1);
     // Forwards nature lock check loop
     for (x = frontCount; x >= 0; x--)
     {
-        forward->setSeed(forward->getSeed() * 0x284A930D + 0xA2974C77); // 5 frames
+        forward->advanceFrames(5);
         pid = getPIDForward();
         getCurrLock();
         if (!currLock.compare(pid))
             countForwardTwo();
     }
 
-    // Checks if first NL PID back from target matches
+    // Check if we end on the same PID as first non-shadow going backwards
     return pidOriginal == pid;
 }
 
 // Checks if seed is valid for second shadow with first shadow set
 bool NatureLock::firstShadowSet(u32 seed)
 {
-    backward->setSeed(seed * 0xD44C2569 + 0xD4016672); // 6 frames
+    backward->setSeed(seed, 6);
 
-    // Build temp pid first to not waste time looping if first nl fails
+    // Grab PID from first non-shadow going backwards
+    // If it doesn't match spread fails
     pidOriginal = getPIDReverse();
-
-    // Backwards nature lock check
     if (!lockInfo[0].compare(pidOriginal))
         return false;
 
     // Backwards nature lock check loop
     for (x = 1; x < backCount; x++)
     {
-        backward->setSeed(backward->getSeed() * 0x2D4673C5 + 0x16AEB36D); // 5 frames
+        backward->advanceFrames(5);
         pid = getPIDReverse();
         getCurrLock();
         if (!currLock.compare(pid))
             countBackTwo();
     }
 
-    forward->setSeed(backward->getSeed() * 0x343FD + 0x269EC3); // 1 frame
+    forward->setSeed(backward->getSeed(), 1);
 
     // Forwards nature lock check
     for (x = frontCount; x >= 0; x--)
     {
-        forward->setSeed(forward->getSeed() * 0x284A930D + 0xA2974C77); // 5 frames
+        forward->advanceFrames(5);
         pid = getPIDForward();
         getCurrLock();
         if (!currLock.compare(pid))
             countForwardTwo();
     }
 
-    // Checks if first NL PID back from target matches
+    // Check if we end on the same PID as first non-shadow going backwards
     return pidOriginal == pid;
 }
 
 // Checks if seed is valid for second shadow with first shadow unset and antishiny(aka Shiny Skip)
 bool NatureLock::firstShadowShinySkip(u32 seed)
 {
-    backward->setSeed(seed * 0xB9B33155 + 0xA170F641); // 1 frame
+    backward->setSeed(seed, 1);
 
     u32 psv, psvtemp;
 
-    // Check how many advances from shiny skip and build initial pid for first nl
+    // Check how many advances from shiny skip
     psv = getPSVReverse();
     psvtemp = getPSVReverse();
     while (psv == psvtemp)
@@ -518,83 +515,82 @@ bool NatureLock::firstShadowShinySkip(u32 seed)
         psv = getPSVReverse();
     }
 
-    backward->setSeed(backward->getSeed() * 0x2D4673C5 + 0x16AEB36D); // 5 frames
+    // Grab PID from first non-shadow going backwards
+    // If it doesn't match spread fails
+    backward->advanceFrames(5);
     pidOriginal = getPIDReverse();
-
-    // Backwards nature lock check
     if (!lockInfo[0].compare(pidOriginal))
         return false;
 
     // Backwards nature lock check loop
     for (x = 1; x < backCount; x++)
     {
-        backward->setSeed(backward->getSeed() * 0x2D4673C5 + 0x16AEB36D); // 5 frames
+        backward->advanceFrames(5);
         pid = getPIDReverse();
         getCurrLock();
         if (!currLock.compare(pid))
             countBackTwo();
     }
 
-    forward->setSeed(backward->getSeed() * 0x343FD + 0x269EC3); // 1 frame
+    forward->setSeed(backward->getSeed(), 1);
 
     // Forwards nature lock check loop
     for (x = frontCount; x >= 0; x--)
     {
-        forward->setSeed(forward->getSeed() * 0x284A930D + 0xA2974C77); // 5 frames
+        forward->advanceFrames(5);
         pid = getPIDForward();
         getCurrLock();
         if (!currLock.compare(pid))
             countForwardTwo();
     }
 
-    // Checks if first NL PID back from target matches
+    // Check if we end on the same PID as first non-shadow going backwards
     return pidOriginal == pid;
 }
 
 // Checks if seed is valid for second shadow with first shadow unset
 bool NatureLock::firstShadowUnset(u32 seed)
 {
-    backward->setSeed(seed * 0x672D6A61 + 0xE493E638); // 8 frames
+    backward->setSeed(seed, 8);
 
-    // Build temp pid first to not waste time looping if first nl fails
+    // Grab PID from first non-shadow going backwards
+    // If it doesn't match spread fails
     pidOriginal = getPIDReverse();
-
-    // Backwards nature lock check
     if (!lockInfo[0].compare(pidOriginal))
         return false;
 
     // Backwards nature lock check loop
     for (x = 1; x < backCount; x++)
     {
-        backward->setSeed(backward->getSeed() * 0x2D4673C5 + 0x16AEB36D); // 5 frames
+        backward->advanceFrames(5);
         pid = getPIDReverse();
         getCurrLock();
         if (!currLock.compare(pid))
             countBackTwo();
     }
 
-    forward->setSeed(backward->getSeed() * 0x343FD + 0x269EC3); // 1 frame
+    forward->setSeed(backward->getSeed(), 1);
 
     // Forwards nature lock check loop
     for (x = frontCount; x >= 0; x--)
     {
-        forward->setSeed(forward->getSeed() * 0x284A930D + 0xA2974C77); // 5 frames
+        forward->advanceFrames(5);
         pid = getPIDForward();
         getCurrLock();
         if (!currLock.compare(pid))
             countForwardTwo();
     }
 
-    // Checks if first NL PID back from target matches
+    // Check if we end on the same PID as first non-shadow going backwards
     return pidOriginal == pid;
 }
 
 // Checks if seed is valid for 1st shadow set for Salamence
 bool NatureLock::salamenceSet(u32 seed)
 {
-    backward->setSeed(seed * 0xD44C2569 + 0xD4016672); // 6 frames
+    backward->setSeed(seed, 6);
 
-    // Build PID
+    // Build PID of non-shadow
     pid = getPIDReverse();
 
     // Backwards nature lock check
@@ -604,34 +600,33 @@ bool NatureLock::salamenceSet(u32 seed)
 // Checks if seed is valid for 1st shadow unset and antishiny(aka Shiny Skip) for Salamence
 bool NatureLock::salamenceShinySkip(u32 seed)
 {
-    backward->setSeed(seed * 0xB9B33155 + 0xA170F641); // 1 frame
+    backward->setSeed(seed, 1);
 
     u32 psv, psvtemp;
 
-    // Check how many advances from shiny skip and build PID
+    // Check how many advances from shiny skip
     psv = getPSVReverse();
     psvtemp = getPSVReverse();
-
     while (psv == psvtemp)
     {
         psvtemp = psv;
         psv = getPSVReverse();
     }
 
-    backward->setSeed(backward->getSeed() * 0x2D4673C5 + 0x16AEB36D); // 5 frames
+    // Build PID of non-shadow
+    backward->advanceFrames(5);
     pid = getPIDReverse();
 
     // Backwards nature lock check
     return currLock.compare(pid);
 }
 
-// Salamence is a special case of single nature lock and second shadow
 // Checks if seed is valid for 1st shadow unset for Salamence
 bool NatureLock::salamenceUnset(u32 seed)
 {
-    backward->setSeed(seed * 0x672D6A61 + 0xE493E638); // 8 frames
+    backward->setSeed(seed, 8);
 
-    // Build PID
+    // Build PID of non-shadow
     pid = getPIDReverse();
 
     // Backwards nature lock check
@@ -641,9 +636,9 @@ bool NatureLock::salamenceUnset(u32 seed)
 // Checks if seed is valid for single nature lock
 bool NatureLock::singleNL(u32 seed)
 {
-    backward->setSeed(seed * 0xB9B33155 + 0xA170F641); // 1 frame
+    backward->setSeed(seed, 1);
 
-    // Build PID
+    // Build PID of non-shadow
     pid = getPIDReverse();
 
     // Backwards nature lock check
@@ -657,7 +652,7 @@ bool NatureLock::eReader(u32 seed, u32 readerPID)
     if (!lockInfo[0].compare(readerPID))
         return false;
 
-    backward->setSeed(seed * 0xB9B33155 + 0xA170F641); // 1 frame
+    backward->setSeed(seed, 1);
 
     // Get first non-shadow PID
     x = 1;
@@ -669,19 +664,19 @@ bool NatureLock::eReader(u32 seed, u32 readerPID)
     // Backwards nature lock check loop
     for (x = 2; x < backCount; x++)
     {
-        backward->advanceFrames(3); // 5 frames
+        backward->advanceFrames(3);
         pid = getPIDReverse();
         getCurrLock();
         if (!currLock.compare(pid))
             countBackTwo();
     }
 
-    forward->setSeed(backward->getSeed() * 0x343FD + 0x269EC3); // 1 frame
+    forward->setSeed(backward->getSeed(), 1);
 
     // Forwards nature lock check loop
     for (x = frontCount; x >= 0; x--)
     {
-        forward->advanceFrames(3); // 5 frames
+        forward->advanceFrames(3);
         pid = getPIDForward();
         getCurrLock();
         if (!currLock.compare(pid))

@@ -221,3 +221,11 @@ void Frame3::setSeed(const u32 &value)
 {
     seed = value;
 }
+
+void Frame3::xorFrame(bool flag)
+{
+    if (flag)
+        seed ^= 0x80000000;
+    pid ^= 0x80008000;
+    nature = pid % 25;
+}

@@ -150,7 +150,10 @@ QVector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 
         // Setup XORed frame
         frame.xorFrame();
         if (compare.comparePID(frame))
+        {
+            frame.setSeed(frame.getSeed() ^ 0x80000000);
             frames.append(frame);
+        }
     }
 
     return frames;

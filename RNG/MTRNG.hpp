@@ -45,7 +45,7 @@ protected:
     virtual void initialize(u32 seed) = 0;
 
 public:
-    ~MT() override { delete mt; }
+    ~MT() override { delete[] mt; }
     void advanceFrames(u32 frames) override;
 
 };
@@ -58,10 +58,11 @@ private:
     void shuffle() override;
 
 public:
-    MersenneTwister(u32 seed);
+    MersenneTwister(u32 seed, u32 frames = 0);
     u32 nextUInt() override;
     u16 nextUShort() override;
     void setSeed(u32 seed) override;
+    void setSeed(u32 seed, u32 frames) override;
     u32 getSeed() override;
 
 };
@@ -74,10 +75,11 @@ private:
     void shuffle() override;
 
 public:
-    MersenneTwisterUntempered(u32 seed);
+    MersenneTwisterUntempered(u32 seed, u32 frames = 0);
     u32 nextUInt() override;
     u16 nextUShort() override;
     void setSeed(u32 seed) override;
+    void setSeed(u32 seed, u32 frames) override;
     u32 getSeed() override;
 
 };
@@ -94,10 +96,11 @@ private:
     void shuffle() override;
 
 public:
-    MersenneTwisterFast(u32 seed, u32 calls);
+    MersenneTwisterFast(u32 seed, u32 calls, u32 frames = 0);
     u32 nextUInt() override;
     u16 nextUShort() override;
     void setSeed(u32 seed) override;
+    void setSeed(u32 seed, u32 frames) override;
     u32 getSeed() override;
 
 };

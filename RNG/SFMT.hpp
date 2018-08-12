@@ -43,12 +43,13 @@ private:
     void shuffle();
 
 public:
-    SFMT(u32 seed);
-    ~SFMT() override { delete sfmt; }
+    SFMT(u32 seed, u32 frames = 0);
+    ~SFMT() override { delete[] sfmt; }
     void advanceFrames(u32 frames) override;
     u32 nextUInt() override;
     u64 nextULong() override;
     void setSeed(u64 seed) override;
+    void setSeed(u64 seed, u32 frames) override;
     u64 getSeed() override;
 
 };

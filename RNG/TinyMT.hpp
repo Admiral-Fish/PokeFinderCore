@@ -40,15 +40,16 @@ private:
     void periodCertification();
 
 public:
-    TinyMT(u32 seed);
-    TinyMT(u32 st[]);
-    ~TinyMT() override { delete state; }
+    TinyMT(u32 seed, u32 frames = 0);
+    TinyMT(u32 st[], u32 frames = 0);
+    ~TinyMT() override { delete[] state; }
     void advanceFrames(u32 frames) override;
     void nextState();
     u32 nextUInt() override;
     u16 nextUShort() override;
     u32 temper();
     void setSeed(u32 seed) override;
+    void setSeed(u32 seed, u32 frames) override;
     u32 getSeed() override;
     u32 *getState();
 

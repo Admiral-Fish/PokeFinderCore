@@ -304,8 +304,7 @@ QVector<Frame3> Egg3::generateUpper(QVector<Frame3> lower, FrameCompare compare)
 
 QVector<Frame3> Egg3::generate(FrameCompare compare)
 {
-    rng = new PokeRNG(seed);
-    rng->advanceFrames(initialFrame - 1);
+    rng = new PokeRNG(seed, initialFrame - 1);
 
     switch (frameType)
     {
@@ -325,8 +324,7 @@ QVector<Frame3> Egg3::generate(FrameCompare compare)
                     return lower;
                 else
                 {
-                    rng->setSeed(seed);
-                    rng->advanceFrames(minPickup - 1);
+                    rng->setSeed(seed, minPickup - 1);
                     return generateUpper(lower, compare);
                 }
             }

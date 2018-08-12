@@ -21,32 +21,29 @@
 #define HGSSROAMER_HPP
 
 #include <QVector>
-#include <cstdint>
-#include <PokeFinderCore/RNG/LCRNG.hpp>
 #include <QString>
-
-typedef uint32_t u32;
+#include <PokeFinderCore/RNG/LCRNG.hpp>
 
 class HGSSRoamer
 {
 
 private:
-    u32 getRouteJ(u32 prng);
-    u32 getRouteK(u32 prng);
+    u16 getRouteJ(u16 prng);
+    u16 getRouteK(u16 prng);
 
     int skips = 0;
-    u32 raikouRoute;
-    u32 enteiRoute;
-    u32 latiRoute;
+    u16 raikouRoute;
+    u16 enteiRoute;
+    u16 latiRoute;
     QVector<bool> roamers;
 
 public:
     HGSSRoamer() {}
-    HGSSRoamer(u32 seed, QVector<bool> roamers, QVector<u32> routes);
+    HGSSRoamer(u32 seed, QVector<bool> roamers, QVector<u16> routes);
     int getSkips() const;
-    u32 getRaikouRoute() const;
-    u32 getEnteiRoute() const;
-    u32 getLatiRoute() const;
+    u16 getRaikouRoute() const;
+    u16 getEnteiRoute() const;
+    u16 getLatiRoute() const;
     QString getRoutes();
 
 };

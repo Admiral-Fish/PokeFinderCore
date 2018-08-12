@@ -32,12 +32,13 @@ protected:
 
 public:
 
-    LCRNG64(u64 add, u64 mult, u64 seed);
+    LCRNG64(u64 add, u64 mult, u64 seed, u32 frames = 0);
     void advanceFrames(u32 frames) override;
     u32 nextUInt(u32 max);
     u64 nextULong() override;
     u32 nextUInt() override;
     void setSeed(u64 seed) override;
+    void setSeed(u64 seed, u32 frames) override;
     u64 getSeed() override;
 
 };
@@ -46,7 +47,7 @@ class BWRNG : public LCRNG64
 {
 
 public:
-    BWRNG(u64 seed) : LCRNG64(0x269ec3, 0x5d588b656c078965, seed)
+    BWRNG(u64 seed, u32 frames = 0) : LCRNG64(0x269ec3, 0x5d588b656c078965, seed, frames)
     {
     }
 
@@ -56,7 +57,7 @@ class BWRNGR : public LCRNG64
 {
 
 public:
-    BWRNGR(u64 seed) : LCRNG64(0x9b1ae6e9a384e6f9, 0xdedcedae9638806d, seed)
+    BWRNGR(u64 seed, u32 frames = 0) : LCRNG64(0x9b1ae6e9a384e6f9, 0xdedcedae9638806d, seed, frames)
     {
     }
 

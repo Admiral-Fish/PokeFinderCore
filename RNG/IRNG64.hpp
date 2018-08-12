@@ -32,6 +32,7 @@ public:
     virtual u64 nextULong() = 0;
     virtual u32 nextUInt() = 0;
     virtual void setSeed(u64 seed) = 0;
+    virtual void setSeed(u64 seed, u32 frames) = 0;
     virtual u64 getSeed() = 0;
     virtual void advanceFrames(u32 frames) = 0;
     virtual ~IRNG64() { }
