@@ -108,10 +108,24 @@ QVector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u
         frame.setSeed(seeds[i] * 0xB9B33155 + 0xA170F641);
         if (compare.comparePID(frame))
         {
-            if (natureLock->firstShadowNormal(frame.getSeed()))
+            switch (type)
             {
-                frames.append(frame); // If this seed passes it is impossible for the sister spread to generate
-                continue;
+                case FirstShadow:
+                    if (natureLock->firstShadowNormal(frame.getSeed()))
+                    {
+                        frames.append(frame); // If this seed passes it is impossible for the sister spread to generate
+                        continue;
+                    }
+                    break;
+                case EReader:
+                    if (natureLock->eReader(frame.getSeed(), frame.getPid()))
+                    {
+                        frames.push_back(frame); // If this seed passes it is impossible for the sister spread to generate
+                        continue;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -120,9 +134,21 @@ QVector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u
         frame.setNature(frame.getPid() % 25);
         if (compare.comparePID(frame))
         {
-            frame.setSeed(frame.getSeed() ^ 0x80000000);
-            if (natureLock->firstShadowNormal(frame.getSeed()))
-                frames.append(frame);
+            switch (type)
+            {
+                case FirstShadow:
+                    frame.setSeed(frame.getSeed() ^ 0x80000000);
+                    if (natureLock->firstShadowNormal(frame.getSeed()))
+                        frames.append(frame);
+                    break;
+                case EReader:
+                    frame.setSeed(frame.getSeed() ^ 0x80000000);
+                    if (natureLock->eReader(frame.getSeed(), frame.getPid()))
+                        frames.append(frame);
+                    break;
+                default:
+                    break;
+            }
         }
     }
     return frames;

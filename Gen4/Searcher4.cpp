@@ -930,7 +930,7 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
                         case OldRod:
                         case GoodRod:
                         case SuperRod:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
+                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) % 100) <= thresh)
                             {
@@ -940,6 +940,15 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
                             }
                             else
                                 skip = true;
+                            break;
+                        case RockSmash:
+                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
+                            if (((slot >> 16) % 100) < 40)
+                            {
+                                frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
+                                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
+                                frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                            }
                             break;
                         case Stationary:
                         default:

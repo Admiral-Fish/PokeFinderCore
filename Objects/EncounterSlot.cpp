@@ -141,6 +141,9 @@ u32 EncounterSlot::kSlot(u32 result, Encounter encounterType)
                        Range(95, 99)
                  };
             return calcSlot(compare, ranges);
+        case RockSmash:
+            ranges = { Range(0, 89), Range(90, 99) };
+            return calcSlot(compare, ranges);
         default:
             ranges = { Range(0, 19), Range(20, 39), Range(40, 49), Range(50, 59), Range(60, 69),
                        Range(70, 79), Range(80, 84), Range(85, 89), Range(90, 93), Range(94, 97),

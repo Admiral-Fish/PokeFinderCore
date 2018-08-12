@@ -26,6 +26,8 @@
 // Constructor for NatureLock
 NatureLock::NatureLock(int num, Method version)
 {
+    forward = new XDRNG(0);
+    backward = new XDRNGR(0);
     if (version == XD)
         natureLockSetupGales(num);
     else
@@ -108,9 +110,21 @@ void NatureLock::natureLockSetupColo(int lockNum)
             lockInfo = { LockInfo(0, 0, 126), LockInfo(24, 127, 255) };
             type = FirstShadow;
             break;
-        case 3: // Murkrow
+        case 3: // E-Reader Mareep
+            lockInfo = { LockInfo(16, 0, 126), LockInfo(12, 0, 126), LockInfo(10, 0, 126), LockInfo(4, 0, 190) };
+            type = EReader;
+            break;
+        case 4: // Murkrow
             lockInfo = { LockInfo(18, 127, 255), LockInfo(12, 0, 126), LockInfo(6, 127, 255 ) };
             type = FirstShadow;
+            break;
+        case 5: // E-Reader Scizor
+            lockInfo = { LockInfo(11, 127, 255), LockInfo(3, 127, 255), LockInfo(2, 0, 255), LockInfo(13, 0, 126) };
+            type = EReader;
+            break;
+        case 6: // E-Reader Togepi
+            lockInfo = { LockInfo(22, 0, 30), LockInfo(24, 127, 255), LockInfo(8, 127, 255), LockInfo(23, 127, 255) };
+            type = EReader;
             break;
         default: // Ursaring
             lockInfo = { LockInfo(21, 0, 126), LockInfo(16, 31, 255), LockInfo(20, 0, 63) };
@@ -645,18 +659,17 @@ bool NatureLock::eReader(u32 seed, u32 readerPID)
 
     backward->setSeed(seed * 0xB9B33155 + 0xA170F641); // 1 frame
 
-    // Build temp pid first to not waste time looping if first backwards nl fails
-    pidOriginal = getPIDReverse();
-
+    // Get first non-shadow PID
     x = 1;
     getCurrLock();
+    getPIDReverse();
     if (!currLock.compare(pid))
         countBackTwo();
 
     // Backwards nature lock check loop
     for (x = 2; x < backCount; x++)
     {
-        backward->setSeed(backward->getSeed() * 0x2D4673C5 + 0x16AEB36D); // 5 frames
+        backward->advanceFrames(3); // 5 frames
         pid = getPIDReverse();
         getCurrLock();
         if (!currLock.compare(pid))
@@ -668,7 +681,7 @@ bool NatureLock::eReader(u32 seed, u32 readerPID)
     // Forwards nature lock check loop
     for (x = frontCount; x >= 0; x--)
     {
-        forward->setSeed(forward->getSeed() * 0x284A930D + 0xA2974C77); // 5 frames
+        forward->advanceFrames(3); // 5 frames
         pid = getPIDForward();
         getCurrLock();
         if (!currLock.compare(pid))
@@ -676,7 +689,7 @@ bool NatureLock::eReader(u32 seed, u32 readerPID)
     }
 
     // Checks if first NL PID back from target matches
-    return pid == pidOriginal;
+    return pid == readerPID;
 }
 
 // Changes which lock info is being used for Colo

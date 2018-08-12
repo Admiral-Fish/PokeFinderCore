@@ -499,9 +499,18 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 3;
                 break;
+            case RockSmash: // TODO
+                //if ((rngList[0] % 100) >= 40)
+                //  continue;
+
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
+                if (!compare.compareSlot(frame))
+                    continue;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
+                hunt = 2;
+                break;
             case HeadButt: // TODO
             case BugCatchingContest: // TODO
-            case RockSmash: // TODO
             default:
                 break;
         }
