@@ -20,8 +20,8 @@
 #ifndef ENCOUNTERSLOT_HPP
 #define ENCOUNTERSLOT_HPP
 
-#include <PokeFinderCore/Objects/Encounter.hpp>
 #include <QVector>
+#include <PokeFinderCore/Objects/Encounter.hpp>
 
 typedef uint32_t u32;
 

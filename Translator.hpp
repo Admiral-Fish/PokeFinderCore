@@ -21,13 +21,10 @@
 #define TRANSLATOR_HPP
 
 #include <QVector>
-#include <cstdint>
 #include <QLocale>
 #include <QStringList>
 #include <QFile>
 #include <QTextStream>
-
-typedef uint32_t u32;
 
 class Translator
 {

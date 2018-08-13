@@ -51,25 +51,25 @@ QVector<Frame4> Generator4::generate(FrameCompare compare)
     rng = new PokeRNG(initialSeed, initialFrame - 1 + offset);
     switch (frameType)
     {
-        case Method1:
+        case Method::Method1:
             return generateMethod1(compare);
-        case MethodJ:
+        case Method::MethodJ:
             switch (leadType)
             {
-                case None:
-                case SuctionCups:
+                case Lead::None:
+                case Lead::SuctionCups:
                     return generateMethodJ(compare);
-                case Synchronize:
+                case Lead::Synchronize:
                     return generateMethodJSynch(compare);
                 // Default to cover all cute charm cases
                 default:
                     return generateMethodJCuteCharm(compare);
             }
-        case MethodK:
+        case Method::MethodK:
             switch (leadType)
             {
-                case None:
-                case SuctionCups:
+                case Lead::None:
+                case Lead::SuctionCups:
                     return generateMethodK(compare);
                 case Synchronize:
                     return generateMethodKSynch(compare);
@@ -77,9 +77,9 @@ QVector<Frame4> Generator4::generate(FrameCompare compare)
                 default:
                     return generateMethodKCuteCharm(compare);
             }
-        case ChainedShiny:
+        case Method::ChainedShiny:
             return generateChainedShiny(compare);
-        case WondercardIVs:
+        case Method::WondercardIVs:
             return generateWondercardIVs(compare);
         default:
             return QVector<Frame4>();
@@ -144,35 +144,35 @@ QVector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
     u16 thresh = 0;
     int hunt = 0;
 
-    if (encounterType == OldRod)
-        thresh = leadType == SuctionCups ? 48 : 24;
-    else if (encounterType == GoodRod)
-        thresh = leadType == SuctionCups ? 98 : 49;
-    else if (encounterType == SuperRod)
-        thresh = leadType == SuctionCups ? 100 : 74;
+    if (encounterType == Encounter::OldRod)
+        thresh = leadType == Lead::SuctionCups ? 48 : 24;
+    else if (encounterType == Encounter::GoodRod)
+        thresh = leadType == Lead::SuctionCups ? 98 : 49;
+    else if (encounterType == Encounter::SuperRod)
+        thresh = leadType == Lead::SuctionCups ? 100 : 74;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
     {
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
-            case Wild:
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], Wild));
+            case Encounter::Wild:
+                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 1;
                 break;
-            case Surfing:
+            case Encounter::Surfing:
                 frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
                 hunt = 2;
                 break;
-            case OldRod:
-            case GoodRod:
-            case SuperRod:
+            case Encounter::OldRod:
+            case Encounter::GoodRod:
+            case Encounter::SuperRod:
                 if ((rngList[0] / 656) > thresh)
                     continue;
 
@@ -238,30 +238,30 @@ QVector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
     u32 pid, pid1, pid2;
     int hunt = 0;
 
-    u16 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
     {
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
-            case Wild:
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], Wild));
+            case Encounter::Wild:
+                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 1;
                 break;
-            case Surfing:
+            case Encounter::Surfing:
                 frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
                 hunt = 2;
                 break;
-            case OldRod:
-            case GoodRod:
-            case SuperRod:
+            case Encounter::OldRod:
+            case Encounter::GoodRod:
+            case Encounter::SuperRod:
                 if ((rngList[0] / 656) > thresh)
                     continue;
 
@@ -331,23 +331,23 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
     u32 pid, pid1, pid2, buffer = 0;
     int hunt = 0;
 
-    u16 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
 
     switch (leadType)
     {
-        case CuteCharmFemale:
+        case Lead::CuteCharmFemale:
             buffer = 0;
             break;
-        case CuteCharm25M:
+        case Lead::CuteCharm25M:
             buffer = 0xC8;
             break;
-        case CuteCharm50M:
+        case Lead::CuteCharm50M:
             buffer = 0x96;
             break;
-        case CuteCharm75M:
+        case Lead::CuteCharm75M:
             buffer = 0x4B;
             break;
-        case CuteCharm875M:
+        case Lead::CuteCharm875M:
             buffer = 0x32;
             break;
         default:
@@ -359,23 +359,23 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
-            case Wild:
-                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], Wild));
+            case Encounter::Wild:
+                frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 1;
                 break;
-            case Surfing:
+            case Encounter::Surfing:
                 frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
                 hunt = 2;
                 break;
-            case OldRod:
-            case GoodRod:
-            case SuperRod:
+            case Encounter::OldRod:
+            case Encounter::GoodRod:
+            case Encounter::SuperRod:
                 if ((rngList[0] / 656) > thresh)
                     continue;
 
@@ -460,35 +460,35 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
     u16 thresh = 0;
     int hunt = 0;
 
-    if (encounterType == OldRod)
-        thresh = leadType == SuctionCups ? 48 : 24;
-    else if (encounterType == GoodRod)
-        thresh = leadType == SuctionCups ? 98 : 49;
-    else if (encounterType == SuperRod)
-        thresh = leadType == SuctionCups ? 100 : 74;
+    if (encounterType == Encounter::OldRod)
+        thresh = leadType == Lead::SuctionCups ? 48 : 24;
+    else if (encounterType == Encounter::GoodRod)
+        thresh = leadType == Lead::SuctionCups ? 98 : 49;
+    else if (encounterType == Encounter::SuperRod)
+        thresh = leadType == Lead::SuctionCups ? 100 : 74;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
     {
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
-            case Wild:
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], Wild));
+            case Encounter::Wild:
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 1;
                 break;
-            case Surfing:
+            case Encounter::Surfing:
                 frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
                 hunt = 2;
                 break;
-            case OldRod:
-            case GoodRod:
-            case SuperRod:
+            case Encounter::OldRod:
+            case Encounter::GoodRod:
+            case Encounter::SuperRod:
                 if ((rngList[0] % 100) > thresh)
                     continue;
 
@@ -498,7 +498,7 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 3;
                 break;
-            case RockSmash: // TODO
+            case Encounter::RockSmash: // TODO
                 //if ((rngList[0] % 100) >= 40)
                 //  continue;
 
@@ -508,8 +508,8 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
                 hunt = 2;
                 break;
-            case HeadButt: // TODO
-            case BugCatchingContest: // TODO
+            case Encounter::HeadButt: // TODO
+            case Encounter::BugCatchingContest: // TODO
             default:
                 break;
         }
@@ -566,30 +566,30 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
     u32 pid, pid1, pid2;
     int hunt = 0;
 
-    u16 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
     {
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
-            case Wild:
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], Wild));
+            case Encounter::Wild:
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 1;
                 break;
-            case Surfing:
+            case Encounter::Surfing:
                 frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
                 hunt = 2;
                 break;
-            case OldRod:
-            case GoodRod:
-            case SuperRod:
+            case Encounter::OldRod:
+            case Encounter::GoodRod:
+            case Encounter::SuperRod:
                 if ((rngList[0] % 100) > thresh)
                     continue;
 
@@ -599,9 +599,9 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 3;
                 break;
-            case HeadButt: // TODO
-            case BugCatchingContest: // TODO
-            case RockSmash: // TODO
+            case Encounter::HeadButt: // TODO
+            case Encounter::BugCatchingContest: // TODO
+            case Encounter::RockSmash: // TODO
             default:
                 break;
         }
@@ -663,23 +663,23 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
     u32 pid, pid1, pid2, buffer = 0;
     int hunt = 0;
 
-    u16 thresh = encounterType == OldRod ? 24 : encounterType == GoodRod ? 49 : encounterType == SuperRod ? 74 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
 
     switch (leadType)
     {
-        case CuteCharmFemale:
+        case Lead::CuteCharmFemale:
             buffer = 0;
             break;
-        case CuteCharm25M:
+        case Lead::CuteCharm25M:
             buffer = 0xC8;
             break;
-        case CuteCharm50M:
+        case Lead::CuteCharm50M:
             buffer = 0x96;
             break;
-        case CuteCharm75M:
+        case Lead::CuteCharm75M:
             buffer = 0x4B;
             break;
-        case CuteCharm875M:
+        case Lead::CuteCharm875M:
             buffer = 0x32;
             break;
         default:
@@ -691,23 +691,23 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
-            case Wild:
-                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], Wild));
+            case Encounter::Wild:
+                frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 1;
                 break;
-            case Surfing:
+            case Encounter::Surfing:
                 frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[1]));
                 hunt = 2;
                 break;
-            case OldRod:
-            case GoodRod:
-            case SuperRod:
+            case Encounter::OldRod:
+            case Encounter::GoodRod:
+            case Encounter::SuperRod:
                 if ((rngList[0] % 100) > thresh)
                     continue;
 
@@ -717,9 +717,9 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 3;
                 break;
-            case HeadButt: // TODO
-            case BugCatchingContest: // TODO
-            case RockSmash: // TODO
+            case Encounter::HeadButt: // TODO
+            case Encounter::BugCatchingContest: // TODO
+            case Encounter::RockSmash: // TODO
             default:
                 break;
         }

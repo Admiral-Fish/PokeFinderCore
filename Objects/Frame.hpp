@@ -20,13 +20,13 @@
 #ifndef FRAME_HPP
 #define FRAME_HPP
 
+#include <QString>
+#include <QVector>
 #include <PokeFinderCore/Objects/Encounter.hpp>
 #include <PokeFinderCore/Objects/Lead.hpp>
 #include <PokeFinderCore/Objects/Method.hpp>
 #include <PokeFinderCore/Objects/Nature.hpp>
 #include <PokeFinderCore/Objects/Power.hpp>
-#include <QString>
-#include <QVector>
 
 typedef uint64_t u64;
 typedef uint32_t u32;
@@ -76,8 +76,7 @@ public:
     u32 getFrame() const;
     u32 getIV(int index) const;
     u32 getPower() const;
-    u32 getPid() const;
-    void setPid(const u32 &value);
+    u32 getPID() const;
     u32 getAbility() const;
     Lead getLeadType() const;
     u32 getEncounterSlot() const;

@@ -24,6 +24,8 @@
 #include <PokeFinderCore/Objects/Encounter.hpp>
 #include <PokeFinderCore/Translator.hpp>
 
+typedef uint32_t u32;
+
 class EncounterArea
 {
 

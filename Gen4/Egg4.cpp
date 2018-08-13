@@ -39,7 +39,7 @@ Egg4::Egg4(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 
     psv = tid ^ sid;
     frameType = method;
 
-    if (frameType == Gen4Normal || frameType == Gen4Masuada)
+    if (frameType == Method::Gen4Normal || frameType == Method::Gen4Masuada)
         mt = new MersenneTwister(seed);
     else
         rng = new PokeRNG(seed);
@@ -189,13 +189,13 @@ QVector<Frame4> Egg4::generate(FrameCompare compare)
 {
     switch (frameType)
     {
-        case Gen4Normal:
+        case Method::Gen4Normal:
             return generatePID(compare);
-        case Gen4Masuada:
+        case Method::Gen4Masuada:
             return generatePIDMasuada(compare);
-        case DPPtIVs:
+        case Method::DPPtIVs:
             return generateIVsDPPt(compare);
-        case HGSSIVs:
+        case Method::HGSSIVs:
             return generateIVsHGSS(compare);
         default:
             return QVector<Frame4>();

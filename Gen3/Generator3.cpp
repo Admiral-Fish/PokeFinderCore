@@ -105,37 +105,37 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
     {
         switch (encounterType)
         {
-            case RockSmash:
+            case Encounter::RockSmash:
                 hunt = rock ? 0 : 1;
                 if ((rngList[hunt++] % 2880) >= rate)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], RockSmash));
+                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[hunt++]));
                 break;
-            case SafariZone:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[0], SafariZone));
+            case Encounter::SafariZone:
+                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 3;
                 break;
-            case Wild:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], Wild));
+            case Encounter::Wild:
+                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 3;
                 break;
-            case Surfing:
-            case OldRod:
-            case GoodRod:
-            case SuperRod:
+            case Encounter::Surfing:
+            case Encounter::OldRod:
+            case Encounter::GoodRod:
+            case Encounter::SuperRod:
                 frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
@@ -207,37 +207,37 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
     {
         switch (encounterType)
         {
-            case RockSmash:
+            case Encounter::RockSmash:
                 hunt = rock ? 0 : 1;
                 if ((rngList[hunt++] % 2880) >= rate)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], RockSmash));
+                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[hunt++]));
                 break;
-            case SafariZone:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[0], SafariZone));
+            case Encounter::SafariZone:
+                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 3;
                 break;
-            case Wild:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], Wild));
+            case Encounter::Wild:
+                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 3;
                 break;
-            case Surfing:
-            case OldRod:
-            case GoodRod:
-            case SuperRod:
+            case Encounter::Surfing:
+            case Encounter::OldRod:
+            case Encounter::GoodRod:
+            case Encounter::SuperRod:
                 frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
@@ -329,8 +329,7 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
         case Lead::CuteCharm75F:
             cuteCharm = &Generator3::cuteCharm75F;
             break;
-        // Case CuteCharm25M:
-        // Set to default to avoid compiler warning message
+        case Lead::CuteCharm25M:
         default:
             cuteCharm = &Generator3::cuteCharm25F;
             break;
@@ -343,38 +342,38 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
     {
         switch (encounterType)
         {
-            case RockSmash:
+            case Encounter::RockSmash:
                 hunt = rock ? 0 : 1;
                 if ((rngList[hunt++] % 2880) >= rate)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], RockSmash));
+                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[hunt++]));
                 hunt++;
                 break;
-            case SafariZone:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[0], SafariZone));
+            case Encounter::SafariZone:
+                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 4;
                 break;
-            case Wild:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], Wild));
+            case Encounter::Wild:
+                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 4;
                 break;
-            case Surfing:
-            case OldRod:
-            case GoodRod:
-            case SuperRod:
+            case Encounter::Surfing:
+            case Encounter::OldRod:
+            case Encounter::GoodRod:
+            case Encounter::SuperRod:
                 frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
@@ -547,29 +546,29 @@ QVector<Frame3> Generator3::generate(FrameCompare compare)
 {
     switch (frameType)
     {
-        case Method1:
-        case Method2:
-        case Method4:
+        case Method::Method1:
+        case Method::Method2:
+        case Method::Method4:
             return generateMethod124(compare);
-        case Method1Reverse:
+        case Method::Method1Reverse:
             return generateMethod1Reverse(compare);
-        case MethodH1:
-        case MethodH2:
-        case MethodH4:
+        case Method::MethodH1:
+        case Method::MethodH2:
+        case Method::MethodH4:
             switch (leadType)
             {
-                case None:
+                case Lead::None:
                     return generateMethodH124(compare);
-                case Synchronize:
+                case Lead::Synchronize:
                     return generateMethodH124Synch(compare);
-                // case CuteCharm:
+                // case Lead::CuteCharm:
                 // Set to default to avoid compiler warning message
                 default:
                     return generateMethodH124CuteCharm(compare);
             }
-        case XDColo:
+        case Method::XDColo:
             return generateMethodXDColo(compare);
-        case Channel:
+        case Method::Channel:
             return generateMethodChannel(compare);
         default:
             return QVector<Frame3>();
@@ -580,25 +579,25 @@ QVector<Frame3> Generator3::generate(FrameCompare compare)
 void Generator3::setup(Method method)
 {
     frameType = method;
-    if (frameType == XDColo || frameType == Channel)
+    if (frameType == Method::XDColo || frameType == Method::Channel)
         rng = new XDRNG(initialSeed, initialFrame - 1 + offset);
     else
         rng = new PokeRNG(initialSeed, initialFrame - 1 + offset);
 
-    if (frameType == Method1 || frameType == MethodH1)
+    if (frameType == Method::Method1 || frameType == Method::MethodH1)
     {
-        iv1 = frameType == MethodH1 ? 1 : 2;
-        iv2 = frameType == MethodH1 ? 2 : 3;
+        iv1 = frameType == Method::MethodH1 ? 1 : 2;
+        iv2 = frameType == Method::MethodH1 ? 2 : 3;
     }
-    else if (frameType == Method2 || frameType == MethodH2)
+    else if (frameType == Method::Method2 || frameType == Method::MethodH2)
     {
-        iv1 = frameType == MethodH2 ? 2 : 3;
-        iv2 = frameType == MethodH2 ? 3 : 4;
+        iv1 = frameType == Method::MethodH2 ? 2 : 3;
+        iv2 = frameType == Method::MethodH2 ? 3 : 4;
     }
-    else if (frameType == Method4 || frameType == MethodH4)
+    else if (frameType == Method::Method4 || frameType == Method::MethodH4)
     {
-        iv1 = frameType == MethodH4 ? 1 : 2;
-        iv2 = frameType == MethodH4 ? 3 : 4;
+        iv1 = frameType == Method::MethodH4 ? 1 : 2;
+        iv2 = frameType == Method::MethodH4 ? 3 : 4;
     }
 }
 

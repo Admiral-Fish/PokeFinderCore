@@ -137,14 +137,9 @@ u32 Frame::getPower() const
     return power;
 }
 
-u32 Frame::getPid() const
+u32 Frame::getPID() const
 {
     return pid;
-}
-
-void Frame::setPid(const u32 &value)
-{
-    pid = value;
 }
 
 u32 Frame::getAbility() const

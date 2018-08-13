@@ -290,7 +290,7 @@ QVector<Frame3> Egg3::generateUpper(QVector<Frame3> lower, FrameCompare compare)
     {
         for (Frame3 up : upper)
         {
-            up.setPID(low.getPid(), up.getPid());
+            up.setPID(low.getPID(), up.getPID());
             if (compare.comparePID(up))
             {
                 up.setFrame(low.getFrame());
@@ -308,16 +308,16 @@ QVector<Frame3> Egg3::generate(FrameCompare compare)
 
     switch (frameType)
     {
-        case EBredPID:
+        case Method::EBredPID:
             return generateEmeraldPID(compare);
-        case EBred:
+        case Method::EBred:
             return generateEmerald(compare);
-        case EBredSplit:
+        case Method::EBredSplit:
             return generateEmeraldSplit(compare);
-        case EBredAlternate:
+        case Method::EBredAlternate:
             return generateEmeraldAlternate(compare);
-        case RSBred:
-        case FRLGBred:
+        case Method::RSBred:
+        case Method::FRLGBred:
             {
                 QVector<Frame3> lower = generateLower(compare);
                 if (lower.size() == 0)
@@ -349,7 +349,7 @@ void Egg3::setMaxRedraw(const u32 &value)
     maxRedraw = value;
 }
 
-void Egg3::setCompatability(const u16 &value)
+void Egg3::setCompatability(const u32 &value)
 {
     compatability = value;
 }

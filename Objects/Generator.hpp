@@ -20,13 +20,13 @@
 #ifndef GENERATOR_HPP
 #define GENERATOR_HPP
 
+#include <QVector>
 #include <PokeFinderCore/Objects/FrameCompare.hpp>
 #include <PokeFinderCore/Objects/Encounter.hpp>
 #include <PokeFinderCore/Objects/EncounterSlot.hpp>
 #include <PokeFinderCore/Objects/Lead.hpp>
 #include <PokeFinderCore/Objects/Method.hpp>
 #include <PokeFinderCore/RNG/IRNG.hpp>
-#include <QVector>
 
 typedef uint32_t u32;
 typedef uint16_t u16;
@@ -39,9 +39,9 @@ protected:
     u16 sid;
     u16 tid;
     u32 offset;
-    Method frameType = Method1;
-    Encounter encounterType = Stationary;
-    Lead leadType = None;
+    Method frameType = Method::Method1;
+    Encounter encounterType = Encounter::Stationary;
+    Lead leadType = Lead::None;
     u32 initialSeed;
     u32 initialFrame;
     u32 maxResults;

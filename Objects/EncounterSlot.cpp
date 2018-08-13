@@ -68,17 +68,17 @@ u32 EncounterSlot::hSlot(u32 result, Encounter encounterType)
     QVector<Range> ranges;
     switch (encounterType)
     {
-        case OldRod:
+        case Encounter::OldRod:
             ranges = { Range(0, 69), Range(70, 99) } ;
             return calcSlot(compare, ranges);
-        case GoodRod:
+        case Encounter::GoodRod:
             ranges = { Range(0, 59), Range(60, 79), Range(80, 99) };
             return calcSlot(compare, ranges);
-        case SuperRod:
+        case Encounter::SuperRod:
             ranges = { Range(0, 39), Range(40, 79), Range(80, 94), Range(95, 98), Range(99, 99) };
             return calcSlot(compare, ranges);
-        case Surfing:
-        case RockSmash:
+        case Encounter::Surfing:
+        case Encounter::RockSmash:
             ranges = { Range(0, 59), Range(60, 89), Range(90, 94), Range(95, 98), Range(99, 99) };
             return calcSlot(compare, ranges);
         default:
@@ -97,12 +97,12 @@ u32 EncounterSlot::jSlot(u32 result, Encounter encounterType)
     QVector<Range> ranges;
     switch (encounterType)
     {
-        case GoodRod:
-        case SuperRod:
+        case Encounter::GoodRod:
+        case Encounter::SuperRod:
             ranges = { Range(0, 39), Range(40, 79), Range(80, 94), Range(95, 98), Range(99, 99) };
             return calcSlot(compare, ranges);
-        case OldRod:
-        case Surfing:
+        case Encounter::OldRod:
+        case Encounter::Surfing:
             ranges = { Range(0, 59), Range(60, 89), Range(90, 94), Range(95, 98), Range(99, 99) };
             return calcSlot(compare, ranges);
         default:
@@ -121,27 +121,27 @@ u32 EncounterSlot::kSlot(u32 result, Encounter encounterType)
     QVector<Range> ranges;
     switch (encounterType)
     {
-        case OldRod:
-        case GoodRod:
-        case SuperRod:
+        case Encounter::OldRod:
+        case Encounter::GoodRod:
+        case Encounter::SuperRod:
             ranges = { Range(0, 39), Range(40, 69), Range(70, 84), Range(85, 94), Range(95, 99) };
             return calcSlot(compare, ranges);
-        case Surfing:
+        case Encounter::Surfing:
             ranges = { Range(0, 59), Range(60, 89), Range(90, 94), Range(95, 98), Range(99, 99) };
             return calcSlot(compare, ranges);
-        case BugCatchingContest:
+        case Encounter::BugCatchingContest:
             ranges = { Range(80, 99), Range(60, 79), Range(50, 59), Range(40, 49), Range(30, 39),
                        Range(20, 29), Range(15, 19), Range(10, 14), Range(5, 9), Range(0, 4)
                  };
             return calcSlot(compare, ranges);
-        case SafariZone:
+        case Encounter::SafariZone:
             return compare % 10;
-        case HeadButt:
+        case Encounter::HeadButt:
             ranges = { Range(0, 49), Range(50, 64), Range(65, 79), Range(80, 89), Range(90, 94),
                        Range(95, 99)
                  };
             return calcSlot(compare, ranges);
-        case RockSmash: // Might be 80/20
+        case Encounter::RockSmash: // Might be 80/20
             ranges = { Range(0, 89), Range(90, 99) };
             return calcSlot(compare, ranges);
         default:

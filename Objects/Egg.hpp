@@ -20,10 +20,10 @@
 #ifndef EGG_HPP
 #define EGG_HPP
 
+#include <QVector>
 #include <PokeFinderCore/Objects/FrameCompare.hpp>
 #include <PokeFinderCore/Objects/Method.hpp>
 #include <PokeFinderCore/RNG/IRNG.hpp>
-#include <QVector>
 
 class Egg
 {
@@ -32,7 +32,7 @@ protected:
     u16 psv;
     u16 sid;
     u16 tid;
-    Method frameType = EBred;
+    Method frameType = Method::EBred;
     u32 seed;
     u32 initialFrame;
     u32 maxResults;

@@ -20,9 +20,9 @@
 #ifndef RNGCACHE_HPP
 #define RNGCACHE_HPP
 
-#include <PokeFinderCore/Objects/Method.hpp>
 #include <QVector>
 #include <QHash>
+#include <PokeFinderCore/Objects/Method.hpp>
 
 typedef uint32_t u32;
 

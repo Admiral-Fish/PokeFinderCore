@@ -39,7 +39,7 @@ private:
     u32 calibration;
     u32 minRedraw;
     u32 maxRedraw;
-    u16 compatability;
+    u32 compatability;
     u32 minPickup;
     u32 maxPickup;
     bool everstone;
@@ -59,7 +59,7 @@ public:
     void setParents(QVector<u32> parent1, QVector<u32> parent2);
     void setMinRedraw(const u32 &value);
     void setMaxRedraw(const u32 &value);
-    void setCompatability(const u16 &value);
+    void setCompatability(const u32 &value);
     void setCalibration(const u32 &value);
     void setEverstone(bool value);
     void setMinPickup(const u32 &value);

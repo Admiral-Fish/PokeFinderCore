@@ -20,9 +20,8 @@
 #ifndef RNGEUCLIDEAN_HPP
 #define RNGEUCLIDEAN_HPP
 
-#include <PokeFinderCore/Objects/Method.hpp>
-#include <cstdint>
 #include <QVector>
+#include <PokeFinderCore/Objects/Method.hpp>
 
 typedef uint64_t u64;
 typedef uint32_t u32;

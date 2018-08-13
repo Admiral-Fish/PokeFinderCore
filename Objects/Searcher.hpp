@@ -20,6 +20,7 @@
 #ifndef SEARCHER_HPP
 #define SEARCHER_HPP
 
+#include <QVector>
 #include <PokeFinderCore/Objects/Encounter.hpp>
 #include <PokeFinderCore/Objects/EncounterSlot.hpp>
 #include <PokeFinderCore/Objects/FrameCompare.hpp>
@@ -27,7 +28,6 @@
 #include <PokeFinderCore/Objects/Method.hpp>
 #include <PokeFinderCore/Objects/Utilities.hpp>
 #include <PokeFinderCore/RNG/LCRNG.hpp>
-#include <QVector>
 
 typedef uint32_t u32;
 typedef uint16_t u16;
@@ -40,9 +40,9 @@ protected:
     u16 sid;
     u16 tid;
     u32 cuteCharm;
-    Encounter encounterType = Stationary;
-    Method frameType = Method1;
-    Lead leadType = None;
+    Encounter encounterType = Encounter::Stationary;
+    Method frameType = Method::Method1;
+    Lead leadType = Lead::None;
     u32 synchNature;
 
 public:

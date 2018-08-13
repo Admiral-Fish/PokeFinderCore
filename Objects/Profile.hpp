@@ -25,8 +25,8 @@
 #include <QApplication>
 #include <QFile>
 #include <QTextStream>
-#include <PokeFinderCore/Objects/Game.hpp>
 #include <QVector>
+#include <PokeFinderCore/Objects/Game.hpp>
 
 typedef uint32_t u32;
 typedef uint16_t u16;
@@ -49,8 +49,8 @@ public:
     Game getVersion() const;
     int getLanguage() const;
     QString getProfileName() const;
-    u32 getTid() const;
-    u32 getSid() const;
+    u16 getTID() const;
+    u16 getSID() const;
 
 };
 

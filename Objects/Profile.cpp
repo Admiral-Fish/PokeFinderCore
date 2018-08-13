@@ -40,29 +40,29 @@ QString Profile::getVersionString() const
 {
     switch (version)
     {
-        case Ruby:
+        case Game::Ruby:
             return QObject::tr("Ruby");
-        case Sapphire:
+        case Game::Sapphire:
             return QObject::tr("Sapphire");
-        case FireRed:
+        case Game::FireRed:
             return QObject::tr("Fire Red");
-        case LeafGreen:
+        case Game::LeafGreen:
             return QObject::tr("Leaf Green");
-        case Emerald:
+        case Game::Emerald:
             return QObject::tr("Emerald");
-        case Gales:
-            return QObject::tr("XD");
-        case Colosseum:
+        case Game::Gales:
+            return QObject::tr("Gales");
+        case Game::Colosseum:
             return QObject::tr("Colosseum");
-        case Diamond:
+        case Game::Diamond:
             return QObject::tr("Diamond");
-        case Pearl:
+        case Game::Pearl:
             return QObject::tr("Pearl");
-        case Platinum:
+        case Game::Platinum:
             return QObject::tr("Platinum");
-        case HeartGold:
+        case Game::HeartGold:
             return QObject::tr("Heart Gold");
-        case SoulSilver:
+        case Game::SoulSilver:
             return QObject::tr("Soul Silver");
         default:
             return "-";
@@ -105,12 +105,12 @@ QString Profile::getProfileName() const
     return profileName;
 }
 
-u32 Profile::getTid() const
+u16 Profile::getTID() const
 {
     return tid;
 }
 
-u32 Profile::getSid() const
+u16 Profile::getSID() const
 {
     return sid;
 }
