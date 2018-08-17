@@ -124,7 +124,7 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 3;
                 break;
-            case Encounter::Wild:
+            case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
@@ -226,7 +226,7 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 3;
                 break;
-            case Encounter::Wild:
+            case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
@@ -362,7 +362,7 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 4;
                 break;
-            case Encounter::Wild:
+            case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;

@@ -31,7 +31,7 @@ EncounterArea3::EncounterArea3(QStringList data)
     delay = data[1].toUInt();
     type = static_cast<Encounter>(data[2].toUInt());
 
-    bool flag = type == Encounter::Wild || type == Encounter::SafariZone;
+    bool flag = type == Encounter::Grass || type == Encounter::SafariZone;
     int len = (data.length() - 3) / (flag ? 2 : 3);
 
     for (int i = 3; i < len + 3; i++)

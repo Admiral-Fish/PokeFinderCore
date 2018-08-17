@@ -49,7 +49,7 @@ EncounterArea4::EncounterArea4(QStringList data, Game game)
     }
     type = static_cast<Encounter>(data[3].toInt());
 
-    bool flag = type == Encounter::Wild || type == Encounter::Swarm || type == Encounter::PokeRadar;
+    bool flag = type == Encounter::Grass || type == Encounter::Swarm || type == Encounter::PokeRadar;
 
     int len = (data.length() - 4) / (flag ? 2 : 3);
     for (int i = 4; i < len + 4; i++)
@@ -99,7 +99,7 @@ QVector<EncounterArea4> EncounterArea4::getEncounters(Encounter type, Game game,
             // Implement later
             if (area.type == type && area.sound == 0 && area.dual == 0)
             {
-                if (area.type == Encounter::Wild && !(area.time == 0 || area.time == time))
+                if (area.type == Encounter::Grass && !(area.time == 0 || area.time == time))
                     continue;
                 areas.append(area);
             }

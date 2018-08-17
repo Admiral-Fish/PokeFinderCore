@@ -156,7 +156,7 @@ QVector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
-            case Encounter::Wild:
+            case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
@@ -245,7 +245,7 @@ QVector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
-            case Encounter::Wild:
+            case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
@@ -359,7 +359,7 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
-            case Encounter::Wild:
+            case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::jSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
@@ -472,7 +472,7 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
-            case Encounter::Wild:
+            case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
@@ -573,7 +573,7 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
-            case Encounter::Wild:
+            case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
@@ -691,7 +691,7 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
         // Check what encounter we are doing and get the necessary slot
         switch (encounterType)
         {
-            case Encounter::Wild:
+            case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::kSlot(rngList[0], encounterType));
                 if (!compare.compareSlot(frame))
                     continue;

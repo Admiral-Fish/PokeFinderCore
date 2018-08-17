@@ -207,7 +207,7 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
                 {
                     switch (encounterType)
                     {
-                        case Encounter::Wild:
+                        case Encounter::Grass:
                             slot = testRNG.getSeed();
                             frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -303,7 +303,7 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
                 {
                     switch (encounterType)
                     {
-                        case Encounter::Wild:
+                        case Encounter::Grass:
                             slot = testRNG.getSeed();
                             frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -340,7 +340,7 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
                 {
                     switch (encounterType)
                     {
-                        case Encounter::Wild:
+                        case Encounter::Grass:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -427,7 +427,7 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
 
                 switch (encounterType)
                 {
-                    case Encounter::Wild:
+                    case Encounter::Grass:
                         slot = seed;
                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                         frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -550,7 +550,7 @@ QVector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u3
 
                     switch (encounterType)
                     {
-                        case Encounter::Wild:
+                        case Encounter::Grass:
                             slot = testRNG.getSeed();
                             frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -652,7 +652,7 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                         frame.setLeadType(Lead::None);
                         switch (encounterType)
                         {
-                            case Encounter::Wild:
+                            case Encounter::Grass:
                                 slot = testRNG.getSeed();
                                 frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -696,7 +696,7 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                             u32 level;
                             switch (encounterType)
                             {
-                                case Encounter::Wild:
+                                case Encounter::Grass:
                                     slot = frame.getSeed();
                                     frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                                     frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -739,7 +739,7 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                         frame.setLeadType(Lead::Synchronize);
                         switch (encounterType)
                         {
-                            case Encounter::Wild:
+                            case Encounter::Grass:
                                 slot = testRNG.getSeed();
                                 frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -789,7 +789,7 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
 
                 switch (encounterType)
                 {
-                    case Encounter::Wild:
+                    case Encounter::Grass:
                         slot = seed;
                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                         frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -913,7 +913,7 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
                 {
                     switch (encounterType)
                     {
-                        case Encounter::Wild:
+                        case Encounter::Grass:
                             slot = testRNG.getSeed();
                             frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1018,7 +1018,7 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                 {
                     switch (encounterType)
                     {
-                        case Encounter::Wild:
+                        case Encounter::Grass:
                             slot = testRNG.getSeed();
                             frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1058,7 +1058,7 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                 {
                     switch (encounterType)
                     {
-                        case Encounter::Wild:
+                        case Encounter::Grass:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1145,7 +1145,7 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
 
                 switch (encounterType)
                 {
-                    case Encounter::Wild:
+                    case Encounter::Grass:
                         slot = seed;
                         frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                         frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1267,7 +1267,7 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
                     frame.setLeadType(Lead::None);
                     switch (encounterType)
                     {
-                        case Encounter::Wild:
+                        case Encounter::Grass:
                             slot = testRNG.getSeed();
                             frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1369,7 +1369,7 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                         frame.setLeadType(Lead::None);
                         switch (encounterType)
                         {
-                            case Encounter::Wild:
+                            case Encounter::Grass:
                                 slot = testRNG.getSeed();
                                 frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1413,7 +1413,7 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                             u32 level;
                             switch (encounterType)
                             {
-                                case Encounter::Wild:
+                                case Encounter::Grass:
                                     slot = frame.getSeed();
                                     frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                     frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1456,7 +1456,7 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                         frame.setLeadType(Lead::Synchronize);
                         switch (encounterType)
                         {
-                            case Encounter::Wild:
+                            case Encounter::Grass:
                                 slot = testRNG.getSeed();
                                 frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1506,7 +1506,7 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
 
                 switch (encounterType)
                 {
-                    case Encounter::Wild:
+                    case Encounter::Grass:
                         slot = seed;
                         frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                         frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));

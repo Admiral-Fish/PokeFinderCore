@@ -23,7 +23,7 @@
 // All the different encounter types wild pokémon can have
 enum Encounter
 {
-    Wild,
+    Grass,
     RockSmash,
     Surfing,
     OldRod,
