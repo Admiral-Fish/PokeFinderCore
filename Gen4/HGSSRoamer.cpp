@@ -31,7 +31,7 @@ HGSSRoamer::HGSSRoamer(u32 seed, QVector<bool> roamers, QVector<u16> routes)
             skips++;
             raikouRoute = getRouteJ(rng.nextUShort());
         }
-        while (routes[0] != raikouRoute);
+        while (routes[0] == raikouRoute);
     }
 
     if (roamers[1])
@@ -41,7 +41,7 @@ HGSSRoamer::HGSSRoamer(u32 seed, QVector<bool> roamers, QVector<u16> routes)
             skips++;
             enteiRoute = getRouteJ(rng.nextUShort());
         }
-        while (routes[1] != enteiRoute);
+        while (routes[1] == enteiRoute);
     }
 
     if (roamers[2])
@@ -51,7 +51,7 @@ HGSSRoamer::HGSSRoamer(u32 seed, QVector<bool> roamers, QVector<u16> routes)
             skips++;
             latiRoute = getRouteK(rng.nextUShort());
         }
-        while (routes[2] != latiRoute);
+        while (routes[2] == latiRoute);
     }
 }
 
