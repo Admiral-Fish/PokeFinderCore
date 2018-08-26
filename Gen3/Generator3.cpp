@@ -54,32 +54,32 @@ QVector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
     Frame3 frame(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    for (int i = 0; i < 12; i++)
-        rngList.append(rng->nextUShort());
+    u16 *rngArray = new u16[maxResults + 12];
+    for (u32 i = 0; i < maxResults + 12; i++)
+        rngArray[i] = rng->nextUShort();
 
     // Method Channel [SEED] [SID] [PID] [PID] [BERRY] [GAME ORIGIN] [OT GENDER] [IV] [IV] [IV] [IV] [IV] [IV]
 
-    u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
+    for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
-        frame.setIDs(40122, rngList[0], 40122 ^ rngList[0]);
+        frame.setIDs(40122, rngArray[cnt], 40122 ^ rngArray[cnt]);
 
-        if ((rngList[2] > 7 ? 0 : 1) != (rngList[1] ^ 40122 ^ rngList[0]))
-            frame.setPID(rngList[2], rngList[1] ^ 0x8000);
+        if ((rngArray[2 + cnt] > 7 ? 0 : 1) != (rngArray[1 + cnt] ^ 40122 ^ rngArray[cnt]))
+            frame.setPID(rngArray[2 + cnt], rngArray[1 + cnt] ^ 0x8000);
         else
-            frame.setPID(rngList[2], rngList[1]);
+            frame.setPID(rngArray[2 + cnt], rngArray[1 + cnt]);
         if (!compare.comparePID(frame))
             continue;
 
-        frame.setIVsManual(rngList[6] >> 11, rngList[7] >> 11, rngList[8] >> 11, rngList[10] >> 11, rngList[11] >> 11, rngList[9] >> 11);
+        frame.setIVsManual(rngArray[6 + cnt] >> 11, rngArray[7 + cnt] >> 11, rngArray[8 + cnt] >> 11, rngArray[10 + cnt] >> 11, rngArray[11 + cnt] >> 11, rngArray[9 + cnt] >> 11);
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.setFrame(cnt);
+        frame.setFrame(cnt + initialFrame);
         frames.append(frame);
     }
-    rngList.clear();
 
+    delete[] rngArray;
     return frames;
 }
 
@@ -90,58 +90,57 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
     Frame3 frame(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    for (int i = 0; i < 20; i++)
-        rngList.append(rng->nextUShort());
-    size = 18;
-
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2;
-    int hunt = 0;
+    u32 pid, pid1, pid2, val1, val2;
+    u32 hunt = 0;
 
     u16 rate = encounter.getEncounterRate() * 16;
     bool rock = rate == 2880;
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++)
     {
+        PokeRNG go(rng->nextUInt());
+        hunt = 2;
+
         switch (encounterType)
         {
             case Encounter::RockSmash:
-                hunt = rock ? 0 : 1;
-                if ((rngList[hunt++] % 2880) >= rate)
+                if (!rock)
+                    go.nextUInt();
+                if (((go.getSeed() >> 16)  % 2880) >= rate)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], encounterType));
+                frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
-                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[hunt++]));
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 break;
             case Encounter::SafariZone:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[0], encounterType));
+                frame.setEncounterSlot(EncounterSlot::hSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
-                hunt = 3;
+                go.advanceFrames(2);
                 break;
             case Encounter::Grass:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
+                frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
-                hunt = 3;
+                go.advanceFrames(1);
                 break;
             case Encounter::Surfing:
             case Encounter::OldRod:
             case Encounter::GoodRod:
             case Encounter::SuperRod:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
+                frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
-                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[2]));
-                hunt = 3;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 break;
             default:
                 break;
@@ -149,18 +148,17 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Grab the hunt nature
-        frame.setNature(rngList[hunt] % 25);
+        frame.setNature(go.nextUShort() % 25);
         if (!compare.compareNature(frame))
             continue;
 
         // Now search for a Method 124 PID that matches our hunt nature
         do
         {
-            if (hunt >= size)
-                refill();
-            pid2 = rngList[++hunt];
-            pid1 = rngList[++hunt];
+            pid2 = go.nextUShort();
+            pid1 = go.nextUShort();
             pid = (pid1 << 16) | pid2;
+            hunt += 2;
         }
         while (pid % 25 != frame.getNature());
 
@@ -168,19 +166,32 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
         if (!compare.comparePID(frame))
             continue;
 
-        if (hunt >= size)
-            refill();
-
         // Valid PID is found now time to generate IVs
-        frame.setIVs(rngList[hunt + iv1], rngList[hunt + iv2]);
+        if (frameType == Method::MethodH1)
+        {
+            val1 = go.nextUShort();
+            val2 = go.nextUShort();
+        }
+        else if (frameType == Method::MethodH2)
+        {
+            go.nextUInt();
+            val1 = go.nextUShort();
+            val2 = go.nextUShort();
+        }
+        else
+        {
+            val1 = go.nextUShort();
+            go.nextUInt();
+            val2 = go.nextUShort();
+        }
+        frame.setIVs(val1, val2);
         if (!compare.compareIVs(frame))
             continue;
 
         frame.setFrame(cnt);
-        frame.setOccidentary(static_cast<u32>(hunt) + cnt - 1);
+        frame.setOccidentary(hunt + cnt);
         frames.append(frame);
     }
-    rngList.clear();
 
     return frames;
 }
@@ -192,58 +203,57 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
     Frame3 frame(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    for (int i = 0; i < 20; i++)
-        rngList.append(rng->nextUShort());
-    size = 18;
-
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2;
-    int hunt = 0;
+    u32 pid, pid1, pid2, val1, val2;
+    u32 hunt = 0;
 
     u16 rate = encounter.getEncounterRate() * 16;
     bool rock = rate == 2880;
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++)
     {
+        PokeRNG go(rng->nextUInt());
+        hunt = 2;
+
         switch (encounterType)
         {
             case Encounter::RockSmash:
-                hunt = rock ? 0 : 1;
-                if ((rngList[hunt++] % 2880) >= rate)
+                if (!rock)
+                    go.nextUInt();
+                if (((go.getSeed() >> 16)  % 2880) >= rate)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], encounterType));
+                frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
-                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[hunt++]));
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 break;
             case Encounter::SafariZone:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[0], encounterType));
+                frame.setEncounterSlot(EncounterSlot::hSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
-                hunt = 3;
+                go.advanceFrames(2);
                 break;
             case Encounter::Grass:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
+                frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
-                hunt = 3;
+                go.advanceFrames(1);
                 break;
             case Encounter::Surfing:
             case Encounter::OldRod:
             case Encounter::GoodRod:
             case Encounter::SuperRod:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
+                frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
-                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[2]));
-                hunt = 3;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 break;
             default:
                 break;
@@ -251,21 +261,24 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
 
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Check by seeing if frame can synch
-        if ((rngList[hunt] & 1) == 0) // Frame is synchable so set nature to synch nature
+        if ((go.nextUShort() & 1) == 0) // Frame is synchable so set nature to synch nature
             frame.setNature(synchNature);
         else // Synch failed so grab hunt nature from next RNG call
-            frame.setNature(rngList[++hunt] % 25);
+        {
+            frame.setNature(go.nextUShort() % 25);
+            hunt++;
+        }
+
         if (!compare.compareNature(frame))
             continue;
 
         // Now search for a Method 124 PID that matches our hunt nature
         do
         {
-            if (hunt >= size)
-                refill();
-            pid2 = rngList[++hunt];
-            pid1 = rngList[++hunt];
+            pid2 = go.nextUShort();
+            pid1 = go.nextUShort();
             pid = (pid1 << 16) | pid2;
+            hunt += 2;
         }
         while (pid % 25 != frame.getNature());
 
@@ -273,19 +286,32 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         if (!compare.comparePID(frame))
             continue;
 
-        if (hunt >= size)
-            refill();
-
         // Valid PID is found now time to generate IVs
-        frame.setIVs(rngList[hunt + iv1], rngList[hunt + iv2]);
+        if (frameType == Method::MethodH1)
+        {
+            val1 = go.nextUShort();
+            val2 = go.nextUShort();
+        }
+        else if (frameType == Method::MethodH2)
+        {
+            go.nextUInt();
+            val1 = go.nextUShort();
+            val2 = go.nextUShort();
+        }
+        else
+        {
+            val1 = go.nextUShort();
+            go.nextUInt();
+            val2 = go.nextUShort();
+        }
+        frame.setIVs(val1, val2);
         if (!compare.compareIVs(frame))
             continue;
 
         frame.setFrame(cnt);
-        frame.setOccidentary(static_cast<u32>(hunt) + cnt - 1);
+        frame.setOccidentary(hunt + cnt);
         frames.append(frame);
     }
-    rngList.clear();
 
     return frames;
 }
@@ -297,13 +323,9 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
     Frame3 frame(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    for (int i = 0; i < 20; i++)
-        rngList.append(rng->nextUShort());
-    size = 18;
-
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2;
-    int hunt = 0;
+    u32 pid, pid1, pid2, val1, val2;
+    u32 hunt = 0;
 
     bool (*cuteCharm)(u32);
     switch (leadType)
@@ -338,84 +360,88 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
     u16 rate = encounter.getEncounterRate() * 16;
     bool rock = rate == 2880;
 
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
+    for (u32 cnt = initialFrame; cnt < max; cnt++)
     {
+        PokeRNG go(rng->nextUInt());
+        hunt = 3;
+
         switch (encounterType)
         {
             case Encounter::RockSmash:
-                hunt = rock ? 0 : 1;
-                if ((rngList[hunt++] % 2880) >= rate)
+                if (!rock)
+                    go.nextUInt();
+                if (((go.getSeed() >> 16)  % 2880) >= rate)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[hunt++], encounterType));
+                frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
-                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[hunt++]));
-                hunt++;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 break;
             case Encounter::SafariZone:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[0], encounterType));
+                frame.setEncounterSlot(EncounterSlot::hSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
-                hunt = 4;
+                go.advanceFrames(2);
                 break;
             case Encounter::Grass:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
+                frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
-                hunt = 4;
+                go.advanceFrames(1);
                 break;
             case Encounter::Surfing:
             case Encounter::OldRod:
             case Encounter::GoodRod:
             case Encounter::SuperRod:
-                frame.setEncounterSlot(EncounterSlot::hSlot(rngList[1], encounterType));
+                frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
 
-                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), rngList[2]));
-                hunt = 4;
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 break;
             default:
                 break;
         }
 
-        // Cute charm uses first call
-        // Call next RNG to determine hunt nature
-        frame.setNature(rngList[hunt] % 25);
-        if (!compare.compareNature(frame))
-            continue;
-
         // Check if cute charm will effect frame
-        if (rngList[hunt - 1] % 3 > 0)
+        if (go.nextUShort() % 3 > 0)
         {
+            // Call next RNG to determine hunt nature
+            frame.setNature(go.nextUShort() % 25);
+            if (!compare.compareNature(frame))
+                continue;
+
             // Now search for a Method 124 PID that matches our hunt nature and cute charm
             do
             {
-                if (hunt >= size)
-                    refill();
-                pid2 = rngList[++hunt];
-                pid1 = rngList[++hunt];
+                pid2 = go.nextUShort();
+                pid1 = go.nextUShort();
                 pid = (pid1 << 16) | pid2;
+                hunt += 2;
             }
             while (pid % 25 != frame.getNature() || !cuteCharm(pid));
         }
         else
         {
+            // Call next RNG to determine hunt nature
+            frame.setNature(go.nextUShort() % 25);
+            if (!compare.compareNature(frame))
+                continue;
+
             // Cute charm failed
             // Only search for a Method 124 PID that matches our hunt nature
             do
             {
-                if (hunt >= size)
-                    refill();
-                pid2 = rngList[++hunt];
-                pid1 = rngList[++hunt];
+                pid2 = go.nextUShort();
+                pid1 = go.nextUShort();
                 pid = (pid1 << 16) | pid2;
+                hunt += 2;
             }
             while (pid % 25 != frame.getNature());
         }
@@ -424,19 +450,32 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
         if (!compare.comparePID(frame))
             continue;
 
-        if (hunt >= size)
-            refill();
-
         // Valid PID is found now time to generate IVs
-        frame.setIVs(rngList[hunt + iv1], rngList[hunt + iv2]);
+        if (frameType == Method::MethodH1)
+        {
+            val1 = go.nextUShort();
+            val2 = go.nextUShort();
+        }
+        else if (frameType == Method::MethodH2)
+        {
+            go.nextUInt();
+            val1 = go.nextUShort();
+            val2 = go.nextUShort();
+        }
+        else
+        {
+            val1 = go.nextUShort();
+            go.nextUInt();
+            val2 = go.nextUShort();
+        }
+        frame.setIVs(val1, val2);
         if (!compare.compareIVs(frame))
             continue;
 
         frame.setFrame(cnt);
-        frame.setOccidentary(static_cast<u32>(hunt) + cnt - 1);
+        frame.setOccidentary(hunt + cnt);
         frames.append(frame);
     }
-    rngList.clear();
 
     return frames;
 }
@@ -448,26 +487,27 @@ QVector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
     Frame3 frame(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    for (int i = 0; i < 5; i++)
-        rngList.append(rng->nextUShort());
+    u16 *rngArray = new u16[maxResults + 5];
+    for (u32 i = 0; i < maxResults + 5; i++)
+        rngArray[i] = rng->nextUShort();
 
     // Method XD/Colo [SEED] [IVS] [IVS] [BLANK] [PID] [PID]
 
-    u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
+    for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
-        frame.setPID(rngList[4], rngList[3]);
+        frame.setPID(rngArray[4 + cnt], rngArray[3 + cnt]);
         if (!compare.comparePID(frame))
             continue;
 
-        frame.setIVs(rngList[0], rngList[1]);
+        frame.setIVs(rngArray[cnt], rngArray[1 + cnt]);
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.setFrame(cnt);
+        frame.setFrame(cnt + initialFrame);
         frames.append(frame);
     }
-    rngList.clear();
+
+    delete[] rngArray;
     return frames;
 }
 
@@ -478,29 +518,29 @@ QVector<Frame3> Generator3::generateMethod124(FrameCompare compare)
     Frame3 frame(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    for (int i = 0; i < 5; i++)
-        rngList.append(rng->nextUShort());
+    u16 *rngArray = new u16[maxResults + 5];
+    for (u32 i = 0; i < maxResults + 5; i++)
+        rngArray[i] = rng->nextUShort();
 
     // Method 1 [SEED] [PID] [PID] [IVS] [IVS]
     // Method 2 [SEED] [PID] [PID] [BLANK] [IVS] [IVS]
     // Method 4 [SEED] [PID] [PID] [IVS] [BLANK] [IVS]
 
-    u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
+    for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
-        frame.setPID(rngList[0], rngList[1]);
+        frame.setPID(rngArray[cnt], rngArray[1 + cnt]);
         if (!compare.comparePID(frame))
             continue;
 
-        frame.setIVs(rngList[iv1], rngList[iv2]);
+        frame.setIVs(rngArray[iv1 + cnt], rngArray[iv2 + cnt]);
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.setFrame(cnt);
+        frame.setFrame(cnt + initialFrame);
         frames.append(frame);
     }
-    rngList.clear();
 
+    delete[] rngArray;
     return frames;
 }
 
@@ -510,35 +550,28 @@ QVector<Frame3> Generator3::generateMethod1Reverse(FrameCompare compare)
     Frame3 frame(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    for (int i = 0; i < 4; i++)
-        rngList.append(rng->nextUShort());
+    u16 *rngArray = new u16[maxResults + 4];
+    for (u32 i = 0; i < maxResults + 4; i++)
+        rngArray[i] = rng->nextUShort();
 
     // Method 1 Reverse [SEED] [PID] [PID] [IVS] [IVS]
 
-    u32 max = initialFrame + maxResults;
-    for (u32 cnt = initialFrame; cnt < max; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
+    for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
-        frame.setPID(rngList[1], rngList[0]);
+        frame.setPID(rngArray[1 + cnt], rngArray[cnt]);
         if (!compare.comparePID(frame))
             continue;
 
-        frame.setIVs(rngList[2], rngList[3]);
+        frame.setIVs(rngArray[2 + cnt], rngArray[3 + cnt]);
         if (!compare.compareIVs(frame))
             continue;
 
-        frame.setFrame(cnt);
+        frame.setFrame(cnt + initialFrame);
         frames.append(frame);
     }
-    rngList.clear();
 
+    delete[] rngArray;
     return frames;
-}
-
-void Generator3::refill()
-{
-    for (int i = 0; i < 20; i++)
-        rngList.append(rng->nextUShort());
-    size += 20;
 }
 
 // Generates frames

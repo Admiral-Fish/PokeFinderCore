@@ -40,7 +40,7 @@ void LCRNG::advanceFrames(u32 frames)
 // Method for finding next 16 bit seed
 u16 LCRNG::nextUShort()
 {
-    return static_cast<u16>((nextUInt() >> 16));
+    return static_cast<u16>(nextUInt() >> 16);
 }
 
 // IRNG Member

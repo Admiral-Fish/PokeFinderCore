@@ -30,11 +30,9 @@ class Generator3: public Generator
 {
 
 private:
-    int iv1;
-    int iv2;
+    u16 iv1;
+    u16 iv2;
     LCRNG *rng = nullptr;
-    QVector<u16> rngList;
-    int size;
     EncounterArea3 encounter;
 
     QVector<Frame3> generateMethodChannel(FrameCompare compare);
@@ -44,7 +42,6 @@ private:
     QVector<Frame3> generateMethodXDColo(FrameCompare compare);
     QVector<Frame3> generateMethod124(FrameCompare compare);
     QVector<Frame3> generateMethod1Reverse(FrameCompare compare);
-    void refill();
     static inline bool cuteCharm125F(u32 pid) { return (pid & 0xff) < 31; }
     static inline bool cuteCharm875M(u32 pid) { return (pid & 0xff) >= 31; }
     static inline bool cuteCharm25F(u32 pid) { return (pid & 0xff) < 63; }
