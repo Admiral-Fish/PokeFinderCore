@@ -31,8 +31,6 @@ class Generator4 : public Generator
 
 private:
     PokeRNG *rng = nullptr;
-    int size;
-    QVector<u16> rngList;
     EncounterArea4 encounter;
 
     QVector<Frame4> generateMethod1(FrameCompare compare);
@@ -48,7 +46,6 @@ private:
                       u16 call6, u16 call7, u16 call8, u16 call9, u16 call10, u16 call11,
                       u16 call12, u16 call13);
     u16 chainedPIDHigh(u16 high, u16 low, u16 tid, u16 sid);
-    void refill();
 
 public:
     Generator4();
