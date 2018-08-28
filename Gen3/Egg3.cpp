@@ -40,44 +40,42 @@ Egg3::Egg3(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 
     frameType = method;
 }
 
-Egg3::~Egg3()
-{
-    delete rng;
-}
-
 QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
 {
     QVector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    int i;
+    u32 i;
     u32 pid = 0;
 
-    for (int x = 0; x < 19; x++)
-        rngList.append(rng->nextUShort());
+    PokeRNG rng(seed, initialFrame - 1);
+    u16 *rngArray = new u16[maxResults + 19];
+    for (u32 x = 0; x < maxResults + 19; x++)
+        rngArray[x] = rng.nextUShort();
 
     u32 val = initialFrame;
 
-    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()), val++)
+    u32 max = maxResults - initialFrame + 1;
+    for (u32 cnt = 0; cnt < max; cnt++, val++)
     {
         for (u32 redraw = minRedraw; redraw <= maxRedraw; redraw++)
         {
-            if (((rngList[0] * 100) / 0xFFFF) >= compatability)
+            if (((rngArray[cnt] * 100) / 0xFFFF) >= compatability)
                 continue;
 
             u32 offset = calibration + 3 * redraw;
 
             i = 1;
 
-            bool flag = everstone ? (rngList[i++] >> 15) == 0 : false;
+            bool flag = everstone ? (rngArray[cnt + i++] >> 15) == 0 : false;
 
             PokeRNG trng((val - offset) & 0xFFFF);
 
             if (!flag)
             {
                 // Lower PID
-                pid = (rngList[i] % 0xFFFE) + 1;
+                pid = (rngArray[i + cnt] % 0xFFFE) + 1;
 
                 // Upper PID
                 pid |= trng.nextUInt() & 0xFFFF0000;
@@ -96,7 +94,7 @@ QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
                         break;
 
                     // generate lower
-                    pid = rngList[i++];
+                    pid = rngArray[cnt + i++];
 
                     // generate upper
                     pid |= trng.nextUInt() & 0xFFFF0000;
@@ -112,7 +110,7 @@ QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
 
             if (compare.comparePID(frame))
             {
-                frame.setFrame(cnt - offset);
+                frame.setFrame(cnt + initialFrame - offset);
                 frame.setOccidentary(redraw);
                 frames.append(frame);
             }
@@ -124,6 +122,7 @@ QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
         return frameA.getFrame() < frameB.getFrame();
     });
 
+    delete[] rngArray;
     return frames;
 }
 
@@ -132,31 +131,33 @@ QVector<Frame3> Egg3::generateEmerald(FrameCompare compare)
     QVector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
-    for (int x = 0; x < 13; x++)
-        rngList.append(rng->nextUShort());
+    PokeRNG rng(seed, initialFrame - 1);
+    u16 *rngArray = new u16[maxResults + 13];
+    for (u32 x = 0; x < maxResults + 13; x++)
+        rngArray[x] = rng.nextUShort();
 
-    u32 iv1, iv2, inh1, inh2, inh3, par1, par2, par3;
+    u32 inh1, inh2, inh3, par1, par2, par3;
 
-    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
+    u32 max = maxResults - initialFrame + 1;
+    for (u32 cnt = 0; cnt < max; cnt++)
     {
-        iv1 = rngList[4];
-        iv2 = rngList[5];
-        inh1 = rngList[7];
-        inh2 = rngList[8];
-        inh3 = rngList[9];
-        par1 = rngList[10];
-        par2 = rngList[11];
-        par3 = rngList[12];
-        frame.setInheritanceEmerald(iv1, iv2, par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
+        inh1 = rngArray[7 + cnt];
+        inh2 = rngArray[8 + cnt];
+        inh3 = rngArray[9 + cnt];
+        par1 = rngArray[10 + cnt];
+        par2 = rngArray[11 + cnt];
+        par3 = rngArray[12 + cnt];
+        frame.setInheritanceEmerald(rngArray[4 + cnt], rngArray[5 + cnt], par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
                                     ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
 
         if (compare.compareIVs(frame))
         {
-            frame.setFrame(cnt);
+            frame.setFrame(cnt + initialFrame);
             frames.append(frame);
         }
     }
 
+    delete[] rngArray;
     return frames;
 }
 
@@ -165,30 +166,33 @@ QVector<Frame3> Egg3::generateEmeraldSplit(FrameCompare compare)
     QVector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
-    for (int x = 0; x < 14; x++)
-        rngList.append(rng->nextUShort());
+    PokeRNG rng(seed, initialFrame - 1);
+    u16 *rngArray = new u16[maxResults + 14];
+    for (u32 x = 0; x < maxResults + 14; x++)
+        rngArray[x] = rng.nextUShort();
 
-    u32 iv1, iv2, inh1, inh2, inh3, par1, par2, par3;
+    u32 inh1, inh2, inh3, par1, par2, par3;
 
-    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
+    u32 max = maxResults - initialFrame + 1;
+    for (u32 cnt = 0; cnt < max; cnt++)
     {
-        iv1 = rngList[4];
-        iv2 = rngList[6];
-        inh1 = rngList[8];
-        inh2 = rngList[9];
-        inh3 = rngList[10];
-        par1 = rngList[11];
-        par2 = rngList[12];
-        par3 = rngList[13];
-        frame.setInheritanceEmerald(iv1, iv2, par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
+        inh1 = rngArray[8 + cnt];
+        inh2 = rngArray[9 + cnt];
+        inh3 = rngArray[10 + cnt];
+        par1 = rngArray[11 + cnt];
+        par2 = rngArray[12 + cnt];
+        par3 = rngArray[13 + cnt];
+        frame.setInheritanceEmerald(rngArray[4 + cnt], rngArray[6 + cnt], par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
                                     ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
 
         if (compare.compareIVs(frame))
         {
-            frame.setFrame(cnt);
+            frame.setFrame(cnt + initialFrame);
             frames.append(frame);
         }
     }
+
+    delete[] rngArray;
     return frames;
 }
 
@@ -197,31 +201,33 @@ QVector<Frame3> Egg3::generateEmeraldAlternate(FrameCompare compare)
     QVector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
-    for (int x = 0; x < 14; x++)
-        rngList.append(rng->nextUShort());
+    PokeRNG rng(seed, initialFrame - 1);
+    u16 *rngArray = new u16[maxResults + 14];
+    for (u32 x = 0; x < maxResults + 14; x++)
+        rngArray[x] = rng.nextUShort();
 
-    u32 iv1, iv2, inh1, inh2, inh3, par1, par2, par3;
+    u32 inh1, inh2, inh3, par1, par2, par3;
 
-    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
+    u32 max = maxResults - initialFrame + 1;
+    for (u32 cnt = 0; cnt < max; cnt++)
     {
-        iv1 = rngList[4];
-        iv2 = rngList[5];
-        inh1 = rngList[8];
-        inh2 = rngList[9];
-        inh3 = rngList[10];
-        par1 = rngList[11];
-        par2 = rngList[12];
-        par3 = rngList[13];
-        frame.setInheritanceEmerald(iv1, iv2, par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
+        inh1 = rngArray[8 + cnt];
+        inh2 = rngArray[9 + cnt];
+        inh3 = rngArray[10 + cnt];
+        par1 = rngArray[11 + cnt];
+        par2 = rngArray[12 + cnt];
+        par3 = rngArray[13 + cnt];
+        frame.setInheritanceEmerald(rngArray[4 + cnt], rngArray[5 + cnt], par1 & 1, par2 & 1, par3 & 1, HABCDS[inh1 % 6],
                                     ABCDS[inh2 % 5], ACDS[inh3 & 3], parent1, parent2);
 
         if (compare.compareIVs(frame))
         {
-            frame.setFrame(cnt);
+            frame.setFrame(cnt + initialFrame);
             frames.append(frame);
         }
     }
 
+    delete[] rngArray;
     return frames;
 }
 
@@ -230,23 +236,27 @@ QVector<Frame3> Egg3::generateLower(FrameCompare compare)
     QVector<Frame3> frames;
     Frame3 frame = Frame3(tid, sid, psv);
 
-    for (int x = 0; x < 2; x++)
-        rngList.append(rng->nextUShort());
+    PokeRNG rng(seed, initialFrame - 1);
+    u16 *rngArray = new u16[maxResults + 2];
+    for (u32 x = 0; x < maxResults + 2; x++)
+        rngArray[x] = rng.nextUShort();
 
-    for (u32 cnt = initialFrame; cnt <= maxResults; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
+    u32 max = maxResults - initialFrame + 1;
+    for (u32 cnt = 0; cnt < max; cnt++)
     {
-        if (((rngList[0] * 100) / 0xFFFF) >= compatability)
+        if (((rngArray[cnt] * 100) / 0xFFFF) >= compatability)
             continue;
 
-        frame.setPID((rngList[1] % 0xFFFE) + 1);
+        frame.setPID((rngArray[1 + cnt] % 0xFFFE) + 1);
 
         if (compare.compareGender(frame))
         {
-            frame.setFrame(cnt);
+            frame.setFrame(cnt + initialFrame);
             frames.append(frame);
         }
     }
 
+    delete[] rngArray;
     return frames;
 }
 
@@ -255,31 +265,31 @@ QVector<Frame3> Egg3::generateUpper(QVector<Frame3> lower, FrameCompare compare)
     QVector<Frame3> upper;
     Frame3 frame = Frame3(tid, sid, psv);
 
-    rngList.clear();
-    for (int x = 0; x < 14; x++)
-        rngList.append(rng->nextUShort());
+    PokeRNG rng(seed, minPickup - 1);
+    u16 *rngArray = new u16[maxResults + 14];
+    for (u32 x = 0; x < maxResults + 14; x++)
+        rngArray[x] = rng.nextUShort();
 
-    u32 iv1, iv2, inh1, inh2, inh3, par1, par2, par3;
+    u32 inh1, inh2, inh3, par1, par2, par3;
 
-    for (u32 cnt = minPickup; cnt <= maxPickup; cnt++, rngList.removeFirst(), rngList.append(rng->nextUShort()))
+    u32 max = maxPickup - minPickup + 1;
+    for (u32 cnt = 0; cnt < max; cnt++)
     {
-        frame.setPID(rngList[3]);
+        frame.setPID(rngArray[3 + cnt]);
 
-        iv1 = rngList[5];
-        iv2 = rngList[6];
-        inh1 = rngList[8];
-        inh2 = rngList[9];
-        inh3 = rngList[10];
-        par1 = rngList[11];
-        par2 = rngList[12];
-        par3 = rngList[13];
+        inh1 = rngArray[8 + cnt];
+        inh2 = rngArray[9 + cnt];
+        inh3 = rngArray[10 + cnt];
+        par1 = rngArray[11 + cnt];
+        par2 = rngArray[12 + cnt];
+        par3 = rngArray[13 + cnt];
 
-        frame.setInheritance(iv1, iv2, par1, par2, par3, inh1,
+        frame.setInheritance(rngArray[5 + cnt], rngArray[6 + cnt], par1, par2, par3, inh1,
                              inh2, inh3, parent1, parent2);
 
         if (compare.compareIVs(frame))
         {
-            frame.setOccidentary(cnt);
+            frame.setOccidentary(cnt + minPickup);
             upper.append(frame);
         }
     }
@@ -299,13 +309,12 @@ QVector<Frame3> Egg3::generateUpper(QVector<Frame3> lower, FrameCompare compare)
         }
     }
 
+    delete[] rngArray;
     return frames;
 }
 
 QVector<Frame3> Egg3::generate(FrameCompare compare)
 {
-    rng = new PokeRNG(seed, initialFrame - 1);
-
     switch (frameType)
     {
         case Method::EBredPID:
@@ -323,10 +332,7 @@ QVector<Frame3> Egg3::generate(FrameCompare compare)
                 if (lower.size() == 0)
                     return lower;
                 else
-                {
-                    rng->setSeed(seed, minPickup - 1);
                     return generateUpper(lower, compare);
-                }
             }
         default:
             return QVector<Frame3>();

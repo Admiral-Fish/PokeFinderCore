@@ -29,8 +29,6 @@ class Egg3 : public Egg
 {
 
 private:
-    PokeRNG *rng = nullptr;
-    QVector<u16> rngList;
     QVector<u32> parent1;
     QVector<u32> parent2;
     const u32 HABCDS[6] = { 0, 1, 2, 5, 3, 4 };
@@ -54,7 +52,6 @@ private:
 public:
     Egg3();
     Egg3(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 seed = 0);
-    ~Egg3();
     QVector<Frame3> generate(FrameCompare compare);
     void setParents(QVector<u32> parent1, QVector<u32> parent2);
     void setMinRedraw(const u32 &value);
