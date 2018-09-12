@@ -74,7 +74,8 @@ void Profile4::deleteProfile()
 
         if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
         {
-            QTextStream stream( &file );
+            QTextStream stream(&file);
+            stream.setCodec("UTF-8");
             stream << doc.toString();
         }
         file.close();
@@ -113,7 +114,8 @@ void Profile4::updateProfile(Profile4 original)
 
                     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
                     {
-                        QTextStream stream( &file );
+                        QTextStream stream(&file);
+                        stream.setCodec("UTF-8");
                         stream << doc.toString();
                     }
                     file.close();
@@ -169,7 +171,8 @@ void Profile4::saveProfile()
 
         if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
         {
-            QTextStream stream( &file );
+            QTextStream stream(&file);
+            stream.setCodec("UTF-8");
             stream << doc.toString();
         }
         file.close();

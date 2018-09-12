@@ -76,7 +76,8 @@ void Profile3::deleteProfile()
 
         if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
         {
-            QTextStream stream( &file );
+            QTextStream stream(&file);
+            stream.setCodec("UTF-8");
             stream << doc.toString();
         }
         file.close();
@@ -102,8 +103,8 @@ void Profile3::updateProfile(Profile3 original)
                 QString name = domElement.childNodes().at(0).toElement().text();
                 int ver = domElement.childNodes().at(1).toElement().text().toInt();
                 int lang = domElement.childNodes().at(2).toElement().text().toInt();
-                u32 id = domElement.childNodes().at(3).toElement().text().toUInt();
-                u32 id2 = domElement.childNodes().at(4).toElement().text().toUInt();
+                u16 id = domElement.childNodes().at(3).toElement().text().toUShort();
+                u16 id2 = domElement.childNodes().at(4).toElement().text().toUShort();
                 bool flag = domElement.childNodes().at(5).toElement().text() == "0" ? false : true;
 
                 if (original.profileName == name && original.version == ver && original.language == lang && original.tid == id && original.sid == id2 && original.deadBattery == flag)
@@ -117,7 +118,8 @@ void Profile3::updateProfile(Profile3 original)
 
                     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
                     {
-                        QTextStream stream( &file );
+                        QTextStream stream(&file);
+                        stream.setCodec("UTF-8");
                         stream << doc.toString();
                     }
                     file.close();
@@ -176,7 +178,8 @@ void Profile3::saveProfile()
 
         if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
         {
-            QTextStream stream( &file );
+            QTextStream stream(&file);
+            stream.setCodec("UTF-8");
             stream << doc.toString();
         }
         file.close();
