@@ -21,6 +21,7 @@
 #define PROFILE3_HPP
 
 #include <PokeFinderCore/Objects/Profile.hpp>
+
 class Profile3 : public Profile
 {
 
