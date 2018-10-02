@@ -25,15 +25,12 @@
 
 typedef uint32_t u32;
 
-class Nature
+namespace Nature
 {
-
-public:
-    static QStringList getNatures();
-    static QStringList getFrameNatures();
-    static u32 getAdjustedNature(u32 nature);
-    static u32 getReversedNature(u32 nature);
-
+    QStringList getNatures();
+    QStringList getFrameNatures();
+    u32 getAdjustedNature(u32 nature);
+    u32 getReversedNature(u32 nature);
 };
 
 #endif // NATURE_HPP

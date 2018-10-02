@@ -337,6 +337,143 @@ bool FrameCompare::compareGender(Frame frame)
     return true;
 }
 
+bool FrameCompare::compareFrame(Frame frame)
+{
+    if (skip)
+        return true;
+
+    if (shiny && !frame.getShiny())
+        return false;
+
+    if (!natures[static_cast<int>(frame.getNature())])
+        return false;
+
+    if (ability != 0 && ability - 1 != frame.getAbility())
+        return false;
+
+    switch (genderRatio)
+    {
+        case 1:
+            switch (gender)
+            {
+                case 1:
+                    if (frame.getGender() < 127)
+                        return false;
+
+                    break;
+                case 2:
+                    if (frame.getGender() >= 127)
+                        return false;
+
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case 2:
+            switch (gender)
+            {
+                case 1:
+                    if (frame.getGender() < 191)
+                        return false;
+
+                    break;
+                case 2:
+                    if (frame.getGender() >= 191)
+                        return false;
+
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case 3:
+            switch (gender)
+            {
+                case 1:
+                    if (frame.getGender() < 63)
+                        return false;
+
+                    break;
+                case 2:
+                    if (frame.getGender() >= 63)
+                        return false;
+
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case 4:
+            switch (gender)
+            {
+                case 1:
+                    if (frame.getGender() < 31)
+                        return false;
+
+                    break;
+                case 2:
+                    if (frame.getGender() >= 31)
+                        return false;
+
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case 5:
+            switch (gender)
+            {
+                case 2:
+                    return false;
+                default:
+                    break;
+            }
+            break;
+        case 6:
+            switch (gender)
+            {
+                case 1:
+                    return false;
+                default:
+                    break;
+            }
+            break;
+        default:
+            break;
+    }
+
+    if (!powers[static_cast<int>(frame.getHidden())])
+        return false;
+
+    for (int i = 0; i < 6; i++)
+    {
+        switch (eval[i])
+        {
+            case 1:
+                if (frame.getIV(i) != val[i])
+                    return false;
+                break;
+            case 2:
+                if (frame.getIV(i) < val[i])
+                    return false;
+                break;
+            case 3:
+                if (frame.getIV(i) > val[i])
+                    return false;
+                break;
+            case 4:
+                if (frame.getIV(i) == val[i])
+                    return false;
+                break;
+            default:
+                break;
+        }
+    }
+
+    return true;
+}
+
 u32 FrameCompare::getGenderRatio()
 {
     return genderRatio;

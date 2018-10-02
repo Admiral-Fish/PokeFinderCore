@@ -68,21 +68,19 @@ QVector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
             frame.setPID(rngArray[2 + cnt], rngArray[1 + cnt] ^ 0x8000);
         else
             frame.setPID(rngArray[2 + cnt], rngArray[1 + cnt]);
-        if (!compare.comparePID(frame))
-            continue;
 
         frame.setIVsManual(rngArray[6 + cnt] >> 11, rngArray[7 + cnt] >> 11, rngArray[8 + cnt] >> 11, rngArray[10 + cnt] >> 11, rngArray[11 + cnt] >> 11, rngArray[9 + cnt] >> 11);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt + initialFrame);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt + initialFrame);
+            frames.append(frame);
+        }
     }
 
     delete[] rngArray;
     return frames;
 }
-
 // Returns QVector of frames for Method H 1, 2, or 4
 QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
 {
@@ -163,8 +161,6 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
         while (pid % 25 != frame.getNature());
 
         frame.setPID(pid, pid1, pid2);
-        if (!compare.comparePID(frame))
-            continue;
 
         // Valid PID is found now time to generate IVs
         if (frameType == Method::MethodH1)
@@ -185,12 +181,13 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
             val2 = go.nextUShort();
         }
         frame.setIVs(val1, val2);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt);
-        frame.setOccidentary(hunt + cnt);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt);
+            frame.setOccidentary(hunt + cnt);
+            frames.append(frame);
+        }
     }
 
     return frames;
@@ -283,8 +280,6 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         while (pid % 25 != frame.getNature());
 
         frame.setPID(pid, pid1, pid2);
-        if (!compare.comparePID(frame))
-            continue;
 
         // Valid PID is found now time to generate IVs
         if (frameType == Method::MethodH1)
@@ -305,12 +300,13 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
             val2 = go.nextUShort();
         }
         frame.setIVs(val1, val2);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt);
-        frame.setOccidentary(hunt + cnt);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt);
+            frame.setOccidentary(hunt + cnt);
+            frames.append(frame);
+        }
     }
 
     return frames;
@@ -447,8 +443,6 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
         }
 
         frame.setPID(pid, pid1, pid2);
-        if (!compare.comparePID(frame))
-            continue;
 
         // Valid PID is found now time to generate IVs
         if (frameType == Method::MethodH1)
@@ -469,12 +463,13 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
             val2 = go.nextUShort();
         }
         frame.setIVs(val1, val2);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt);
-        frame.setOccidentary(hunt + cnt);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt);
+            frame.setOccidentary(hunt + cnt);
+            frames.append(frame);
+        }
     }
 
     return frames;
@@ -496,15 +491,14 @@ QVector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
     for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
         frame.setPID(rngArray[4 + cnt], rngArray[3 + cnt]);
-        if (!compare.comparePID(frame))
-            continue;
 
         frame.setIVs(rngArray[cnt], rngArray[1 + cnt]);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt + initialFrame);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt + initialFrame);
+            frames.append(frame);
+        }
     }
 
     delete[] rngArray;
@@ -529,15 +523,14 @@ QVector<Frame3> Generator3::generateMethod124(FrameCompare compare)
     for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
         frame.setPID(rngArray[cnt], rngArray[1 + cnt]);
-        if (!compare.comparePID(frame))
-            continue;
 
         frame.setIVs(rngArray[iv1 + cnt], rngArray[iv2 + cnt]);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt + initialFrame);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt + initialFrame);
+            frames.append(frame);
+        }
     }
 
     delete[] rngArray;
@@ -559,15 +552,14 @@ QVector<Frame3> Generator3::generateMethod1Reverse(FrameCompare compare)
     for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
         frame.setPID(rngArray[1 + cnt], rngArray[cnt]);
-        if (!compare.comparePID(frame))
-            continue;
 
         frame.setIVs(rngArray[2 + cnt], rngArray[3 + cnt]);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt + initialFrame);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt + initialFrame);
+            frames.append(frame);
+        }
     }
 
     delete[] rngArray;

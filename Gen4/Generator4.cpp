@@ -106,16 +106,15 @@ QVector<Frame4> Generator4::generateMethod1(FrameCompare compare)
     for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
         frame.setPID(rngArray[cnt], rngArray[1 + cnt]);
-        if (!compare.comparePID(frame))
-            continue;
 
         frame.setIVs(rngArray[2 + cnt], rngArray[3 + cnt]);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setSeed(rngArray[cnt]);
-        frame.setFrame(cnt + initialFrame);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setSeed(rngArray[cnt]);
+            frame.setFrame(cnt + initialFrame);
+            frames.append(frame);
+        }
     }
 
     delete[] rngArray;
@@ -193,19 +192,18 @@ QVector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
         while (pid % 25 != frame.getNature());
 
         frame.setPID(pid, pid2, pid1);
-        if (!compare.comparePID(frame))
-            continue;
 
         u16 val1 = go.nextUShort();
         u16 val2 = go.nextUShort();
 
         frame.setIVs(val1, val2);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt);
-        frame.setOccidentary(hunt + cnt);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt);
+            frame.setOccidentary(hunt + cnt);
+            frames.append(frame);
+        }
     }
 
     return frames;
@@ -280,19 +278,18 @@ QVector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
         while (pid % 25 != frame.getNature());
 
         frame.setPID(pid, pid2, pid1);
-        if (!compare.comparePID(frame))
-            continue;
 
         u16 val1 = go.nextUShort();
         u16 val2 = go.nextUShort();
 
         frame.setIVs(val1, val2);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt);
-        frame.setOccidentary(hunt + cnt);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt);
+            frame.setOccidentary(hunt + cnt);
+            frames.append(frame);
+        }
     }
 
     return frames;
@@ -403,18 +400,16 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
             frame.setOccidentary(hunt + cnt);
         }
 
-        if (!compare.comparePID(frame))
-            continue;
-
         u16 val1 = go.nextUShort();
         u16 val2 = go.nextUShort();
 
         frame.setIVs(val1, val2);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt);
+            frames.append(frame);
+        }
     }
 
     return frames;
@@ -504,19 +499,18 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
         while (pid % 25 != frame.getNature());
 
         frame.setPID(pid, pid2, pid1);
-        if (!compare.comparePID(frame))
-            continue;
 
         u16 val1 = go.nextUShort();
         u16 val2 = go.nextUShort();
 
         frame.setIVs(val1, val2);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt);
-        frame.setOccidentary(hunt + cnt);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt);
+            frame.setOccidentary(hunt + cnt);
+            frames.append(frame);
+        }
     }
 
     return frames;
@@ -604,19 +598,18 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
         while (pid % 25 != frame.getNature());
 
         frame.setPID(pid, pid2, pid1);
-        if (!compare.comparePID(frame))
-            continue;
 
         u16 val1 = go.nextUShort();
         u16 val2 = go.nextUShort();
 
         frame.setIVs(val1, val2);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt);
-        frame.setOccidentary(hunt + cnt);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt);
+            frame.setOccidentary(hunt + cnt);
+            frames.append(frame);
+        }
     }
 
     return frames;
@@ -738,18 +731,16 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
             frame.setOccidentary(hunt + cnt);
         }
 
-        if (!compare.comparePID(frame))
-            continue;
-
         u16 val1 = go.nextUShort();
         u16 val2 = go.nextUShort();
 
         frame.setIVs(val1, val2);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setFrame(cnt);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setFrame(cnt);
+            frames.append(frame);
+        }
     }
 
     return frames;
@@ -774,16 +765,15 @@ QVector<Frame4> Generator4::generateChainedShiny(FrameCompare compare)
         high = chainedPIDHigh(rngArray[2 + cnt], low, tid, sid);
 
         frame.setPID(low, high);
-        if (!compare.comparePID(frame))
-            continue;
 
         frame.setIVs(rngArray[16 + cnt], rngArray[17 + cnt]);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setSeed(rngArray[cnt]);
-        frame.setFrame(cnt + initialFrame);
-        frames.append(frame);
+        if (compare.compareFrame(frame))
+        {
+            frame.setSeed(rngArray[cnt]);
+            frame.setFrame(cnt + initialFrame);
+            frames.append(frame);
+        }
     }
 
     delete[] rngArray;
@@ -804,12 +794,13 @@ QVector<Frame4> Generator4::generateWondercardIVs(FrameCompare compare)
     for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
         frame.setIVs(rngArray[cnt], rngArray[1 + cnt]);
-        if (!compare.compareIVs(frame))
-            continue;
 
-        frame.setSeed(rngArray[cnt]);
-        frame.setFrame(cnt + initialFrame);
-        frames.append(frame);
+        if (compare.compareIVs(frame))
+        {
+            frame.setSeed(rngArray[cnt]);
+            frame.setFrame(cnt + initialFrame);
+            frames.append(frame);
+        }
     }
 
     delete[] rngArray;

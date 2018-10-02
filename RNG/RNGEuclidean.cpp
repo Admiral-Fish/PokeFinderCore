@@ -54,9 +54,9 @@ void RNGEuclidean::setupEuclidean(Method FrameType)
 }
 
 // Recovers origin seeds for two 16 bit calls(15 bits known)
-QVector<u32> RNGEuclidean::recoverLower16BitsIV(u32 first, u32 second)
+QVector<QPair<u32, u32>> RNGEuclidean::recoverLower16BitsIV(u32 first, u32 second)
 {
-    QVector<u32> origin;
+    QVector<QPair<u32, u32>> origin;
     u32 fullFirst, fullSecond;
 
     u64 t = static_cast<u32>(((second - sub1 * first) - sub2));
@@ -68,17 +68,16 @@ QVector<u32> RNGEuclidean::recoverLower16BitsIV(u32 first, u32 second)
         {
             fullFirst = first | static_cast<u32>((t / sub1));
             fullSecond = fullFirst * MULT + ADD;
-            origin.append(fullFirst);
-            origin.append(fullSecond);
+            origin.append(QPair<u32, u32>(fullFirst, fullSecond));
         }
     }
     return origin;
 }
 
 // Recovers origin seeds for two 16 bit calls
-QVector<u32> RNGEuclidean::recoverLower16BitsPID(u32 first, u32 second)
+QVector<QPair<u32, u32>> RNGEuclidean::recoverLower16BitsPID(u32 first, u32 second)
 {
-    QVector<u32> origin;
+    QVector<QPair<u32, u32>> origin;
     u32 fullFirst, fullSecond;
 
     u64 t = static_cast<u32>(((second - sub1 * first) - sub2));
@@ -88,10 +87,9 @@ QVector<u32> RNGEuclidean::recoverLower16BitsPID(u32 first, u32 second)
     {
         if ((t % sub1) < 0x10000)
         {
-            fullFirst = first | static_cast<u32>((t / sub1));
+            fullFirst = first | static_cast<u32>(t / sub1);
             fullSecond = fullFirst * MULT + ADD;
-            origin.append(fullFirst);
-            origin.append(fullSecond);
+            origin.append(QPair<u32, u32>(fullFirst, fullSecond));
         }
     }
     return origin;

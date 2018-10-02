@@ -32,13 +32,13 @@ RNGCache::RNGCache(Method MethodType)
 // Populates cache to use for brute forcing
 void RNGCache::populateMap()
 {
-    for (u32 i = 0; i < 256; i++)
+    for (u16 i = 0; i < 256; i++)
     {
         u32 right = mult * i + add;
-        u32 val = right >> 16;
+        u16 val = right >> 16;
 
         keys[val] = i;
-        keys[(val - 1) & 0xFFFF] = i;
+        keys[val - 1] = i;
     }
 }
 
@@ -71,10 +71,10 @@ QVector<u32> RNGCache::recoverLower16BitsIV(u32 first, u32 second)
     // flipped and unflipped to account for only knowing 15 bits
     u32 search1 = second - first * mult;
     u32 search2 = second - (first ^ 0x80000000) * mult;
-    QHash<u32, u32>::const_iterator locate;
+
     for (u32 i = 0; i < 256; i++, search1 -= k, search2 -= k)
     {
-        locate = keys.find(search1 >> 16);
+        auto locate = keys.find(search1 >> 16);
         if (locate != keys.end())
         {
             u32 test = first | (i << 8) | locate.value();
@@ -101,10 +101,10 @@ QVector<u32> RNGCache::recoverLower16BitsPID(u32 first, u32 second)
 {
     QVector<u32> origin;
     u32 search = second - first * mult;
-    QHash<u32, u32>::const_iterator locate;
+
     for (u32 i = 0; i < 256; i++, search -= k)
     {
-        locate = keys.find(search >> 16);
+        auto locate = keys.find(search >> 16);
         if (locate != keys.end())
         {
             u32 test = first | (i << 8) | locate.value();

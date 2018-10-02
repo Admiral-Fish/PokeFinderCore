@@ -95,15 +95,15 @@ QVector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    QVector<u32> seeds = euclidean->recoverLower16BitsIV(first, second);
+    QVector<QPair<u32, u32>> seeds = euclidean->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
-    for (auto i = 0; i < size; i += 2)
+    for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        forward->setSeed(seeds[i + 1], 1);
+        forward->setSeed(seeds[i].second, 1);
         frame.setPID(forward->nextUShort(), forward->nextUShort());
-        frame.setSeed(seeds[i] * 0xB9B33155 + 0xA170F641);
+        frame.setSeed(seeds[i].first * 0xB9B33155 + 0xA170F641);
         if (compare.comparePID(frame))
         {
             switch (type)
@@ -347,15 +347,15 @@ QVector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    QVector<u32> seeds = euclidean->recoverLower16BitsIV(first, second);
+    QVector<QPair<u32, u32>> seeds = euclidean->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
-    for (auto i = 0; i < size; i += 2)
+    for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        forward->setSeed(seeds[i + 1], 1);
+        forward->setSeed(seeds[i].second, 1);
         frame.setPID(forward->nextUShort(), forward->nextUShort());
-        frame.setSeed(seeds[i] * 0xB9B33155 + 0xA170F641);
+        frame.setSeed(seeds[i].first * 0xB9B33155 + 0xA170F641);
         if (compare.comparePID(frame))
         {
             switch (type)
@@ -490,15 +490,15 @@ QVector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa,
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-    QVector<uint> seeds = euclidean->recoverLower16BitsIV(first, second);
+    QVector<QPair<u32, u32>> seeds = euclidean->recoverLower16BitsIV(first, second);
     auto size = seeds.size();
 
-    for (auto i = 0; i < size; i += 2)
+    for (auto i = 0; i < size; i++)
     {
         // Setup normal frame
-        forward->setSeed(seeds[i + 1], 1);
+        forward->setSeed(seeds[i].second, 1);
         frame.setPID(forward->nextUShort(), forward->nextUShort());
-        frame.setSeed(seeds[i] * 0xB9B33155 + 0xA170F641);
+        frame.setSeed(seeds[i].first * 0xB9B33155 + 0xA170F641);
         if (compare.comparePID(frame))
             frames.append(frame);
 

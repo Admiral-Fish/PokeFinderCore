@@ -21,6 +21,7 @@
 #define RNGEUCLIDEAN_HPP
 
 #include <QVector>
+#include <QPair>
 #include <PokeFinderCore/Objects/Method.hpp>
 
 typedef uint64_t u64;
@@ -40,8 +41,8 @@ private:
 
 public:
     RNGEuclidean(Method FrameType);
-    QVector<u32> recoverLower16BitsIV(u32 first, u32 second);
-    QVector<u32> recoverLower16BitsPID(u32 first, u32 second);
+    QVector<QPair<u32, u32>> recoverLower16BitsIV(u32 first, u32 second);
+    QVector<QPair<u32, u32>> recoverLower16BitsPID(u32 first, u32 second);
     QVector<u32> recoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     void switchEuclidean(Method FrameType);
 

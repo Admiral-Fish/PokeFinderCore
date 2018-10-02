@@ -23,12 +23,9 @@
 #include <QStringList>
 #include <QTranslator>
 
-class Power
+namespace Power
 {
-
-public:
-    static QStringList getPowers();
-
+    QStringList getPowers();
 };
 
 #endif // POWER_HPP

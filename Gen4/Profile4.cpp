@@ -19,13 +19,57 @@
 
 #include "Profile4.hpp"
 
-Profile4::Profile4(QString profileName, Game version, u16 tid, u16 sid, int language) : Profile(profileName, version, tid, sid, language)
+Profile4::Profile4(QString profileName, Game version, u16 tid, u16 sid, Game dual, int radio, int language) : Profile(profileName, version, tid, sid, language)
 {
+    this->dual = dual;
+    this->radio = radio;
 }
 
 Profile4::Profile4() : Profile()
 {
     this->version = Diamond;
+}
+
+Game Profile4::getDualSlot()
+{
+    return dual;
+}
+
+int Profile4::getRadio()
+{
+    return radio;
+}
+
+QString Profile4::getDualSlotString()
+{
+    switch (dual)
+    {
+        case Game::Ruby:
+            return QObject::tr("Ruby");
+        case Game::Sapphire:
+            return QObject::tr("Sapphire");
+        case Game::FireRed:
+            return QObject::tr("Fire Red");
+        case Game::LeafGreen:
+            return QObject::tr("Leaf Green");
+        case Game::Emerald:
+            return QObject::tr("Emerald");
+        default:
+            return "-";
+    }
+}
+
+QString Profile4::getRadioString()
+{
+    switch (radio)
+    {
+        case 1:
+            return QObject::tr("Hoenn Sound");
+        case 2:
+            return QObject::tr("Sinnoh Sound");
+        default:
+            return "-";
+    }
 }
 
 void Profile4::deleteProfile()
@@ -103,14 +147,18 @@ void Profile4::updateProfile(Profile4 original)
                 int lang = domElement.childNodes().at(2).toElement().text().toInt();
                 u16 id = domElement.childNodes().at(3).toElement().text().toUShort();
                 u16 id2 = domElement.childNodes().at(4).toElement().text().toUShort();
+                int dualVer = domElement.childNodes().at(5).toElement().text().toInt();
+                int rad = domElement.childNodes().at(6).toElement().text().toInt();
 
-                if (original.profileName == name && original.version == ver && original.language == lang && original.tid == id && original.sid == id2)
+                if (original.profileName == name && original.version == ver && original.language == lang && original.tid == id && original.sid == id2 && original.dual == dualVer && original.radio == rad)
                 {
                     domElement.childNodes().at(0).toElement().firstChild().setNodeValue(profileName);
                     domElement.childNodes().at(1).toElement().firstChild().setNodeValue(QString::number(version));
                     domElement.childNodes().at(2).toElement().firstChild().setNodeValue(QString::number(language));
                     domElement.childNodes().at(3).toElement().firstChild().setNodeValue(QString::number(tid));
                     domElement.childNodes().at(4).toElement().firstChild().setNodeValue(QString::number(sid));
+                    domElement.childNodes().at(5).toElement().firstChild().setNodeValue(QString::number(dual));
+                    domElement.childNodes().at(6).toElement().firstChild().setNodeValue(QString::number(radio));
 
                     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
                     {
@@ -140,23 +188,29 @@ void Profile4::saveProfile()
         QDomElement profiles = doc.documentElement();
 
         QDomElement gen4 = doc.createElement("Gen4");
-        QDomElement profileNameE = doc.createElement("profileName");
-        QDomElement versionE = doc.createElement("version");
-        QDomElement languageE = doc.createElement("language");
-        QDomElement tidE = doc.createElement("tid");
-        QDomElement sidE = doc.createElement("sid");
+        QDomElement name = doc.createElement("profileName");
+        QDomElement ver = doc.createElement("version");
+        QDomElement lang = doc.createElement("language");
+        QDomElement id1 = doc.createElement("tid");
+        QDomElement id2 = doc.createElement("sid");
+        QDomElement dualVer = doc.createElement("dual");
+        QDomElement rad = doc.createElement("radio");
 
-        profileNameE.appendChild(doc.createTextNode(profileName));
-        versionE.appendChild(doc.createTextNode(QString::number(version)));
-        languageE.appendChild(doc.createTextNode(QString::number(language)));
-        tidE.appendChild(doc.createTextNode(QString::number(tid)));
-        sidE.appendChild(doc.createTextNode(QString::number(sid)));
+        name.appendChild(doc.createTextNode(profileName));
+        ver.appendChild(doc.createTextNode(QString::number(version)));
+        lang.appendChild(doc.createTextNode(QString::number(language)));
+        id1.appendChild(doc.createTextNode(QString::number(tid)));
+        id2.appendChild(doc.createTextNode(QString::number(sid)));
+        dualVer.appendChild(doc.createTextNode(QString::number(dual)));
+        rad.appendChild(doc.createTextNode(QString::number(radio)));
 
-        gen4.appendChild(profileNameE);
-        gen4.appendChild(versionE);
-        gen4.appendChild(languageE);
-        gen4.appendChild(tidE);
-        gen4.appendChild(sidE);
+        gen4.appendChild(name);
+        gen4.appendChild(ver);
+        gen4.appendChild(lang);
+        gen4.appendChild(id1);
+        gen4.appendChild(id2);
+        gen4.appendChild(dualVer);
+        gen4.appendChild(rad);
 
         if (profiles.isNull())
         {
@@ -205,6 +259,8 @@ QVector<Profile4> Profile4::loadProfileList()
                     int language = 0;
                     u16 tid = 0;
                     u16 sid = 0;
+                    int dual = 0;
+                    int radio = 0;
                     while (!info.isNull())
                     {
                         QDomElement infoElement = info.toElement();
@@ -212,30 +268,24 @@ QVector<Profile4> Profile4::loadProfileList()
                         {
                             const QString tagName(infoElement.tagName());
                             if (tagName == "profileName")
-                            {
                                 profileName = infoElement.text();
-                            }
                             else if (tagName == "version")
-                            {
                                 version = infoElement.text().toInt();
-                            }
                             else if (tagName == "language")
-                            {
                                 language = infoElement.text().toInt();
-                            }
                             else if (tagName == "tid")
-                            {
                                 tid = infoElement.text().toUShort();
-                            }
                             else if (tagName == "sid")
-                            {
                                 sid = infoElement.text().toUShort();
-                            }
+                            else if (tagName == "dual")
+                                dual = infoElement.text().toInt();
+                            else if (tagName == "radio")
+                                radio = infoElement.text().toInt();
 
                             info = info.nextSibling();
                         }
                     }
-                    profileList.append(Profile4(profileName, static_cast<Game>(version), tid, sid, language));
+                    profileList.append(Profile4(profileName, static_cast<Game>(version), tid, sid, static_cast<Game>(dual), radio, language));
                 }
             }
             domNode = domNode.nextSibling();

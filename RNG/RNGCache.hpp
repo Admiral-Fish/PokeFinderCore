@@ -25,6 +25,7 @@
 #include <PokeFinderCore/Objects/Method.hpp>
 
 typedef uint32_t u32;
+typedef uint16_t u16;
 
 class RNGCache
 {
@@ -33,7 +34,7 @@ private:
     u32 add;
     u32 k;
     u32 mult;
-    QHash<u32, u32> keys;
+    QHash<u16, u16> keys;
 
     void populateMap();
     void setupCache(Method MethodType);

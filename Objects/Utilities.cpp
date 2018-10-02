@@ -33,31 +33,27 @@ u32 Utilities::calcGen4Seed(QDateTime dateTime, u32 delay)
     QDate date = dateTime.date();
     QTime time = dateTime.time();
 
-    u32 ab = static_cast<u32>(date.month() * date.day() + time.minute() + time.second());
+    u32 ab = static_cast<u8>(date.month() * date.day() + time.minute() + time.second());
     u32 cd = static_cast<u32>(time.hour());
 
     return ((ab << 24) | (cd << 16)) + delay;
 }
 
-bool Utilities::shiny(u32 pid, u32 tid, u32 sid)
+bool Utilities::shiny(u32 pid, u16 tid, u16 sid)
 {
-    return (((pid & 0xFFFF) ^ (pid >> 16) ^ tid ^ sid) < 8);
+    return ((pid & 0xFFFF) ^ (pid >> 16) ^ tid ^ sid) < 8;
 }
 
 QString Utilities::coinFlips(u32 seed, int flips)
 {
-    QString coins = "";
+    QStringList coins;
 
     MersenneTwister rng(seed);
 
     for (int i = 0; i < flips; i++)
-    {
-        coins += (rng.nextUInt() & 1) == 0 ? "T" : "H";
+        coins.append((rng.nextUInt() & 1) == 0 ? "T" : "H");
 
-        if (i != (flips - 1))
-            coins += ", ";
-    }
-    return coins;
+    return coins.join(", ");
 }
 
 QString Utilities::getCalls(u32 seed, int num, HGSSRoamer info)

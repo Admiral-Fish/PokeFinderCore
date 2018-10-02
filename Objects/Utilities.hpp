@@ -28,17 +28,16 @@
 #include <PokeFinderCore/Gen4/HGSSRoamer.hpp>
 
 typedef uint32_t u32;
+typedef uint16_t u16;
+typedef uint8_t u8;
 
-class Utilities
+namespace Utilities
 {
-
-public:
-    static u32 calcGen3Seed(QDate time, u32 h, u32 m);
-    static u32 calcGen4Seed(QDateTime dateTime, u32 delay);
-    static bool shiny(u32 pid, u32 tid, u32  sid);
-    static QString coinFlips(u32 seed, int flips);
-    static QString getCalls(u32 seed, int num, HGSSRoamer info);
-
+    u32 calcGen3Seed(QDate time, u32 h, u32 m);
+    u32 calcGen4Seed(QDateTime dateTime, u32 delay);
+    bool shiny(u32 pid, u16 tid, u16  sid);
+    QString coinFlips(u32 seed, int flips);
+    QString getCalls(u32 seed, int num, HGSSRoamer info);
 };
 
 #endif // UTILITIES_HPP

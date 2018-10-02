@@ -53,6 +53,7 @@ public:
     bool compareHiddenPower(Frame frame);
     bool compareSlot(Frame frame);
     bool compareGender(Frame frame);
+    bool compareFrame(Frame frame);
     u32 getGenderRatio();
 
 };
