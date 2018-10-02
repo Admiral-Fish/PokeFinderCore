@@ -55,7 +55,7 @@ QString Profile4::getDualSlotString()
         case Game::Emerald:
             return QObject::tr("Emerald");
         default:
-            return "-";
+            return QObject::tr("None");
     }
 }
 
@@ -68,7 +68,7 @@ QString Profile4::getRadioString()
         case 2:
             return QObject::tr("Sinnoh Sound");
         default:
-            return "-";
+            return QObject::tr("None");
     }
 }
 
