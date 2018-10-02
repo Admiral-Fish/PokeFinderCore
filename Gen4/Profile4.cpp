@@ -27,7 +27,9 @@ Profile4::Profile4(QString profileName, Game version, u16 tid, u16 sid, Game dua
 
 Profile4::Profile4() : Profile()
 {
-    this->version = Diamond;
+    version = Game::Diamond;
+    dual = Game::Blank;
+    radio = 0;
 }
 
 Game Profile4::getDualSlot()

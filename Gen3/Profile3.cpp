@@ -26,8 +26,8 @@ Profile3::Profile3(QString profileName, Game version, u16 tid, u16 sid, int lang
 
 Profile3::Profile3()
 {
-    this->deadBattery = false;
-    this->version = Emerald;
+    deadBattery = false;
+    version = Game::Emerald;
 }
 
 void Profile3::deleteProfile()
