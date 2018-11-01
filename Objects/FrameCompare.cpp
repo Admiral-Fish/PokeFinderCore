@@ -19,8 +19,8 @@
 
 #include "FrameCompare.hpp"
 
-FrameCompare::FrameCompare(QVector<u32> eval, QVector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
-                           QVector<bool> nature, QVector<bool> power, bool onlyShiny, bool skipCompare)
+FrameCompare::FrameCompare(const QVector<u32> &eval, const QVector<u32> &values, int genderIndex, int genderRatioIndex, int abilityIndex,
+                           const QVector<bool> &nature, const QVector<bool> &power, bool onlyShiny, bool skipCompare)
 {
     this->eval = eval;
     val = values;
@@ -39,8 +39,8 @@ FrameCompare::FrameCompare(QVector<u32> eval, QVector<u32> values, int genderInd
     skip = skipCompare;
 }
 
-FrameCompare::FrameCompare(QVector<u32> eval, QVector<u32> values, int genderIndex, int genderRatioIndex, int abilityIndex,
-                           QVector<bool> nature, QVector<bool> power, bool onlyShiny, bool skipCompare, QVector<bool> encounter)
+FrameCompare::FrameCompare(const QVector<u32> &eval, const QVector<u32> &values, int genderIndex, int genderRatioIndex, int abilityIndex,
+                           const QVector<bool> &nature, const QVector<bool> &power, bool onlyShiny, bool skipCompare, const QVector<bool> &encounter)
 {
     this->eval = eval;
     val = values;
@@ -74,14 +74,14 @@ FrameCompare::FrameCompare(int genderIndex, int genderRatioIndex, int abilityInd
     skip = false;
 }
 
-FrameCompare::FrameCompare(QVector<u32> eval, QVector<u32> values, QVector<bool> power)
+FrameCompare::FrameCompare(const QVector<u32> &eval, const QVector<u32> &values, const QVector<bool> &power)
 {
     this->eval = eval;
     val = values;
     powers = power;
 }
 
-bool FrameCompare::comparePID(Frame frame)
+bool FrameCompare::comparePID(const Frame &frame)
 {
     if (skip)
         return true;
@@ -190,7 +190,7 @@ bool FrameCompare::comparePID(Frame frame)
     return true;
 }
 
-bool FrameCompare::compareIVs(Frame frame)
+bool FrameCompare::compareIVs(const Frame &frame)
 {
     if (skip)
         return true;
@@ -226,22 +226,22 @@ bool FrameCompare::compareIVs(Frame frame)
     return true;
 }
 
-bool FrameCompare::compareNature(Frame frame)
+bool FrameCompare::compareNature(const Frame &frame)
 {
     return natures[static_cast<int>(frame.getNature())];
 }
 
-bool FrameCompare::compareHiddenPower(Frame frame)
+bool FrameCompare::compareHiddenPower(const Frame &frame)
 {
     return powers[static_cast<int>(frame.getHidden())];
 }
 
-bool FrameCompare::compareSlot(Frame frame)
+bool FrameCompare::compareSlot(const Frame &frame)
 {
     return encounterSlots[static_cast<int>(frame.getEncounterSlot())];
 }
 
-bool FrameCompare::compareGender(Frame frame)
+bool FrameCompare::compareGender(const Frame &frame)
 {
     switch (genderRatio)
     {
@@ -337,7 +337,7 @@ bool FrameCompare::compareGender(Frame frame)
     return true;
 }
 
-bool FrameCompare::compareFrame(Frame frame)
+bool FrameCompare::compareFrame(const Frame &frame)
 {
     if (skip)
         return true;

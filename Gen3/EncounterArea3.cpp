@@ -19,7 +19,7 @@
 
 #include "EncounterArea3.hpp"
 
-EncounterArea3::EncounterArea3(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel, u32 delay)
+EncounterArea3::EncounterArea3(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel, u32 delay)
     : EncounterArea(location, type, species, minLevel, maxLevel)
 {
     this->delay = delay;

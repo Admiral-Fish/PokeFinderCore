@@ -38,7 +38,7 @@ private:
     QVector<bool> roamers;
 
 public:
-    HGSSRoamer() {}
+    HGSSRoamer() = default;
     HGSSRoamer(u32 seed, QVector<bool> roamers, QVector<u16> routes);
     int getSkips() const;
     u16 getRaikouRoute() const;

@@ -29,8 +29,8 @@
 #include <PokeFinderCore/Objects/Utilities.hpp>
 #include <PokeFinderCore/RNG/LCRNG.hpp>
 
-typedef uint32_t u32;
-typedef uint16_t u16;
+using u32 = uint32_t;
+using u16 = uint16_t;
 
 class Searcher
 {

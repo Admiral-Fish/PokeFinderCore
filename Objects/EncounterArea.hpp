@@ -24,7 +24,8 @@
 #include <PokeFinderCore/Objects/Encounter.hpp>
 #include <PokeFinderCore/Translator.hpp>
 
-typedef uint32_t u32;
+using u32 = uint32_t;
+using u16 = uint16_t;
 
 class EncounterArea
 {
@@ -37,8 +38,8 @@ protected:
     Encounter type;
 
 public:
-    EncounterArea() {}
-    EncounterArea(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel);
+    EncounterArea() = default;
+    EncounterArea(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel);
     bool levelLocked(u32 slot);
     Encounter getType();
     int getLocation();

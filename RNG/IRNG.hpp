@@ -22,8 +22,8 @@
 
 #include <cstdint>
 
-typedef uint32_t u32;
-typedef uint16_t u16;
+using u32 = uint32_t;
+using u16 = uint16_t;
 
 class IRNG
 {
@@ -35,7 +35,7 @@ public:
     virtual void setSeed(u32 seed, u32 frames) = 0;
     virtual u32 getSeed() = 0;
     virtual void advanceFrames(u32 frames) = 0;
-    virtual ~IRNG() { }
+    virtual ~IRNG() = default;
 
 };
 

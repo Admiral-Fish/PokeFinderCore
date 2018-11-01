@@ -20,7 +20,7 @@
 #include "Utilities.hpp"
 
 // Returns initial seed for Ruby/Sapphire live battery given date and time
-u32 Utilities::calcGen3Seed(QDate time, u32 h, u32 m)
+u32 Utilities::calcGen3Seed(const QDate &time, u32 h, u32 m)
 {
     u32 d = static_cast<u32>(QDate(time.year() == 2000 ? 1999 : 2000, 12, 31).daysTo(time));
 
@@ -28,7 +28,7 @@ u32 Utilities::calcGen3Seed(QDate time, u32 h, u32 m)
     return (seed >> 16) ^ (seed & 0xFFFF);
 }
 
-u32 Utilities::calcGen4Seed(QDateTime dateTime, u32 delay)
+u32 Utilities::calcGen4Seed(const QDateTime &dateTime, u32 delay)
 {
     QDate date = dateTime.date();
     QTime time = dateTime.time();
@@ -56,7 +56,7 @@ QString Utilities::coinFlips(u32 seed, int flips)
     return coins.join(", ");
 }
 
-QString Utilities::getCalls(u32 seed, int num, HGSSRoamer info)
+QString Utilities::getCalls(u32 seed, int num, const HGSSRoamer &info)
 {
     QString calls = "";
 

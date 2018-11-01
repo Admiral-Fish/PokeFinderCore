@@ -41,7 +41,7 @@ private:
 
 public:
     TinyMT(u32 seed, u32 frames = 0);
-    TinyMT(u32 st[], u32 frames = 0);
+    TinyMT(const u32 st[], u32 frames = 0);
     ~TinyMT() override { delete[] state; }
     void advanceFrames(u32 frames) override;
     void nextState();

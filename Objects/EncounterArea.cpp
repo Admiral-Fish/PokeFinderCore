@@ -19,7 +19,7 @@
 
 #include "EncounterArea.hpp"
 
-EncounterArea::EncounterArea(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel)
+EncounterArea::EncounterArea(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel)
 {
     this->type = type;
     this->location = location;
@@ -74,8 +74,8 @@ QVector<bool> EncounterArea::getSlots(u32 num)
 {
     QVector<bool> flags;
 
-    for (int i = 0; i < species.size(); i++)
-        flags.append(species[i] == static_cast<int>(num));
+    for (int specie : species)
+        flags.append(specie == static_cast<int>(num));
 
     return flags;
 }

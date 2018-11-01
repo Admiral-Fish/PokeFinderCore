@@ -19,7 +19,7 @@
 
 #include "Translator.hpp"
 
-QStringList Translator::getSpecies(QVector<int> nums)
+QStringList Translator::getSpecies(const QVector<int> &nums)
 {
     QStringList species;
 
@@ -42,7 +42,7 @@ QStringList Translator::getSpecies(QVector<int> nums)
     return species;
 }
 
-QStringList Translator::getLocationsGen3(QVector<int> nums)
+QStringList Translator::getLocationsGen3(const QVector<int> &nums)
 {
     QStringList locations;
 
@@ -65,7 +65,7 @@ QStringList Translator::getLocationsGen3(QVector<int> nums)
     return locations;
 }
 
-QStringList Translator::getLocationsGen4(QVector<int> nums)
+QStringList Translator::getLocationsGen4(const QVector<int> &nums)
 {
     QStringList locations;
 

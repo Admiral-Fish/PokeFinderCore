@@ -23,7 +23,7 @@
 #include <QStringList>
 #include <QTranslator>
 
-typedef uint32_t u32;
+using u32 = uint32_t;
 
 namespace Nature
 {

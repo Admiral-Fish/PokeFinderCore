@@ -19,14 +19,14 @@
 
 #include "EncounterArea4.hpp"
 
-EncounterArea4::EncounterArea4(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel, Game dual, int time)
+EncounterArea4::EncounterArea4(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel, Game dual, int time)
     : EncounterArea(location, type, species, minLevel, maxLevel)
 {
     this->dual = dual;
     this->time = time;
 }
 
-EncounterArea4::EncounterArea4(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel, int sound, int time)
+EncounterArea4::EncounterArea4(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel, int sound, int time)
     : EncounterArea(location, type, species, minLevel, maxLevel)
 {
     this->sound = sound;

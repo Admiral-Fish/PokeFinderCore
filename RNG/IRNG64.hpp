@@ -22,8 +22,8 @@
 
 #include <cstdint>
 
-typedef uint64_t u64;
-typedef uint32_t u32;
+using u64 = uint64_t;
+using u32 = uint32_t;
 
 class IRNG64
 {
@@ -35,7 +35,7 @@ public:
     virtual void setSeed(u64 seed, u32 frames) = 0;
     virtual u64 getSeed() = 0;
     virtual void advanceFrames(u32 frames) = 0;
-    virtual ~IRNG64() { }
+    virtual ~IRNG64() = default;
 
 };
 

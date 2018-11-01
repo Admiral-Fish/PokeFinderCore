@@ -19,7 +19,7 @@
 
 #include "Profile3.hpp"
 
-Profile3::Profile3(QString profileName, Game version, u16 tid, u16 sid, int language, bool deadBattery) : Profile(profileName, version, tid, sid, language)
+Profile3::Profile3(const QString &profileName, Game version, u16 tid, u16 sid, int language, bool deadBattery) : Profile(profileName, version, tid, sid, language)
 {
     this->deadBattery = deadBattery;
 }
@@ -105,7 +105,7 @@ void Profile3::updateProfile(Profile3 original)
                 int lang = domElement.childNodes().at(2).toElement().text().toInt();
                 u16 id = domElement.childNodes().at(3).toElement().text().toUShort();
                 u16 id2 = domElement.childNodes().at(4).toElement().text().toUShort();
-                bool flag = domElement.childNodes().at(5).toElement().text() == "0" ? false : true;
+                bool flag = domElement.childNodes().at(5).toElement().text() == "1";
 
                 if (original.profileName == name && original.version == ver && original.language == lang && original.tid == id && original.sid == id2 && original.deadBattery == flag)
                 {
@@ -241,7 +241,7 @@ QVector<Profile3> Profile3::loadProfileList()
                             }
                             else if (tagName == "deadBattery")
                             {
-                                deadBattery = (infoElement.text() == "1" ? true : false);
+                                deadBattery = infoElement.text() == "1";
                             }
 
                             info = info.nextSibling();

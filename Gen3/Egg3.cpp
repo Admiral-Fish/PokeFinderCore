@@ -50,7 +50,7 @@ QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
     u32 pid = 0;
 
     PokeRNG rng(seed, initialFrame - 1);
-    u16 *rngArray = new u16[maxResults + 19];
+    auto *rngArray = new u16[maxResults + 19];
     for (u32 x = 0; x < maxResults + 19; x++)
         rngArray[x] = rng.nextUShort();
 
@@ -132,7 +132,7 @@ QVector<Frame3> Egg3::generateEmerald(FrameCompare compare)
     Frame3 frame = Frame3(tid, sid, psv);
 
     PokeRNG rng(seed, initialFrame - 1);
-    u16 *rngArray = new u16[maxResults + 13];
+    auto *rngArray = new u16[maxResults + 13];
     for (u32 x = 0; x < maxResults + 13; x++)
         rngArray[x] = rng.nextUShort();
 
@@ -167,7 +167,7 @@ QVector<Frame3> Egg3::generateEmeraldSplit(FrameCompare compare)
     Frame3 frame = Frame3(tid, sid, psv);
 
     PokeRNG rng(seed, initialFrame - 1);
-    u16 *rngArray = new u16[maxResults + 14];
+    auto *rngArray = new u16[maxResults + 14];
     for (u32 x = 0; x < maxResults + 14; x++)
         rngArray[x] = rng.nextUShort();
 
@@ -202,7 +202,7 @@ QVector<Frame3> Egg3::generateEmeraldAlternate(FrameCompare compare)
     Frame3 frame = Frame3(tid, sid, psv);
 
     PokeRNG rng(seed, initialFrame - 1);
-    u16 *rngArray = new u16[maxResults + 14];
+    auto *rngArray = new u16[maxResults + 14];
     for (u32 x = 0; x < maxResults + 14; x++)
         rngArray[x] = rng.nextUShort();
 
@@ -237,7 +237,7 @@ QVector<Frame3> Egg3::generateLower(FrameCompare compare)
     Frame3 frame = Frame3(tid, sid, psv);
 
     PokeRNG rng(seed, initialFrame - 1);
-    u16 *rngArray = new u16[maxResults + 2];
+    auto *rngArray = new u16[maxResults + 2];
     for (u32 x = 0; x < maxResults + 2; x++)
         rngArray[x] = rng.nextUShort();
 
@@ -266,7 +266,7 @@ QVector<Frame3> Egg3::generateUpper(QVector<Frame3> lower, FrameCompare compare)
     Frame3 frame = Frame3(tid, sid, psv);
 
     PokeRNG rng(seed, minPickup - 1);
-    u16 *rngArray = new u16[maxResults + 14];
+    auto *rngArray = new u16[maxResults + 14];
     for (u32 x = 0; x < maxResults + 14; x++)
         rngArray[x] = rng.nextUShort();
 
@@ -296,9 +296,9 @@ QVector<Frame3> Egg3::generateUpper(QVector<Frame3> lower, FrameCompare compare)
 
     QVector<Frame3> frames;
 
-    for (Frame3 low : lower)
+    for (const auto &low : lower)
     {
-        for (Frame3 up : upper)
+        for (auto up : upper)
         {
             up.setPID(low.getPID(), up.getPID());
             if (compare.comparePID(up))
@@ -313,7 +313,7 @@ QVector<Frame3> Egg3::generateUpper(QVector<Frame3> lower, FrameCompare compare)
     return frames;
 }
 
-QVector<Frame3> Egg3::generate(FrameCompare compare)
+QVector<Frame3> Egg3::generate(const FrameCompare &compare)
 {
     switch (frameType)
     {
@@ -329,7 +329,7 @@ QVector<Frame3> Egg3::generate(FrameCompare compare)
         case Method::FRLGBred:
             {
                 QVector<Frame3> lower = generateLower(compare);
-                if (lower.size() == 0)
+                if (lower.isEmpty())
                     return lower;
                 else
                     return generateUpper(lower, compare);
@@ -339,7 +339,7 @@ QVector<Frame3> Egg3::generate(FrameCompare compare)
     }
 }
 
-void Egg3::setParents(QVector<u32> parent1, QVector<u32> parent2)
+void Egg3::setParents(const QVector<u32> &parent1, const QVector<u32> &parent2)
 {
     this->parent1 = parent1;
     this->parent2 = parent2;

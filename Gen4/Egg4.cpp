@@ -105,7 +105,7 @@ QVector<Frame4> Egg4::generateIVsDPPt(FrameCompare compare)
     frame.setInitialSeed(seed);
 
     PokeRNG rng(seed, initialFrame - 1);
-    u16 *rngArray = new u16[maxResults + 8];
+    auto *rngArray = new u16[maxResults + 8];
     for (u32 x = 0; x < maxResults + 8; x++)
         rngArray[x] = rng.nextUShort();
 
@@ -142,7 +142,7 @@ QVector<Frame4> Egg4::generateIVsHGSS(FrameCompare compare)
     frame.setInitialSeed(seed);
 
     PokeRNG rng(seed, initialFrame - 1);
-    u16 *rngArray = new u16[maxResults + 8];
+    auto *rngArray = new u16[maxResults + 8];
     for (u32 x = 0; x < maxResults + 8; x++)
         rngArray[x] = rng.nextUShort();
 
@@ -172,7 +172,7 @@ QVector<Frame4> Egg4::generateIVsHGSS(FrameCompare compare)
     return frames;
 }
 
-QVector<Frame4> Egg4::generate(FrameCompare compare)
+QVector<Frame4> Egg4::generate(const FrameCompare &compare)
 {
     switch (frameType)
     {
@@ -189,7 +189,7 @@ QVector<Frame4> Egg4::generate(FrameCompare compare)
     }
 }
 
-void Egg4::setParents(QVector<u32> parent1, QVector<u32> parent2)
+void Egg4::setParents(const QVector<u32> &parent1, const QVector<u32> &parent2)
 {
     this->parent1 = parent1;
     this->parent2 = parent2;

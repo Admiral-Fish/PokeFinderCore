@@ -28,8 +28,8 @@
 #include <PokeFinderCore/Objects/Method.hpp>
 #include <PokeFinderCore/RNG/IRNG.hpp>
 
-typedef uint32_t u32;
-typedef uint16_t u16;
+using u32 = uint32_t;
+using u16 = uint16_t;
 
 class Generator
 {

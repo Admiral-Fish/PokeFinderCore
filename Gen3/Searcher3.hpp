@@ -52,7 +52,7 @@ private:
 
 public:
     Searcher3();
-    Searcher3(u16 tid, u16 sid, u32 ratio, FrameCompare compare);
+    Searcher3(u16 tid, u16 sid, u32 ratio, const FrameCompare &compare);
     ~Searcher3();
     QVector<Frame3> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     void setup(Method method);

@@ -52,8 +52,8 @@ private:
 public:
     Egg3();
     Egg3(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 seed = 0);
-    QVector<Frame3> generate(FrameCompare compare);
-    void setParents(QVector<u32> parent1, QVector<u32> parent2);
+    QVector<Frame3> generate(const FrameCompare &compare);
+    void setParents(const QVector<u32> &parent1, const QVector<u32> &parent2);
     void setMinRedraw(const u32 &value);
     void setMaxRedraw(const u32 &value);
     void setCompatability(const u32 &value);

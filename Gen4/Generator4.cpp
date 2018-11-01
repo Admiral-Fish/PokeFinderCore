@@ -46,7 +46,7 @@ Generator4::~Generator4()
     delete rng;
 }
 
-QVector<Frame4> Generator4::generate(FrameCompare compare)
+QVector<Frame4> Generator4::generate(const FrameCompare &compare)
 {
     rng = new PokeRNG(initialSeed, initialFrame - 1 + offset);
     switch (frameType)
@@ -97,7 +97,7 @@ QVector<Frame4> Generator4::generateMethod1(FrameCompare compare)
     Frame4 frame = Frame4(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    u16 *rngArray = new u16[maxResults + 4];
+    auto *rngArray = new u16[maxResults + 4];
     for (u32 i = 0; i < maxResults + 4; i++)
         rngArray[i] = rng->nextUShort();
 
@@ -752,7 +752,7 @@ QVector<Frame4> Generator4::generateChainedShiny(FrameCompare compare)
     Frame4 frame = Frame4(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    u16 *rngArray = new u16[maxResults + 18];
+    auto *rngArray = new u16[maxResults + 18];
     for (u32 i = 0; i < maxResults + 18; i++)
         rngArray[i] = rng->nextUShort();
 
@@ -785,7 +785,7 @@ QVector<Frame4> Generator4::generateWondercardIVs(FrameCompare compare)
     QVector<Frame4> frames;
     Frame4 frame = Frame4(tid, sid, psv);
 
-    u16 *rngArray = new u16[maxResults + 2];
+    auto *rngArray = new u16[maxResults + 2];
     for (u32 i = 0; i < maxResults + 2; i++)
         rngArray[i] = rng->nextUShort();
 

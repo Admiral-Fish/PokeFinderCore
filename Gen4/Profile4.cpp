@@ -19,7 +19,7 @@
 
 #include "Profile4.hpp"
 
-Profile4::Profile4(QString profileName, Game version, u16 tid, u16 sid, Game dual, int radio, int language) : Profile(profileName, version, tid, sid, language)
+Profile4::Profile4(const QString &profileName, Game version, u16 tid, u16 sid, Game dual, int radio, int language) : Profile(profileName, version, tid, sid, language)
 {
     this->dual = dual;
     this->radio = radio;

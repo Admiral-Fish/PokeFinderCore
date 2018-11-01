@@ -28,7 +28,7 @@
 #include <QVector>
 #include <PokeFinderCore/Objects/Game.hpp>
 
-typedef uint16_t u16;
+using u16 = uint16_t;
 
 class Profile
 {
@@ -41,7 +41,7 @@ protected:
     u16 sid;
 
 public:
-    Profile(QString profileName, Game version, u16 tid, u16 sid, int language = 0);
+    Profile(const QString &profileName, Game version, u16 tid, u16 sid, int language = 0);
     Profile();
     QString getVersionString() const;
     QString getLanguageString() const;

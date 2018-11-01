@@ -26,14 +26,11 @@
 #include <QFile>
 #include <QTextStream>
 
-class Translator
+namespace Translator
 {
-
-public:
-    static QStringList getSpecies(QVector<int> nums);
-    static QStringList getLocationsGen3(QVector<int> nums);
-    static QStringList getLocationsGen4(QVector<int> nums);
-
+    QStringList getSpecies(const QVector<int> &nums);
+    QStringList getLocationsGen3(const QVector<int> &nums);
+    QStringList getLocationsGen4(const QVector<int> &nums);
 };
 
 #endif // TRANSLATOR_HPP

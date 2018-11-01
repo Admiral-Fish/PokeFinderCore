@@ -30,7 +30,7 @@ private:
     int radio;
 
 public:
-    Profile4(QString profileName, Game version, u16 tid, u16 sid, Game dual = Game::Blank, int radio = 0, int language = 0);
+    Profile4(const QString &profileName, Game version, u16 tid, u16 sid, Game dual = Game::Blank, int radio = 0, int language = 0);
     Profile4();
     QString getDualSlotString();
     Game getDualSlot();

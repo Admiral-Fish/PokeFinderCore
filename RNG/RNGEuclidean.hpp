@@ -24,8 +24,8 @@
 #include <QPair>
 #include <PokeFinderCore/Objects/Method.hpp>
 
-typedef uint64_t u64;
-typedef uint32_t u32;
+using u64 = uint64_t;
+using u32 = uint32_t;
 
 class RNGEuclidean
 {

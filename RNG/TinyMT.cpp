@@ -28,7 +28,7 @@ TinyMT::TinyMT(u32 seed, u32 frames)
 }
 
 // Constructor given Tiny states
-TinyMT::TinyMT(u32 st[], u32 frames)
+TinyMT::TinyMT(const u32 st[], u32 frames)
 {
     state = new u32[4];
     for (int i = 0; i < 4; i++)

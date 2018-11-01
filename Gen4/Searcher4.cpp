@@ -28,7 +28,7 @@ Searcher4::Searcher4()
 }
 
 // Constructor given user defined parameters
-Searcher4::Searcher4(u16 tid, u16 sid, u32 ratio, u32 minDelay, u32 maxDelay, u32 minFrame, u32 maxFrame, FrameCompare compare, Method method)
+Searcher4::Searcher4(u16 tid, u16 sid, u32 ratio, u32 minDelay, u32 maxDelay, u32 minFrame, u32 maxFrame, const FrameCompare &compare, Method method)
 {
     this->tid = tid;
     this->sid = sid;
@@ -136,12 +136,10 @@ QVector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    int size = seeds.size();
-
-    for (int i = 0; i < size; i++)
+    for (const auto &seed : seeds)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
+        backward->setSeed(seed);
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         frame.setSeed(backward->nextUInt());
         if (compare.comparePID(frame))
@@ -171,14 +169,11 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    int size = seeds.size();
-
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
-
-    for (int i = 0; i < size; i++)
+    for (const auto &val : seeds)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
+        backward->setSeed(val);
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         u32 seed = backward->nextUInt();
 
@@ -266,14 +261,11 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    int size = seeds.size();
-
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
-
-    for (int i = 0; i < size; i++)
+    for (const auto &val : seeds)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
+        backward->setSeed(val);
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         u32 seed = backward->nextUInt();
 
@@ -399,14 +391,11 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    int size = seeds.size();
-
     u32 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
-
-    for (int i = 0; i < size; i++)
+    for (const auto &val : seeds)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
+        backward->setSeed(val);
         u16 pid2 = backward->nextUShort();
         u16 pid1 = backward->nextUShort();
         u32 seed = backward->nextUInt();
@@ -460,9 +449,8 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
                 }
 
                 u32 choppedPID = pid2 / 0xa3e;
-                for (int i = 0; i < 5; i++)
+                for (const auto &buffer : unbiasedBuffer)
                 {
-                    u32 buffer = unbiasedBuffer[i];
                     switch (buffer)
                     {
                         case 0x0:
@@ -511,15 +499,12 @@ QVector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u3
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    int size = seeds.size();
-
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
     u16 adjustedThresh = encounterType == Encounter::OldRod ? 48 : encounterType == Encounter::GoodRod ? 98 : encounterType == Encounter::SuperRod ? 99 : 0;
-
-    for (int i = 0; i < size; i++)
+    for (const auto &val : seeds)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
+        backward->setSeed(val);
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         u32 seed = backward->nextUInt();
 
@@ -611,15 +596,12 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    int size = seeds.size();
-
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
     u16 adjustedThresh = encounterType == Encounter::OldRod ? 48 : encounterType == Encounter::GoodRod ? 98 : encounterType == Encounter::SuperRod ? 99 : 0;
-
-    for (int i = 0; i < size; i++)
+    for (const auto &val : seeds)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
+        backward->setSeed(val);
         u16 pid2 = backward->nextUShort();
         u16 pid1 = backward->nextUShort();
         u32 seed = backward->nextUInt();
@@ -824,9 +806,8 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                 u32 choppedPID = pid2 / 0xA3E;
                 if (!skipFrame)
                 {
-                    for (int i = 0; i < 5; i++)
+                    for (const auto &buffer : unbiasedBuffer)
                     {
-                        u32 buffer = unbiasedBuffer[i];
                         switch (buffer)
                         {
                             case 0x0:
@@ -877,14 +858,11 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    int size = seeds.size();
-
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
-
-    for (int i = 0; i < size; i++)
+    for (const auto &val : seeds)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
+        backward->setSeed(val);
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         u32 seed = backward->nextUInt();
 
@@ -981,14 +959,11 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    int size = seeds.size();
-
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
-
-    for (int i = 0; i < size; i++)
+    for (const auto &val : seeds)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
+        backward->setSeed(val);
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         u32 seed = backward->nextUInt();
 
@@ -1117,14 +1092,11 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    int size = seeds.size();
-
     u32 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
-
-    for (int i = 0; i < size; i++)
+    for (const auto &val : seeds)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
+        backward->setSeed(val);
         u16 pid2 = backward->nextUShort();
         u16 pid1 = backward->nextUShort();
         u32 seed = backward->nextUInt();
@@ -1178,9 +1150,8 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
                 }
 
                 u32 choppedPID = pid2 % 25;
-                for (int i = 0; i < 5; i++)
+                for (const auto &buffer : unbiasedBuffer)
                 {
-                    u32 buffer = unbiasedBuffer[i];
                     switch (buffer)
                     {
                         case 0x0:
@@ -1229,15 +1200,12 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    int size = seeds.size();
-
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
     u16 adjustedThresh = encounterType == Encounter::OldRod ? 48 : encounterType == Encounter::GoodRod ? 98 : encounterType == Encounter::SuperRod ? 99 : 0;
-
-    for (int i = 0; i < size; i++)
+    for (const auto &val : seeds)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
+        backward->setSeed(val);
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         u32 seed = backward->nextUInt();
 
@@ -1328,15 +1296,12 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    int size = seeds.size();
-
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
     u16 adjustedThresh = encounterType == Encounter::OldRod ? 48 : encounterType == Encounter::GoodRod ? 98 : encounterType == Encounter::SuperRod ? 99 : 0;
-
-    for (int i = 0; i < size; i++)
+    for (const auto &val : seeds)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
+        backward->setSeed(val);
         u16 pid2 = backward->nextUShort();
         u16 pid1 = backward->nextUShort();
         u32 seed = backward->nextUInt();
@@ -1541,9 +1506,8 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                 u32 choppedPID = pid2 % 25;
                 if (!skipFrame)
                 {
-                    for (int i = 0; i < 5; i++)
+                    for (const auto &buffer : unbiasedBuffer)
                     {
-                        u32 buffer = unbiasedBuffer[i];
                         switch (buffer)
                         {
                             case 0x0:
@@ -1594,17 +1558,16 @@ QVector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa,
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    int size = seeds.size();
 
     u16 calls[15];
     u16 low, high;
 
-    for (int i = 0; i < size; i++)
+    for (const auto &seed : seeds)
     {
-        backward->setSeed(seeds[i]);
+        backward->setSeed(seed);
 
-        for (int i = 0; i < 15; i++)
-            calls[i] = backward->nextUShort();
+        for (auto &call : calls)
+            call = backward->nextUShort();
 
         low = chainedPIDLow(calls);
         high = chainedPIDHigh(calls[13], low, tid, sid);
@@ -1637,12 +1600,10 @@ QVector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    auto size = seeds.size();
-
-    for (auto i = 0; i < size; i++)
+    for (const auto &seed : seeds)
     {
         // Setup normal frame
-        backward->setSeed(seeds[i]);
+        backward->setSeed(seed);
         frame.setSeed(backward->nextUInt());
         frames.append(frame);
 
@@ -1685,7 +1646,7 @@ QVector<Frame4> Searcher4::searchInitialSeeds(QVector<Frame4> results)
 }
 
 
-u16 Searcher4::chainedPIDLow(u16 *calls)
+u16 Searcher4::chainedPIDLow(const u16 *calls)
 {
     return static_cast<u16>((calls[14] & 7) | ((calls[12] & 1) << 3) | ((calls[11] & 1) << 4) | ((calls[10] & 1) << 5) | ((calls[9] & 1) << 6) |
                             ((calls[8] & 1) << 7) | ((calls[7] & 1) << 8) | ((calls[6] & 1) << 9) | ((calls[5] & 1) << 10) | ((calls[4] & 1) << 11) |

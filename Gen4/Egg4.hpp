@@ -44,8 +44,8 @@ private:
 public:
     Egg4();
     Egg4(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 seed);
-    QVector<Frame4> generate(FrameCompare compare);
-    void setParents(QVector<u32> parent1, QVector<u32> parent2);
+    QVector<Frame4> generate(const FrameCompare &compare);
+    void setParents(const QVector<u32> &parent1, const QVector<u32> &parent2);
 
 };
 

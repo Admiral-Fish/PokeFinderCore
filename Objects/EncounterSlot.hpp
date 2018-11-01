@@ -23,7 +23,7 @@
 #include <QVector>
 #include <PokeFinderCore/Objects/Encounter.hpp>
 
-typedef uint32_t u32;
+using u32 = uint32_t;
 
 class Range
 {

@@ -34,7 +34,7 @@ private:
     PokeRNGR *backward = nullptr;
     EncounterArea4 encounter;
     FrameCompare compare;
-    u32 unbiasedBuffer[5] = { 0, 0x96, 0xC8, 0x4B, 0x32 };
+    const u32 unbiasedBuffer[5] = { 0, 0x96, 0xC8, 0x4B, 0x32 };
     u32 minDelay;
     u32 maxDelay;
     u32 minFrame;
@@ -54,12 +54,12 @@ private:
     QVector<Frame4> searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     QVector<Frame4> searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     QVector<Frame4> searchInitialSeeds(QVector<Frame4> results);
-    u16 chainedPIDLow(u16 *calls);
+    u16 chainedPIDLow(const u16 *calls);
     u16 chainedPIDHigh(u16 high, u16 low, u16 tid, u16 sid);
 
 public:
     Searcher4();
-    Searcher4(u16 tid, u16 sid, u32 ratio, u32 minDelay, u32 maxDelay, u32 minFrame, u32 maxFrame, FrameCompare compare, Method method);
+    Searcher4(u16 tid, u16 sid, u32 ratio, u32 minDelay, u32 maxDelay, u32 minFrame, u32 maxFrame, const FrameCompare &compare, Method method);
     ~Searcher4();
     QVector<Frame4> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     void setEncounter(const EncounterArea4 &value);

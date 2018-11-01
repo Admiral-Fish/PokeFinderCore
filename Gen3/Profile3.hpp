@@ -29,7 +29,7 @@ private:
     bool deadBattery;
 
 public:
-    Profile3(QString profileName, Game version, u16 tid, u16 sid, int language = 0, bool deadBattery = false);
+    Profile3(const QString &profileName, Game version, u16 tid, u16 sid, int language = 0, bool deadBattery = false);
     Profile3();
     static QVector<Profile3> loadProfileList();
     void saveProfile();

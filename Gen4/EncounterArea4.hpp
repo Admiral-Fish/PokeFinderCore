@@ -35,9 +35,9 @@ private:
     int sound; // 0: None, 1: Hoenn, 2: Sinnoh
 
 public:
-    EncounterArea4() : EncounterArea() {}
-    EncounterArea4(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel, Game dual, int time);
-    EncounterArea4(int location, Encounter type, QVector<int> species, QVector<u32> minLevel, QVector<u32> maxLevel, int sound, int time);
+    EncounterArea4() = default;
+    EncounterArea4(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel, Game dual, int time);
+    EncounterArea4(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel, int sound, int time);
     EncounterArea4(QStringList data, Game game);
     static QVector<EncounterArea4> getEncounters(Encounter type, Game game, int time);
     u32 calcLevel(u32 index, u32 prng);
