@@ -23,8 +23,8 @@ QStringList Translator::getSpecies(const QVector<int> &nums)
 {
     QStringList species;
 
-    QString locale = QLocale().name().left(2);
-    QFile file(QString(":/species_%1.txt").arg(locale));
+    QSettings setting;
+    QFile file(QString(":/species_%1.txt").arg(setting.value("locale", "en").toString()));
 
     if (file.open(QIODevice::ReadOnly))
     {
@@ -34,10 +34,11 @@ QStringList Translator::getSpecies(const QVector<int> &nums)
         while (!ts.atEnd())
             input << ts.readLine();
 
-        for (int x : nums)
+        for (const int &x : nums)
             species.append(input[x - 1]);
+
+        file.close();
     }
-    file.close();
 
     return species;
 }
@@ -46,8 +47,8 @@ QStringList Translator::getLocationsGen3(const QVector<int> &nums)
 {
     QStringList locations;
 
-    QString locale = QLocale().name().left(2);
-    QFile file(QString(":/rsefrlg_%1.txt").arg(locale));
+    QSettings setting;
+    QFile file(QString(":/rsefrlg_%1.txt").arg(setting.value("locale", "en").toString()));
 
     if (file.open(QIODevice::ReadOnly))
     {
@@ -57,10 +58,11 @@ QStringList Translator::getLocationsGen3(const QVector<int> &nums)
         while (!ts.atEnd())
             input << ts.readLine();
 
-        for (int x : nums)
+        for (const int &x : nums)
             locations.append(input[x]);
+
+        file.close();
     }
-    file.close();
 
     return locations;
 }
@@ -69,8 +71,8 @@ QStringList Translator::getLocationsGen4(const QVector<int> &nums)
 {
     QStringList locations;
 
-    QString locale = QLocale().name().left(2);
-    QFile file(QString(":/dppthgss_%1.txt").arg(locale));
+    QSettings setting;
+    QFile file(QString(":/dppthgss_%1.txt").arg(setting.value("locale", "en").toString()));
 
     if (file.open(QIODevice::ReadOnly))
     {
@@ -80,10 +82,11 @@ QStringList Translator::getLocationsGen4(const QVector<int> &nums)
         while (!ts.atEnd())
             input << ts.readLine();
 
-        for (int x : nums)
+        for (const int &x : nums)
             locations.append(input[x]);
+
+        file.close();
     }
-    file.close();
 
     return locations;
 }

@@ -20,6 +20,7 @@
 #ifndef ENCOUNTERAREA_HPP
 #define ENCOUNTERAREA_HPP
 
+#include <QFile>
 #include <QVector>
 #include <PokeFinderCore/Objects/Encounter.hpp>
 #include <PokeFinderCore/Translator.hpp>

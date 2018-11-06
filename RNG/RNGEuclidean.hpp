@@ -21,7 +21,6 @@
 #define RNGEUCLIDEAN_HPP
 
 #include <QVector>
-#include <QPair>
 #include <PokeFinderCore/Objects/Method.hpp>
 
 using u64 = uint64_t;

@@ -21,9 +21,9 @@
 #define GENERATOR_HPP
 
 #include <QVector>
-#include <PokeFinderCore/Objects/FrameCompare.hpp>
 #include <PokeFinderCore/Objects/Encounter.hpp>
 #include <PokeFinderCore/Objects/EncounterSlot.hpp>
+#include <PokeFinderCore/Objects/FrameCompare.hpp>
 #include <PokeFinderCore/Objects/Lead.hpp>
 #include <PokeFinderCore/Objects/Method.hpp>
 #include <PokeFinderCore/RNG/IRNG.hpp>

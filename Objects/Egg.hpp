@@ -21,8 +21,8 @@
 #define EGG_HPP
 
 #include <QVector>
-#include <PokeFinderCore/Objects/FrameCompare.hpp>
 #include <PokeFinderCore/Objects/Method.hpp>
+#include <PokeFinderCore/Objects/FrameCompare.hpp>
 #include <PokeFinderCore/RNG/IRNG.hpp>
 
 class Egg

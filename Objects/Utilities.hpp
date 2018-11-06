@@ -23,12 +23,10 @@
 #include <QDateTime>
 #include <QString>
 #include <QVector>
-#include <PokeFinderCore/RNG/MTRNG.hpp>
-#include <PokeFinderCore/RNG/LCRNG.hpp>
 #include <PokeFinderCore/Gen4/HGSSRoamer.hpp>
+#include <PokeFinderCore/RNG/LCRNG.hpp>
+#include <PokeFinderCore/RNG/MTRNG.hpp>
 
-using u32 = uint32_t;
-using u16 = uint16_t;
 using u8 = uint8_t;
 
 namespace Utilities

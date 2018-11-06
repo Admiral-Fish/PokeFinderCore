@@ -20,11 +20,10 @@
 #ifndef TRANSLATOR_HPP
 #define TRANSLATOR_HPP
 
-#include <QVector>
-#include <QLocale>
-#include <QStringList>
 #include <QFile>
+#include <QSettings>
 #include <QTextStream>
+#include <QVector>
 
 namespace Translator
 {

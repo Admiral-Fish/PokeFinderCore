@@ -20,9 +20,8 @@
 #ifndef PROFILE_HPP
 #define PROFILE_HPP
 
-#include <QString>
-#include <QDomDocument>
 #include <QApplication>
+#include <QDomDocument>
 #include <QFile>
 #include <QTextStream>
 #include <QVector>

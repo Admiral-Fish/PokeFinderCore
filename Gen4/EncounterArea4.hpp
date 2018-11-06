@@ -20,11 +20,8 @@
 #ifndef ENCOUNTERAREA4_HPP
 #define ENCOUNTERAREA4_HPP
 
-#include <QStringList>
-#include <QTextStream>
-#include <QFile>
-#include <PokeFinderCore/Objects/Game.hpp>
 #include <PokeFinderCore/Objects/EncounterArea.hpp>
+#include <PokeFinderCore/Objects/Game.hpp>
 
 class EncounterArea4 : public EncounterArea
 {

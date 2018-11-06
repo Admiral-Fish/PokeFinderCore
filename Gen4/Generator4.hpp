@@ -20,11 +20,11 @@
 #ifndef GENERATOR4_HPP
 #define GENERATOR4_HPP
 
-#include <PokeFinderCore/Gen4/Frame4.hpp>
-#include <PokeFinderCore/Objects/Generator.hpp>
-#include <PokeFinderCore/Objects/FrameCompare.hpp>
-#include <PokeFinderCore/RNG/LCRNG.hpp>
 #include <PokeFinderCore/Gen4/EncounterArea4.hpp>
+#include <PokeFinderCore/Gen4/Frame4.hpp>
+#include <PokeFinderCore/Objects/FrameCompare.hpp>
+#include <PokeFinderCore/Objects/Generator.hpp>
+#include <PokeFinderCore/RNG/LCRNG.hpp>
 
 class Generator4 : public Generator
 {

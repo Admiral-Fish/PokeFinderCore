@@ -20,8 +20,8 @@
 #ifndef EGG3_HPP
 #define EGG3_HPP
 
-#include <PokeFinderCore/Objects/Egg.hpp>
 #include <PokeFinderCore/Gen3/Frame3.hpp>
+#include <PokeFinderCore/Objects/Egg.hpp>
 #include <PokeFinderCore/Objects/FrameCompare.hpp>
 #include <PokeFinderCore/RNG/LCRNG.hpp>
 

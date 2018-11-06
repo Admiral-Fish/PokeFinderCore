@@ -21,8 +21,8 @@
 #define EGG4_HPP
 
 #include <PokeFinderCore/Objects/Egg.hpp>
-#include <PokeFinderCore/Gen4/Frame4.hpp>
 #include <PokeFinderCore/Objects/FrameCompare.hpp>
+#include <PokeFinderCore/Gen4/Frame4.hpp>
 #include <PokeFinderCore/RNG/LCRNG.hpp>
 #include <PokeFinderCore/RNG/MTRNG.hpp>
 
