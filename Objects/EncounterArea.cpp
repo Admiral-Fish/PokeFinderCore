@@ -21,11 +21,20 @@
 
 EncounterArea::EncounterArea(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel)
 {
-    this->type = type;
     this->location = location;
+    this->type = type;
     this->species = species;
     this->minLevel = minLevel;
     this->maxLevel = maxLevel;
+}
+
+EncounterArea::EncounterArea(int location, Encounter type, const QVector<int> &species, const QVector<u32> &levels)
+{
+    this->location = location;
+    this->type = type;
+    this->species = species;
+    this->minLevel = levels;
+    this->maxLevel = levels;
 }
 
 bool EncounterArea::levelLocked(u32 slot)

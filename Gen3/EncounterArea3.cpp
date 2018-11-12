@@ -19,68 +19,48 @@
 
 #include "EncounterArea3.hpp"
 
-EncounterArea3::EncounterArea3(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel, u32 delay)
+EncounterArea3::EncounterArea3(int location, u32 delay, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel)
     : EncounterArea(location, type, species, minLevel, maxLevel)
 {
     this->delay = delay;
 }
 
-EncounterArea3::EncounterArea3(QStringList data)
+EncounterArea3::EncounterArea3(int location, u32 delay, Encounter type, const QVector<int> &species, const QVector<u32> &levels)
+    : EncounterArea(location, type, species, levels)
 {
-    location = data[0].toInt();
-    delay = data[1].toUInt();
-    type = static_cast<Encounter>(data[2].toUInt());
-
-    bool flag = type == Encounter::Grass || type == Encounter::SafariZone;
-    int len = (data.length() - 3) / (flag ? 2 : 3);
-
-    for (int i = 3; i < len + 3; i++)
-    {
-        species.append(data[i].toInt());
-        minLevel.append(data[i + len].toUInt());
-        maxLevel.append(data[i + (flag ? len : len * 2)].toUInt());
-    }
+    this->delay = delay;
 }
 
 QVector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Game game)
 {
-    QString path;
+    QVector<EncounterArea3> encounters;
     switch (game)
     {
         case Ruby:
-            path = ":/ruby.csv";
+            encounters = Encounters3::encountersRuby;
             break;
         case Sapphire:
-            path = ":/sapphire.csv";
+            encounters = Encounters3::encountersSapphire;
             break;
         case FireRed:
-            path = ":/firered.csv";
+            encounters = Encounters3::encountersFireRed;
             break;
         case LeafGreen:
-            path = ":/leafgreen.csv";
+            encounters = Encounters3::encountersLeafGreen;
             break;
         case Emerald:
         default:
-            path = ":/emerald.csv";
+            encounters = Encounters3::encountersEmerald;
             break;
     }
 
-    QFile file(path);
-
     QVector<EncounterArea3> areas;
-    if (file.open(QIODevice::ReadOnly))
+    for (auto &area : encounters)
     {
-        QTextStream ts(&file);
-
-        while (!ts.atEnd())
-        {
-            EncounterArea3 area = EncounterArea3(ts.readLine().split(","));
-
-            if (area.getType() == type)
-                areas.append(area);
-        }
+        if (area.getType() == type)
+            areas.append(area);
     }
-    file.close();
+
     return areas;
 }
 

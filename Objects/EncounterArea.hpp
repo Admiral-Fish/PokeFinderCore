@@ -41,6 +41,7 @@ protected:
 public:
     EncounterArea() = default;
     EncounterArea(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel);
+    EncounterArea(int location, Encounter type, const QVector<int> &species, const QVector<u32> &levels);
     bool levelLocked(u32 slot);
     Encounter getType();
     int getLocation();
