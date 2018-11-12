@@ -19,94 +19,36 @@
 
 #include "EncounterArea4.hpp"
 
-EncounterArea4::EncounterArea4(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel, Game dual, int time)
+EncounterArea4::EncounterArea4(int location, int time, Game dual, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel)
     : EncounterArea(location, type, species, minLevel, maxLevel)
 {
     this->dual = dual;
     this->time = time;
+    sound = 0;
 }
 
-EncounterArea4::EncounterArea4(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel, int sound, int time)
+EncounterArea4::EncounterArea4(int location, int time, int sound, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel)
     : EncounterArea(location, type, species, minLevel, maxLevel)
 {
     this->sound = sound;
     this->time = time;
+    dual = Game::Blank;
 }
 
-EncounterArea4::EncounterArea4(QStringList data, Game game)
+EncounterArea4::EncounterArea4(int location, int time, Game dual, Encounter type, const QVector<int> &species, const QVector<u32> &levels)
+    : EncounterArea(location, type, species, levels)
 {
-    location = data[0].toInt();
-    time = data[1].toInt();
-    if (game == Game::HeartGold || game == Game::SoulSilver)
-    {
-        sound = data[2].toInt();
-        dual = Game::Blank;
-    }
-    else
-    {
-        dual = static_cast<Game>(data[2].toInt());
-        sound = 0;
-    }
-    type = static_cast<Encounter>(data[3].toInt());
-
-    bool flag = type == Encounter::Grass || type == Encounter::Swarm || type == Encounter::PokeRadar;
-
-    int len = (data.length() - 4) / (flag ? 2 : 3);
-    for (int i = 4; i < len + 4; i++)
-    {
-        species.append(data[i].toInt());
-        minLevel.append(data[i + len].toUInt());
-        maxLevel.append(data[i + (flag ? len : len * 2)].toUInt());
-    }
+    this->dual = dual;
+    this->time = time;
+    sound = 0;
 }
 
-QVector<EncounterArea4> EncounterArea4::getEncounters(Encounter type, Game game, int time)
+EncounterArea4::EncounterArea4(int location, int time, int sound, Encounter type, const QVector<int> &species, const QVector<u32> &levels)
+    : EncounterArea(location, type, species, levels)
 {
-    QString path;
-    switch (game)
-    {
-        case Diamond:
-            path = ":/diamond.csv";
-            break;
-        case Pearl:
-            path = ":/pearl.csv";
-            break;
-        case Platinum:
-            path = ":/platinum.csv";
-            break;
-        case HeartGold:
-            path = ":/heartgold.csv";
-            break;
-        case SoulSilver:
-        default:
-            path = ":/soulsilver.csv";
-            break;
-    }
-
-    QFile file(path);
-
-    QVector<EncounterArea4> areas;
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QTextStream ts(&file);
-
-        while (!ts.atEnd())
-        {
-            QString in = ts.readLine();
-            EncounterArea4 area = EncounterArea4(in.split(","), game);
-
-            // Temp remove all slots related to sound and dual
-            // Implement later
-            if (area.type == type && area.sound == 0 && area.dual == 0)
-            {
-                if (area.type == Encounter::Grass && !(area.time == 0 || area.time == time))
-                    continue;
-                areas.append(area);
-            }
-        }
-    }
-    file.close();
-    return areas;
+    this->sound = sound;
+    this->time = time;
+    dual = Game::Blank;
 }
 
 u32 EncounterArea4::calcLevel(u32 index, u32 prng)

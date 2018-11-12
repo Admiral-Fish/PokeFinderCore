@@ -27,16 +27,16 @@ class EncounterArea4 : public EncounterArea
 {
 
 private:
-    Game dual;
+    Game dual; // For DPPt
     int time; // 0: Any 1: Morning, 2: Day, 3: Night
-    int sound; // 0: None, 1: Hoenn, 2: Sinnoh
+    int sound; // 0: None, 1: Hoenn, 2: Sinnoh, For HGSS
 
 public:
     EncounterArea4() = default;
-    EncounterArea4(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel, Game dual, int time);
-    EncounterArea4(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel, int sound, int time);
-    EncounterArea4(QStringList data, Game game);
-    static QVector<EncounterArea4> getEncounters(Encounter type, Game game, int time);
+    EncounterArea4(int location, int time, Game dual, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel);
+    EncounterArea4(int location, int time, int sound, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel);
+    EncounterArea4(int location, int time, Game dual, Encounter type, const QVector<int> &species, const QVector<u32> &levels);
+    EncounterArea4(int location, int time, int sound, Encounter type, const QVector<int> &species, const QVector<u32> &levels);
     u32 calcLevel(u32 index, u32 prng);
     u32 calcLevel(u32 index);
     Game getDual() const;

@@ -31,39 +31,6 @@ EncounterArea3::EncounterArea3(int location, u32 delay, Encounter type, const QV
     this->delay = delay;
 }
 
-QVector<EncounterArea3> EncounterArea3::getEncounters(Encounter type, Game game)
-{
-    QVector<EncounterArea3> encounters;
-    switch (game)
-    {
-        case Ruby:
-            encounters = Encounters3::encountersRuby;
-            break;
-        case Sapphire:
-            encounters = Encounters3::encountersSapphire;
-            break;
-        case FireRed:
-            encounters = Encounters3::encountersFireRed;
-            break;
-        case LeafGreen:
-            encounters = Encounters3::encountersLeafGreen;
-            break;
-        case Emerald:
-        default:
-            encounters = Encounters3::encountersEmerald;
-            break;
-    }
-
-    QVector<EncounterArea3> areas;
-    for (auto &area : encounters)
-    {
-        if (area.getType() == type)
-            areas.append(area);
-    }
-
-    return areas;
-}
-
 u32 EncounterArea3::calcLevel(u32 index, u32 prng)
 {
     if (levelLocked(index))
