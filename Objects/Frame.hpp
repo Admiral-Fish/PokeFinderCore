@@ -55,8 +55,6 @@ protected:
     u16 tid;
     u32 level;
 
-    QStringList natures = Nature::getFrameNatures();
-    QStringList powers = Power::getPowers();
     QString getFemale125();
     QString getFemale25();
     QString getFemale50();

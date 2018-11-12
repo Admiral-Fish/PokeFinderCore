@@ -28,3 +28,8 @@ QStringList Power::getPowers()
                          };
     return powers;
 }
+
+QString Power::getPower(u32 power)
+{
+    return getPowers()[power];
+}

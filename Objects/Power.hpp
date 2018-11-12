@@ -23,9 +23,12 @@
 #include <QStringList>
 #include <QTranslator>
 
+using u32 = uint32_t;
+
 namespace Power
 {
     QStringList getPowers();
+    QString getPower(u32 power);
 };
 
 #endif // POWER_HPP

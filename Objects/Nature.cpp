@@ -32,6 +32,11 @@ QStringList Nature::getNatures()
     return natures;
 }
 
+QString Nature::getNature(u32 nature)
+{
+    return getFrameNatures()[nature];
+}
+
 QStringList Nature::getFrameNatures()
 {
     QStringList natures = { QObject::tr("Hardy"), QObject::tr("Lonely"), QObject::tr("Brave"), QObject::tr("Adamant"),

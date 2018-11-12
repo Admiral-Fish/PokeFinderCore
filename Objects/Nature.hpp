@@ -28,6 +28,7 @@ using u32 = uint32_t;
 namespace Nature
 {
     QStringList getNatures();
+    QString getNature(u32 nature);
     QStringList getFrameNatures();
     u32 getAdjustedNature(u32 nature);
     u32 getReversedNature(u32 nature);
