@@ -27,22 +27,18 @@ class EncounterArea4 : public EncounterArea
 {
 
 private:
-    Game dual; // For DPPt
-    int time; // 0: Any 1: Morning, 2: Day, 3: Night
-    int sound; // 0: None, 1: Hoenn, 2: Sinnoh, For HGSS
+    int time;
 
 public:
     EncounterArea4() = default;
-    EncounterArea4(int location, int time, Game dual, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel);
-    EncounterArea4(int location, int time, int sound, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel);
-    EncounterArea4(int location, int time, Game dual, Encounter type, const QVector<int> &species, const QVector<u32> &levels);
-    EncounterArea4(int location, int time, int sound, Encounter type, const QVector<int> &species, const QVector<u32> &levels);
-    u32 calcLevel(u32 index, u32 prng);
-    u32 calcLevel(u32 index);
-    Game getDual() const;
+    EncounterArea4(int location, int time, Encounter type, const QVector<Slot> &pokemon);
+    u32 calcLevel(u32 index, u32 prng) const;
+    u32 calcLevel(u32 index) const;
     int getTime() const;
-    int getSound() const;
+    void setSlot(int index, int specie);
 
 };
+
+QDataStream &operator>>(QDataStream &in, EncounterArea4 &encounter);
 
 #endif // ENCOUNTERAREA4_HPP

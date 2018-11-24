@@ -28,29 +28,43 @@
 using u32 = uint32_t;
 using u16 = uint16_t;
 
+class Slot;
+
 class EncounterArea
 {
 
 protected:
-    QVector<u32> minLevel;
-    QVector<u32> maxLevel;
-    QVector<int> species;
+    QVector<Slot> pokemon;
     int location;
     Encounter type;
 
 public:
     EncounterArea() = default;
-    EncounterArea(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel);
-    EncounterArea(int location, Encounter type, const QVector<int> &species, const QVector<u32> &levels);
-    bool levelLocked(u32 slot);
-    Encounter getType();
-    int getLocation();
-    QVector<u32> getMinLevel();
-    QVector<u32> getMaxLevel();
-    QVector<int> getSpecies();
-    QVector<int> getUniqueSpecies();
-    QVector<bool> getSlots(u32 num);
-    QStringList getSpecieNames();
+    EncounterArea(int location, Encounter type, const QVector<Slot> &pokemon);
+    Encounter getType() const;
+    int getLocation() const;
+    QVector<int> getUniqueSpecies() const;
+    QVector<bool> getSlots(u32 num) const;
+    QStringList getSpecieNames() const;
+
+};
+
+class Slot
+{
+
+private:
+    u32 minLevel;
+    u32 maxLevel;
+    int specie;
+
+public:
+    Slot() = default;
+    Slot(int specie, u32 minLevel, u32 maxLevel);
+
+    u32 getMinLevel() const { return minLevel; }
+    u32 getMaxLevel() const { return maxLevel; }
+    int getSpecie() const { return specie; }
+    void setSpecie(int specie) { this->specie = specie; }
 
 };
 

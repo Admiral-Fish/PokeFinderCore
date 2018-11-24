@@ -19,41 +19,97 @@
 
 #include "Encounters4.hpp"
 
-QVector<EncounterArea4> Encounters4::getEncounters(Encounter type, Game game, int time)
+Encounters4::Encounters4(Encounter type, Game game, Game dual, int time, int radio)
+{
+    this->type = type;
+    this->game = game;
+    this->dual = dual;
+    this->time = time;
+    this->radio = radio;
+}
+
+QVector<EncounterArea4> Encounters4::getEncounters()
 {
     QVector<EncounterArea4> encounters;
+    for (const auto &area : getBaseEncounters())
+    {
+        if (area.getType() == type && (area.getTime() == 0 || area.getTime() == time))
+            encounters.append(area);
+    }
+
+    // TODO
+    /*if (dual != Game::Blank && (type == Encounter::Grass || type == Encounter::PokeRadar || type == Encounter::Swarm))
+        encounters = modifySlotsDual(encounters);
+
+    if (radio != 0)
+        encounters = modifySlotsSound(encounters);*/
+
+    return encounters;
+}
+
+QVector<EncounterArea4> Encounters4::getBaseEncounters() const
+{
+    QString path;
     switch (game)
     {
-        case Diamond:
-            encounters = Encounters4::encountersDiamond;
+        case Game::Diamond:
+            path = ":/diamond.bin";
             break;
-        case Pearl:
-            encounters = Encounters4::encountersPearl;
+        case Game::Pearl:
+            path = ":/pearl.bin";
             break;
-        case Platinum:
-            encounters = Encounters4::encountersPlatinum;
+        case Game::Platinum:
+            path = ":/platinum.bin";
             break;
-        case HeartGold:
-            encounters = Encounters4::encountersHeartGold;
+        case Game::HeartGold:
+            path = ":/heartgold.bin";
             break;
-        case SoulSilver:
+        case Game::SoulSilver:
         default:
-            encounters = Encounters4::encountersSoulSilver;
+            path = ":/soulsilver.bin";
             break;
     }
 
-    QVector<EncounterArea4> areas;
-    for (auto &area : encounters)
+    QVector<EncounterArea4> encounters;
+    QFile file(path);
+    if (file.open(QIODevice::ReadOnly))
     {
-        // Temp remove all slots related to sound and dual
-        // Implement later
-        if (area.getType() == type && area.getSound() == 0 && area.getDual() == 0)
+        QDataStream stream(&file);
+        stream >> encounters;
+        file.close();
+    }
+
+    return encounters;
+}
+
+// Changes slots 8 & 9
+/*QVector<EncounterArea4> Encounters4::modifySlotsDual(QVector<EncounterArea4> encounters)
+{
+    const auto &modifiers = Modifiers::getDualModifiers(game, dual);
+    for (auto &encounter : encounters)
+    {
+        const auto &iterator = modifiers.find(encounter.getLocation());
+        if (iterator != modifiers.end())
         {
-            if (area.getType() == Encounter::Grass && !(area.getTime() == 0 || area.getTime() == time))
-                continue;
-            areas.append(area);
+            const auto &modify = iterator.value();
+            encounter.setSlot(8, modify.first);
+            encounter.setSlot(9, modify.second);
         }
     }
+    return encounters;
+}*/
 
-    return areas;
-}
+// TODO figure out slot changes
+/*QVector<EncounterArea4> Encounters4::modifySlotsSound(QVector<EncounterArea4> encounters)
+{
+    const auto &modifiers = Modifiers::getRadioModifiers(game, radio);
+    for (auto &encounter : encounters)
+    {
+        const auto &iterator = modifiers.find(encounter.getLocation());
+        if (iterator != modifiers.end())
+        {
+            const auto &modify = iterator.value();
+        }
+    }
+    return encounters;
+}*/

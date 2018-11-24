@@ -19,34 +19,56 @@
 
 #include "Encounters3.hpp"
 
-QVector<EncounterArea3> Encounters3::getEncounters(Encounter type, Game game)
+Encounters3::Encounters3(Encounter type, Game game)
 {
-    QVector<EncounterArea3> encounters;
+    this->type = type;
+    this->game = game;
+}
+
+QVector<EncounterArea3> Encounters3::getEncounters()
+{
+    QVector<EncounterArea3> areas;
+
+    QString path;
     switch (game)
     {
         case Ruby:
-            encounters = Encounters3::encountersRuby;
+            path = ":/ruby.bin";
             break;
         case Sapphire:
-            encounters = Encounters3::encountersSapphire;
+            path = ":/sapphire.bin";
             break;
         case FireRed:
-            encounters = Encounters3::encountersFireRed;
+            path = ":/firered.bin";
             break;
         case LeafGreen:
-            encounters = Encounters3::encountersLeafGreen;
+            path = ":/leafgreen.bin";
             break;
         case Emerald:
         default:
-            encounters = Encounters3::encountersEmerald;
+            path = ":/emerald.bin";
             break;
     }
 
-    QVector<EncounterArea3> areas;
-    for (auto &area : encounters)
+    QFile file(path);
+    if (file.open(QIODevice::ReadOnly))
     {
-        if (area.getType() == type)
-            areas.append(area);
+        QDataStream stream(&file);
+        stream >> areas;
+
+        for (int i = 0; i < areas.count();)
+        {
+            if (areas[i].getType() != type)
+            {
+                areas.removeAt(i);
+            }
+            else
+            {
+                i++;
+            }
+        }
+
+        file.close();
     }
 
     return areas;

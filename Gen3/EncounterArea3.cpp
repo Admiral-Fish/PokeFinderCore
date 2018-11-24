@@ -19,29 +19,20 @@
 
 #include "EncounterArea3.hpp"
 
-EncounterArea3::EncounterArea3(int location, u32 delay, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel)
-    : EncounterArea(location, type, species, minLevel, maxLevel)
+EncounterArea3::EncounterArea3(int location, u32 delay, Encounter type, const QVector<Slot> &pokemon)
+    : EncounterArea(location, type, pokemon)
 {
     this->delay = delay;
 }
 
-EncounterArea3::EncounterArea3(int location, u32 delay, Encounter type, const QVector<int> &species, const QVector<u32> &levels)
-    : EncounterArea(location, type, species, levels)
+u32 EncounterArea3::calcLevel(u32 index, u32 prng) const
 {
-    this->delay = delay;
+    return (prng % (pokemon.at(index).getMaxLevel() - pokemon.at(index).getMinLevel() + 1)) + pokemon.at(index).getMinLevel();
 }
 
-u32 EncounterArea3::calcLevel(u32 index, u32 prng)
+u32 EncounterArea3::calcLevel(u32 index) const
 {
-    if (levelLocked(index))
-        return minLevel[static_cast<int>(index)];
-
-    return (prng % (maxLevel[static_cast<int>(index)] - minLevel[static_cast<int>(index)] + 1)) + minLevel[static_cast<int>(index)];
-}
-
-u32 EncounterArea3::calcLevel(u32 index)
-{
-    return maxLevel[static_cast<int>(index)];
+    return pokemon.at(index).getMinLevel();
 }
 
 // Only for Rock Smash since all other encounters can be forced
@@ -82,4 +73,43 @@ u16 EncounterArea3::getEncounterRate() const
 u32 EncounterArea3::getDelay() const
 {
     return delay;
+}
+
+QDataStream &operator>>(QDataStream &in, EncounterArea3 &encounter)
+{
+    QVariant location, delay, type;
+    in >> location >> delay >> type;
+
+    int size;
+    switch (static_cast<Encounter>(type.toInt()))
+    {
+        case Encounter::Grass:
+        case Encounter::SafariZone:
+            size = 12;
+            break;
+        case Encounter::OldRod:
+            size = 2;
+            break;
+        case Encounter::GoodRod:
+            size = 3;
+            break;
+        case Encounter::RockSmash:
+        case Encounter::SuperRod:
+        case Encounter::Surfing:
+            size = 5;
+            break;
+        default:
+            break;
+    }
+
+    QVector<Slot> pokemon;
+    for (int i = 0; i < size; i++)
+    {
+        QVariant specie, min, max;
+        in >> specie >> min >> max;
+        pokemon.append(Slot(specie.toInt(), min.toUInt(), max.toUInt()));
+    }
+
+    encounter = EncounterArea3(location.toInt(), delay.toUInt(), static_cast<Encounter>(type.toInt()), pokemon);
+    return in;
 }

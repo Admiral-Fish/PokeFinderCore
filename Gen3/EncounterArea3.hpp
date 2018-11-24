@@ -31,14 +31,15 @@ private:
 
 public:
     EncounterArea3() = default;
-    EncounterArea3(int location, u32 delay, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel);
-    EncounterArea3(int location, u32 delay, Encounter type, const QVector<int> &species, const QVector<u32> &levels);
-    u32 calcLevel(u32 index, u32 prng);
-    u32 calcLevel(u32 index);
+    EncounterArea3(int location, u32 delay, Encounter type, const QVector<Slot> &pokemon);
+    u32 calcLevel(u32 index, u32 prng) const;
+    u32 calcLevel(u32 index) const;
     u16 getEncounterRate() const;
     u32 getDelay() const;
 
 };
+
+QDataStream &operator>>(QDataStream &in, EncounterArea3 &encounter);
 
 
 #endif // ENCOUNTERAREA3_HPP

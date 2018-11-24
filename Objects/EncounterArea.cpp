@@ -19,77 +19,58 @@
 
 #include "EncounterArea.hpp"
 
-EncounterArea::EncounterArea(int location, Encounter type, const QVector<int> &species, const QVector<u32> &minLevel, const QVector<u32> &maxLevel)
+EncounterArea::EncounterArea(int location, Encounter type, const QVector<Slot> &pokemon)
 {
     this->location = location;
     this->type = type;
-    this->species = species;
-    this->minLevel = minLevel;
-    this->maxLevel = maxLevel;
+    this->pokemon = pokemon;
 }
 
-EncounterArea::EncounterArea(int location, Encounter type, const QVector<int> &species, const QVector<u32> &levels)
-{
-    this->location = location;
-    this->type = type;
-    this->species = species;
-    this->minLevel = levels;
-    this->maxLevel = levels;
-}
-
-bool EncounterArea::levelLocked(u32 slot)
-{
-    return minLevel[static_cast<int>(slot)] == maxLevel[static_cast<int>(slot)];
-}
-
-Encounter EncounterArea::getType()
+Encounter EncounterArea::getType() const
 {
     return type;
 }
 
-int EncounterArea::getLocation()
+int EncounterArea::getLocation() const
 {
     return location;
 }
 
-QVector<u32> EncounterArea::getMinLevel()
-{
-    return minLevel;
-}
-
-QVector<u32> EncounterArea::getMaxLevel()
-{
-    return maxLevel;
-}
-
-QVector<int> EncounterArea::getSpecies()
-{
-    return species;
-}
-
-QVector<int> EncounterArea::getUniqueSpecies()
+QVector<int> EncounterArea::getUniqueSpecies() const
 {
     QVector<int> nums;
 
-    nums.append(species[0]);
-    for (int i = 1; i < species.size(); i++)
-        if (!nums.contains(species[i]))
-            nums.append(species[i]);
+    for (const auto &mon : pokemon)
+    {
+        if (!nums.contains(mon.getSpecie()))
+        {
+            nums.append(mon.getSpecie());
+        }
+    }
 
     return nums;
 }
 
-QVector<bool> EncounterArea::getSlots(u32 num)
+QVector<bool> EncounterArea::getSlots(u32 num) const
 {
     QVector<bool> flags;
 
-    for (int specie : species)
-        flags.append(specie == static_cast<int>(num));
+    for (const auto &mon : pokemon)
+    {
+        flags.append(mon.getSpecie() == static_cast<int>(num));
+    }
 
     return flags;
 }
 
-QStringList EncounterArea::getSpecieNames()
+QStringList EncounterArea::getSpecieNames() const
 {
     return Translator::getSpecies(getUniqueSpecies());
+}
+
+Slot::Slot(int specie, u32 minLevel, u32 maxLevel)
+{
+    this->specie = specie;
+    this->minLevel = minLevel;
+    this->maxLevel = maxLevel;
 }
