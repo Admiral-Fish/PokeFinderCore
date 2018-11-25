@@ -30,12 +30,14 @@ private:
 
 public:
     Profile3(const QString &profileName, Game version, u16 tid, u16 sid, int language = 0, bool deadBattery = false);
+    Profile3(QJsonObject data);
     Profile3();
+    bool getDeadBattery() const;
+    QJsonObject getJson();
     static QVector<Profile3> loadProfileList();
     void saveProfile();
     void deleteProfile();
     void updateProfile(Profile3 original);
-    bool getDeadBattery() const;
 
 };
 

@@ -21,9 +21,10 @@
 #define PROFILE_HPP
 
 #include <QApplication>
-#include <QDomDocument>
 #include <QFile>
-#include <QTextStream>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QVector>
 #include <PokeFinderCore/Objects/Game.hpp>
 

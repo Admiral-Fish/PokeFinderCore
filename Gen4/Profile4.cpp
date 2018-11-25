@@ -19,10 +19,18 @@
 
 #include "Profile4.hpp"
 
-Profile4::Profile4(const QString &profileName, Game version, u16 tid, u16 sid, Game dual, int radio, int language) : Profile(profileName, version, tid, sid, language)
+Profile4::Profile4(const QString &profileName, Game version, u16 tid, u16 sid, Game dual, int radio, int language)
+    : Profile(profileName, version, tid, sid, language)
 {
     this->dual = dual;
     this->radio = radio;
+}
+
+Profile4::Profile4(QJsonObject data)
+    : Profile(data["name"].toString(), static_cast<Game>(data["version"].toInt()), data["tid"].toInt(), data["sid"].toInt(), data["version"].toInt())
+{
+    dual = static_cast<Game>(data["dual"].toInt());
+    radio = data["radio"].toInt();
 }
 
 Profile4::Profile4() : Profile()
@@ -74,223 +82,104 @@ QString Profile4::getRadioString()
     }
 }
 
+QJsonObject Profile4::getJson()
+{
+    QJsonObject profile;
+    profile["name"] = profileName;
+    profile["version"] = version;
+    profile["language"] = language;
+    profile["tid"] = tid;
+    profile["sid"] = sid;
+    profile["dual"] = dual;
+    profile["radio"] = radio;
+    return profile;
+}
+
 void Profile4::deleteProfile()
 {
-    bool exists = false;
-    QDomDocument doc;
-    QFile file(QApplication::applicationDirPath() + "/profiles.xml");
-    if (file.open(QIODevice::ReadOnly | QFile::Text))
+    QFile file(QApplication::applicationDirPath() + "/profiles.json");
+    if (file.open(QIODevice::ReadWrite | QFile::Text))
     {
-        doc.setContent(&file);
+        QJsonObject profiles(QJsonDocument::fromJson(file.readAll()).object());
+        QJsonArray gen4 = profiles["gen4"].toArray();
 
-        file.close();
-
-        QDomElement profiles = doc.documentElement();
-        QDomNode domNode = profiles.firstChild();
-        while (!domNode.isNull() && !exists)
+        for (int i = 0; i < gen4.size(); i++)
         {
-            QDomElement domElement = domNode.toElement();
-            if (!domElement.isNull())
+            Profile4 profile(gen4[i].toObject());
+
+            if (profile.profileName == profileName && profile.version == version && profile.language == language &&
+                    profile.tid == tid && profile.sid == sid && profile.dual == dual && profile.radio == radio)
             {
-                if (domElement.tagName() == "Gen4")
-                {
-                    QDomNode info = domElement.firstChild();
-                    while (!info.isNull())
-                    {
-                        QDomElement infoElement = info.toElement();
-                        if (!infoElement.isNull())
-                        {
-                            const QString tagName(infoElement.tagName());
-                            if (tagName == "profileName")
-                            {
-                                if (this->profileName == infoElement.text())
-                                {
-                                    exists = true;
-                                    domNode.parentNode().removeChild(domNode);
-                                }
-                                break;
-                            }
-                            info = info.nextSibling();
-                        }
-                    }
-                }
+                gen4.removeAt(i);
+                profiles["gen4"] = gen4;
+
+                file.resize(0);
+                file.write(QJsonDocument(profiles).toJson());
+                break;
             }
-            domNode = domNode.nextSibling();
         }
 
-        if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
-        {
-            QTextStream stream(&file);
-            stream.setCodec("UTF-8");
-            stream << doc.toString();
-        }
         file.close();
     }
 }
 
 void Profile4::updateProfile(Profile4 original)
 {
-    QDomDocument doc;
-    QFile file(QApplication::applicationDirPath() + "/profiles.xml");
-    if (file.open(QIODevice::ReadOnly | QFile::Text))
+    QFile file(QApplication::applicationDirPath() + "/profiles.json");
+    if (file.open(QIODevice::ReadWrite | QFile::Text))
     {
-        doc.setContent(&file);
-        file.close();
+        QJsonObject profiles(QJsonDocument::fromJson(file.readAll()).object());
+        QJsonArray gen4 = profiles["gen4"].toArray();
 
-        QDomElement profiles = doc.documentElement();
-        QDomNode domNode = profiles.firstChild();
-        while (!domNode.isNull())
+        for (auto &&i : gen4)
         {
-            QDomElement domElement = domNode.toElement();
-            if (!domElement.isNull() && domElement.tagName() == "Gen4")
+            Profile4 profile(i.toObject());
+
+            if (original.profileName == profile.profileName && original.version == profile.version && original.language == profile.language &&
+                    original.tid == profile.tid && original.sid == profile.sid && original.dual == profile.dual && original.radio == profile.radio)
             {
-                QString name = domElement.childNodes().at(0).toElement().text();
-                int ver = domElement.childNodes().at(1).toElement().text().toInt();
-                int lang = domElement.childNodes().at(2).toElement().text().toInt();
-                u16 id = domElement.childNodes().at(3).toElement().text().toUShort();
-                u16 id2 = domElement.childNodes().at(4).toElement().text().toUShort();
-                int dualVer = domElement.childNodes().at(5).toElement().text().toInt();
-                int rad = domElement.childNodes().at(6).toElement().text().toInt();
+                i = getJson();
+                profiles["gen4"] = gen4;
 
-                if (original.profileName == name && original.version == ver && original.language == lang && original.tid == id && original.sid == id2 && original.dual == dualVer && original.radio == rad)
-                {
-                    domElement.childNodes().at(0).toElement().firstChild().setNodeValue(profileName);
-                    domElement.childNodes().at(1).toElement().firstChild().setNodeValue(QString::number(version));
-                    domElement.childNodes().at(2).toElement().firstChild().setNodeValue(QString::number(language));
-                    domElement.childNodes().at(3).toElement().firstChild().setNodeValue(QString::number(tid));
-                    domElement.childNodes().at(4).toElement().firstChild().setNodeValue(QString::number(sid));
-                    domElement.childNodes().at(5).toElement().firstChild().setNodeValue(QString::number(dual));
-                    domElement.childNodes().at(6).toElement().firstChild().setNodeValue(QString::number(radio));
-
-                    if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
-                    {
-                        QTextStream stream(&file);
-                        stream.setCodec("UTF-8");
-                        stream << doc.toString();
-                    }
-                    file.close();
-                    return;
-                }
+                file.resize(0);
+                file.write(QJsonDocument(profiles).toJson());
+                break;
             }
-            domNode = domNode.nextSibling();
         }
+        file.close();
     }
 }
 
 void Profile4::saveProfile()
 {
-    QDomDocument doc;
-    QFile file(QApplication::applicationDirPath() + "/profiles.xml");
-    if (file.open(QIODevice::ReadOnly | QFile::Text))
+    QFile file(QApplication::applicationDirPath() + "/profiles.json");
+    if (file.open(QIODevice::ReadWrite | QIODevice::Text))
     {
-        doc.setContent(&file);
+        QJsonObject profiles(QJsonDocument::fromJson(file.readAll()).object());
+        QJsonArray gen4 = profiles["gen4"].toArray();
 
-        file.close();
+        gen4.append(getJson());
+        profiles["gen4"] = gen4;
 
-        QDomElement profiles = doc.documentElement();
-
-        QDomElement gen4 = doc.createElement("Gen4");
-        QDomElement name = doc.createElement("profileName");
-        QDomElement ver = doc.createElement("version");
-        QDomElement lang = doc.createElement("language");
-        QDomElement id1 = doc.createElement("tid");
-        QDomElement id2 = doc.createElement("sid");
-        QDomElement dualVer = doc.createElement("dual");
-        QDomElement rad = doc.createElement("radio");
-
-        name.appendChild(doc.createTextNode(profileName));
-        ver.appendChild(doc.createTextNode(QString::number(version)));
-        lang.appendChild(doc.createTextNode(QString::number(language)));
-        id1.appendChild(doc.createTextNode(QString::number(tid)));
-        id2.appendChild(doc.createTextNode(QString::number(sid)));
-        dualVer.appendChild(doc.createTextNode(QString::number(dual)));
-        rad.appendChild(doc.createTextNode(QString::number(radio)));
-
-        gen4.appendChild(name);
-        gen4.appendChild(ver);
-        gen4.appendChild(lang);
-        gen4.appendChild(id1);
-        gen4.appendChild(id2);
-        gen4.appendChild(dualVer);
-        gen4.appendChild(rad);
-
-        if (profiles.isNull())
-        {
-            profiles = doc.createElement("Profiles");
-            profiles.appendChild(gen4);
-            doc.appendChild(profiles);
-        }
-        else
-        {
-            profiles.appendChild(gen4);
-        }
-
-        if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
-        {
-            QTextStream stream(&file);
-            stream.setCodec("UTF-8");
-            stream << doc.toString();
-        }
+        file.resize(0);
+        file.write(QJsonDocument(profiles).toJson());
         file.close();
     }
 }
 
 QVector<Profile4> Profile4::loadProfileList()
 {
-    static QVector<Profile4> profileList;
-    profileList.clear();
+    QVector<Profile4> profileList;
 
-    QDomDocument doc;
-    QFile file(QApplication::applicationDirPath() + "/profiles.xml");
-    if (file.open(QIODevice::ReadOnly | QFile::Text))
+    QFile file(QApplication::applicationDirPath() + "/profiles.json");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        doc.setContent(&file);
+        QJsonDocument profiles(QJsonDocument::fromJson(file.readAll()));
+        QJsonArray gen4 = profiles["gen4"].toArray();
 
-        QDomElement profiles = doc.documentElement();
-        QDomNode domNode = profiles.firstChild();
-        while (!domNode.isNull())
+        for (const auto &&i : gen4)
         {
-            QDomElement domElement = domNode.toElement();
-            if (!domElement.isNull())
-            {
-                if (domElement.tagName() == "Gen4")
-                {
-                    QDomNode info = domElement.firstChild();
-                    QString profileName;
-                    int version = 0;
-                    int language = 0;
-                    u16 tid = 0;
-                    u16 sid = 0;
-                    int dual = 0;
-                    int radio = 0;
-                    while (!info.isNull())
-                    {
-                        QDomElement infoElement = info.toElement();
-                        if (!infoElement.isNull())
-                        {
-                            const QString tagName(infoElement.tagName());
-                            if (tagName == "profileName")
-                                profileName = infoElement.text();
-                            else if (tagName == "version")
-                                version = infoElement.text().toInt();
-                            else if (tagName == "language")
-                                language = infoElement.text().toInt();
-                            else if (tagName == "tid")
-                                tid = infoElement.text().toUShort();
-                            else if (tagName == "sid")
-                                sid = infoElement.text().toUShort();
-                            else if (tagName == "dual")
-                                dual = infoElement.text().toInt();
-                            else if (tagName == "radio")
-                                radio = infoElement.text().toInt();
-
-                            info = info.nextSibling();
-                        }
-                    }
-                    profileList.append(Profile4(profileName, static_cast<Game>(version), tid, sid, static_cast<Game>(dual), radio, language));
-                }
-            }
-            domNode = domNode.nextSibling();
+            profileList.append(Profile4(i.toObject()));
         }
         file.close();
     }

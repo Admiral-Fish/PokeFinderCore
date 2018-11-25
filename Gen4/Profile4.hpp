@@ -31,11 +31,13 @@ private:
 
 public:
     Profile4(const QString &profileName, Game version, u16 tid, u16 sid, Game dual = Game::Blank, int radio = 0, int language = 0);
+    Profile4(QJsonObject data);
     Profile4();
     QString getDualSlotString();
     Game getDualSlot();
     QString getRadioString();
     int getRadio();
+    QJsonObject getJson();
     static QVector<Profile4> loadProfileList();
     void saveProfile();
     void deleteProfile();

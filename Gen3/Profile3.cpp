@@ -19,9 +19,16 @@
 
 #include "Profile3.hpp"
 
-Profile3::Profile3(const QString &profileName, Game version, u16 tid, u16 sid, int language, bool deadBattery) : Profile(profileName, version, tid, sid, language)
+Profile3::Profile3(const QString &profileName, Game version, u16 tid, u16 sid, int language, bool deadBattery)
+    : Profile(profileName, version, tid, sid, language)
 {
     this->deadBattery = deadBattery;
+}
+
+Profile3::Profile3(QJsonObject data)
+    : Profile(data["name"].toString(), static_cast<Game>(data["version"].toInt()), data["tid"].toInt(), data["sid"].toInt(), data["language"].toInt())
+{
+    deadBattery = data["battery"].toBool();
 }
 
 Profile3::Profile3()
@@ -30,235 +37,111 @@ Profile3::Profile3()
     version = Game::Emerald;
 }
 
+bool Profile3::getDeadBattery() const
+{
+    return deadBattery;
+}
+
+QJsonObject Profile3::getJson()
+{
+    QJsonObject data;
+    data["name"] = profileName;
+    data["version"] = version;
+    data["language"] = language;
+    data["tid"] = tid;
+    data["sid"] = sid;
+    data["battery"] = deadBattery;
+    return data;
+}
+
 void Profile3::deleteProfile()
 {
-    bool exists = false;
-    QDomDocument doc;
-    QFile file(QApplication::applicationDirPath() + "/profiles.xml");
-    if (file.open(QIODevice::ReadOnly | QFile::Text))
+    QFile file(QApplication::applicationDirPath() + "/profiles.json");
+    if (file.open(QIODevice::ReadWrite | QFile::Text))
     {
-        doc.setContent(&file);
+        QJsonObject profiles(QJsonDocument::fromJson(file.readAll()).object());
+        QJsonArray gen3 = profiles["gen3"].toArray();
 
-        file.close();
-
-        QDomElement profiles = doc.documentElement();
-        QDomNode domNode = profiles.firstChild();
-        while (!domNode.isNull() && !exists)
+        for (int i = 0; i < gen3.size(); i++)
         {
-            QDomElement domElement = domNode.toElement();
-            if (!domElement.isNull())
+            Profile3 profile(gen3[i].toObject());
+
+            if (profile.profileName == profileName && profile.version == version && profile.language == language &&
+                    profile.tid == tid && profile.sid == sid && profile.deadBattery == deadBattery)
             {
-                if (domElement.tagName() == "Gen3")
-                {
-                    QDomNode info = domElement.firstChild();
-                    while (!info.isNull())
-                    {
-                        QDomElement infoElement = info.toElement();
-                        if (!infoElement.isNull())
-                        {
-                            const QString tagName(infoElement.tagName());
-                            if (tagName == "profileName")
-                            {
-                                if (this->profileName == infoElement.text())
-                                {
-                                    exists = true;
-                                    domNode.parentNode().removeChild(domNode);
-                                }
-                                break;
-                            }
-                            info = info.nextSibling();
-                        }
-                    }
-                }
+                gen3.removeAt(i);
+                profiles["gen3"] = gen3;
+
+                file.resize(0);
+                file.write(QJsonDocument(profiles).toJson());
+                break;
             }
-            domNode = domNode.nextSibling();
         }
 
-        if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
-        {
-            QTextStream stream(&file);
-            stream.setCodec("UTF-8");
-            stream << doc.toString();
-        }
         file.close();
     }
 }
 
 void Profile3::updateProfile(Profile3 original)
 {
-    QDomDocument doc;
-    QFile file(QApplication::applicationDirPath() + "/profiles.xml");
-    if (file.open(QIODevice::ReadOnly | QFile::Text))
+    QFile file(QApplication::applicationDirPath() + "/profiles.json");
+    if (file.open(QIODevice::ReadWrite | QFile::Text))
     {
-        doc.setContent(&file);
-        file.close();
+        QJsonObject profiles(QJsonDocument::fromJson(file.readAll()).object());
+        QJsonArray gen3 = profiles["gen3"].toArray();
 
-        QDomElement profiles = doc.documentElement();
-        QDomNode domNode = profiles.firstChild();
-        while (!domNode.isNull())
+        for (auto &&i : gen3)
         {
-            QDomElement domElement = domNode.toElement();
-            if (!domElement.isNull() && domElement.tagName() == "Gen3")
+            Profile3 profile(i.toObject());
+
+            if (original.profileName == profile.profileName && original.version == profile.version && original.language == profile.language &&
+                    original.tid == profile.tid && original.sid == profile.sid && original.deadBattery == profile.deadBattery)
             {
-                QString name = domElement.childNodes().at(0).toElement().text();
-                int ver = domElement.childNodes().at(1).toElement().text().toInt();
-                int lang = domElement.childNodes().at(2).toElement().text().toInt();
-                u16 id = domElement.childNodes().at(3).toElement().text().toUShort();
-                u16 id2 = domElement.childNodes().at(4).toElement().text().toUShort();
-                bool flag = domElement.childNodes().at(5).toElement().text() == "1";
+                i = getJson();
+                profiles["gen3"] = gen3;
 
-                if (original.profileName == name && original.version == ver && original.language == lang && original.tid == id && original.sid == id2 && original.deadBattery == flag)
-                {
-                    domElement.childNodes().at(0).toElement().firstChild().setNodeValue(profileName);
-                    domElement.childNodes().at(1).toElement().firstChild().setNodeValue(QString::number(version));
-                    domElement.childNodes().at(2).toElement().firstChild().setNodeValue(QString::number(language));
-                    domElement.childNodes().at(3).toElement().firstChild().setNodeValue(QString::number(tid));
-                    domElement.childNodes().at(4).toElement().firstChild().setNodeValue(QString::number(sid));
-                    domElement.childNodes().at(5).toElement().firstChild().setNodeValue(QString::number(deadBattery));
-
-                    if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
-                    {
-                        QTextStream stream(&file);
-                        stream.setCodec("UTF-8");
-                        stream << doc.toString();
-                    }
-                    file.close();
-                    return;
-                }
+                file.resize(0);
+                file.write(QJsonDocument(profiles).toJson());
+                break;
             }
-            domNode = domNode.nextSibling();
         }
+        file.close();
     }
 }
 
 void Profile3::saveProfile()
 {
-    QDomDocument doc;
-    QFile file(QApplication::applicationDirPath() + "/profiles.xml");
-    if (file.open(QIODevice::ReadOnly | QFile::Text))
+    QFile file(QApplication::applicationDirPath() + "/profiles.json");
+    if (file.open(QIODevice::ReadWrite | QIODevice::Text))
     {
-        doc.setContent(&file);
+        QJsonObject profiles(QJsonDocument::fromJson(file.readAll()).object());
+        QJsonArray gen3 = profiles["gen3"].toArray();
 
-        file.close();
+        gen3.append(getJson());
+        profiles["gen3"] = gen3;
 
-        QDomElement profiles = doc.documentElement();
-
-        QDomElement gen3 = doc.createElement("Gen3");
-        QDomElement profileNameE = doc.createElement("profileName");
-        QDomElement versionE = doc.createElement("version");
-        QDomElement languageE = doc.createElement("language");
-        QDomElement tidE = doc.createElement("tid");
-        QDomElement sidE = doc.createElement("sid");
-        QDomElement deadBatteryE = doc.createElement("deadBattery");
-
-        profileNameE.appendChild(doc.createTextNode(profileName));
-        versionE.appendChild(doc.createTextNode(QString::number(version)));
-        languageE.appendChild(doc.createTextNode(QString::number(language)));
-        tidE.appendChild(doc.createTextNode(QString::number(tid)));
-        sidE.appendChild(doc.createTextNode(QString::number(sid)));
-        deadBatteryE.appendChild(doc.createTextNode(QString::number(deadBattery)));
-
-        gen3.appendChild(profileNameE);
-        gen3.appendChild(versionE);
-        gen3.appendChild(languageE);
-        gen3.appendChild(tidE);
-        gen3.appendChild(sidE);
-        gen3.appendChild(deadBatteryE);
-
-        if (profiles.isNull())
-        {
-            profiles = doc.createElement("Profiles");
-            profiles.appendChild(gen3);
-            doc.appendChild(profiles);
-        }
-        else
-        {
-            profiles.appendChild(gen3);
-        }
-
-        if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QFile::Text))
-        {
-            QTextStream stream(&file);
-            stream.setCodec("UTF-8");
-            stream << doc.toString();
-        }
+        file.resize(0);
+        file.write(QJsonDocument(profiles).toJson());
         file.close();
     }
 }
 
 QVector<Profile3> Profile3::loadProfileList()
 {
-    static QVector<Profile3> profileList;
-    profileList.clear();
+    QVector<Profile3> profileList;
 
-    QDomDocument doc;
-    QFile file(QApplication::applicationDirPath() + "/profiles.xml");
-    if (file.open(QIODevice::ReadOnly | QFile::Text))
+    QFile file(QApplication::applicationDirPath() + "/profiles.json");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        doc.setContent(&file);
+        QJsonDocument profiles(QJsonDocument::fromJson(file.readAll()));
+        QJsonArray gen3 = profiles["gen3"].toArray();
 
-        QDomElement profiles = doc.documentElement();
-        QDomNode domNode = profiles.firstChild();
-        while (!domNode.isNull())
+        for (const auto &&i : gen3)
         {
-            QDomElement domElement = domNode.toElement();
-            if (!domElement.isNull())
-            {
-                if (domElement.tagName() == "Gen3")
-                {
-                    QDomNode info = domElement.firstChild();
-                    QString profileName;
-                    int version = 0;
-                    int language = 0;
-                    u16 tid = 0;
-                    u16 sid = 0;
-                    bool deadBattery = false;
-                    while (!info.isNull())
-                    {
-                        QDomElement infoElement = info.toElement();
-                        if (!infoElement.isNull())
-                        {
-                            const QString tagName(infoElement.tagName());
-                            if (tagName == "profileName")
-                            {
-                                profileName = infoElement.text();
-                            }
-                            else if (tagName == "version")
-                            {
-                                version = infoElement.text().toInt();
-                            }
-                            else if (tagName == "language")
-                            {
-                                language = infoElement.text().toInt();
-                            }
-                            else if (tagName == "tid")
-                            {
-                                tid = infoElement.text().toUShort();
-                            }
-                            else if (tagName == "sid")
-                            {
-                                sid = infoElement.text().toUShort();
-                            }
-                            else if (tagName == "deadBattery")
-                            {
-                                deadBattery = infoElement.text() == "1";
-                            }
-
-                            info = info.nextSibling();
-                        }
-                    }
-                    profileList.append(Profile3(profileName, static_cast<Game>(version), tid, sid, language, deadBattery));
-                }
-            }
-            domNode = domNode.nextSibling();
+            profileList.append(Profile3(i.toObject()));
         }
         file.close();
     }
 
     return profileList;
-}
-
-bool Profile3::getDeadBattery() const
-{
-    return deadBattery;
 }
