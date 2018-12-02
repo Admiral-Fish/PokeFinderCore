@@ -1,5 +1,5 @@
 <RCC>
-	<qresource prefix="/text">
+    <qresource prefix="/text">
         <file alias="species_de.txt">Text/species_de.txt</file>
         <file alias="species_en.txt">Text/species_en.txt</file>
         <file alias="species_es.txt">Text/species_es.txt</file>
