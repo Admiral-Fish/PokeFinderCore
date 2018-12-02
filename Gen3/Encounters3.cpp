@@ -33,20 +33,20 @@ QVector<EncounterArea3> Encounters3::getEncounters()
     switch (game)
     {
         case Ruby:
-            path = ":/ruby.bin";
+            path = ":/encounters/ruby.bin";
             break;
         case Sapphire:
-            path = ":/sapphire.bin";
+            path = ":/encounters/sapphire.bin";
             break;
         case FireRed:
-            path = ":/firered.bin";
+            path = ":/encounters/firered.bin";
             break;
         case LeafGreen:
-            path = ":/leafgreen.bin";
+            path = ":/encounters/leafgreen.bin";
             break;
         case Emerald:
         default:
-            path = ":/emerald.bin";
+            path = ":/encounters/emerald.bin";
             break;
     }
 

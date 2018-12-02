@@ -24,12 +24,13 @@
 #include <QSettings>
 #include <QTextStream>
 #include <QVector>
+#include <PokeFinderCore/Objects/Game.hpp>
 
 namespace Translator
 {
     QStringList getSpecies(const QVector<int> &nums);
     QStringList getLocationsGen3(const QVector<int> &nums);
-    QStringList getLocationsGen4(const QVector<int> &nums);
+    QStringList getLocationsGen4(const QVector<int> &nums, Game game);
 };
 
 #endif // TRANSLATOR_HPP

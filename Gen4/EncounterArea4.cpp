@@ -19,10 +19,9 @@
 
 #include "EncounterArea4.hpp"
 
-EncounterArea4::EncounterArea4(int location, int time, Encounter type, const QVector<Slot> &pokemon)
+EncounterArea4::EncounterArea4(int location, Encounter type, const QVector<Slot> &pokemon)
     : EncounterArea(location, type, pokemon)
 {
-    this->time = time;
 }
 
 u32 EncounterArea4::calcLevel(u32 index, u32 prng) const
@@ -35,51 +34,7 @@ u32 EncounterArea4::calcLevel(u32 index) const
     return pokemon.at(index).getMinLevel();
 }
 
-int EncounterArea4::getTime() const
-{
-    return time;
-}
-
 void EncounterArea4::setSlot(int index, int specie)
 {
     pokemon[index].setSpecie(specie);
-}
-
-QDataStream &operator>>(QDataStream &in, EncounterArea4 &encounter)
-{
-    QVariant location, time, type;
-    in >> location >> time >> type;
-
-    int size;
-    switch (static_cast<Encounter>(type.toInt()))
-    {
-        case Encounter::Grass:
-        case Encounter::Swarm:
-        case Encounter::PokeRadar:
-            size = 12;
-        case Encounter::SafariZone:
-            break;
-        case Encounter::RockSmash:
-            size = 2;
-            break;
-        case Encounter::OldRod:
-        case Encounter::GoodRod:
-        case Encounter::SuperRod:
-        case Encounter::Surfing:
-            size = 5;
-            break;
-        default:
-            break;
-    }
-
-    QVector<Slot> pokemon;
-    for (int i = 0; i < size; i++)
-    {
-        QVariant specie, min, max;
-        in >> specie >> min >> max;
-        pokemon.append(Slot(specie.toInt(), min.toUInt(), max.toUInt()));
-    }
-
-    encounter = EncounterArea4(location.toInt(), time.toInt(), static_cast<Encounter>(type.toInt()), pokemon);
-    return in;
 }

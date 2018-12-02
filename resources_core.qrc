@@ -1,0 +1,48 @@
+<RCC>
+	<qresource prefix="/text">
+        <file alias="species_de.txt">Text/species_de.txt</file>
+        <file alias="species_en.txt">Text/species_en.txt</file>
+        <file alias="species_es.txt">Text/species_es.txt</file>
+        <file alias="species_fr.txt">Text/species_fr.txt</file>
+        <file alias="species_it.txt">Text/species_it.txt</file>
+        <file alias="species_ja.txt">Text/species_ja.txt</file>
+        <file alias="species_ko.txt">Text/species_ko.txt</file>
+        <file alias="species_zh.txt">Text/species_zh.txt</file>
+        <file alias="rsefrlg_de.txt">Text/Gen3/rsefrlg_en.txt</file>
+        <file alias="rsefrlg_en.txt">Text/Gen3/rsefrlg_en.txt</file>
+        <file alias="rsefrlg_es.txt">Text/Gen3/rsefrlg_en.txt</file>
+        <file alias="rsefrlg_fr.txt">Text/Gen3/rsefrlg_en.txt</file>
+        <file alias="rsefrlg_it.txt">Text/Gen3/rsefrlg_en.txt</file>
+        <file alias="rsefrlg_ja.txt">Text/Gen3/rsefrlg_en.txt</file>
+        <file alias="rsefrlg_ko.txt">Text/Gen3/rsefrlg_en.txt</file>
+        <file alias="rsefrlg_zh.txt">Text/Gen3/rsefrlg_en.txt</file>
+        <file alias="dppt_de.txt">Text/Gen4/dppt_de.txt</file>
+        <file alias="dppt_en.txt">Text/Gen4/dppt_en.txt</file>
+        <file alias="dppt_es.txt">Text/Gen4/dppt_es.txt</file>
+        <file alias="dppt_fr.txt">Text/Gen4/dppt_fr.txt</file>
+        <file alias="dppt_it.txt">Text/Gen4/dppt_it.txt</file>
+        <file alias="dppt_ja.txt">Text/Gen4/dppt_ja.txt</file>
+        <file alias="dppt_ko.txt">Text/Gen4/dppt_ko.txt</file>
+        <file alias="dppt_zh.txt">Text/Gen4/dppt_zh.txt</file>
+        <file alias="hgss_de.txt">Text/Gen4/hgss_de.txt</file>
+        <file alias="hgss_en.txt">Text/Gen4/hgss_en.txt</file>
+        <file alias="hgss_es.txt">Text/Gen4/hgss_es.txt</file>
+        <file alias="hgss_fr.txt">Text/Gen4/hgss_fr.txt</file>
+        <file alias="hgss_it.txt">Text/Gen4/hgss_it.txt</file>
+        <file alias="hgss_ja.txt">Text/Gen4/hgss_ja.txt</file>
+        <file alias="hgss_ko.txt">Text/Gen4/hgss_ko.txt</file>
+        <file alias="hgss_zh.txt">Text/Gen4/hgss_zh.txt</file>
+    </qresource>
+    <qresource prefix="/encounters">
+        <file alias="ruby.bin">Encounters/Gen3/ruby.bin</file>
+        <file alias="sapphire.bin">Encounters/Gen3/sapphire.bin</file>
+        <file alias="firered.bin">Encounters/Gen3/firered.bin</file>
+        <file alias="leafgreen.bin">Encounters/Gen3/leafgreen.bin</file>
+        <file alias="emerald.bin">Encounters/Gen3/emerald.bin</file>
+        <file alias="diamond.bin">Encounters/Gen4/diamond.bin</file>
+        <file alias="pearl.bin">Encounters/Gen4/pearl.bin</file>
+        <file alias="platinum.bin">Encounters/Gen4/platinum.bin</file>
+        <file alias="heartgold.bin">Encounters/Gen4/heartgold.bin</file>
+        <file alias="soulsilver.bin">Encounters/Gen4/soulsilver.bin</file>
+    </qresource>
+</RCC>

@@ -26,19 +26,13 @@
 class EncounterArea4 : public EncounterArea
 {
 
-private:
-    int time;
-
 public:
     EncounterArea4() = default;
-    EncounterArea4(int location, int time, Encounter type, const QVector<Slot> &pokemon);
+    EncounterArea4(int location, Encounter type, const QVector<Slot> &pokemon);
     u32 calcLevel(u32 index, u32 prng) const;
     u32 calcLevel(u32 index) const;
-    int getTime() const;
     void setSlot(int index, int specie);
 
 };
-
-QDataStream &operator>>(QDataStream &in, EncounterArea4 &encounter);
 
 #endif // ENCOUNTERAREA4_HPP

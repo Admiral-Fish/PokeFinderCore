@@ -74,3 +74,10 @@ Slot::Slot(int specie, u32 minLevel, u32 maxLevel)
     this->minLevel = minLevel;
     this->maxLevel = maxLevel;
 }
+
+Slot::Slot(int specie, u32 level)
+{
+    this->specie = specie;
+    minLevel = level;
+    maxLevel = level;
+}

@@ -31,85 +31,306 @@ Encounters4::Encounters4(Encounter type, Game game, Game dual, int time, int rad
 QVector<EncounterArea4> Encounters4::getEncounters()
 {
     QVector<EncounterArea4> encounters;
-    for (const auto &area : getBaseEncounters())
+    QByteArrayList entries = getData();
+    for (int i = 0; i < entries.size(); i++)
     {
-        if (area.getType() == type && (area.getTime() == 0 || area.getTime() == time))
-            encounters.append(area);
+        QByteArray data = entries[i];
+        if (game == Game::HeartGold || game == Game::SoulSilver)
+        {
+            for (const auto &encounter : getHGSS(data, i))
+            {
+                if (encounter.getType() == type)
+                {
+                    encounters.append(encounter);
+                }
+            }
+        }
+        else
+        {
+            for (const auto &encounter : getDPPt(data, i))
+            {
+                if (encounter.getType() == type)
+                {
+                    encounters.append(encounter);
+                }
+            }
+        }
     }
-
-    // TODO
-    /*if (dual != Game::Blank && (type == Encounter::Grass || type == Encounter::PokeRadar || type == Encounter::Swarm))
-        encounters = modifySlotsDual(encounters);
-
-    if (radio != 0)
-        encounters = modifySlotsSound(encounters);*/
 
     return encounters;
 }
 
-QVector<EncounterArea4> Encounters4::getBaseEncounters() const
+QByteArrayList Encounters4::getData() const
 {
     QString path;
+    int size;
     switch (game)
     {
         case Game::Diamond:
-            path = ":/diamond.bin";
+            path = ":/encounters/diamond.bin";
+            size = 158;
             break;
         case Game::Pearl:
-            path = ":/pearl.bin";
+            path = ":/encounters/pearl.bin";
+            size = 158;
             break;
         case Game::Platinum:
-            path = ":/platinum.bin";
+            path = ":/encounters/platinum.bin";
+            size = 158;
             break;
         case Game::HeartGold:
-            path = ":/heartgold.bin";
+            path = ":/encounters/heartgold.bin";
+            size = 191;
             break;
         case Game::SoulSilver:
         default:
-            path = ":/soulsilver.bin";
+            path = ":/encounters/soulsilver.bin";
+            size = 191;
             break;
     }
 
-    QVector<EncounterArea4> encounters;
+    QByteArray data;
     QFile file(path);
     if (file.open(QIODevice::ReadOnly))
     {
-        QDataStream stream(&file);
-        stream >> encounters;
+        data = file.readAll();
         file.close();
+    }
+
+    QByteArrayList encounters;
+    for (int i = 0; i < data.size(); i += size)
+    {
+        encounters.append(data.mid(i, size));
     }
 
     return encounters;
 }
 
-// Changes slots 8 & 9
-/*QVector<EncounterArea4> Encounters4::modifySlotsDual(QVector<EncounterArea4> encounters)
+QVector<EncounterArea4> Encounters4::getHGSS(const QByteArray &data, int i)
 {
-    const auto &modifiers = Modifiers::getDualModifiers(game, dual);
-    for (auto &encounter : encounters)
+    QVector<EncounterArea4> encounters;
+    if (getValue(data, 0, 1) == 1)
     {
-        const auto &iterator = modifiers.find(encounter.getLocation());
-        if (iterator != modifiers.end())
-        {
-            const auto &modify = iterator.value();
-            encounter.setSlot(8, modify.first);
-            encounter.setSlot(9, modify.second);
-        }
-    }
-    return encounters;
-}*/
+        int t;
+        if (time == 0)
+            t = 1;
+        else if (time == 1)
+            t = 3;
+        else
+            t = 5;
 
-// TODO figure out slot changes
-/*QVector<EncounterArea4> Encounters4::modifySlotsSound(QVector<EncounterArea4> encounters)
-{
-    const auto &modifiers = Modifiers::getRadioModifiers(game, radio);
-    for (auto &encounter : encounters)
-    {
-        const auto &iterator = modifiers.find(encounter.getLocation());
-        if (iterator != modifiers.end())
+        QVector<Slot> pokemon;
+        for (int i = 0; i < 12; i++)
         {
-            const auto &modify = iterator.value();
+            int level = getValue(data, 3 + i * 7, 1);
+            int specie = getValue(data, 3 + t + i * 7, 2);
+            pokemon.append(Slot(specie, level));
         }
+
+        modifyRadio(pokemon, data);
+        modifySwarmHGSS(pokemon, data);
+
+        encounters.append(EncounterArea4(i, Encounter::Grass, pokemon));
+    }
+    else if (getValue(data, 1, 1) == 1 && type == Encounter::RockSmash)
+    {
+        QVector<Slot> pokemon;
+        for (int i = 0; i < 2; i++)
+        {
+            int min = getValue(data, 95 + i * 4, 1);
+            int max = getValue(data, 96 + i * 4, 1);
+            int specie = getValue(data, 97 + i * 4, 2);
+            pokemon.append(Slot(specie, min, max));
+        }
+        encounters.append(EncounterArea4(i, Encounter::RockSmash, pokemon));
+    }
+    else if (getValue(data, 2, 1) == 1)
+    {
+        QVector<Slot> surf;
+        for (int i = 0; i < 5; i++)
+        {
+            int min = getValue(data, 103 + i * 4, 1);
+            int max = getValue(data, 103 + 1 + i * 4, 1);
+            int specie = getValue(data, 103 + 2 + i * 4, 2);
+            surf.append(Slot(specie, min, max));
+        }
+        modifySwarmHGSS(surf, data);
+        encounters.append(EncounterArea4(i, Encounter::Surfing, surf));
+
+        QVector<Slot> old;
+        for (int i = 0; i < 5; i++)
+        {
+            int min = getValue(data, 123 + i * 4, 1);
+            int max = getValue(data, 123 + 1 + i * 4, 1);
+            int specie = getValue(data, 123 + 2 + i * 4, 2);
+            old.append(Slot(specie, min, max));
+        }
+        encounters.append(EncounterArea4(i, Encounter::OldRod, old));
+
+        QVector<Slot> good;
+        for (int i = 0; i < 5; i++)
+        {
+            int min = getValue(data, 143 + i * 4, 1);
+            int max = getValue(data, 143 + 1 + i * 4, 1);
+            int specie = getValue(data, 143 + 2 + i * 4, 2);
+            good.append(Slot(specie, min, max));
+        }
+        modifySwarmHGSS(good, data);
+        encounters.append(EncounterArea4(i, Encounter::GoodRod, good));
+
+        QVector<Slot> super;
+        for (int i = 0; i < 5; i++)
+        {
+            int min = getValue(data, 163 + i * 4, 1);
+            int max = getValue(data, 163 + 1 + i * 4, 1);
+            int specie = getValue(data, 163 + 2 + i * 4, 2);
+            super.append(Slot(specie, min, max));
+        }
+        modifySwarmHGSS(super, data);
+        encounters.append(EncounterArea4(i, Encounter::SuperRod, super));
     }
     return encounters;
-}*/
+}
+
+QVector<EncounterArea4> Encounters4::getDPPt(const QByteArray &data, int i)
+{
+    QVector<EncounterArea4> encounters;
+    if (getValue(data, 0, 1) == 1 && type == Encounter::Grass)
+    {
+        QVector<Slot> pokemon;
+        for (int i = 0; i < 12; i++)
+        {
+            int level = getValue(data, 2 + i * 3, 1);
+            int specie = getValue(data, 3 + i * 3, 2);
+            pokemon.append(Slot(specie, level));
+        }
+
+        modifyTime(pokemon, data);
+        modifyDual(pokemon, data);
+        modifyRadar(pokemon, data);
+        modifySwarmDPPt(pokemon, data);
+
+        encounters.append(EncounterArea4(i, Encounter::Grass, pokemon));
+    }
+    if (getValue(data, 1, 1) == 1)
+    {
+        QVector<Slot> surf;
+        for (int i = 0; i < 5; i++)
+        {
+            int min = getValue(data, 78 + i * 4, 1);
+            int max = getValue(data, 78 + 1 + i * 4, 1);
+            int specie = getValue(data, 78 + 2 + i * 4, 2);
+            surf.append(Slot(specie, min, max));
+        }
+        encounters.append(EncounterArea4(i, Encounter::Surfing, surf));
+
+        QVector<Slot> old;
+        for (int i = 0; i < 5; i++)
+        {
+            int min = getValue(data, 98 + i * 4, 1);
+            int max = getValue(data, 98 + 1 + i * 4, 1);
+            int specie = getValue(data, 98 + 2 + i * 4, 2);
+            old.append(Slot(specie, min, max));
+        }
+        encounters.append(EncounterArea4(i, Encounter::OldRod, old));
+
+        QVector<Slot> good;
+        for (int i = 0; i < 5; i++)
+        {
+            int min = getValue(data, 118 + i * 4, 1);
+            int max = getValue(data, 118 + 1 + i * 4, 1);
+            int specie = getValue(data, 118 + 2 + i * 4, 2);
+            good.append(Slot(specie, min, max));
+        }
+        encounters.append(EncounterArea4(i, Encounter::GoodRod, good));
+
+        QVector<Slot> super;
+        for (int i = 0; i < 5; i++)
+        {
+            int min = getValue(data, 138 + i * 4, 1);
+            int max = getValue(data, 138 + 1 + i * 4, 1);
+            int specie = getValue(data, 138 + 2 + i * 4, 2);
+            super.append(Slot(specie, min, max));
+        }
+        encounters.append(EncounterArea4(i, Encounter::SuperRod, super));
+    }
+    return encounters;
+}
+
+void Encounters4::modifyRadio(QVector<Slot> &pokemon, const QByteArray &data)
+{
+    if (radio == 1)
+    {
+        pokemon[4].setSpecie(getValue(data, 87, 2));
+        pokemon[5].setSpecie(getValue(data, 89, 2));
+    }
+    else if (radio == 2)
+    {
+        pokemon[4].setSpecie(getValue(data, 91, 2));
+        pokemon[5].setSpecie(getValue(data, 93, 2));
+    }
+}
+
+void Encounters4::modifyTime(QVector<Slot> &pokemon, const QByteArray &data)
+{
+    // Need to verify this
+    if (time == 1)
+    {
+        pokemon[2].setSpecie(getValue(data, 42, 2));
+        pokemon[3].setSpecie(getValue(data, 44, 2));
+    }
+    else if (time == 2)
+    {
+        pokemon[2].setSpecie(getValue(data, 46, 2));
+        pokemon[3].setSpecie(getValue(data, 48, 2));
+    }
+}
+
+void Encounters4::modifyDual(QVector<Slot> &pokemon, const QByteArray &data)
+{
+    if (dual == Game::Ruby)
+    {
+        pokemon[8].setSpecie(getValue(data, 58, 2));
+        pokemon[9].setSpecie(getValue(data, 60, 2));
+    }
+    else if (dual == Game::Sapphire)
+    {
+        pokemon[8].setSpecie(getValue(data, 62, 2));
+        pokemon[9].setSpecie(getValue(data, 64, 2));
+    }
+    else if (dual == Game::Emerald)
+    {
+        pokemon[8].setSpecie(getValue(data, 66, 2));
+        pokemon[9].setSpecie(getValue(data, 68, 2));
+    }
+    else if (dual == Game::FireRed)
+    {
+        pokemon[8].setSpecie(getValue(data, 70, 2));
+        pokemon[9].setSpecie(getValue(data, 72, 2));
+    }
+    else if (dual == Game::LeafGreen)
+    {
+        pokemon[8].setSpecie(getValue(data, 74, 2));
+        pokemon[9].setSpecie(getValue(data, 76, 2));
+    }
+}
+
+void Encounters4::modifyRadar(QVector<Slot> &pokemon, const QByteArray &data)
+{
+    // TODO
+}
+
+void Encounters4::modifySwarmHGSS(QVector<Slot> &pokemon, const QByteArray &data)
+{
+    // TODO
+}
+
+void Encounters4::modifySwarmDPPt(QVector<Slot> &pokemon, const QByteArray &data)
+{
+    // TODO
+}
+
+ushort Encounters4::getValue(const QByteArray &data, int offset, int length)
+{
+    return data.mid(offset, length).toHex().toUShort(nullptr, 16);
+}

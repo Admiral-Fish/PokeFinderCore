@@ -60,6 +60,7 @@ private:
 public:
     Slot() = default;
     Slot(int specie, u32 minLevel, u32 maxLevel);
+    Slot(int specie, u32 level);
 
     u32 getMinLevel() const { return minLevel; }
     u32 getMaxLevel() const { return maxLevel; }

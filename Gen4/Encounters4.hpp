@@ -22,7 +22,6 @@
 
 #include <QDataStream>
 #include <PokeFinderCore/Gen4/EncounterArea4.hpp>
-//#include <PokeFinderCore/Gen4/Modifiers4.hpp>
 
 class Encounters4
 {
@@ -34,12 +33,19 @@ public:
 private:
     Encounter type;
     Game game, dual; // Dual is used in DPPt
-    int time; // 0: Any 1: Morning, 2: Day, 3: Night
+    int time; // 0: Morning, 1: Day, 2: Night
     int radio; // 0: None, 1: Hoenn, 2: Sinnoh, For HGSS
 
-    QVector<EncounterArea4> getBaseEncounters() const;
-    //QVector<EncounterArea4> modifySlotsDual(QVector<EncounterArea4> encounters);
-    //QVector<EncounterArea4> modifySlotsSound(QVector<EncounterArea4> encounters);
+    QByteArrayList getData() const;
+    QVector<EncounterArea4> getHGSS(const QByteArray &data, int i);
+    QVector<EncounterArea4> getDPPt(const QByteArray &data, int i);
+    void modifyRadio(QVector<Slot> &pokemon, const QByteArray &data);
+    void modifyTime(QVector<Slot> &pokemon, const QByteArray &data);
+    void modifyDual(QVector<Slot> &pokemon, const QByteArray &data);
+    void modifyRadar(QVector<Slot> &pokemon, const QByteArray &data);
+    void modifySwarmHGSS(QVector<Slot> &pokemon, const QByteArray &data);
+    void modifySwarmDPPt(QVector<Slot> &pokemon, const QByteArray &data);
+    inline ushort getValue(const QByteArray &data, int offset, int length);
 
 };
 
