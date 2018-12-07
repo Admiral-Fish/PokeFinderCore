@@ -23,9 +23,9 @@
 #include <QDateTime>
 #include <QString>
 #include <QVector>
-#include <PokeFinderCore/Gen4/HGSSRoamer.hpp>
-#include <PokeFinderCore/RNG/LCRNG.hpp>
-#include <PokeFinderCore/RNG/MTRNG.hpp>
+#include <Gen4/HGSSRoamer.hpp>
+#include <RNG/LCRNG.hpp>
+#include <RNG/MTRNG.hpp>
 
 using u8 = uint8_t;
 

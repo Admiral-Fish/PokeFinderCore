@@ -20,11 +20,11 @@
 #ifndef EGG4_HPP
 #define EGG4_HPP
 
-#include <PokeFinderCore/Objects/Egg.hpp>
-#include <PokeFinderCore/Objects/FrameCompare.hpp>
-#include <PokeFinderCore/Gen4/Frame4.hpp>
-#include <PokeFinderCore/RNG/LCRNG.hpp>
-#include <PokeFinderCore/RNG/MTRNG.hpp>
+#include <Objects/Egg.hpp>
+#include <Objects/FrameCompare.hpp>
+#include <Gen4/Frame4.hpp>
+#include <RNG/LCRNG.hpp>
+#include <RNG/MTRNG.hpp>
 
 class Egg4 : public Egg
 {

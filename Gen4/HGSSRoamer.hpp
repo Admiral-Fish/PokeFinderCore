@@ -21,7 +21,7 @@
 #define HGSSROAMER_HPP
 
 #include <QVector>
-#include <PokeFinderCore/RNG/LCRNG.hpp>
+#include <RNG/LCRNG.hpp>
 
 class HGSSRoamer
 {

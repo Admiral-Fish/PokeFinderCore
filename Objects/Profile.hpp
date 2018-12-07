@@ -26,7 +26,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QVector>
-#include <PokeFinderCore/Objects/Game.hpp>
+#include <Objects/Game.hpp>
 
 using u16 = uint16_t;
 

@@ -21,13 +21,13 @@
 #define SEARCHER_HPP
 
 #include <QVector>
-#include <PokeFinderCore/Objects/Encounter.hpp>
-#include <PokeFinderCore/Objects/EncounterSlot.hpp>
-#include <PokeFinderCore/Objects/FrameCompare.hpp>
-#include <PokeFinderCore/Objects/Lead.hpp>
-#include <PokeFinderCore/Objects/Method.hpp>
-#include <PokeFinderCore/Objects/Utilities.hpp>
-#include <PokeFinderCore/RNG/LCRNG.hpp>
+#include <Objects/Encounter.hpp>
+#include <Objects/EncounterSlot.hpp>
+#include <Objects/FrameCompare.hpp>
+#include <Objects/Lead.hpp>
+#include <Objects/Method.hpp>
+#include <Objects/Utilities.hpp>
+#include <RNG/LCRNG.hpp>
 
 using u32 = uint32_t;
 using u16 = uint16_t;

@@ -22,11 +22,11 @@
 
 #include <QString>
 #include <QVector>
-#include <PokeFinderCore/Objects/Encounter.hpp>
-#include <PokeFinderCore/Objects/Lead.hpp>
-#include <PokeFinderCore/Objects/Method.hpp>
-#include <PokeFinderCore/Objects/Nature.hpp>
-#include <PokeFinderCore/Objects/Power.hpp>
+#include <Objects/Encounter.hpp>
+#include <Objects/Lead.hpp>
+#include <Objects/Method.hpp>
+#include <Objects/Nature.hpp>
+#include <Objects/Power.hpp>
 
 using u64 = uint64_t;
 using u32 = uint32_t;

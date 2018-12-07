@@ -24,7 +24,7 @@
 #include <QSettings>
 #include <QTextStream>
 #include <QVector>
-#include <PokeFinderCore/Objects/Game.hpp>
+#include <Objects/Game.hpp>
 
 namespace Translator
 {

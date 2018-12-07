@@ -20,7 +20,7 @@
 #ifndef MTRNG_HPP
 #define MTRNG_HPP
 
-#include <PokeFinderCore/RNG/IRNG.hpp>
+#include <RNG/IRNG.hpp>
 
 class MT : public IRNG
 {

@@ -22,8 +22,8 @@
 
 #include <QFile>
 #include <QVector>
-#include <PokeFinderCore/Objects/Encounter.hpp>
-#include <PokeFinderCore/Translator.hpp>
+#include <Objects/Encounter.hpp>
+#include <Translator.hpp>
 
 using u32 = uint32_t;
 using u16 = uint16_t;

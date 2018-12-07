@@ -21,8 +21,8 @@
 #define FRAMECOMPARE_HPP
 
 #include <QVector>
-#include <PokeFinderCore/Objects/Frame.hpp>
-#include <PokeFinderCore/Objects/Nature.hpp>
+#include <Objects/Frame.hpp>
+#include <Objects/Nature.hpp>
 
 class FrameCompare
 {

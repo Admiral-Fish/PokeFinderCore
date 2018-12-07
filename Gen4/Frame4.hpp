@@ -20,7 +20,7 @@
 #ifndef FRAME4_HPP
 #define FRAME4_HPP
 
-#include <PokeFinderCore/Objects/Frame.hpp>
+#include <Objects/Frame.hpp>
 
 class Frame4 : public Frame
 {

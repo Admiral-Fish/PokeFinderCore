@@ -21,7 +21,7 @@
 #define ENCOUNTERS4_HPP
 
 #include <QDataStream>
-#include <PokeFinderCore/Gen4/EncounterArea4.hpp>
+#include <Gen4/EncounterArea4.hpp>
 
 class Encounters4
 {

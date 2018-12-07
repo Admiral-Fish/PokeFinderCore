@@ -21,7 +21,7 @@
 #define ENCOUNTERS3_HPP
 
 #include <QDataStream>
-#include <PokeFinderCore/Gen3/EncounterArea3.hpp>
+#include<Gen3/EncounterArea3.hpp>
 
 class Encounters3
 {

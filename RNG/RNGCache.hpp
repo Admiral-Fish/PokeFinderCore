@@ -22,7 +22,7 @@
 
 #include <QHash>
 #include <QVector>
-#include <PokeFinderCore/Objects/Method.hpp>
+#include <Objects/Method.hpp>
 
 using u32 = uint32_t;
 using u16 = uint16_t;

@@ -20,7 +20,7 @@
 #ifndef LCRNG64_HPP
 #define LCRNG64_HPP
 
-#include <PokeFinderCore/RNG/IRNG64.hpp>
+#include <RNG/IRNG64.hpp>
 
 class LCRNG64 : public IRNG64
 {

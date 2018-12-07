@@ -20,10 +20,10 @@
 #ifndef SEARCHER4_HPP
 #define SEARCHER4_HPP
 
-#include <PokeFinderCore/Gen4/EncounterArea4.hpp>
-#include <PokeFinderCore/Gen4/Frame4.hpp>
-#include <PokeFinderCore/Objects/Searcher.hpp>
-#include <PokeFinderCore/RNG/RNGCache.hpp>
+#include <Gen4/EncounterArea4.hpp>
+#include <Gen4/Frame4.hpp>
+#include <Objects/Searcher.hpp>
+#include <RNG/RNGCache.hpp>
 
 class Searcher4 : public Searcher
 {

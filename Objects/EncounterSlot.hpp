@@ -21,7 +21,7 @@
 #define ENCOUNTERSLOT_HPP
 
 #include <QVector>
-#include <PokeFinderCore/Objects/Encounter.hpp>
+#include <Objects/Encounter.hpp>
 
 using u32 = uint32_t;
 

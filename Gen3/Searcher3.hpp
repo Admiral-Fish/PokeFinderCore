@@ -20,12 +20,12 @@
 #ifndef SEARCHER3_HPP
 #define SEARCHER3_HPP
 
-#include <PokeFinderCore/Gen3/EncounterArea3.hpp>
-#include <PokeFinderCore/Gen3/Frame3.hpp>
-#include <PokeFinderCore/Gen3/NatureLock.hpp>
-#include <PokeFinderCore/Objects/Searcher.hpp>
-#include <PokeFinderCore/RNG/RNGCache.hpp>
-#include <PokeFinderCore/RNG/RNGEuclidean.hpp>
+#include <Gen3/EncounterArea3.hpp>
+#include <Gen3/Frame3.hpp>
+#include <Gen3/NatureLock.hpp>
+#include <Objects/Searcher.hpp>
+#include <RNG/RNGCache.hpp>
+#include <RNG/RNGEuclidean.hpp>
 
 class Searcher3: public Searcher
 {

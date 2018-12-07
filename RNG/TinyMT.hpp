@@ -20,7 +20,7 @@
 #ifndef TINYMT_HPP
 #define TINYMT_HPP
 
-#include <PokeFinderCore/RNG/IRNG.hpp>
+#include <RNG/IRNG.hpp>
 
 class TinyMT : public IRNG
 {

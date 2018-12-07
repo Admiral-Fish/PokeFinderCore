@@ -33,16 +33,4 @@
         <file alias="hgss_ko.txt">Text/Gen4/hgss_ko.txt</file>
         <file alias="hgss_zh.txt">Text/Gen4/hgss_zh.txt</file>
     </qresource>
-    <qresource prefix="/encounters">
-        <file alias="ruby.bin">Encounters/Gen3/ruby.bin</file>
-        <file alias="sapphire.bin">Encounters/Gen3/sapphire.bin</file>
-        <file alias="firered.bin">Encounters/Gen3/firered.bin</file>
-        <file alias="leafgreen.bin">Encounters/Gen3/leafgreen.bin</file>
-        <file alias="emerald.bin">Encounters/Gen3/emerald.bin</file>
-        <file alias="diamond.bin">Encounters/Gen4/diamond.bin</file>
-        <file alias="pearl.bin">Encounters/Gen4/pearl.bin</file>
-        <file alias="platinum.bin">Encounters/Gen4/platinum.bin</file>
-        <file alias="heartgold.bin">Encounters/Gen4/heartgold.bin</file>
-        <file alias="soulsilver.bin">Encounters/Gen4/soulsilver.bin</file>
-    </qresource>
 </RCC>

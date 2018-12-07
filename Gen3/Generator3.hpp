@@ -20,11 +20,11 @@
 #ifndef GENERATOR3_HPP
 #define GENERATOR3_HPP
 
-#include <PokeFinderCore/Gen3/EncounterArea3.hpp>
-#include <PokeFinderCore/Gen3/Frame3.hpp>
-#include <PokeFinderCore/Objects/FrameCompare.hpp>
-#include <PokeFinderCore/Objects/Generator.hpp>
-#include <PokeFinderCore/RNG/LCRNG.hpp>
+#include <Gen3/EncounterArea3.hpp>
+#include <Gen3/Frame3.hpp>
+#include <Objects/FrameCompare.hpp>
+#include <Objects/Generator.hpp>
+#include <RNG/LCRNG.hpp>
 
 class Generator3: public Generator
 {

@@ -20,7 +20,7 @@
 #ifndef PROFILE3_HPP
 #define PROFILE3_HPP
 
-#include <PokeFinderCore/Objects/Profile.hpp>
+#include <Objects/Profile.hpp>
 
 class Profile3 : public Profile
 {

@@ -21,8 +21,8 @@
 #define NATURELOCK_HPP
 
 #include <QVector>
-#include <PokeFinderCore/RNG/LCRNG.hpp>
-#include <PokeFinderCore/Objects/Method.hpp>
+#include <RNG/LCRNG.hpp>
+#include <Objects/Method.hpp>
 
 // Defines the different types of shadows
 enum ShadowType

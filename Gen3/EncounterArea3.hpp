@@ -20,8 +20,8 @@
 #ifndef ENCOUNTERAREA3_HPP
 #define ENCOUNTERAREA3_HPP
 
-#include <PokeFinderCore/Objects/EncounterArea.hpp>
-#include <PokeFinderCore/Objects/Game.hpp>
+#include <Objects/EncounterArea.hpp>
+#include <Objects/Game.hpp>
 
 class EncounterArea3 : public EncounterArea
 {
