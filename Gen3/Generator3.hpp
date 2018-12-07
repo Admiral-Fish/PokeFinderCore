@@ -55,7 +55,7 @@ public:
     Generator3();
     Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u16 tid, u16 sid, u32 offset);
     ~Generator3();
-    QVector<Frame3> generate(FrameCompare compare);
+    QVector<Frame3> generate(const FrameCompare& compare);
     void setup(Method method);
     void setEncounter(const EncounterArea3 &value);
 

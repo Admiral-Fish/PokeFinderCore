@@ -567,7 +567,7 @@ QVector<Frame3> Generator3::generateMethod1Reverse(FrameCompare compare)
 }
 
 // Generates frames
-QVector<Frame3> Generator3::generate(FrameCompare compare)
+QVector<Frame3> Generator3::generate(const FrameCompare &compare)
 {
     switch (frameType)
     {
