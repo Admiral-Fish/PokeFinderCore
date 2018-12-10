@@ -149,7 +149,7 @@ void Frame3::setInheritance(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 
     ivs[4] = (iv2 >> 10) & 0x1f;
     ivs[5] = iv2 & 0x1f;
 
-    u32 available[6] =  { 0, 1, 2, 3, 4, 5 };
+    u16 available[6] =  { 0, 1, 2, 3, 4, 5 };
     u32 val[6] = { inh1, inh2, inh3, par1, par2, par3 };
 
     for (u32 cnt = 0; cnt < 3; cnt++)
@@ -183,9 +183,10 @@ void Frame3::setInheritance(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 
         }
 
         // Avoids repeat IV inheritance
-        for (u32 j = 0; j < 5 - cnt; j++)
-            if (ivslot <= available[j])
-                available[j] = available[j + 1];
+        for (int i = ivslot; i < 5; i++)
+        {
+            available[i] = available[i + 1];
+        }
     }
 
     hidden = ((((ivs[0] & 1) + 2 * (ivs[1] & 1) + 4 * (ivs[2] & 1) + 8 * (ivs[5] & 1) + 16 * (ivs[3] & 1) + 32 * (ivs[4] & 1)) * 15) / 63);

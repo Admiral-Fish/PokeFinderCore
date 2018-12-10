@@ -27,13 +27,13 @@ QString Frame::getGenderString()
         case 0:
             return "-";
         case 1:
-            return (gender >= 127) ? "♂" : "♀";
+            return gender >= 127 ? "♂" : "♀";
         case 2:
-            return (gender >= 191) ? "♂" : "♀";
+            return gender >= 191 ? "♂" : "♀";
         case 3:
-            return (gender >= 63) ? "♂" : "♀";
+            return gender >= 63 ? "♂" : "♀";
         case 4:
-            return (gender >= 31) ? "♂" : "♀";
+            return gender >= 31 ? "♂" : "♀";
         case 5:
             return "♂";
         case 6:
@@ -69,7 +69,7 @@ void Frame::setIDs(u16 tid, u16 sid, u16 psv)
 }
 
 // Sets IVs for either Channel method or manual input and calculates characteristics based on IVs
-void Frame::setIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6)
+void Frame::setIVsManual(u8 iv1, u8 iv2, u8 iv3, u8 iv4, u8 iv5, u8 iv6)
 {
     ivs[0] = iv1;
     ivs[1] = iv2;
@@ -127,12 +127,12 @@ u32 Frame::getFrame() const
     return frame;
 }
 
-u32 Frame::getIV(int index) const
+u8 Frame::getIV(int index) const
 {
     return ivs[index];
 }
 
-u32 Frame::getPower() const
+u8 Frame::getPower() const
 {
     return power;
 }
@@ -142,7 +142,7 @@ u32 Frame::getPID() const
     return pid;
 }
 
-u32 Frame::getAbility() const
+u8 Frame::getAbility() const
 {
     return ability;
 }
@@ -152,22 +152,22 @@ Lead Frame::getLeadType() const
     return leadType;
 }
 
-u32 Frame::getEncounterSlot() const
+u8 Frame::getEncounterSlot() const
 {
     return encounterSlot;
 }
 
-void Frame::setEncounterSlot(const u32 &value)
+void Frame::setEncounterSlot(const u8 &value)
 {
     encounterSlot = value;
 }
 
-u32 Frame::getLevel() const
+u8 Frame::getLevel() const
 {
     return level;
 }
 
-void Frame::setLevel(const u32 &value)
+void Frame::setLevel(const u8 &value)
 {
     level = value;
 }
@@ -182,27 +182,27 @@ u32 Frame::getNature() const
     return nature;
 }
 
-void Frame::setNature(const u32 &value)
+void Frame::setNature(const u8 &value)
 {
     nature = value;
 }
 
-u32 Frame::getHidden() const
+u8 Frame::getHidden() const
 {
     return hidden;
 }
 
-u32 Frame::getGender() const
+u16 Frame::getGender() const
 {
     return gender;
 }
 
-u32 Frame::getGenderRatio() const
+u8 Frame::getGenderRatio() const
 {
     return genderRatio;
 }
 
-void Frame::setGenderRatio(const u32 &value)
+void Frame::setGenderRatio(const u8 &value)
 {
     genderRatio = value;
 }

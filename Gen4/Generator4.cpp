@@ -432,6 +432,8 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
     else if (encounterType == Encounter::SuperRod)
         thresh = leadType == Lead::SuctionCups ? 100 : 74;
 
+    u16 rate = encounter.getEncounterRate();
+
     for (u32 cnt = initialFrame; cnt < max; cnt++)
     {
         PokeRNG go(rng->nextUInt());
@@ -467,7 +469,7 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
                 hunt = 3;
                 break;
             case Encounter::RockSmash: // TODO
-                if (((go.getSeed() >> 16) % 100) >= 40)
+                if (((go.getSeed() >> 16) % 100) >= rate)
                     continue;
 
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.getSeed() >> 16, encounterType));
@@ -526,6 +528,7 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
     u32 pid, pid1, pid2, hunt = 0;
 
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u16 rock = encounter.getEncounterRate();
 
     for (u32 cnt = initialFrame; cnt < max; cnt++)
     {
@@ -562,7 +565,7 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
                 hunt = 4;
                 break;
             case Encounter::RockSmash: // TODO
-                if (((go.getSeed() >> 16) % 100) >= 40)
+                if (((go.getSeed() >> 16) % 100) >= rock)
                     continue;
 
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.getSeed() >> 16, encounterType));
@@ -625,6 +628,7 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
     u32 pid, pid1, pid2, buffer = 0, hunt = 0;
 
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u16 rock = encounter.getEncounterRate();
 
     switch (leadType)
     {
@@ -682,7 +686,7 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
                 hunt = 4;
                 break;
             case Encounter::RockSmash: // TODO
-                if (((go.getSeed() >> 16) % 100) >= 40)
+                if (((go.getSeed() >> 16) % 100) >= rock)
                     continue;
 
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.getSeed() >> 16, encounterType));

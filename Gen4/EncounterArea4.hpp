@@ -32,6 +32,7 @@ public:
     u32 calcLevel(u32 index, u32 prng) const;
     u32 calcLevel(u32 index) const;
     void setSlot(int index, int specie);
+    u16 getEncounterRate() const;
 
 };
 

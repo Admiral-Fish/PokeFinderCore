@@ -38,3 +38,27 @@ void EncounterArea4::setSlot(int index, int specie)
 {
     pokemon[index].setSpecie(specie);
 }
+
+u16 EncounterArea4::getEncounterRate() const
+{
+    switch (location)
+    {
+        case 117: // Cerulean Cave 1F
+        case 119: // Cerulean Cave B1F
+            return 5;
+        case 8: // Ruins of Alpha (Outside)
+        case 88: // Rock Tunnel 2F
+            return 20;
+        case 35: // Cianwood City
+        case 66: // Cliff Cave
+        case 73: // Route 19
+            return 30;
+        case 78: // Vermillion City
+        case 114: // Victory Road 3F
+            return 40;
+        case 52: // Dark Cave (Route 31)
+            return 50;
+        default:
+            return 0;
+    }
+}

@@ -31,29 +31,30 @@
 using u64 = uint64_t;
 using u32 = uint32_t;
 using u16 = uint16_t;
+using u8 = uint8_t;
 
 class Frame
 {
 
 protected:
-    u32 ivs[6];
-    u32 ability;
-    u32 encounterSlot;
+    u8 ivs[6];
+    u8 ability;
+    u8 encounterSlot;
     Encounter encounterType;
     u32 frame;
-    u32 gender;
-    u32 genderRatio;
-    u32 hidden;
+    u16 gender;
+    u8 genderRatio;
+    u8 hidden;
     Lead leadType;
     Method methodType;
-    u32 nature;
+    u8 nature;
     u32 pid;
-    u32 power;
+    u8 power;
     u16 psv;
     bool shiny;
     u16 sid;
     u16 tid;
-    u32 level;
+    u8 level;
 
     QString getFemale125();
     QString getFemale25();
@@ -65,29 +66,29 @@ public:
     QString getNatureString();
     QString getPowerString();
     QString getShinyString();
-    void setIVsManual(u32 iv1, u32 iv2, u32 iv3, u32 iv4, u32 iv5, u32 iv6);
+    void setIVsManual(u8 iv1, u8 iv2, u8 iv3, u8 iv4, u8 iv5, u8 iv6);
     void setIDs(u16 tid, u16 sid, u16 psv);
     void setIVs(u32 iv1, u32 iv2);
     void setPID(u32 pid1, u32 pid2);
     void setPID(u32 pid, u32 pid1, u32 pid2);
     void setPID(u32 pid);
     u32 getFrame() const;
-    u32 getIV(int index) const;
-    u32 getPower() const;
+    u8 getIV(int index) const;
+    u8 getPower() const;
     u32 getPID() const;
-    u32 getAbility() const;
+    u8 getAbility() const;
     Lead getLeadType() const;
-    u32 getEncounterSlot() const;
-    void setEncounterSlot(const u32 &value);
-    u32 getLevel() const;
-    void setLevel(const u32 &value);
+    u8 getEncounterSlot() const;
+    void setEncounterSlot(const u8 &value);
+    u8 getLevel() const;
+    void setLevel(const u8 &value);
     bool getShiny() const;
     u32 getNature() const;
-    void setNature(const u32 &value);
-    u32 getHidden() const;
-    u32 getGender() const;
-    u32 getGenderRatio() const;
-    void setGenderRatio(const u32 &value);
+    void setNature(const u8 &value);
+    u8 getHidden() const;
+    u16 getGender() const;
+    u8 getGenderRatio() const;
+    void setGenderRatio(const u8 &value);
     void setFrame(const u32 &value);
     void setLeadType(const Lead &value);
 

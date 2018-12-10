@@ -132,7 +132,7 @@ QVector<EncounterArea4> Encounters4::getHGSS(const QByteArray &data, int i)
 
         encounters.append(EncounterArea4(i, Encounter::Grass, pokemon));
     }
-    else if (getValue(data, 1, 1) == 1 && type == Encounter::RockSmash)
+    if (getValue(data, 1, 1) == 1)
     {
         QVector<Slot> pokemon;
         for (int i = 0; i < 2; i++)
@@ -144,7 +144,7 @@ QVector<EncounterArea4> Encounters4::getHGSS(const QByteArray &data, int i)
         }
         encounters.append(EncounterArea4(i, Encounter::RockSmash, pokemon));
     }
-    else if (getValue(data, 2, 1) == 1)
+    if (getValue(data, 2, 1) == 1)
     {
         QVector<Slot> surf;
         for (int i = 0; i < 5; i++)
