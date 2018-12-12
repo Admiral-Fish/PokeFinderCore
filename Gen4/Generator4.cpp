@@ -419,11 +419,11 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
     u16 thresh = 0;
 
     if (encounterType == Encounter::OldRod)
-        thresh = leadType == Lead::SuctionCups ? 48 : 24;
+        thresh = leadType == Lead::SuctionCups ? 90 : 25;
     else if (encounterType == Encounter::GoodRod)
-        thresh = leadType == Lead::SuctionCups ? 98 : 49;
+        thresh = leadType == Lead::SuctionCups ? 100 : 50;
     else if (encounterType == Encounter::SuperRod)
-        thresh = leadType == Lead::SuctionCups ? 100 : 74;
+        thresh = leadType == Lead::SuctionCups ? 100 : 75;
 
     u16 rate = encounter.getEncounterRate();
 
@@ -451,7 +451,7 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
             case Encounter::OldRod:
             case Encounter::GoodRod:
             case Encounter::SuperRod:
-                if (((go.getSeed() >> 16) % 100) > thresh)
+                if (((go.getSeed() >> 16) % 100) >= thresh)
                     continue;
 
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.nextUShort(), encounterType));
@@ -521,7 +521,7 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt = 0;
 
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
     u16 rock = encounter.getEncounterRate();
 
     for (u32 cnt = initialFrame; cnt < max; cnt++)
@@ -548,7 +548,7 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
             case Encounter::OldRod:
             case Encounter::GoodRod:
             case Encounter::SuperRod:
-                if (((go.getSeed() >> 16) % 100) > thresh)
+                if (((go.getSeed() >> 16) % 100) >= thresh)
                     continue;
 
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.nextUShort(), encounterType));
@@ -622,7 +622,7 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, buffer = 0, hunt = 0;
 
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
     u16 rock = encounter.getEncounterRate();
 
     switch (leadType)
@@ -670,7 +670,7 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
             case Encounter::OldRod:
             case Encounter::GoodRod:
             case Encounter::SuperRod:
-                if (((go.getSeed() >> 16) % 100) > thresh)
+                if (((go.getSeed() >> 16) % 100) >= thresh)
                     continue;
 
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.nextUShort(), encounterType));

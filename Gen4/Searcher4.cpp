@@ -166,7 +166,8 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+
     for (const auto &val : seeds)
     {
         // Setup normal frame
@@ -216,7 +217,7 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
                         case Encounter::SuperRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= thresh)
+                            if (((nibble >> 16) / 656) < thresh)
                             {
                                 frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
@@ -258,7 +259,8 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+
     for (const auto &val : seeds)
     {
         // Setup normal frame
@@ -309,7 +311,7 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
                         case Encounter::SuperRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= thresh)
+                            if (((nibble >> 16) / 656) < thresh)
                             {
                                 frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
@@ -346,7 +348,7 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
                         case Encounter::SuperRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= thresh)
+                            if (((nibble >> 16) / 656) < thresh)
                             {
                                 frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), slot >> 16));
@@ -388,7 +390,8 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u32 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u32 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+
     for (const auto &val : seeds)
     {
         // Setup normal frame
@@ -430,7 +433,7 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
                     case Encounter::SuperRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
                         nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if ((nibble >> 16) / 656 <= thresh)
+                        if ((nibble >> 16) / 656 < thresh)
                         {
                             frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), seed >> 16));
@@ -496,8 +499,9 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
-    u16 adjustedThresh = encounterType == Encounter::OldRod ? 48 : encounterType == Encounter::GoodRod ? 98 : encounterType == Encounter::SuperRod ? 99 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u16 adjustedThresh = encounterType == Encounter::OldRod ? 90 : encounterType == Encounter::GoodRod ? 100 : encounterType == Encounter::SuperRod ? 100 : 0;
+
     for (const auto &val : seeds)
     {
         // Setup normal frame
@@ -551,9 +555,9 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                             case Encounter::SuperRod:
                                 slot = testRNG.getSeed();
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) / 656) <= adjustedThresh)
+                                if (((nibble >> 16) / 656) < adjustedThresh)
                                 {
-                                    if (((nibble >> 16) / 656) > thresh)
+                                    if (((nibble >> 16) / 656) >= thresh)
                                         frame.setLeadType(Lead::SuctionCups);
                                     frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                                     frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), slot >> 16));
@@ -596,7 +600,7 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                                 case Encounter::SuperRod:
                                     slot = nibble;
                                     nibble = frame.getSeed();
-                                    if (((nibble >> 16) / 656) <= thresh)
+                                    if (((nibble >> 16) / 656) < thresh)
                                     {
                                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                                         frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), slot >> 16));
@@ -638,7 +642,7 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                             case Encounter::SuperRod:
                                 slot = testRNG.getSeed();
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) / 656) <= thresh)
+                                if (((nibble >> 16) / 656) < thresh)
                                 {
                                     frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                                     frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), slot >> 16));
@@ -688,7 +692,7 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                     case Encounter::SuperRod:
                         slot = seed;
                         nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if ((nibble >> 16) / 656 <= thresh)
+                        if ((nibble >> 16) / 656 < thresh)
                         {
                             frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), slot >> 16));
@@ -758,7 +762,7 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
     u16 rock = encounter.getEncounterRate();
 
     for (const auto &val : seeds)
@@ -810,7 +814,7 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
                         case Encounter::SuperRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= thresh)
+                            if (((nibble >> 16) % 100) < thresh)
                             {
                                 frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -865,7 +869,7 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
     u16 rock = encounter.getEncounterRate();
 
     for (const auto &val : seeds)
@@ -918,7 +922,7 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                         case Encounter::SuperRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= thresh)
+                            if (((nibble >> 16) % 100) < thresh)
                             {
                                 frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -971,7 +975,7 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                         case Encounter::SuperRod:
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= thresh)
+                            if (((nibble >> 16) % 100) < thresh)
                             {
                                 frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1026,7 +1030,7 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u32 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u32 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
     u16 rock = encounter.getEncounterRate();
 
     for (const auto &val : seeds)
@@ -1070,7 +1074,7 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
                     case Encounter::SuperRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;;
                         nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if ((nibble >> 16) % 100 <= thresh)
+                        if ((nibble >> 16) % 100 < thresh)
                         {
                             frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1149,8 +1153,8 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
-    u16 adjustedThresh = encounterType == Encounter::OldRod ? 48 : encounterType == Encounter::GoodRod ? 98 : encounterType == Encounter::SuperRod ? 99 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u16 adjustedThresh = encounterType == Encounter::OldRod ? 90 : encounterType == Encounter::GoodRod ? 100 : encounterType == Encounter::SuperRod ? 100 : 0;
     u16 rock = encounter.getEncounterRate();
 
     for (const auto &val : seeds)
@@ -1203,9 +1207,9 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
                         case Encounter::SuperRod:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) % 100) <= adjustedThresh)
+                            if (((nibble >> 16) % 100) < adjustedThresh)
                             {
-                                if (((nibble >> 16) % 100) > thresh)
+                                if (((nibble >> 16) % 100) >= thresh)
                                     frame.setLeadType(Lead::SuctionCups);
                                 frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1260,8 +1264,8 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
-    u16 adjustedThresh = encounterType == Encounter::OldRod ? 48 : encounterType == Encounter::GoodRod ? 98 : encounterType == Encounter::SuperRod ? 99 : 0;
+    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u16 adjustedThresh = encounterType == Encounter::OldRod ? 90 : encounterType == Encounter::GoodRod ? 100 : encounterType == Encounter::SuperRod ? 100 : 0;
     u16 rock = encounter.getEncounterRate();
 
     for (const auto &val : seeds)
@@ -1317,9 +1321,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                             case Encounter::SuperRod:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) % 100) <= adjustedThresh)
+                                if (((nibble >> 16) % 100) < adjustedThresh)
                                 {
-                                    if (((nibble >> 16) % 100) > thresh)
+                                    if (((nibble >> 16) % 100) >= thresh)
                                         frame.setLeadType(Lead::SuctionCups);
                                     frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                     frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1375,7 +1379,7 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                                 case Encounter::SuperRod:
                                     slot = nibble;
                                     nibble = frame.getSeed();
-                                    if (((nibble >> 16) / 656) <= thresh)
+                                    if (((nibble >> 16) / 656) < thresh)
                                     {
                                         frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                         frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1430,7 +1434,7 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                             case Encounter::SuperRod:
                                 slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                                if (((nibble >> 16) % 100) <= thresh)
+                                if (((nibble >> 16) % 100) < thresh)
                                 {
                                     frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                     frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
@@ -1494,7 +1498,7 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                     case Encounter::SuperRod:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;;
                         nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                        if (((nibble >> 16) % 100) <= thresh)
+                        if (((nibble >> 16) % 100) < thresh)
                         {
                             frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
