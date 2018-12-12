@@ -73,9 +73,6 @@ QVector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u3
                 case Lead::CuteCharm:
                     frames = searchMethodJCuteCharm(hp, atk, def, spa, spd, spe);
                     break;
-                case Lead::SuctionCups:
-                    frames = searchMethodJSuctionCups(hp, atk, def, spa, spd, spe);
-                    break;
                 case Lead::Search:
                     frames = searchMethodJSearch(hp, atk, def, spa, spd, spe);
                     break;
@@ -189,7 +186,7 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
                 continue;
 
             PokeRNGR testRNG(seed);
-            u32 testPID, slot = 0;
+            u32 testPID, slot = 0, level = 0;
             u32 nextRNG = seed >> 16;
             u32 nextRNG2 = testRNG.nextUShort();
 
@@ -217,12 +214,12 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
                         case Encounter::OldRod:
                         case Encounter::GoodRod:
                         case Encounter::SuperRod:
-                            slot = testRNG.getSeed();
+                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) / 656) <= thresh)
                             {
                                 frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
-                                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), slot >> 16));
+                                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
@@ -310,12 +307,12 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
                         case Encounter::OldRod:
                         case Encounter::GoodRod:
                         case Encounter::SuperRod:
-                            slot = testRNG.getSeed();
+                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
                             nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                             if (((nibble >> 16) / 656) <= thresh)
                             {
                                 frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
-                                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), slot >> 16));
+                                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
@@ -431,12 +428,12 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
                     case Encounter::OldRod:
                     case Encounter::GoodRod:
                     case Encounter::SuperRod:
-                        slot = seed;
+                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
                         nibble = slot * 0xeeb9eb65 + 0xa3561a1;
                         if ((nibble >> 16) / 656 <= thresh)
                         {
                             frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
-                            frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), slot >> 16));
+                            frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), seed >> 16));
                             frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                         }
                         else
@@ -481,103 +478,6 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
                         frames.append(frame);
                 }
             }
-        }
-    }
-
-    return frames;
-}
-
-QVector<Frame4> Searcher4::searchMethodJSuctionCups(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
-{
-    QVector<Frame4> frames;
-
-    frame.setIVsManual(hp, atk, def, spa, spd, spe);
-    if (!compare.compareHiddenPower(frame))
-        return frames;
-
-    u32 first = (hp | (atk << 5) | (def << 10)) << 16;
-    u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
-
-    QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
-    u16 adjustedThresh = encounterType == Encounter::OldRod ? 48 : encounterType == Encounter::GoodRod ? 98 : encounterType == Encounter::SuperRod ? 99 : 0;
-    for (const auto &val : seeds)
-    {
-        // Setup normal frame
-        backward->setSeed(val);
-        frame.setPID(backward->nextUShort(), backward->nextUShort());
-        u32 seed = backward->nextUInt();
-
-        for (int i = 0; i < 2; i++)
-        {
-            if (i == 1)
-            {
-                frame.xorFrame();
-                seed ^= 0x80000000;
-            }
-
-            if (!compare.comparePID(frame))
-                continue;
-
-            PokeRNGR testRNG(seed);
-            u32 testPID, slot = 0;
-            u32 nextRNG = seed >> 16;
-            u32 nextRNG2 = testRNG.nextUShort();
-
-            do
-            {
-                u32 nibble;
-                bool skip = false;
-
-                if ((nextRNG / 0xa3e) == frame.getNature())
-                {
-                    frame.setLeadType(Lead::None);
-
-                    switch (encounterType)
-                    {
-                        case Encounter::Grass:
-                            slot = testRNG.getSeed();
-                            frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
-                            frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
-                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
-                            break;
-                        case Encounter::Surfing:
-                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
-                            frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
-                            frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
-                            break;
-                        case Encounter::OldRod:
-                        case Encounter::GoodRod:
-                        case Encounter::SuperRod:
-                            slot = testRNG.getSeed();
-                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
-                            if (((nibble >> 16) / 656) <= adjustedThresh)
-                            {
-                                if (((nibble >> 16) / 656) > thresh)
-                                    frame.setLeadType(Lead::SuctionCups);
-                                frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
-                                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), slot >> 16));
-                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
-                            }
-                            else
-                                skip = true;
-                            break;
-                        case Encounter::Stationary:
-                        default:
-                            frame.setSeed(testRNG.getSeed());
-                            break;
-                    }
-
-                    if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
-                        frames.append(frame);
-                }
-
-                testPID = (nextRNG << 16) | nextRNG2;
-                nextRNG = testRNG.nextUShort();
-                nextRNG2 = testRNG.nextUShort();
-            }
-            while (testPID % 25 != frame.getNature());
         }
     }
 

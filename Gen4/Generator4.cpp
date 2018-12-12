@@ -57,7 +57,6 @@ QVector<Frame4> Generator4::generate(const FrameCompare &compare)
             switch (leadType)
             {
                 case Lead::None:
-                case Lead::SuctionCups:
                     return generateMethodJ(compare);
                 case Lead::Synchronize:
                     return generateMethodJSynch(compare);
@@ -129,14 +128,8 @@ QVector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
 
     u32 max = initialFrame + maxResults;
     u32 pid, pid1, pid2, hunt = 0;
-    u16 thresh = 0;
 
-    if (encounterType == Encounter::OldRod)
-        thresh = leadType == Lead::SuctionCups ? 48 : 24;
-    else if (encounterType == Encounter::GoodRod)
-        thresh = leadType == Lead::SuctionCups ? 98 : 49;
-    else if (encounterType == Encounter::SuperRod)
-        thresh = leadType == Lead::SuctionCups ? 100 : 74;
+    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++)
     {
@@ -168,7 +161,7 @@ QVector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
                 frame.setEncounterSlot(EncounterSlot::jSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
-                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.getSeed() >> 16));
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 1;
                 break;
             default:
@@ -250,7 +243,7 @@ QVector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
                 frame.setEncounterSlot(EncounterSlot::jSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
-                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.getSeed() >> 16));
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 2;
                 break;
             default:
@@ -357,7 +350,7 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
                 frame.setEncounterSlot(EncounterSlot::jSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
-                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.getSeed() >> 16));
+                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 2;
                 break;
             default:
