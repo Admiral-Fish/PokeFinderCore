@@ -461,11 +461,12 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
                 go.advanceFrames(1);
                 hunt = 3;
                 break;
-            case Encounter::RockSmash: // TODO
-                if (((go.getSeed() >> 16) % 100) >= rate)
+            case Encounter::RockSmash:
+                // Blank(or maybe item) ???
+                if (((go.nextUShort()) % 100) >= rate)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::kSlot(go.getSeed() >> 16, encounterType));
+                frame.setEncounterSlot(EncounterSlot::kSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
@@ -557,11 +558,12 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
                 go.advanceFrames(1);
                 hunt = 4;
                 break;
-            case Encounter::RockSmash: // TODO
-                if (((go.getSeed() >> 16) % 100) >= rock)
+            case Encounter::RockSmash:
+                // Blank(or maybe item) ???
+                if (((go.nextUShort()) % 100) >= rock)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::kSlot(go.getSeed() >> 16, encounterType));
+                frame.setEncounterSlot(EncounterSlot::kSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
@@ -678,11 +680,12 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
                 go.advanceFrames(1);
                 hunt = 4;
                 break;
-            case Encounter::RockSmash: // TODO
-                if (((go.getSeed() >> 16) % 100) >= rock)
+            case Encounter::RockSmash:
+                // Blank(or maybe item) ???
+                if (((go.nextUShort()) % 100) >= rock)
                     continue;
 
-                frame.setEncounterSlot(EncounterSlot::kSlot(go.getSeed() >> 16, encounterType));
+                frame.setEncounterSlot(EncounterSlot::kSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
                     continue;
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));

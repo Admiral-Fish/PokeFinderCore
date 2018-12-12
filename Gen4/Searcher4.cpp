@@ -759,6 +759,8 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u16 rock = encounter.getEncounterRate();
+
     for (const auto &val : seeds)
     {
         // Setup normal frame
@@ -819,12 +821,16 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
                             break;
                         case Encounter::RockSmash:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
-                            if (((slot >> 16) % 100) < 40) // Need to setup lookup table for locations
+                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                            if (((nibble >> 16) % 100) < rock)
                             {
                                 frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
-                                frame.setSeed(slot * 0xeeb9eb65 + 0xa3561a1);
+                                nibble = nibble * 0xeeb9eb65 + 0xa3561a1; // Blank(or maybe item)
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
+                            else
+                                skip = true;
                             break;
                         case Encounter::Stationary:
                         default:
@@ -860,6 +866,8 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u16 rock = encounter.getEncounterRate();
+
     for (const auto &val : seeds)
     {
         // Setup normal frame
@@ -919,6 +927,19 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                             else
                                 skip = true;
                             break;
+                        case Encounter::RockSmash:
+                            slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
+                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                            if (((nibble >> 16) % 100) < rock)
+                            {
+                                frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
+                                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
+                                nibble = nibble * 0xeeb9eb65 + 0xa3561a1; // Blank(or maybe item)
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
+                            }
+                            else
+                                skip = true;
+                            break;
                         case Encounter::Stationary:
                         default:
                             frame.setSeed(testRNG.getSeed());
@@ -959,6 +980,19 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                             else
                                 skip = true;
                             break;
+                        case Encounter::RockSmash:
+                            slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
+                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                            if (((nibble >> 16) % 100) < rock)
+                            {
+                                frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
+                                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), testRNG.getSeed() >> 16));
+                                nibble = nibble * 0xeeb9eb65 + 0xa3561a1; // Blank(or maybe item)
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
+                            }
+                            else
+                                skip = true;
+                            break;
                         case Encounter::Stationary:
                         default:
                             frame.setSeed(testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1);
@@ -993,6 +1027,8 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
     u32 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u16 rock = encounter.getEncounterRate();
+
     for (const auto &val : seeds)
     {
         // Setup normal frame
@@ -1038,6 +1074,19 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
                         {
                             frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
+                            frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
+                        }
+                        else
+                            continue;
+                        break;
+                    case Encounter::RockSmash:
+                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
+                        nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                        if (((nibble >> 16) % 100) < rock)
+                        {
+                            frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
+                            frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), seed >> 16));
+                            nibble = nibble * 0xeeb9eb65 + 0xa3561a1; // Blank(or maybe item)
                             frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                         }
                         else
@@ -1102,6 +1151,8 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
     u16 adjustedThresh = encounterType == Encounter::OldRod ? 48 : encounterType == Encounter::GoodRod ? 98 : encounterType == Encounter::SuperRod ? 99 : 0;
+    u16 rock = encounter.getEncounterRate();
+
     for (const auto &val : seeds)
     {
         // Setup normal frame
@@ -1163,6 +1214,19 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
                             else
                                 skip = true;
                             break;
+                        case Encounter::RockSmash:
+                            slot = seed * 0xeeb9eb65 + 0xa3561a1;
+                            nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                            if (((nibble >> 16) % 100) < rock)
+                            {
+                                frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
+                                frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), seed >> 16));
+                                nibble = nibble * 0xeeb9eb65 + 0xa3561a1; // Blank(or maybe item)
+                                frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
+                            }
+                            else
+                                skip = true;
+                            break;
                         case Encounter::Stationary:
                         default:
                             frame.setSeed(testRNG.getSeed());
@@ -1198,6 +1262,8 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
     u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
     u16 adjustedThresh = encounterType == Encounter::OldRod ? 48 : encounterType == Encounter::GoodRod ? 98 : encounterType == Encounter::SuperRod ? 99 : 0;
+    u16 rock = encounter.getEncounterRate();
+
     for (const auto &val : seeds)
     {
         // Setup normal frame
@@ -1262,6 +1328,19 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                                 else
                                     skip = true;
                                 break;
+                            case Encounter::RockSmash:
+                                slot = seed * 0xeeb9eb65 + 0xa3561a1;
+                                nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                if (((nibble >> 16) % 100) < rock)
+                                {
+                                    frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
+                                    frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), seed >> 16));
+                                    nibble = nibble * 0xeeb9eb65 + 0xa3561a1; // Blank(or maybe item)
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
+                                }
+                                else
+                                    skip = true;
+                                break;
                             case Encounter::Stationary:
                             default:
                                 frame.setSeed(testRNG.getSeed());
@@ -1305,6 +1384,19 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                                     else
                                         skip = true;
                                     break;
+                                case Encounter::RockSmash:
+                                    slot = nibble;
+                                    nibble = frame.getSeed();
+                                    if (((nibble >> 16) % 100) < rock)
+                                    {
+                                        frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
+                                        frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), seed >> 16));
+                                        nibble = nibble * 0xeeb9eb65 + 0xa3561a1; // Blank(or maybe item)
+                                        frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
+                                    }
+                                    else
+                                        skip = true;
+                                    break;
                                 case Encounter::Stationary:
                                 default:
                                     frame.setSeed(testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1);
@@ -1342,6 +1434,20 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                                 {
                                     frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                     frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
+                                    frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
+                                }
+                                else
+                                    skip = true;
+                                break;
+
+                            case Encounter::RockSmash:
+                                slot = seed * 0xeeb9eb65 + 0xa3561a1;
+                                nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                                if (((nibble >> 16) % 100) < rock)
+                                {
+                                    frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
+                                    frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), seed >> 16));
+                                    nibble = nibble * 0xeeb9eb65 + 0xa3561a1; // Blank(or maybe item)
                                     frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
@@ -1392,6 +1498,19 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                         {
                             frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                             frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
+                            frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
+                        }
+                        else
+                            continue;
+                        break;
+                    case Encounter::RockSmash:
+                        slot = seed * 0xeeb9eb65 + 0xa3561a1;
+                        nibble = slot * 0xeeb9eb65 + 0xa3561a1;
+                        if (((nibble >> 16) % 100) < rock)
+                        {
+                            frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
+                            frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), seed >> 16));
+                            nibble = nibble * 0xeeb9eb65 + 0xa3561a1; // Blank(or maybe item)
                             frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                         }
                         else
