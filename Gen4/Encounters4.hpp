@@ -47,7 +47,7 @@ private:
     void modifyRadar(QVector<Slot> &pokemon, const QByteArray &data);
     void modifySwarmHGSS(QVector<Slot> &pokemon, const QByteArray &data);
     void modifySwarmDPPt(QVector<Slot> &pokemon, const QByteArray &data);
-    inline ushort getValue(const QByteArray &data, int offset, int length);
+    inline u16 getValue(const QByteArray &data, int offset, int length);
 
 };
 

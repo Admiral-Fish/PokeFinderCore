@@ -31,6 +31,7 @@ Profile4::Profile4(const QString &profileName, Game version, u16 tid, u16 sid, G
 Profile4::Profile4(QJsonObject data)
     : Profile(data["name"].toString(), static_cast<Game>(data["version"].toInt()), data["tid"].toInt(), data["sid"].toInt(), data["version"].toInt())
 {
+    Game tmp = static_cast<Game>(data["dual"].toInt());
     dual = static_cast<Game>(data["dual"].toInt());
     radio = data["radio"].toInt();
     radar = data["radar"].toBool();
