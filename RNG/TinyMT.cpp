@@ -19,7 +19,6 @@
 
 #include "TinyMT.hpp"
 
-// Constructor
 TinyMT::TinyMT(u32 seed, u32 frames)
 {
     state = new u32[4];
@@ -27,14 +26,20 @@ TinyMT::TinyMT(u32 seed, u32 frames)
     advanceFrames(frames);
 }
 
-// Constructor given Tiny states
 TinyMT::TinyMT(const u32 st[], u32 frames)
 {
     state = new u32[4];
     for (int i = 0; i < 4; i++)
+    {
         state[i] = st[i];
+    }
     periodCertification();
     advanceFrames(frames);
+}
+
+TinyMT::~TinyMT()
+{
+    delete state;
 }
 
 void TinyMT::advanceFrames(u32 frames)
@@ -43,37 +48,6 @@ void TinyMT::advanceFrames(u32 frames)
         nextState();
 }
 
-// Creates Tiny state given seed
-void TinyMT::initialize(u32 seed)
-{
-    this->seed = seed;
-    state[0] = seed;
-    state[1] = MAT1;
-    state[2] = MAT2;
-    state[3] = TMAT;
-
-    for (u32 i = 1; i < 8; i++)
-        state[i & 3] ^= i + 0x6c078965 * (state[(i - 1) & 3] ^ (state[(i - 1) & 3] >> 30));
-
-    periodCertification();
-
-    for (int i = 0; i < 8; i++)
-        nextState();
-}
-
-// Verifies not all 4 Tiny states are 0
-void TinyMT::periodCertification()
-{
-    if (state[0] == 0 && state[1] == 0 && state[2] == 0 && state[3] == 0)
-    {
-        state[0] = 'T';
-        state[1] = 'I';
-        state[2] = 'N';
-        state[3] = 'Y';
-    }
-}
-
-// Generates the next Tiny state
 void TinyMT::nextState()
 {
     u32 y = state[3];
@@ -92,7 +66,6 @@ void TinyMT::nextState()
     }
 }
 
-// Calls the next state and next psuedo random number
 u32 TinyMT::nextUInt()
 {
     nextState();
@@ -104,7 +77,6 @@ u16 TinyMT::nextUShort()
     return static_cast<u16>(nextUInt() >> 16);
 }
 
-// Generates the psuedo random number from the Tiny state
 u32 TinyMT::temper()
 {
     u32 t0 = state[3];
@@ -116,13 +88,11 @@ u32 TinyMT::temper()
     return t0;
 }
 
-// IRNG Member
 void TinyMT::setSeed(u32 seed)
 {
     initialize(seed);
 }
 
-// IRNG Member
 void TinyMT::setSeed(u32 seed, u32 frames)
 {
     initialize(seed);
@@ -137,4 +107,37 @@ u32 *TinyMT::getState()
 u32 TinyMT::getSeed()
 {
     return seed;
+}
+
+void TinyMT::initialize(u32 seed)
+{
+    this->seed = seed;
+    state[0] = seed;
+    state[1] = MAT1;
+    state[2] = MAT2;
+    state[3] = TMAT;
+
+    for (u32 i = 1; i < 8; i++)
+    {
+        state[i & 3] ^= i + 0x6c078965 * (state[(i - 1) & 3] ^ (state[(i - 1) & 3] >> 30));
+    }
+
+    periodCertification();
+
+    for (int i = 0; i < 8; i++)
+    {
+        nextState();
+    }
+}
+
+// Verifies not all 4 Tiny states are 0
+void TinyMT::periodCertification()
+{
+    if (state[0] == 0 && state[1] == 0 && state[2] == 0 && state[3] == 0)
+    {
+        state[0] = 'T';
+        state[1] = 'I';
+        state[2] = 'N';
+        state[3] = 'Y';
+    }
 }

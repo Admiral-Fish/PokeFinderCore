@@ -23,34 +23,9 @@
 // Uses Euclidean divison to reduce the search space (kmax) even further then RNGCache
 // Only beneficial for smaller multipliers such as XDRNG
 
-// Constructor for RNGEuclidean
 RNGEuclidean::RNGEuclidean(Method FrameType)
 {
     setupEuclidean(FrameType);
-}
-
-// Sets up the Euclidean constants
-void RNGEuclidean::setupEuclidean(Method FrameType)
-{
-    if (FrameType == Channel)
-    {
-        // Channel is a unique situation having 6 rng calls with each call 5 bits known
-        // It is unable to use the cache method and uses a modified Euclidean approach to keep kmax as low as possible
-        // Using the first and last calls we can produce a modified adder and multiplier
-        // Mult-j = Mult^j
-        // Add-j = Add * (1 + Mult + ... + Mult^(j-1))
-        // Using j = 5 and XDRNG gives Mult = 0x284A930D and Add = 0xa2974c77
-        sub1 = 0x284A930D; // Modified mult
-        sub2 = 0x9A974C78; // -Modified add + 0x8000000 - 1
-        base = 0x142549847b56cf2; // 0x7ffffff * (Modified mult + 1)
-    }
-    // XDColo, XD, Colo
-    else
-    {
-        sub1 = 0x343fd; // XDRNG mult
-        sub2 = 0x259ec4; // -XDRNG add + 0x10000 - 1
-        base = 0x343fabc02; // 0xffff * (XDRNG mult + 1)
-    }
 }
 
 // Recovers origin seeds for two 16 bit calls(15 bits known)
@@ -115,27 +90,57 @@ QVector<u32> RNGEuclidean::recoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u
         // so there is no need to check if the last call lines up
         u32 call = fullFirst * MULT + ADD;
         if ((call >> 27) != atk)
+        {
             continue;
+        }
 
         call = call * MULT + ADD;
         if ((call >> 27) != def)
+        {
             continue;
+        }
 
         call = call * MULT + ADD;
         if ((call >> 27) != spe)
+        {
             continue;
+        }
 
         call = call * MULT + ADD;
         if ((call >> 27) != spa)
+        {
             continue;
+        }
 
         origin.append(fullFirst);
     }
     return origin;
 }
 
-// Switches the Euclidean being used
 void RNGEuclidean::switchEuclidean(Method FrameType)
 {
     setupEuclidean(FrameType);
+}
+
+void RNGEuclidean::setupEuclidean(Method FrameType)
+{
+    if (FrameType == Channel)
+    {
+        // Channel is a unique situation having 6 rng calls with each call 5 bits known
+        // It is unable to use the cache method and uses a modified Euclidean approach to keep kmax as low as possible
+        // Using the first and last calls we can produce a modified adder and multiplier
+        // Mult-j = Mult^j
+        // Add-j = Add * (1 + Mult + ... + Mult^(j-1))
+        // Using j = 5 and XDRNG gives Mult = 0x284A930D and Add = 0xa2974c77
+        sub1 = 0x284A930D; // Modified mult
+        sub2 = 0x9A974C78; // (-)Modified add + 0x8000000 - 1
+        base = 0x142549847b56cf2; // 0x7ffffff * (Modified mult + 1)
+    }
+    // XDColo, XD, Colo
+    else
+    {
+        sub1 = 0x343fd; // XDRNG mult
+        sub2 = 0x259ec4; // (-)XDRNG add + 0x10000 - 1
+        base = 0x343fabc02; // 0xffff * (XDRNG mult + 1)
+    }
 }

@@ -25,23 +25,27 @@
 class Profile4 : public Profile
 {
 
-private:
-    Game dual;
-    int radio;
-
 public:
-    Profile4(const QString &profileName, Game version, u16 tid, u16 sid, Game dual = Game::Blank, int radio = 0, int language = 0);
+    Profile4(const QString &profileName, Game version, u16 tid, u16 sid, Game dual = Game::Blank, int radio = 0, int language = 0, bool radar = false, bool swarm = false);
     Profile4(QJsonObject data);
     Profile4();
-    QString getDualSlotString();
-    Game getDualSlot();
-    QString getRadioString();
-    int getRadio();
+    QString getDualSlotString() const;
+    Game getDualSlot() const;
+    QString getRadioString() const;
+    int getRadio() const;
+    bool getRadar() const;
+    bool getSwarm() const;
     QJsonObject getJson();
     static QVector<Profile4> loadProfileList();
     void saveProfile();
     void deleteProfile();
     void updateProfile(Profile4 original);
+
+private:
+    Game dual;
+    int radio;
+    bool radar;
+    bool swarm;
 
 };
 

@@ -23,31 +23,31 @@
 // Different method types for various games
 enum Method
 {
-    Method1,
-    Method1Reverse,
-    Method2,
-    Method4,
-    MethodH1,
-    MethodH2,
-    MethodH4,
-    XDColo,
-    XD, // Used to signify XD shadows
-    Colo, // Used to signify Colo shadows
-    Channel,
-    EBred,
-    EBredSplit,
-    EBredAlternate,
-    EBredPID,
-    RSBred,
-    FRLGBred,
-    MethodJ,
-    MethodK,
-    ChainedShiny,
-    WondercardIVs,
-    Gen4Normal,
-    Gen4Masuada,
-    DPPtIVs,
-    HGSSIVs
+    Method1             = 1 << 0,
+    Method1Reverse      = 1 << 1,
+    Method2             = 1 << 2,
+    Method4             = 1 << 3,
+    MethodH1            = 1 << 4,
+    MethodH2            = 1 << 5,
+    MethodH4            = 1 << 6,
+    XD                  = 1 << 7, // Used to signify XD shadows
+    Colo                = 1 << 8, // Used to signify Colo shadows
+    XDColo              = 1 << 9,
+    Channel             = 1 << 10,
+    EBred               = 1 << 11,
+    EBredSplit          = 1 << 12,
+    EBredAlternate      = 1 << 13,
+    EBredPID            = 1 << 14,
+    RSBred              = 1 << 15,
+    FRLGBred            = 1 << 16,
+    MethodJ             = 1 << 17,
+    MethodK             = 1 << 18,
+    ChainedShiny        = 1 << 19,
+    WondercardIVs       = 1 << 20,
+    Gen4Normal          = 1 << 21,
+    Gen4Masuada         = 1 << 22,
+    DPPtIVs             = 1 << 23,
+    HGSSIVs             = 1 << 24
 };
 
 #endif // METHOD_HPP

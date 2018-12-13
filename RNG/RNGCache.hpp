@@ -30,6 +30,12 @@ using u16 = uint16_t;
 class RNGCache
 {
 
+public:
+    RNGCache(Method MethodType);
+    QVector<u32> recoverLower16BitsIV(u32 first, u32 second);
+    QVector<u32> recoverLower16BitsPID(u32 first, u32 second);
+    void switchCache(Method MethodType);
+
 private:
     u32 add;
     u32 k;
@@ -38,12 +44,6 @@ private:
 
     void populateMap();
     void setupCache(Method MethodType);
-
-public:
-    RNGCache(Method MethodType);
-    QVector<u32> recoverLower16BitsIV(u32 first, u32 second);
-    QVector<u32> recoverLower16BitsPID(u32 first, u32 second);
-    void switchCache(Method MethodType);
 
 };
 

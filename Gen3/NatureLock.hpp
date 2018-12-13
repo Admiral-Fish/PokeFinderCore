@@ -37,21 +37,37 @@ enum ShadowType
 class LockInfo
 {
 
+public:
+    LockInfo() = default;
+    LockInfo(u32 nature, u32 genderLower, u32 genderUpper, bool free = false);
+    bool compare(u32 pid);
+
 private:
     u32 genderUpper;
     u32 genderLower;
     u32 nature;
     bool free;
 
-public:
-    LockInfo();
-    LockInfo(u32 nature, u32 genderLower, u32 genderUpper, bool free = false);
-    bool compare(u32 pid);
-
 };
 
 class NatureLock
 {
+
+public:
+    NatureLock(int num, Method version);
+    ~NatureLock();
+    ShadowType getType();
+    bool firstShadowNormal(u32 seed);
+    bool firstShadowSet(u32 seed);
+    bool firstShadowShinySkip(u32 seed);
+    bool firstShadowUnset(u32 seed);
+    bool salamenceSet(u32 seed);
+    bool salamenceShinySkip(u32 seed);
+    bool salamenceUnset(u32 seed);
+    bool singleNL(u32 seed);
+    bool eReader(u32 seed, u32 readerPID);
+    void switchLockColo(int lockNum);
+    void switchLockGales(int lockNum);
 
 private:
     int backCount;
@@ -73,22 +89,6 @@ private:
     u32 getPSVReverse();
     void natureLockSetupColo(int lockNum);
     void natureLockSetupGales(int lockNum);
-
-public:
-    NatureLock(int num, Method version);
-    ~NatureLock();
-    ShadowType getType();
-    bool firstShadowNormal(u32 seed);
-    bool firstShadowSet(u32 seed);
-    bool firstShadowShinySkip(u32 seed);
-    bool firstShadowUnset(u32 seed);
-    bool salamenceSet(u32 seed);
-    bool salamenceShinySkip(u32 seed);
-    bool salamenceUnset(u32 seed);
-    bool singleNL(u32 seed);
-    bool eReader(u32 seed, u32 readerPID);
-    void switchLockColo(int lockNum);
-    void switchLockGales(int lockNum);
 
 };
 

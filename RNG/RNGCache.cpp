@@ -22,44 +22,10 @@
 // See https://crypto.stackexchange.com/a/10609 for how the following math works
 // Uses a brute force meet in the middle attack using precomputated data
 
-// Constructor for RNGCache
 RNGCache::RNGCache(Method MethodType)
 {
     keys.reserve(512);
     setupCache(MethodType);
-}
-
-// Populates cache to use for brute forcing
-void RNGCache::populateMap()
-{
-    for (u16 i = 0; i < 256; i++)
-    {
-        u32 right = mult * i + add;
-        u16 val = right >> 16;
-
-        keys[val] = i;
-        keys[val - 1] = i;
-    }
-}
-
-// Generates brute force cache based on which method is provided
-void RNGCache::setupCache(Method MethodType)
-{
-    if (MethodType == Method4)
-    {
-        k = 0xa29a6900; // Mult * Mult << 8
-        mult = 0xc2a29a69; // Mult * Mult
-        add = 0xe97e7b6a; // Add * (Mult + 1)
-    }
-    // Method 1/2
-    else
-    {
-        k = 0xc64e6d00; // Mult << 8
-        mult = 0x41c64e6d; // pokerng constant
-        add = 0x6073; // pokerng constant
-    }
-
-    populateMap();
 }
 
 // Recovers origin seeds for two 16 bit calls(15 bits known) with or without gap based on the cache
@@ -80,7 +46,9 @@ QVector<u32> RNGCache::recoverLower16BitsIV(u32 first, u32 second)
             u32 test = first | (i << 8) | locate.value();
             // Verify IV calls line up
             if (((test * mult + add) & 0x7fff0000) == second)
+            {
                 origin.append(test);
+            }
         }
 
         locate = keys.find(search2 >> 16);
@@ -89,7 +57,9 @@ QVector<u32> RNGCache::recoverLower16BitsIV(u32 first, u32 second)
             u32 test = first | (i << 8) | locate.value();
             // Verify IV calls line up
             if (((test * mult + add) & 0x7fff0000) == second)
+            {
                 origin.append(test);
+            }
         }
     }
 
@@ -110,14 +80,46 @@ QVector<u32> RNGCache::recoverLower16BitsPID(u32 first, u32 second)
             u32 test = first | (i << 8) | locate.value();
             // Verify PID calls line up
             if (((test * mult + add) & 0xffff0000) == second)
+            {
                 origin.append(test);
+            }
         }
     }
     return origin;
 }
 
-// Switches cache being used
 void RNGCache::switchCache(Method MethodType)
 {
     setupCache(MethodType);
+}
+
+void RNGCache::populateMap()
+{
+    for (u16 i = 0; i < 256; i++)
+    {
+        u32 right = mult * i + add;
+        u16 val = right >> 16;
+
+        keys[val] = i;
+        keys[val - 1] = i;
+    }
+}
+
+void RNGCache::setupCache(Method MethodType)
+{
+    if (MethodType == Method4)
+    {
+        k = 0xa29a6900; // Mult * Mult << 8
+        mult = 0xc2a29a69; // Mult * Mult
+        add = 0xe97e7b6a; // Add * (Mult + 1)
+    }
+    // Method 1/2
+    else
+    {
+        k = 0xc64e6d00; // Mult << 8
+        mult = 0x41c64e6d; // pokerng constant
+        add = 0x6073; // pokerng constant
+    }
+
+    populateMap();
 }

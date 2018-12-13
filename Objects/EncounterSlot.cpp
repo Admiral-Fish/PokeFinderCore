@@ -19,11 +19,6 @@
 
 #include "EncounterSlot.hpp"
 
-/* Ranges are used alongside an RNG call to
- * determine what encounter slot a frame will have
- */
-
-// Constructor for Range
 Range::Range()
 {
     min = 0;
@@ -36,22 +31,17 @@ Range::Range(u32 min, u32 max)
     this->max = max;
 }
 
-// Gets current value of the max
 u32 Range::getMax()
 {
     return max;
 }
 
-// Gets current value of the min
 u32 Range::getMin()
 {
     return min;
 }
 
 
-// Encounter slot calculations
-
-// Runs through ranges and compare value to get the encounter slot
 u32 EncounterSlot::calcSlot(u32 compare, QVector<Range> ranges)
 {
     int size = ranges.size();

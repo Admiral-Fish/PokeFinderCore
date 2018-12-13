@@ -30,6 +30,15 @@
 class Searcher3: public Searcher
 {
 
+public:
+    Searcher3();
+    Searcher3(u16 tid, u16 sid, u32 ratio, const FrameCompare &compare);
+    ~Searcher3();
+    QVector<Frame3> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    void setup(Method method);
+    void setupNatureLock(int num);
+    void setEncounter(const EncounterArea3 &value);
+
 private:
     RNGCache *cache = nullptr;
     RNGEuclidean *euclidean = nullptr;
@@ -48,15 +57,6 @@ private:
     QVector<Frame3> searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     QVector<Frame3> searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
     QVector<Frame3> searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
-
-public:
-    Searcher3();
-    Searcher3(u16 tid, u16 sid, u32 ratio, const FrameCompare &compare);
-    ~Searcher3();
-    QVector<Frame3> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
-    void setup(Method method);
-    void setupNatureLock(int num);
-    void setEncounter(const EncounterArea3 &value);
 
 };
 

@@ -27,18 +27,6 @@
 class FrameCompare
 {
 
-private:
-    QVector<u32> eval;
-    QVector<u32> val;
-    u32 gender;
-    u32 genderRatio;
-    u32 ability;
-    QVector<bool> natures;
-    QVector<bool> powers;
-    QVector<bool> encounterSlots;
-    bool shiny;
-    bool skip;
-
 public:
     FrameCompare() = default;
     FrameCompare(const QVector<u32> &eval, const QVector<u32> &values, int genderIndex, int genderRatioIndex, int abilityIndex,
@@ -55,6 +43,18 @@ public:
     bool compareGender(const Frame &frame);
     bool compareFrame(const Frame &frame);
     u32 getGenderRatio();
+
+private:
+    QVector<u32> eval;
+    QVector<u32> val;
+    u32 gender;
+    u32 genderRatio;
+    u32 ability;
+    QVector<bool> natures;
+    QVector<bool> powers;
+    QVector<bool> encounterSlots;
+    bool shiny;
+    bool skip;
 
 };
 

@@ -19,7 +19,6 @@
 
 #include "Searcher3.hpp"
 
-// Default constructor
 Searcher3::Searcher3()
 {
     tid = 12345;
@@ -28,7 +27,6 @@ Searcher3::Searcher3()
     frame.setIDs(tid, sid, psv);
 }
 
-// Constructor given user defined parameters
 Searcher3::Searcher3(u16 tid, u16 sid, u32 ratio, const FrameCompare &compare)
 {
     this->tid = tid;
@@ -48,14 +46,104 @@ Searcher3::~Searcher3()
     delete natureLock;
 }
 
-// Returns QVector of frames for Channel Method
+QVector<Frame3> Searcher3::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+{
+    switch (frameType)
+    {
+        case Method::Method1:
+        case Method::Method2:
+        case Method::Method4:
+            return searchMethod124(hp, atk, def, spa, spd, spe);
+        case Method::Method1Reverse:
+            return searchMethod1Reverse(hp, atk, def, spa, spd, spe);
+        case Method::MethodH1:
+        case Method::MethodH2:
+        case Method::MethodH4:
+            return searchMethodH124(hp, atk, def, spa, spd, spe);
+        case Method::Colo:
+            return searchMethodColo(hp, atk, def, spa, spd, spe);
+        case Method::XD:
+            return searchMethodXD(hp, atk, def, spa, spd, spe);
+        case Method::XDColo:
+            return searchMethodXDColo(hp, atk, def, spa, spd, spe);
+        case Method::Channel:
+            return searchMethodChannel(hp, atk, def, spa, spd, spe);
+        default:
+            return QVector<Frame3>();
+    }
+}
+
+void Searcher3::setup(Method method)
+{
+    frameType = method;
+
+    if (frameType == Method::XDColo || frameType == Method::Channel || frameType == Method::XD || frameType == Method::Colo)
+    {
+        forward = new XDRNG(0);
+        backward = new XDRNGR(0);
+    }
+    else
+    {
+        forward = new PokeRNG(0);
+        backward = new PokeRNGR(0);
+    }
+
+    switch (frameType)
+    {
+        case Method::Method1:
+        case Method::Method1Reverse:
+        case Method::MethodH1:
+            cache = new RNGCache(Method::Method1);
+            break;
+        case Method::Method2:
+        case Method::MethodH2:
+            cache = new RNGCache(Method::Method2);
+            break;
+        case Method::Method4:
+        case Method::MethodH4:
+            cache = new RNGCache(Method::Method4);
+            break;
+        case Method::Colo:
+        case Method::XD:
+        case Method::XDColo:
+            euclidean = new RNGEuclidean(Method::XDColo);
+            break;
+        case Method::Channel:
+            euclidean = new RNGEuclidean(Method::Channel);
+            break;
+        default:
+            break;
+    }
+}
+
+void Searcher3::setupNatureLock(int num)
+{
+    if (frameType == Method::XD)
+    {
+        natureLock = new NatureLock(num, Method::XD);
+    }
+    else if (frameType == Method::Colo)
+    {
+        natureLock = new NatureLock(num, Method::Colo);
+    }
+    type = natureLock->getType();
+    frame.setLockReason(QObject::tr("Pass NL"));
+}
+
+void Searcher3::setEncounter(const EncounterArea3 &value)
+{
+    encounter = value;
+}
+
 QVector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     QVector<u32> seeds = euclidean->recoverLower27BitsChannel(hp, atk, def, spa, spd, spe);
     for (const auto &seed : seeds)
@@ -69,7 +157,10 @@ QVector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa
 
         // Determine if PID needs to be XORed
         if ((pid2 > 7 ? 0 : 1) != (pid1 ^ sid ^ 40122))
+        {
             pid1 ^= 0x8000;
+        }
+
         frame.setIDs(40122, sid, 40122 ^ sid);
         frame.setPID(pid2, pid1);
 
@@ -82,14 +173,15 @@ QVector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa
     return frames;
 }
 
-// Returns QVector of frames for Method Colo Shadows
 QVector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -132,11 +224,15 @@ QVector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u
             {
                 case ShadowType::FirstShadow:
                     if (natureLock->firstShadowNormal(frame.getSeed()))
+                    {
                         frames.append(frame);
+                    }
                     break;
                 case ShadowType::EReader:
                     if (natureLock->eReader(frame.getSeed(), frame.getPID()))
+                    {
                         frames.append(frame);
+                    }
                     break;
                 default:
                     break;
@@ -146,14 +242,15 @@ QVector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u
     return frames;
 }
 
-// Returns QVector of frames for Method H1/H2/H4
 QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -177,7 +274,9 @@ QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u
             }
 
             if (!compare.comparePID(frame))
+            {
                 continue;
+            }
 
             LCRNG testRNG = PokeRNGR(seed);
             u32 testPID, slot;
@@ -332,14 +431,15 @@ QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u
     return frames;
 }
 
-// Returns QVector of frames for Method Gales Shadows
 QVector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -474,14 +574,15 @@ QVector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32
     return frames;
 }
 
-// Return QVector of frames for Method XDColo
 QVector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -494,24 +595,29 @@ QVector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa,
         frame.setPID(forward->nextUShort(), forward->nextUShort());
         frame.setSeed(pair.first * 0xB9B33155 + 0xA170F641);
         if (compare.comparePID(frame))
+        {
             frames.append(frame);
+        }
 
         // Setup XORed frame
         frame.xorFrame(true);
         if (compare.comparePID(frame))
+        {
             frames.append(frame);
+        }
     }
     return frames;
 }
 
-// Returns QVector of frames for Method 1/2/4
 QVector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     QVector<Frame3> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -524,12 +630,16 @@ QVector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u3
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         frame.setSeed(backward->nextUInt());
         if (compare.comparePID(frame))
+        {
             frames.append(frame);
+        }
 
         // Setup XORed frame
         frame.xorFrame(true);
         if (compare.comparePID(frame))
+        {
             frames.append(frame);
+        }
     }
     return frames;
 }
@@ -541,7 +651,9 @@ QVector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 sp
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -555,103 +667,16 @@ QVector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 sp
         frame.setPID(temp, backward->nextUShort());
         frame.setSeed(backward->nextUInt());
         if (compare.comparePID(frame))
+        {
             frames.append(frame);
+        }
 
         // Setup XORed frame
         frame.xorFrame(true);
         if (compare.comparePID(frame))
+        {
             frames.append(frame);
+        }
     }
     return frames;
-}
-
-// Determines which generational method to return
-QVector<Frame3> Searcher3::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
-{
-    switch (frameType)
-    {
-        case Method::Method1:
-        case Method::Method2:
-        case Method::Method4:
-            return searchMethod124(hp, atk, def, spa, spd, spe);
-        case Method::Method1Reverse:
-            return searchMethod1Reverse(hp, atk, def, spa, spd, spe);
-        case Method::MethodH1:
-        case Method::MethodH2:
-        case Method::MethodH4:
-            return searchMethodH124(hp, atk, def, spa, spd, spe);
-        case Method::Colo:
-            return searchMethodColo(hp, atk, def, spa, spd, spe);
-        case Method::XD:
-            return searchMethodXD(hp, atk, def, spa, spd, spe);
-        case Method::XDColo:
-            return searchMethodXDColo(hp, atk, def, spa, spd, spe);
-        case Method::Channel:
-            return searchMethodChannel(hp, atk, def, spa, spd, spe);
-        default:
-            return QVector<Frame3>();
-    }
-}
-
-// Switches cache or euclidean to user defined method
-void Searcher3::setup(Method method)
-{
-    frameType = method;
-
-    if (frameType == Method::XDColo || frameType == Method::Channel || frameType == Method::XD || frameType == Method::Colo)
-    {
-        forward = new XDRNG(0);
-        backward = new XDRNGR(0);
-    }
-    else
-    {
-        forward = new PokeRNG(0);
-        backward = new PokeRNGR(0);
-    }
-
-    switch (frameType)
-    {
-        case Method::Method1:
-        case Method::Method1Reverse:
-        case Method::MethodH1:
-            cache = new RNGCache(Method::Method1);
-            break;
-        case Method::Method2:
-        case Method::MethodH2:
-            cache = new RNGCache(Method::Method2);
-            break;
-        case Method::Method4:
-        case Method::MethodH4:
-            cache = new RNGCache(Method::Method4);
-            break;
-        case Method::Colo:
-        case Method::XD:
-        case Method::XDColo:
-            euclidean = new RNGEuclidean(Method::XDColo);
-            break;
-        case Method::Channel:
-            euclidean = new RNGEuclidean(Method::Channel);
-            break;
-        default:
-            break;
-    }
-}
-
-void Searcher3::setupNatureLock(int num)
-{
-    if (frameType == Method::XD)
-    {
-        natureLock = new NatureLock(num, Method::XD);
-    }
-    else if (frameType == Method::Colo)
-    {
-        natureLock = new NatureLock(num, Method::Colo);
-    }
-    type = natureLock->getType();
-    frame.setLockReason(QObject::tr("Pass NL"));
-}
-
-void Searcher3::setEncounter(const EncounterArea3 &value)
-{
-    encounter = value;
 }

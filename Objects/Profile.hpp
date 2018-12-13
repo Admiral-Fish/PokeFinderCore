@@ -33,13 +33,6 @@ using u16 = uint16_t;
 class Profile
 {
 
-protected:
-    QString profileName;
-    Game version;
-    int language;
-    u16 tid;
-    u16 sid;
-
 public:
     Profile(const QString &profileName, Game version, u16 tid, u16 sid, int language = 0);
     Profile();
@@ -50,6 +43,13 @@ public:
     QString getProfileName() const;
     u16 getTID() const;
     u16 getSID() const;
+
+protected:
+    QString profileName;
+    Game version;
+    int language;
+    u16 tid;
+    u16 sid;
 
 };
 

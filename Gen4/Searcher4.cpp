@@ -27,7 +27,6 @@ Searcher4::Searcher4()
     frame.setIDs(tid, sid, psv);
 }
 
-// Constructor given user defined parameters
 Searcher4::Searcher4(u16 tid, u16 sid, u32 ratio, u32 minDelay, u32 maxDelay, u32 minFrame, u32 maxFrame, const FrameCompare &compare, Method method)
 {
     this->tid = tid;
@@ -49,6 +48,11 @@ Searcher4::~Searcher4()
 {
     delete cache;
     delete backward;
+}
+
+void Searcher4::setEncounter(const EncounterArea4 &value)
+{
+    encounter = value;
 }
 
 QVector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
@@ -116,18 +120,15 @@ QVector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u3
     return searchInitialSeeds(frames);
 }
 
-void Searcher4::setEncounter(const EncounterArea4 &value)
-{
-    encounter = value;
-}
-
 QVector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
 {
     QVector<Frame4> frames;
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -140,7 +141,9 @@ QVector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 
         frame.setPID(backward->nextUShort(), backward->nextUShort());
         frame.setSeed(backward->nextUInt());
         if (compare.comparePID(frame))
+        {
             frames.append(frame);
+        }
 
         // Setup XORed frame
         frame.xorFrame();
@@ -160,7 +163,9 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -184,7 +189,9 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
             }
 
             if (!compare.comparePID(frame))
+            {
                 continue;
+            }
 
             PokeRNGR testRNG(seed);
             u32 testPID, slot = 0;
@@ -224,7 +231,9 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
+                            {
                                 skip = true;
+                            }
                             break;
                         case Encounter::Stationary:
                         default:
@@ -233,7 +242,9 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
                     }
 
                     if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
+                    {
                         frames.append(frame);
+                    }
                 }
 
                 testPID = (nextRNG << 16) | nextRNG2;
@@ -253,7 +264,9 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -277,7 +290,9 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
             }
 
             if (!compare.comparePID(frame))
+            {
                 continue;
+            }
 
             PokeRNGR testRNG(seed);
             u32 testPID, slot = 0;
@@ -318,7 +333,9 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
+                            {
                                 skip = true;
+                            }
                             break;
                         case Encounter::Stationary:
                         default:
@@ -355,7 +372,9 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
+                            {
                                 skip = true;
+                            }
                             break;
                         case Encounter::Stationary:
                         default:
@@ -365,7 +384,9 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
                 }
 
                 if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
+                {
                     frames.append(frame);
+                }
 
                 testPID = (nextRNG << 16) | nextRNG2;
                 nextRNG = testRNG.nextUShort();
@@ -384,7 +405,9 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -440,7 +463,9 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
                             frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                         }
                         else
+                        {
                             continue;
+                        }
                         break;
                     case Encounter::Stationary:
                     default:
@@ -475,10 +500,14 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
 
                     frame.setPID(choppedPID + buffer, 0);
                     if (!compare.comparePID(frame))
+                    {
                         continue;
+                    }
 
                     if (encounterType == Encounter::Stationary || compare.compareSlot(frame))
+                    {
                         frames.append(frame);
+                    }
                 }
             }
         }
@@ -493,7 +522,9 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -564,7 +595,9 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                                     frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
+                                {
                                     skip = true;
+                                }
                                 break;
                             case Stationary:
                             default:
@@ -573,7 +606,9 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                         }
 
                         if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
+                        {
                             frames.append(frame);
+                        }
 
                         // Failed synch
                         if ((nextRNG2 >> 15) == 1)
@@ -607,7 +642,9 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                                         frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                     }
                                     else
+                                    {
                                         skip = true;
+                                    }
                                     break;
                                 case Encounter::Stationary:
                                 default:
@@ -616,7 +653,9 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                             }
 
                             if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
+                            {
                                 frames.append(frame);
+                            }
                         }
                     }
                     // Successful synch
@@ -649,7 +688,9 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                                     frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
+                                {
                                     skip = true;
+                                }
                                 break;
                             case Encounter::Stationary:
                             default:
@@ -658,7 +699,9 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                         }
 
                         if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
+                        {
                             frames.append(frame);
+                        }
                     }
 
                     testPID = (nextRNG << 16) | nextRNG2;
@@ -699,7 +742,9 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                             frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                         }
                         else
+                        {
                             continue;
+                        }
                         break;
                     case Encounter::Stationary:
                     default:
@@ -736,11 +781,15 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
 
                         frame.setPID(buffer + choppedPID, 0);
                         if (!compare.comparePID(frame))
+                        {
                             continue;
+                        }
 
                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                         if (encounterType == Encounter::Stationary || compare.compareSlot(frame))
+                        {
                             frames.append(frame);
+                        }
                     }
                 }
             }
@@ -756,7 +805,9 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -781,7 +832,9 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
             }
 
             if (!compare.comparePID(frame))
+            {
                 continue;
+            }
 
             PokeRNGR testRNG(seed);
             u32 testPID, slot = 0;
@@ -821,7 +874,9 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
+                            {
                                 skip = true;
+                            }
                             break;
                         case Encounter::RockSmash:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
@@ -834,7 +889,9 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
+                            {
                                 skip = true;
+                            }
                             break;
                         case Encounter::Stationary:
                         default:
@@ -843,7 +900,9 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
                     }
 
                     if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
+                    {
                         frames.append(frame);
+                    }
                 }
 
                 testPID = (nextRNG << 16) | nextRNG2;
@@ -863,7 +922,9 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -888,7 +949,9 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
             }
 
             if (!compare.comparePID(frame))
+            {
                 continue;
+            }
 
             PokeRNGR testRNG(seed);
             u32 testPID, slot = 0;
@@ -929,7 +992,9 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
+                            {
                                 skip = true;
+                            }
                             break;
                         case Encounter::RockSmash:
                             slot = testRNG.getSeed() * 0xeeb9eb65 + 0xa3561a1;
@@ -942,7 +1007,9 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
+                            {
                                 skip = true;
+                            }
                             break;
                         case Encounter::Stationary:
                         default:
@@ -951,7 +1018,9 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                     }
 
                     if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
+                    {
                         frames.append(frame);
+                    }
                 }
                 // Failed Synch
                 else if ((nextRNG2 & 1) == 1 && (nextRNG % 25) == frame.getNature())
@@ -982,7 +1051,9 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
+                            {
                                 skip = true;
+                            }
                             break;
                         case Encounter::RockSmash:
                             slot = testRNG.getSeed() * 0xdc6c95d9 + 0x4d3cb126;
@@ -995,7 +1066,9 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
+                            {
                                 skip = true;
+                            }
                             break;
                         case Encounter::Stationary:
                         default:
@@ -1004,7 +1077,9 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
                     }
 
                     if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
+                    {
                         frames.append(frame);
+                    }
                 }
 
                 testPID = (nextRNG << 16) | nextRNG2;
@@ -1024,7 +1099,9 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -1081,7 +1158,9 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
                             frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                         }
                         else
+                        {
                             continue;
+                        }
                         break;
                     case Encounter::RockSmash:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
@@ -1094,7 +1173,9 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
                             frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                         }
                         else
+                        {
                             continue;
+                        }
                         break;
                     case Encounter::Stationary:
                     default:
@@ -1129,10 +1210,14 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
 
                     frame.setPID(choppedPID + buffer, 0);
                     if (!compare.comparePID(frame))
+                    {
                         continue;
+                    }
 
                     if (encounterType == Encounter::Stationary || compare.compareSlot(frame))
+                    {
                         frames.append(frame);
+                    }
                 }
             }
         }
@@ -1147,7 +1232,9 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -1173,7 +1260,9 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
             }
 
             if (!compare.comparePID(frame))
+            {
                 continue;
+            }
 
             PokeRNGR testRNG(seed);
             u32 testPID, slot = 0;
@@ -1210,13 +1299,17 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
                             if (((nibble >> 16) % 100) < adjustedThresh)
                             {
                                 if (((nibble >> 16) % 100) >= thresh)
+                                {
                                     frame.setLeadType(Lead::SuctionCups);
+                                }
                                 frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
+                            {
                                 skip = true;
+                            }
                             break;
                         case Encounter::RockSmash:
                             slot = seed * 0xeeb9eb65 + 0xa3561a1;
@@ -1229,7 +1322,9 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
                                 frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                             }
                             else
+                            {
                                 skip = true;
+                            }
                             break;
                         case Encounter::Stationary:
                         default:
@@ -1238,7 +1333,9 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
                     }
 
                     if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
+                    {
                         frames.append(frame);
+                    }
                 }
 
                 testPID = (nextRNG << 16) | nextRNG2;
@@ -1258,7 +1355,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -1324,13 +1423,17 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                                 if (((nibble >> 16) % 100) < adjustedThresh)
                                 {
                                     if (((nibble >> 16) % 100) >= thresh)
+                                    {
                                         frame.setLeadType(Lead::SuctionCups);
+                                    }
                                     frame.setEncounterSlot(EncounterSlot::kSlot(slot >> 16, encounterType));
                                     frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                                     frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
+                                {
                                     skip = true;
+                                }
                                 break;
                             case Encounter::RockSmash:
                                 slot = seed * 0xeeb9eb65 + 0xa3561a1;
@@ -1343,7 +1446,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                                     frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
+                                {
                                     skip = true;
+                                }
                                 break;
                             case Encounter::Stationary:
                             default:
@@ -1352,7 +1457,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                         }
 
                         if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
+                        {
                             frames.append(frame);
+                        }
 
                         // Failed synch
                         if ((nextRNG2 & 1) == 1)
@@ -1386,7 +1493,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                                         frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                     }
                                     else
+                                    {
                                         skip = true;
+                                    }
                                     break;
                                 case Encounter::RockSmash:
                                     slot = nibble;
@@ -1399,7 +1508,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                                         frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                     }
                                     else
+                                    {
                                         skip = true;
+                                    }
                                     break;
                                 case Encounter::Stationary:
                                 default:
@@ -1408,7 +1519,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                             }
 
                             if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
+                            {
                                 frames.append(frame);
+                            }
                         }
                     }
                     // Successful synch
@@ -1441,9 +1554,10 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                                     frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
+                                {
                                     skip = true;
+                                }
                                 break;
-
                             case Encounter::RockSmash:
                                 slot = seed * 0xeeb9eb65 + 0xa3561a1;
                                 nibble = slot * 0xeeb9eb65 + 0xa3561a1;
@@ -1455,7 +1569,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                                     frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                                 }
                                 else
+                                {
                                     skip = true;
+                                }
                                 break;
                             case Encounter::Stationary:
                             default:
@@ -1464,7 +1580,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                         }
 
                         if (!skip && (encounterType == Encounter::Stationary || compare.compareSlot(frame)))
+                        {
                             frames.append(frame);
+                        }
                     }
 
                     testPID = (nextRNG << 16) | nextRNG2;
@@ -1505,7 +1623,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                             frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                         }
                         else
+                        {
                             continue;
+                        }
                         break;
                     case Encounter::RockSmash:
                         slot = seed * 0xeeb9eb65 + 0xa3561a1;
@@ -1518,7 +1638,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                             frame.setSeed(nibble * 0xeeb9eb65 + 0xa3561a1);
                         }
                         else
+                        {
                             continue;
+                        }
                         break;
                     case Encounter::Stationary:
                     default:
@@ -1555,11 +1677,15 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
 
                         frame.setPID(buffer + choppedPID, 0);
                         if (!compare.comparePID(frame))
+                        {
                             continue;
+                        }
 
                         frame.setEncounterSlot(EncounterSlot::jSlot(slot >> 16, encounterType));
                         if (encounterType == Encounter::Stationary || compare.compareSlot(frame))
+                        {
                             frames.append(frame);
+                        }
                     }
                 }
             }
@@ -1575,7 +1701,9 @@ QVector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa,
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
@@ -1590,7 +1718,9 @@ QVector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa,
         backward->setSeed(seed);
 
         for (auto &call : calls)
+        {
             call = backward->nextUShort();
+        }
 
         low = chainedPIDLow(calls);
         high = chainedPIDHigh(calls[13], low, tid, sid);
@@ -1617,7 +1747,9 @@ QVector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa
 
     frame.setIVsManual(hp, atk, def, spa, spd, spe);
     if (!compare.compareHiddenPower(frame))
+    {
         return frames;
+    }
 
     u32 first = (hp | (atk << 5) | (def << 10)) << 16;
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;

@@ -33,18 +33,21 @@ Frame3::Frame3(u16 tid, u16 sid, u16 psv)
     this->psv = psv;
 }
 
-// Returns real time for a given frame
 QString Frame3::getTime()
 {
     int32_t seconds = frame / 60;
     int32_t milliseconds = ((frame % 60) * 100) / 60;
     if (seconds < 60)
+    {
         return QString("%1.%2 s").arg(seconds).arg(milliseconds, 2, 10, QChar('0'));
+    }
 
     int32_t minutes = frame / 3600;
     seconds -= minutes * 60;
     if (minutes < 60)
+    {
         return QString("%1 m %2.%3 s").arg(minutes).arg(seconds).arg(milliseconds, 2, 10, QChar('0'));
+    }
 
     int32_t hours = minutes / 60;
     minutes -= 60 * hours;
@@ -57,12 +60,16 @@ QString Frame3::getTimeEgg()
     int32_t seconds = occidentary / 60;
     int32_t milliseconds = ((occidentary % 60) * 100) / 60;
     if (seconds < 60)
+    {
         return QString("%1.%2 s").arg(seconds).arg(milliseconds, 2, 10, QChar('0'));
+    }
 
     int32_t minutes = occidentary / 3600;
     seconds -= minutes * 60;
     if (minutes < 60)
+    {
         return QString("%1 m %2.%3 s").arg(minutes).arg(seconds).arg(milliseconds, 2, 10, QChar('0'));
+    }
 
     int32_t hours = minutes / 60;
     minutes -= 60 * hours;
@@ -226,7 +233,9 @@ void Frame3::setSeed(const u32 &value)
 void Frame3::xorFrame(bool flag)
 {
     if (flag)
+    {
         seed ^= 0x80000000;
+    }
     pid ^= 0x80008000;
     nature = pid % 25;
 }

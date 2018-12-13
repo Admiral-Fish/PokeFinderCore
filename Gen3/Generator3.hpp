@@ -29,6 +29,14 @@
 class Generator3: public Generator
 {
 
+public:
+    Generator3();
+    Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u16 tid, u16 sid, u32 offset);
+    ~Generator3();
+    QVector<Frame3> generate(const FrameCompare &compare);
+    void setup(Method method);
+    void setEncounter(const EncounterArea3 &value);
+
 private:
     u16 iv1;
     u16 iv2;
@@ -50,14 +58,6 @@ private:
     static inline bool cuteCharm50M(u32 pid) { return (pid & 0xff) >= 127; }
     static inline bool cuteCharm75F(u32 pid) { return (pid & 0xff) < 191; }
     static inline bool cuteCharm25M(u32 pid) { return (pid & 0xff) >= 191; }
-
-public:
-    Generator3();
-    Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u16 tid, u16 sid, u32 offset);
-    ~Generator3();
-    QVector<Frame3> generate(const FrameCompare& compare);
-    void setup(Method method);
-    void setEncounter(const EncounterArea3 &value);
 
 };
 

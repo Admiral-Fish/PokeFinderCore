@@ -40,6 +40,29 @@ Egg4::Egg4(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 
     frameType = method;
 }
 
+void Egg4::setParents(const QVector<u32> &parent1, const QVector<u32> &parent2)
+{
+    this->parent1 = parent1;
+    this->parent2 = parent2;
+}
+
+QVector<Frame4> Egg4::generate(const FrameCompare &compare)
+{
+    switch (frameType)
+    {
+        case Method::Gen4Normal:
+            return generatePID(compare);
+        case Method::Gen4Masuada:
+            return generatePIDMasuada(compare);
+        case Method::DPPtIVs:
+            return generateIVsDPPt(compare);
+        case Method::HGSSIVs:
+            return generateIVsHGSS(compare);
+        default:
+            return QVector<Frame4>();
+    }
+}
+
 QVector<Frame4> Egg4::generatePID(FrameCompare compare)
 {
     QVector<Frame4> frames;
@@ -81,7 +104,9 @@ QVector<Frame4> Egg4::generatePIDMasuada(FrameCompare compare)
             u32 val = (pid >> 16) ^ (pid & 0xFFFF);
 
             if ((val ^ psv) < 8)
+            {
                 break;
+            }
 
             pid = pid * 0x6c078965 + 1; // Advance with ARNG
         }
@@ -107,7 +132,9 @@ QVector<Frame4> Egg4::generateIVsDPPt(FrameCompare compare)
     PokeRNG rng(seed, initialFrame - 1);
     auto *rngArray = new u16[maxResults + 8];
     for (u32 x = 0; x < maxResults + 8; x++)
+    {
         rngArray[x] = rng.nextUShort();
+    }
 
     u32 inh1, inh2, inh3, par1, par2, par3;
 
@@ -144,7 +171,9 @@ QVector<Frame4> Egg4::generateIVsHGSS(FrameCompare compare)
     PokeRNG rng(seed, initialFrame - 1);
     auto *rngArray = new u16[maxResults + 8];
     for (u32 x = 0; x < maxResults + 8; x++)
+    {
         rngArray[x] = rng.nextUShort();
+    }
 
     u32 inh1, inh2, inh3, par1, par2, par3;
 
@@ -170,27 +199,4 @@ QVector<Frame4> Egg4::generateIVsHGSS(FrameCompare compare)
 
     delete[] rngArray;
     return frames;
-}
-
-QVector<Frame4> Egg4::generate(const FrameCompare &compare)
-{
-    switch (frameType)
-    {
-        case Method::Gen4Normal:
-            return generatePID(compare);
-        case Method::Gen4Masuada:
-            return generatePIDMasuada(compare);
-        case Method::DPPtIVs:
-            return generateIVsDPPt(compare);
-        case Method::HGSSIVs:
-            return generateIVsHGSS(compare);
-        default:
-            return QVector<Frame4>();
-    }
-}
-
-void Egg4::setParents(const QVector<u32> &parent1, const QVector<u32> &parent2)
-{
-    this->parent1 = parent1;
-    this->parent2 = parent2;
 }

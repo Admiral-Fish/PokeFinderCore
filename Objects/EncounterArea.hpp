@@ -33,11 +33,6 @@ class Slot;
 class EncounterArea
 {
 
-protected:
-    QVector<Slot> pokemon;
-    int location;
-    Encounter type;
-
 public:
     EncounterArea() = default;
     EncounterArea(int location, Encounter type, const QVector<Slot> &pokemon);
@@ -47,15 +42,15 @@ public:
     QVector<bool> getSlots(u32 num) const;
     QStringList getSpecieNames() const;
 
+protected:
+    QVector<Slot> pokemon;
+    int location;
+    Encounter type;
+
 };
 
 class Slot
 {
-
-private:
-    u32 minLevel;
-    u32 maxLevel;
-    int specie;
 
 public:
     Slot() = default;
@@ -66,6 +61,11 @@ public:
     u32 getMaxLevel() const { return maxLevel; }
     int getSpecie() const { return specie; }
     void setSpecie(int specie) { this->specie = specie; }
+
+private:
+    u32 minLevel;
+    u32 maxLevel;
+    int specie;
 
 };
 

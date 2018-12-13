@@ -25,6 +25,10 @@
 class MT : public IRNG
 {
 
+public:
+    ~MT() override;
+    void advanceFrames(u32 frames) override;
+
 protected:
     static const u32 LOWERMASK = 0x7FFFFFFF;
     static const int M = 397;
@@ -44,18 +48,10 @@ protected:
     virtual void shuffle() = 0;
     virtual void initialize(u32 seed) = 0;
 
-public:
-    ~MT() override { delete[] mt; }
-    void advanceFrames(u32 frames) override;
-
 };
 
 class MersenneTwister : public MT
 {
-
-private:
-    void initialize(u32 seed) override;
-    void shuffle() override;
 
 public:
     MersenneTwister(u32 seed, u32 frames = 0);
@@ -65,14 +61,14 @@ public:
     void setSeed(u32 seed, u32 frames) override;
     u32 getSeed() override;
 
+private:
+    void initialize(u32 seed) override;
+    void shuffle() override;
+
 };
 
 class MersenneTwisterUntempered : public MT
 {
-
-private:
-    void initialize(u32 seed) override;
-    void shuffle() override;
 
 public:
     MersenneTwisterUntempered(u32 seed, u32 frames = 0);
@@ -82,18 +78,14 @@ public:
     void setSeed(u32 seed, u32 frames) override;
     u32 getSeed() override;
 
+private:
+    void initialize(u32 seed) override;
+    void shuffle() override;
+
 };
 
 class MersenneTwisterFast : public MT
 {
-
-private:
-    static const u32 TEMPERINGMASKC2 = 0xEF000000;
-    u32 max;
-    u32 maxCalls;
-
-    void initialize(u32 seed) override;
-    void shuffle() override;
 
 public:
     MersenneTwisterFast(u32 seed, u32 calls, u32 frames = 0);
@@ -102,6 +94,14 @@ public:
     void setSeed(u32 seed) override;
     void setSeed(u32 seed, u32 frames) override;
     u32 getSeed() override;
+
+private:
+    static const u32 TEMPERINGMASKC2 = 0xEF000000;
+    u32 max;
+    u32 maxCalls;
+
+    void initialize(u32 seed) override;
+    void shuffle() override;
 
 };
 

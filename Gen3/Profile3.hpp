@@ -25,9 +25,6 @@
 class Profile3 : public Profile
 {
 
-private:
-    bool deadBattery;
-
 public:
     Profile3(const QString &profileName, Game version, u16 tid, u16 sid, int language = 0, bool deadBattery = false);
     Profile3(QJsonObject data);
@@ -38,6 +35,9 @@ public:
     void saveProfile();
     void deleteProfile();
     void updateProfile(Profile3 original);
+
+private:
+    bool deadBattery;
 
 };
 

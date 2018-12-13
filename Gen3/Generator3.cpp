@@ -19,7 +19,6 @@
 
 #include "Generator3.hpp"
 
-// Default constructor
 Generator3::Generator3()
 {
     maxResults = 100000;
@@ -30,7 +29,6 @@ Generator3::Generator3()
     psv = tid ^ sid;
 }
 
-// Constructor given user defined parameters
 Generator3::Generator3(u32 maxResults, u32 initialFrame, u32 initialSeed, u16 tid, u16 sid, u32 offset)
 {
     this->maxResults = maxResults;
@@ -47,7 +45,73 @@ Generator3::~Generator3()
     delete rng;
 }
 
-// Returns QVector of frames for Method Channel
+QVector<Frame3> Generator3::generate(const FrameCompare &compare)
+{
+    switch (frameType)
+    {
+        case Method::Method1:
+        case Method::Method2:
+        case Method::Method4:
+            return generateMethod124(compare);
+        case Method::Method1Reverse:
+            return generateMethod1Reverse(compare);
+        case Method::MethodH1:
+        case Method::MethodH2:
+        case Method::MethodH4:
+            switch (leadType)
+            {
+                case Lead::None:
+                    return generateMethodH124(compare);
+                case Lead::Synchronize:
+                    return generateMethodH124Synch(compare);
+                // case Lead::CuteCharm:
+                // Set to default to avoid compiler warning message
+                default:
+                    return generateMethodH124CuteCharm(compare);
+            }
+        case Method::XDColo:
+            return generateMethodXDColo(compare);
+        case Method::Channel:
+            return generateMethodChannel(compare);
+        default:
+            return QVector<Frame3>();
+    }
+}
+
+void Generator3::setup(Method method)
+{
+    frameType = method;
+    if (frameType == Method::XDColo || frameType == Method::Channel)
+    {
+        rng = new XDRNG(initialSeed, initialFrame - 1 + offset);
+    }
+    else
+    {
+        rng = new PokeRNG(initialSeed, initialFrame - 1 + offset);
+    }
+
+    if (frameType == Method::Method1 || frameType == Method::MethodH1)
+    {
+        iv1 = frameType == Method::MethodH1 ? 1 : 2;
+        iv2 = frameType == Method::MethodH1 ? 2 : 3;
+    }
+    else if (frameType == Method::Method2 || frameType == Method::MethodH2)
+    {
+        iv1 = frameType == Method::MethodH2 ? 2 : 3;
+        iv2 = frameType == Method::MethodH2 ? 3 : 4;
+    }
+    else if (frameType == Method::Method4 || frameType == Method::MethodH4)
+    {
+        iv1 = frameType == Method::MethodH4 ? 1 : 2;
+        iv2 = frameType == Method::MethodH4 ? 3 : 4;
+    }
+}
+
+void Generator3::setEncounter(const EncounterArea3 &value)
+{
+    encounter = value;
+}
+
 QVector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
 {
     QVector<Frame3> frames;
@@ -56,7 +120,9 @@ QVector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
 
     u16 *rngArray = new u16[maxResults + 12];
     for (u32 i = 0; i < maxResults + 12; i++)
+    {
         rngArray[i] = rng->nextUShort();
+    }
 
     // Method Channel [SEED] [SID] [PID] [PID] [BERRY] [GAME ORIGIN] [OT GENDER] [IV] [IV] [IV] [IV] [IV] [IV]
 
@@ -65,9 +131,13 @@ QVector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
         frame.setIDs(40122, rngArray[cnt], 40122 ^ rngArray[cnt]);
 
         if ((rngArray[2 + cnt] > 7 ? 0 : 1) != (rngArray[1 + cnt] ^ 40122 ^ rngArray[cnt]))
+        {
             frame.setPID(rngArray[2 + cnt], rngArray[1 + cnt] ^ 0x8000);
+        }
         else
+        {
             frame.setPID(rngArray[2 + cnt], rngArray[1 + cnt]);
+        }
 
         frame.setIVsManual(rngArray[6 + cnt] >> 11, rngArray[7 + cnt] >> 11, rngArray[8 + cnt] >> 11, rngArray[10 + cnt] >> 11, rngArray[11 + cnt] >> 11, rngArray[9 + cnt] >> 11);
 
@@ -81,7 +151,7 @@ QVector<Frame3> Generator3::generateMethodChannel(FrameCompare compare)
     delete[] rngArray;
     return frames;
 }
-// Returns QVector of frames for Method H 1, 2, or 4
+
 QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
 {
     QVector<Frame3> frames;
@@ -104,20 +174,28 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
         {
             case Encounter::RockSmash:
                 if (!rock)
+                {
                     go.nextUInt();
+                }
                 if (((go.getSeed() >> 16)  % 2880) >= rate)
+                {
                     continue;
+                }
 
                 frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 break;
             case Encounter::SafariZone:
                 frame.setEncounterSlot(EncounterSlot::hSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 go.advanceFrames(2);
@@ -125,7 +203,9 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
             case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 go.advanceFrames(1);
@@ -136,7 +216,9 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
             case Encounter::SuperRod:
                 frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 break;
@@ -148,7 +230,9 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
         // Grab the hunt nature
         frame.setNature(go.nextUShort() % 25);
         if (!compare.compareNature(frame))
+        {
             continue;
+        }
 
         // Now search for a Method 124 PID that matches our hunt nature
         do
@@ -193,7 +277,6 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
     return frames;
 }
 
-// Returns QVector of frames for Method H 1, 2, or 4 given synch lead
 QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
 {
     QVector<Frame3> frames;
@@ -216,20 +299,28 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         {
             case Encounter::RockSmash:
                 if (!rock)
+                {
                     go.nextUInt();
+                }
                 if (((go.getSeed() >> 16)  % 2880) >= rate)
+                {
                     continue;
+                }
 
                 frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 break;
             case Encounter::SafariZone:
                 frame.setEncounterSlot(EncounterSlot::hSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 go.advanceFrames(2);
@@ -237,7 +328,9 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
             case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 go.advanceFrames(1);
@@ -248,7 +341,9 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
             case Encounter::SuperRod:
                 frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 break;
@@ -259,7 +354,9 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         // Method H relies on grabbing a hunt nature and generating PIDs until the PID nature matches the hunt nature
         // Check by seeing if frame can synch
         if ((go.nextUShort() & 1) == 0) // Frame is synchable so set nature to synch nature
+        {
             frame.setNature(synchNature);
+        }
         else // Synch failed so grab hunt nature from next RNG call
         {
             frame.setNature(go.nextUShort() % 25);
@@ -267,7 +364,9 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
         }
 
         if (!compare.compareNature(frame))
+        {
             continue;
+        }
 
         // Now search for a Method 124 PID that matches our hunt nature
         do
@@ -312,7 +411,6 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
     return frames;
 }
 
-// Returns QVector of frames for Method H 1, 2, or 4 given cute charm lead
 QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
 {
     QVector<Frame3> frames;
@@ -365,20 +463,28 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
         {
             case Encounter::RockSmash:
                 if (!rock)
+                {
                     go.nextUInt();
+                }
                 if (((go.getSeed() >> 16)  % 2880) >= rate)
+                {
                     continue;
+                }
 
                 frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 break;
             case Encounter::SafariZone:
                 frame.setEncounterSlot(EncounterSlot::hSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 go.advanceFrames(2);
@@ -386,7 +492,9 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
             case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 go.advanceFrames(1);
@@ -397,7 +505,9 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
             case Encounter::SuperRod:
                 frame.setEncounterSlot(EncounterSlot::hSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
 
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 break;
@@ -411,7 +521,9 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
             // Call next RNG to determine hunt nature
             frame.setNature(go.nextUShort() % 25);
             if (!compare.compareNature(frame))
+            {
                 continue;
+            }
 
             // Now search for a Method 124 PID that matches our hunt nature and cute charm
             do
@@ -428,7 +540,9 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
             // Call next RNG to determine hunt nature
             frame.setNature(go.nextUShort() % 25);
             if (!compare.compareNature(frame))
+            {
                 continue;
+            }
 
             // Cute charm failed
             // Only search for a Method 124 PID that matches our hunt nature
@@ -475,7 +589,6 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
     return frames;
 }
 
-// Returns QVector of frames for Method XD/Colo
 QVector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
 {
     QVector<Frame3> frames;
@@ -484,14 +597,15 @@ QVector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
 
     u16 *rngArray = new u16[maxResults + 5];
     for (u32 i = 0; i < maxResults + 5; i++)
+    {
         rngArray[i] = rng->nextUShort();
+    }
 
     // Method XD/Colo [SEED] [IVS] [IVS] [BLANK] [PID] [PID]
 
     for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
         frame.setPID(rngArray[4 + cnt], rngArray[3 + cnt]);
-
         frame.setIVs(rngArray[cnt], rngArray[1 + cnt]);
 
         if (compare.compareFrame(frame))
@@ -505,7 +619,6 @@ QVector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
     return frames;
 }
 
-// Returns QVector of frames for Method 1, 2, or 4
 QVector<Frame3> Generator3::generateMethod124(FrameCompare compare)
 {
     QVector<Frame3> frames;
@@ -514,7 +627,9 @@ QVector<Frame3> Generator3::generateMethod124(FrameCompare compare)
 
     u16 *rngArray = new u16[maxResults + 5];
     for (u32 i = 0; i < maxResults + 5; i++)
+    {
         rngArray[i] = rng->nextUShort();
+    }
 
     // Method 1 [SEED] [PID] [PID] [IVS] [IVS]
     // Method 2 [SEED] [PID] [PID] [BLANK] [IVS] [IVS]
@@ -523,7 +638,6 @@ QVector<Frame3> Generator3::generateMethod124(FrameCompare compare)
     for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
         frame.setPID(rngArray[cnt], rngArray[1 + cnt]);
-
         frame.setIVs(rngArray[iv1 + cnt], rngArray[iv2 + cnt]);
 
         if (compare.compareFrame(frame))
@@ -545,14 +659,15 @@ QVector<Frame3> Generator3::generateMethod1Reverse(FrameCompare compare)
 
     u16 *rngArray = new u16[maxResults + 4];
     for (u32 i = 0; i < maxResults + 4; i++)
+    {
         rngArray[i] = rng->nextUShort();
+    }
 
     // Method 1 Reverse [SEED] [PID] [PID] [IVS] [IVS]
 
     for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
         frame.setPID(rngArray[1 + cnt], rngArray[cnt]);
-
         frame.setIVs(rngArray[2 + cnt], rngArray[3 + cnt]);
 
         if (compare.compareFrame(frame))
@@ -564,69 +679,4 @@ QVector<Frame3> Generator3::generateMethod1Reverse(FrameCompare compare)
 
     delete[] rngArray;
     return frames;
-}
-
-// Generates frames
-QVector<Frame3> Generator3::generate(const FrameCompare &compare)
-{
-    switch (frameType)
-    {
-        case Method::Method1:
-        case Method::Method2:
-        case Method::Method4:
-            return generateMethod124(compare);
-        case Method::Method1Reverse:
-            return generateMethod1Reverse(compare);
-        case Method::MethodH1:
-        case Method::MethodH2:
-        case Method::MethodH4:
-            switch (leadType)
-            {
-                case Lead::None:
-                    return generateMethodH124(compare);
-                case Lead::Synchronize:
-                    return generateMethodH124Synch(compare);
-                // case Lead::CuteCharm:
-                // Set to default to avoid compiler warning message
-                default:
-                    return generateMethodH124CuteCharm(compare);
-            }
-        case Method::XDColo:
-            return generateMethodXDColo(compare);
-        case Method::Channel:
-            return generateMethodChannel(compare);
-        default:
-            return QVector<Frame3>();
-    }
-}
-
-// Determines what generational method to use
-void Generator3::setup(Method method)
-{
-    frameType = method;
-    if (frameType == Method::XDColo || frameType == Method::Channel)
-        rng = new XDRNG(initialSeed, initialFrame - 1 + offset);
-    else
-        rng = new PokeRNG(initialSeed, initialFrame - 1 + offset);
-
-    if (frameType == Method::Method1 || frameType == Method::MethodH1)
-    {
-        iv1 = frameType == Method::MethodH1 ? 1 : 2;
-        iv2 = frameType == Method::MethodH1 ? 2 : 3;
-    }
-    else if (frameType == Method::Method2 || frameType == Method::MethodH2)
-    {
-        iv1 = frameType == Method::MethodH2 ? 2 : 3;
-        iv2 = frameType == Method::MethodH2 ? 3 : 4;
-    }
-    else if (frameType == Method::Method4 || frameType == Method::MethodH4)
-    {
-        iv1 = frameType == Method::MethodH4 ? 1 : 2;
-        iv2 = frameType == Method::MethodH4 ? 3 : 4;
-    }
-}
-
-void Generator3::setEncounter(const EncounterArea3 &value)
-{
-    encounter = value;
 }

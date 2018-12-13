@@ -19,13 +19,11 @@
 
 #include "Encounters4.hpp"
 
-Encounters4::Encounters4(Encounter type, Game game, Game dual, int time, int radio)
+Encounters4::Encounters4(Encounter type, int time, const Profile4 &profile)
 {
     this->type = type;
-    this->game = game;
-    this->dual = dual;
     this->time = time;
-    this->radio = radio;
+    this->profile = profile;
 }
 
 QVector<EncounterArea4> Encounters4::getEncounters()
@@ -35,7 +33,7 @@ QVector<EncounterArea4> Encounters4::getEncounters()
     for (int i = 0; i < entries.size(); i++)
     {
         QByteArray data = entries[i];
-        if (game == Game::HeartGold || game == Game::SoulSilver)
+        if (profile.getVersion() & Game::HGSS)
         {
             for (const auto &encounter : getHGSS(data, i))
             {
@@ -64,7 +62,7 @@ QByteArrayList Encounters4::getData() const
 {
     QString path;
     int size;
-    switch (game)
+    switch (profile.getVersion())
     {
         case Game::Diamond:
             path = ":/encounters/diamond.bin";
@@ -259,12 +257,12 @@ QVector<EncounterArea4> Encounters4::getDPPt(const QByteArray &data, int i)
 
 void Encounters4::modifyRadio(QVector<Slot> &pokemon, const QByteArray &data)
 {
-    if (radio == 1)
+    if (profile.getRadio() == 1)
     {
         pokemon[4].setSpecie(getValue(data, 87, 2));
         pokemon[5].setSpecie(getValue(data, 89, 2));
     }
-    else if (radio == 2)
+    else if (profile.getRadio() == 2)
     {
         pokemon[4].setSpecie(getValue(data, 91, 2));
         pokemon[5].setSpecie(getValue(data, 93, 2));
@@ -288,27 +286,27 @@ void Encounters4::modifyTime(QVector<Slot> &pokemon, const QByteArray &data)
 
 void Encounters4::modifyDual(QVector<Slot> &pokemon, const QByteArray &data)
 {
-    if (dual == Game::Ruby)
+    if (profile.getDualSlot() == Game::Ruby)
     {
         pokemon[8].setSpecie(getValue(data, 58, 2));
         pokemon[9].setSpecie(getValue(data, 60, 2));
     }
-    else if (dual == Game::Sapphire)
+    else if (profile.getDualSlot() == Game::Sapphire)
     {
         pokemon[8].setSpecie(getValue(data, 62, 2));
         pokemon[9].setSpecie(getValue(data, 64, 2));
     }
-    else if (dual == Game::Emerald)
+    else if (profile.getDualSlot() == Game::Emerald)
     {
         pokemon[8].setSpecie(getValue(data, 66, 2));
         pokemon[9].setSpecie(getValue(data, 68, 2));
     }
-    else if (dual == Game::FireRed)
+    else if (profile.getDualSlot() == Game::FireRed)
     {
         pokemon[8].setSpecie(getValue(data, 70, 2));
         pokemon[9].setSpecie(getValue(data, 72, 2));
     }
-    else if (dual == Game::LeafGreen)
+    else if (profile.getDualSlot() == Game::LeafGreen)
     {
         pokemon[8].setSpecie(getValue(data, 74, 2));
         pokemon[9].setSpecie(getValue(data, 76, 2));
@@ -318,16 +316,28 @@ void Encounters4::modifyDual(QVector<Slot> &pokemon, const QByteArray &data)
 void Encounters4::modifyRadar(QVector<Slot> &pokemon, const QByteArray &data)
 {
     // TODO
+    if (profile.getRadar())
+    {
+
+    }
 }
 
 void Encounters4::modifySwarmHGSS(QVector<Slot> &pokemon, const QByteArray &data)
 {
     // TODO
+    if (profile.getSwarm())
+    {
+
+    }
 }
 
 void Encounters4::modifySwarmDPPt(QVector<Slot> &pokemon, const QByteArray &data)
 {
     // TODO
+    if (profile.getSwarm())
+    {
+
+    }
 }
 
 ushort Encounters4::getValue(const QByteArray &data, int offset, int length)

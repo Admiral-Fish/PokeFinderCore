@@ -34,6 +34,14 @@ using u16 = uint16_t;
 class Generator
 {
 
+public:
+    Encounter getEncounterType() const;
+    void setEncounterType(const Encounter &value);
+    Lead getLeadType() const;
+    void setLeadType(const Lead &value);
+    u32 getSynchNature() const;
+    void setSynchNature(const u32 &value);
+
 protected:
     u16 psv;
     u16 sid;
@@ -47,14 +55,6 @@ protected:
     u32 maxResults;
     u32 synchNature;
     u32 cuteCharm;
-
-public:
-    Encounter getEncounterType() const;
-    void setEncounterType(const Encounter &value);
-    Lead getLeadType() const;
-    void setLeadType(const Lead &value);
-    u32 getSynchNature() const;
-    void setSynchNature(const u32 &value);
 
 };
 

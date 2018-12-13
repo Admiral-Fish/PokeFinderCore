@@ -40,6 +40,87 @@ Egg3::Egg3(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 
     frameType = method;
 }
 
+QVector<Frame3> Egg3::generate(const FrameCompare &compare)
+{
+    switch (frameType)
+    {
+        case Method::EBredPID:
+            return generateEmeraldPID(compare);
+        case Method::EBred:
+            return generateEmerald(compare);
+        case Method::EBredSplit:
+            return generateEmeraldSplit(compare);
+        case Method::EBredAlternate:
+            return generateEmeraldAlternate(compare);
+        case Method::RSBred:
+        case Method::FRLGBred:
+            {
+                QVector<Frame3> lower = generateLower(compare);
+                if (lower.isEmpty())
+                {
+                    return lower;
+                }
+                else
+                {
+                    return generateUpper(lower, compare);
+                }
+            }
+        default:
+            return QVector<Frame3>();
+    }
+}
+
+void Egg3::setParents(const QVector<u32> &parent1, const QVector<u32> &parent2)
+{
+    this->parent1 = parent1;
+    this->parent2 = parent2;
+}
+
+void Egg3::setMinRedraw(const u32 &value)
+{
+    minRedraw = value;
+}
+
+void Egg3::setMaxRedraw(const u32 &value)
+{
+    maxRedraw = value;
+}
+
+void Egg3::setCompatability(const int &value)
+{
+    compatability = value;
+}
+
+void Egg3::setCalibration(const u32 &value)
+{
+    calibration = value;
+}
+
+void Egg3::setEverstone(bool value)
+{
+    everstone = value;
+}
+
+void Egg3::setMinPickup(const u32 &value)
+{
+    minPickup = value;
+}
+
+void Egg3::setMaxPickup(const u32 &value)
+{
+    maxPickup = value;
+}
+
+u32 Egg3::getSeed() const
+{
+    return seed;
+}
+
+void Egg3::setSeed(const u32 &value)
+{
+    seed = value;
+}
+
 QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
 {
     QVector<Frame3> frames;
@@ -52,7 +133,9 @@ QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
     PokeRNG rng(seed, initialFrame - 1);
     auto *rngArray = new u16[maxResults + 19];
     for (u32 x = 0; x < maxResults + 19; x++)
+    {
         rngArray[x] = rng.nextUShort();
+    }
 
     u32 val = initialFrame;
 
@@ -62,7 +145,9 @@ QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
         for (u32 redraw = minRedraw; redraw <= maxRedraw; redraw++)
         {
             if (((rngArray[cnt] * 100) / 0xFFFF) >= compatability)
+            {
                 continue;
+            }
 
             u32 offset = calibration + 3 * redraw;
 
@@ -91,7 +176,9 @@ QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
                     // Adjusted i value is 19
                     // Skip at this point since spread is unlikely to occur
                     if (i == 19)
+                    {
                         break;
+                    }
 
                     // generate lower
                     pid = rngArray[cnt + i++];
@@ -102,7 +189,9 @@ QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
                 while (pid % 0x19 != everstoneNature);
 
                 if (i == 19)
+                {
                     continue;
+                }
 
                 frame.setPID(pid, pid >> 16, pid & 0xFFFF);
                 frame.setNature(everstoneNature);
@@ -117,9 +206,9 @@ QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
         }
     }
 
-    std::sort(frames.begin(), frames.end(), [](const Frame3 & frameA, const Frame3 & frameB)
+    std::sort(frames.begin(), frames.end(), [](const Frame3 & frame1, const Frame3 & frame2)
     {
-        return frameA.getFrame() < frameB.getFrame();
+        return frame1.getFrame() < frame2.getFrame();
     });
 
     delete[] rngArray;
@@ -134,7 +223,9 @@ QVector<Frame3> Egg3::generateEmerald(FrameCompare compare)
     PokeRNG rng(seed, initialFrame - 1);
     auto *rngArray = new u16[maxResults + 13];
     for (u32 x = 0; x < maxResults + 13; x++)
+    {
         rngArray[x] = rng.nextUShort();
+    }
 
     u32 inh1, inh2, inh3, par1, par2, par3;
 
@@ -169,7 +260,9 @@ QVector<Frame3> Egg3::generateEmeraldSplit(FrameCompare compare)
     PokeRNG rng(seed, initialFrame - 1);
     auto *rngArray = new u16[maxResults + 14];
     for (u32 x = 0; x < maxResults + 14; x++)
+    {
         rngArray[x] = rng.nextUShort();
+    }
 
     u32 inh1, inh2, inh3, par1, par2, par3;
 
@@ -204,7 +297,9 @@ QVector<Frame3> Egg3::generateEmeraldAlternate(FrameCompare compare)
     PokeRNG rng(seed, initialFrame - 1);
     auto *rngArray = new u16[maxResults + 14];
     for (u32 x = 0; x < maxResults + 14; x++)
+    {
         rngArray[x] = rng.nextUShort();
+    }
 
     u32 inh1, inh2, inh3, par1, par2, par3;
 
@@ -239,13 +334,17 @@ QVector<Frame3> Egg3::generateLower(FrameCompare compare)
     PokeRNG rng(seed, initialFrame - 1);
     auto *rngArray = new u16[maxResults + 2];
     for (u32 x = 0; x < maxResults + 2; x++)
+    {
         rngArray[x] = rng.nextUShort();
+    }
 
     u32 max = maxResults - initialFrame + 1;
     for (u32 cnt = 0; cnt < max; cnt++)
     {
         if (((rngArray[cnt] * 100) / 0xFFFF) >= compatability)
+        {
             continue;
+        }
 
         frame.setPID((rngArray[1 + cnt] % 0xFFFE) + 1);
 
@@ -268,7 +367,9 @@ QVector<Frame3> Egg3::generateUpper(QVector<Frame3> lower, FrameCompare compare)
     PokeRNG rng(seed, minPickup - 1);
     auto *rngArray = new u16[maxResults + 14];
     for (u32 x = 0; x < maxResults + 14; x++)
+    {
         rngArray[x] = rng.nextUShort();
+    }
 
     u32 inh1, inh2, inh3, par1, par2, par3;
 
@@ -311,81 +412,4 @@ QVector<Frame3> Egg3::generateUpper(QVector<Frame3> lower, FrameCompare compare)
 
     delete[] rngArray;
     return frames;
-}
-
-QVector<Frame3> Egg3::generate(const FrameCompare &compare)
-{
-    switch (frameType)
-    {
-        case Method::EBredPID:
-            return generateEmeraldPID(compare);
-        case Method::EBred:
-            return generateEmerald(compare);
-        case Method::EBredSplit:
-            return generateEmeraldSplit(compare);
-        case Method::EBredAlternate:
-            return generateEmeraldAlternate(compare);
-        case Method::RSBred:
-        case Method::FRLGBred:
-            {
-                QVector<Frame3> lower = generateLower(compare);
-                if (lower.isEmpty())
-                    return lower;
-                else
-                    return generateUpper(lower, compare);
-            }
-        default:
-            return QVector<Frame3>();
-    }
-}
-
-void Egg3::setParents(const QVector<u32> &parent1, const QVector<u32> &parent2)
-{
-    this->parent1 = parent1;
-    this->parent2 = parent2;
-}
-
-void Egg3::setMinRedraw(const u32 &value)
-{
-    minRedraw = value;
-}
-
-void Egg3::setMaxRedraw(const u32 &value)
-{
-    maxRedraw = value;
-}
-
-void Egg3::setCompatability(const u32 &value)
-{
-    compatability = value;
-}
-
-void Egg3::setCalibration(const u32 &value)
-{
-    calibration = value;
-}
-
-void Egg3::setEverstone(bool value)
-{
-    everstone = value;
-}
-
-void Egg3::setMinPickup(const u32 &value)
-{
-    minPickup = value;
-}
-
-void Egg3::setMaxPickup(const u32 &value)
-{
-    maxPickup = value;
-}
-
-u32 Egg3::getSeed() const
-{
-    return seed;
-}
-
-void Egg3::setSeed(const u32 &value)
-{
-    seed = value;
 }

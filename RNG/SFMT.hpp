@@ -25,6 +25,16 @@
 class SFMT : public IRNG64
 {
 
+public:
+    SFMT(u32 seed, u32 frames = 0);
+    ~SFMT() override;
+    void advanceFrames(u32 frames) override;
+    u32 nextUInt() override;
+    u64 nextULong() override;
+    void setSeed(u64 seed) override;
+    void setSeed(u64 seed, u32 frames) override;
+    u64 getSeed() override;
+
 private:
     static const u32 CMSK1 = 0xdfffffef;
     static const u32 CMSK2 = 0xddfecb7f;
@@ -41,16 +51,6 @@ private:
     void initialize(u32 seed);
     void periodCertificaion();
     void shuffle();
-
-public:
-    SFMT(u32 seed, u32 frames = 0);
-    ~SFMT() override { delete[] sfmt; }
-    void advanceFrames(u32 frames) override;
-    u32 nextUInt() override;
-    u64 nextULong() override;
-    void setSeed(u64 seed) override;
-    void setSeed(u64 seed, u32 frames) override;
-    u64 getSeed() override;
 
 };
 

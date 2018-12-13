@@ -28,6 +28,21 @@
 class Egg3 : public Egg
 {
 
+public:
+    Egg3();
+    Egg3(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 seed = 0);
+    QVector<Frame3> generate(const FrameCompare &compare);
+    void setParents(const QVector<u32> &parent1, const QVector<u32> &parent2);
+    void setMinRedraw(const u32 &value);
+    void setMaxRedraw(const u32 &value);
+    void setCompatability(const int &value);
+    void setCalibration(const u32 &value);
+    void setEverstone(bool value);
+    void setMinPickup(const u32 &value);
+    void setMaxPickup(const u32 &value);
+    u32 getSeed() const;
+    void setSeed(const u32 &value);
+
 private:
     QVector<u32> parent1;
     QVector<u32> parent2;
@@ -37,7 +52,7 @@ private:
     u32 calibration;
     u32 minRedraw;
     u32 maxRedraw;
-    u32 compatability;
+    int compatability;
     u32 minPickup;
     u32 maxPickup;
     bool everstone;
@@ -48,21 +63,6 @@ private:
     QVector<Frame3> generateEmeraldAlternate(FrameCompare compare);
     QVector<Frame3> generateLower(FrameCompare compare);
     QVector<Frame3> generateUpper(QVector<Frame3> lower, FrameCompare compare);
-
-public:
-    Egg3();
-    Egg3(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 seed = 0);
-    QVector<Frame3> generate(const FrameCompare &compare);
-    void setParents(const QVector<u32> &parent1, const QVector<u32> &parent2);
-    void setMinRedraw(const u32 &value);
-    void setMaxRedraw(const u32 &value);
-    void setCompatability(const u32 &value);
-    void setCalibration(const u32 &value);
-    void setEverstone(bool value);
-    void setMinPickup(const u32 &value);
-    void setMaxPickup(const u32 &value);
-    u32 getSeed() const;
-    void setSeed(const u32 &value);
 
 };
 

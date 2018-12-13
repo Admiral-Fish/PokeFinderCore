@@ -25,11 +25,6 @@
 class Frame4 : public Frame
 {
 
-private:
-    u32 occidentary;
-    u32 seed;
-    u32 initialSeed;
-
 public:
     Frame4();
     Frame4(u16 tid, u16 sid, u16 psv);
@@ -46,6 +41,11 @@ public:
     u32 getOccidentary() const;
     void setOccidentary(const u32 &value);
     void xorFrame();
+
+private:
+    u32 occidentary;
+    u32 seed;
+    u32 initialSeed;
 
 };
 

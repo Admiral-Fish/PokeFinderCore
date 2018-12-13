@@ -46,6 +46,11 @@ Generator4::~Generator4()
     delete rng;
 }
 
+void Generator4::setEncounter(const EncounterArea4 &value)
+{
+    encounter = value;
+}
+
 QVector<Frame4> Generator4::generate(const FrameCompare &compare)
 {
     rng = new PokeRNG(initialSeed, initialFrame - 1 + offset);
@@ -85,11 +90,6 @@ QVector<Frame4> Generator4::generate(const FrameCompare &compare)
     }
 }
 
-void Generator4::setEncounter(const EncounterArea4 &value)
-{
-    encounter = value;
-}
-
 QVector<Frame4> Generator4::generateMethod1(FrameCompare compare)
 {
     QVector<Frame4> frames;
@@ -98,7 +98,9 @@ QVector<Frame4> Generator4::generateMethod1(FrameCompare compare)
 
     auto *rngArray = new u16[maxResults + 4];
     for (u32 i = 0; i < maxResults + 4; i++)
+    {
         rngArray[i] = rng->nextUShort();
+    }
 
     // Method 1 [SEED] [PID] [PID] [IVS] [IVS]
 
@@ -141,14 +143,20 @@ QVector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
             case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::jSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 0;
                 break;
             case Encounter::Surfing:
                 frame.setEncounterSlot(EncounterSlot::jSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 1;
                 break;
@@ -156,11 +164,16 @@ QVector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
             case Encounter::GoodRod:
             case Encounter::SuperRod:
                 if (((go.getSeed() >> 16) / 656) > thresh)
+                {
                     continue;
+                }
 
                 frame.setEncounterSlot(EncounterSlot::jSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 1;
                 break;
@@ -172,7 +185,9 @@ QVector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
         frame.setNature(go.nextUShort() / 0xa3e);
 
         if (!compare.compareNature(frame))
+        {
             continue;
+        }
 
         // Begin search for valid pid
         do
@@ -223,14 +238,20 @@ QVector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
             case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::jSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 1;
                 break;
             case Encounter::Surfing:
                 frame.setEncounterSlot(EncounterSlot::jSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 2;
                 break;
@@ -238,11 +259,16 @@ QVector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
             case Encounter::GoodRod:
             case Encounter::SuperRod:
                 if (((go.getSeed() >> 16) / 656) > thresh)
+                {
                     continue;
+                }
 
                 frame.setEncounterSlot(EncounterSlot::jSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 2;
                 break;
@@ -250,15 +276,20 @@ QVector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
                 break;
         }
 
-        // Successful synch
-        if ((go.nextUShort() >> 15) == 0)
+
+        if ((go.nextUShort() >> 15) == 0) // Successful synch
+        {
             frame.setNature(synchNature);
-        // Failed synch
-        else
+        }
+        else // Failed synch
+        {
             frame.setNature(go.nextUShort() / 0xa3e);
+        }
 
         if (!compare.compareNature(frame))
+        {
             continue;
+        }
 
         // Begin search for valid pid
         do
@@ -330,14 +361,20 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
             case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::jSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 1;
                 break;
             case Encounter::Surfing:
                 frame.setEncounterSlot(EncounterSlot::jSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 2;
                 break;
@@ -345,11 +382,16 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
             case Encounter::GoodRod:
             case Encounter::SuperRod:
                 if (((go.getSeed() >> 16) / 656) > thresh)
+                {
                     continue;
+                }
 
                 frame.setEncounterSlot(EncounterSlot::jSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 2;
                 break;
@@ -357,27 +399,30 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
                 break;
         }
 
-        // Successful cute charm
-        if ((go.nextUShort() / 0x5556) != 0)
+
+        if ((go.nextUShort() / 0x5556) != 0) // Successful cute charm
         {
             // Get nature
             frame.setNature(go.nextUShort() / 0xa3e);
 
             if (!compare.compareNature(frame))
+            {
                 continue;
+            }
 
             // Cute charm doesn't hunt for a valid PID, just uses buffer and target nature
             frame.setPID(buffer + frame.getNature(), 0, buffer + frame.getNature());
             frame.setOccidentary(cnt);
         }
-        // Failed cute charm
-        else
+        else // Failed cute charm
         {
             // Get nature
             frame.setNature(go.nextUShort() / 0xa3e);
 
             if (!compare.compareNature(frame))
+            {
                 continue;
+            }
 
             // Begin search for valid pid
             do
@@ -419,11 +464,17 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
     u16 thresh = 0;
 
     if (encounterType == Encounter::OldRod)
+    {
         thresh = leadType == Lead::SuctionCups ? 90 : 25;
+    }
     else if (encounterType == Encounter::GoodRod)
+    {
         thresh = leadType == Lead::SuctionCups ? 100 : 50;
+    }
     else if (encounterType == Encounter::SuperRod)
+    {
         thresh = leadType == Lead::SuctionCups ? 100 : 75;
+    }
 
     u16 rate = encounter.getEncounterRate();
 
@@ -437,14 +488,20 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
             case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 1;
                 break;
             case Encounter::Surfing:
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 2;
                 break;
@@ -452,11 +509,16 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
             case Encounter::GoodRod:
             case Encounter::SuperRod:
                 if (((go.getSeed() >> 16) % 100) >= thresh)
+                {
                     continue;
+                }
 
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 go.advanceFrames(1);
                 hunt = 3;
@@ -464,11 +526,16 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
             case Encounter::RockSmash:
                 // Blank(or maybe item) ???
                 if (((go.nextUShort()) % 100) >= rate)
+                {
                     continue;
+                }
 
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 2;
                 break;
@@ -482,7 +549,9 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
         frame.setNature(go.nextUShort() % 25);
 
         if (!compare.compareNature(frame))
+        {
             continue;
+        }
 
         // Begin search for valid pid
         do
@@ -534,14 +603,20 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
             case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 2;
                 break;
             case Encounter::Surfing:
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 3;
                 break;
@@ -549,11 +624,16 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
             case Encounter::GoodRod:
             case Encounter::SuperRod:
                 if (((go.getSeed() >> 16) % 100) >= thresh)
+                {
                     continue;
+                }
 
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 go.advanceFrames(1);
                 hunt = 4;
@@ -561,11 +641,16 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
             case Encounter::RockSmash:
                 // Blank(or maybe item) ???
                 if (((go.nextUShort()) % 100) >= rock)
+                {
                     continue;
+                }
 
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 3;
                 break;
@@ -575,16 +660,20 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
                 break;
         }
 
-        // Get hunt nature
-        // Successful synch
-        if ((go.nextUShort() & 1) == 0)
+
+        if ((go.nextUShort() & 1) == 0) // Successful synch
+        {
             frame.setNature(synchNature);
-        // Failed synch
-        else
+        }
+        else // Failed synch
+        {
             frame.setNature(go.nextUShort() % 25);
+        }
 
         if (!compare.compareNature(frame))
+        {
             continue;
+        }
 
         // Begin search for valid pid
         do
@@ -656,14 +745,20 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
             case Encounter::Grass:
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 hunt = 2;
                 break;
             case Encounter::Surfing:
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.getSeed() >> 16, encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 3;
                 break;
@@ -671,11 +766,16 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
             case Encounter::GoodRod:
             case Encounter::SuperRod:
                 if (((go.getSeed() >> 16) % 100) >= thresh)
+                {
                     continue;
+                }
 
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot()));
                 go.advanceFrames(1);
                 hunt = 4;
@@ -683,11 +783,16 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
             case Encounter::RockSmash:
                 // Blank(or maybe item) ???
                 if (((go.nextUShort()) % 100) >= rock)
+                {
                     continue;
+                }
 
                 frame.setEncounterSlot(EncounterSlot::kSlot(go.nextUShort(), encounterType));
                 if (!compare.compareSlot(frame))
+                {
                     continue;
+                }
+
                 frame.setLevel(encounter.calcLevel(frame.getEncounterSlot(), go.nextUShort()));
                 hunt = 3;
                 break;
@@ -697,26 +802,28 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
                 break;
         }
 
-        // Successfull cute charm
-        if ((go.nextUShort() % 3) != 0)
+        if ((go.nextUShort() % 3) != 0) // Successfull cute charm
         {
             // Get hunt nature
             frame.setNature(go.nextUShort() % 25);
 
             if (!compare.compareNature(frame))
+            {
                 continue;
+            }
 
             frame.setPID(buffer + frame.getNature(), 0, buffer + frame.getNature());
             frame.setOccidentary(cnt);
         }
-        // Failed cutecharm
-        else
+        else // Failed cutecharm
         {
             // Get hunt nature
             frame.setNature(go.nextUShort() % 25);
 
             if (!compare.compareNature(frame))
+            {
                 continue;
+            }
 
             // Begin search for valid pid
             do
@@ -754,7 +861,9 @@ QVector<Frame4> Generator4::generateChainedShiny(FrameCompare compare)
 
     auto *rngArray = new u16[maxResults + 18];
     for (u32 i = 0; i < maxResults + 18; i++)
+    {
         rngArray[i] = rng->nextUShort();
+    }
 
     u16 low, high;
 
@@ -765,7 +874,6 @@ QVector<Frame4> Generator4::generateChainedShiny(FrameCompare compare)
         high = chainedPIDHigh(rngArray[2 + cnt], low, tid, sid);
 
         frame.setPID(low, high);
-
         frame.setIVs(rngArray[16 + cnt], rngArray[17 + cnt]);
 
         if (compare.compareFrame(frame))
@@ -787,7 +895,9 @@ QVector<Frame4> Generator4::generateWondercardIVs(FrameCompare compare)
 
     auto *rngArray = new u16[maxResults + 2];
     for (u32 i = 0; i < maxResults + 2; i++)
+    {
         rngArray[i] = rng->nextUShort();
+    }
 
     // Wondercard IVs [SEED] [IVS] [IVS]
 

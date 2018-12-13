@@ -28,6 +28,13 @@
 class Searcher4 : public Searcher
 {
 
+public:
+    Searcher4();
+    Searcher4(u16 tid, u16 sid, u32 ratio, u32 minDelay, u32 maxDelay, u32 minFrame, u32 maxFrame, const FrameCompare &compare, Method method);
+    ~Searcher4();
+    void setEncounter(const EncounterArea4 &value);
+    QVector<Frame4> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+
 private:
     RNGCache *cache = nullptr;
     Frame4 frame = Frame4(0, 0, 0);
@@ -55,13 +62,6 @@ private:
     QVector<Frame4> searchInitialSeeds(QVector<Frame4> results);
     u16 chainedPIDLow(const u16 *calls);
     u16 chainedPIDHigh(u16 high, u16 low, u16 tid, u16 sid);
-
-public:
-    Searcher4();
-    Searcher4(u16 tid, u16 sid, u32 ratio, u32 minDelay, u32 maxDelay, u32 minFrame, u32 maxFrame, const FrameCompare &compare, Method method);
-    ~Searcher4();
-    QVector<Frame4> search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
-    void setEncounter(const EncounterArea4 &value);
 };
 
 #endif // SEARCHER4_HPP

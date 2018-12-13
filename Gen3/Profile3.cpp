@@ -54,6 +54,43 @@ QJsonObject Profile3::getJson()
     return data;
 }
 
+QVector<Profile3> Profile3::loadProfileList()
+{
+    QVector<Profile3> profileList;
+
+    QFile file(QApplication::applicationDirPath() + "/profiles.json");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QJsonDocument profiles(QJsonDocument::fromJson(file.readAll()));
+        QJsonArray gen3 = profiles["gen3"].toArray();
+
+        for (const auto &&i : gen3)
+        {
+            profileList.append(Profile3(i.toObject()));
+        }
+        file.close();
+    }
+
+    return profileList;
+}
+
+void Profile3::saveProfile()
+{
+    QFile file(QApplication::applicationDirPath() + "/profiles.json");
+    if (file.open(QIODevice::ReadWrite | QIODevice::Text))
+    {
+        QJsonObject profiles(QJsonDocument::fromJson(file.readAll()).object());
+        QJsonArray gen3 = profiles["gen3"].toArray();
+
+        gen3.append(getJson());
+        profiles["gen3"] = gen3;
+
+        file.resize(0);
+        file.write(QJsonDocument(profiles).toJson());
+        file.close();
+    }
+}
+
 void Profile3::deleteProfile()
 {
     QFile file(QApplication::applicationDirPath() + "/profiles.json");
@@ -107,41 +144,4 @@ void Profile3::updateProfile(Profile3 original)
         }
         file.close();
     }
-}
-
-void Profile3::saveProfile()
-{
-    QFile file(QApplication::applicationDirPath() + "/profiles.json");
-    if (file.open(QIODevice::ReadWrite | QIODevice::Text))
-    {
-        QJsonObject profiles(QJsonDocument::fromJson(file.readAll()).object());
-        QJsonArray gen3 = profiles["gen3"].toArray();
-
-        gen3.append(getJson());
-        profiles["gen3"] = gen3;
-
-        file.resize(0);
-        file.write(QJsonDocument(profiles).toJson());
-        file.close();
-    }
-}
-
-QVector<Profile3> Profile3::loadProfileList()
-{
-    QVector<Profile3> profileList;
-
-    QFile file(QApplication::applicationDirPath() + "/profiles.json");
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QJsonDocument profiles(QJsonDocument::fromJson(file.readAll()));
-        QJsonArray gen3 = profiles["gen3"].toArray();
-
-        for (const auto &&i : gen3)
-        {
-            profileList.append(Profile3(i.toObject()));
-        }
-        file.close();
-    }
-
-    return profileList;
 }

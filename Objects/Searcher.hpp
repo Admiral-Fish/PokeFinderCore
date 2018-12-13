@@ -35,6 +35,14 @@ using u16 = uint16_t;
 class Searcher
 {
 
+public:
+    Encounter getEncounterType() const;
+    void setEncounterType(const Encounter &value);
+    Method getFrameType() const;
+    void setFrameType(const Method &value);
+    Lead getLeadType() const;
+    void setLeadType(const Lead &value);
+
 protected:
     u16 psv;
     u16 sid;
@@ -44,14 +52,6 @@ protected:
     Method frameType = Method::Method1;
     Lead leadType = Lead::None;
     u32 synchNature;
-
-public:
-    Encounter getEncounterType() const;
-    void setEncounterType(const Encounter &value);
-    Method getFrameType() const;
-    void setFrameType(const Method &value);
-    Lead getLeadType() const;
-    void setLeadType(const Lead &value);
 
 };
 

@@ -23,18 +23,16 @@
 // All the different encounter types wild pokémon can have
 enum Encounter
 {
-    Grass,
-    RockSmash,
-    Surfing,
-    OldRod,
-    GoodRod,
-    SuperRod,
-    Swarm,
-    PokeRadar,
-    Stationary,
-    SafariZone,
-    BugCatchingContest,
-    HeadButt
+    Grass               = 1 << 0,
+    RockSmash           = 1 << 1,
+    Surfing             = 1 << 2,
+    OldRod              = 1 << 3,
+    GoodRod             = 1 << 4,
+    SuperRod            = 1 << 5,
+    Stationary          = 1 << 6,
+    SafariZone          = 1 << 7,
+    BugCatchingContest  = 1 << 8,
+    HeadButt            = 1 << 9
 };
 
 #endif // ENCOUNTER_HPP

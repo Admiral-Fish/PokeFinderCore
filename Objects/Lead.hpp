@@ -23,21 +23,20 @@
 // Different modifiers that can lead a party
 enum Lead
 {
-    None,
-    Search,
-    Synchronize,
-    CuteCharm,
-    CuteCharm50M,
-    CuteCharm75M,
-    CuteCharm25M,
-    CuteCharm875M,
-    CuteCharm50F,
-    CuteCharm75F,
-    CuteCharm25F,
-    CuteCharm125F,
-    CuteCharmFemale,
-    Everstone,
-    SuctionCups
+    None            = 1 << 0,
+    Search          = 1 << 1,
+    Synchronize     = 1 << 2,
+    CuteCharm       = 1 << 3,
+    CuteCharm50M    = 1 << 4,
+    CuteCharm75M    = 1 << 5,
+    CuteCharm25M    = 1 << 6,
+    CuteCharm875M   = 1 << 7,
+    CuteCharm50F    = 1 << 8,
+    CuteCharm75F    = 1 << 9,
+    CuteCharm25F    = 1 << 10,
+    CuteCharm125F   = 1 << 11,
+    CuteCharmFemale = 1 << 12,
+    SuctionCups     = 1 << 13
 };
 
 #endif // LEAD_HPP

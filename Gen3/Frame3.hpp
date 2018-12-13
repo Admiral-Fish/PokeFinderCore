@@ -25,11 +25,6 @@
 class Frame3: public Frame
 {
 
-private:
-    QString lockReason;
-    u32 occidentary;
-    u32 seed;
-
 public:
     Frame3();
     Frame3(u16 tid, u16 sid, u16 psv);
@@ -46,6 +41,11 @@ public:
     u32 getSeed() const;
     void setSeed(const u32 &value);
     void xorFrame(bool flag = false);
+
+private:
+    QString lockReason;
+    u32 occidentary;
+    u32 seed;
 
 };
 

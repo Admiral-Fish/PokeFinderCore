@@ -29,6 +29,13 @@ using u32 = uint32_t;
 class RNGEuclidean
 {
 
+public:
+    RNGEuclidean(Method FrameType);
+    QVector<QPair<u32, u32>> recoverLower16BitsIV(u32 first, u32 second);
+    QVector<QPair<u32, u32>> recoverLower16BitsPID(u32 first, u32 second);
+    QVector<u32> recoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
+    void switchEuclidean(Method FrameType);
+
 private:
     static const u32 ADD = 0x269EC3;
     static const u32 MULT = 0x343FD;
@@ -37,13 +44,6 @@ private:
     u64 sub2;
 
     void setupEuclidean(Method FrameType);
-
-public:
-    RNGEuclidean(Method FrameType);
-    QVector<QPair<u32, u32>> recoverLower16BitsIV(u32 first, u32 second);
-    QVector<QPair<u32, u32>> recoverLower16BitsPID(u32 first, u32 second);
-    QVector<u32> recoverLower27BitsChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe);
-    void switchEuclidean(Method FrameType);
 
 };
 

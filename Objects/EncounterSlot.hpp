@@ -28,28 +28,24 @@ using u32 = uint32_t;
 class Range
 {
 
-private:
-    u32 max;
-    u32 min;
-
 public:
     Range();
     Range(u32 min, u32 max);
     u32 getMax();
     u32 getMin();
 
+private:
+    u32 max;
+    u32 min;
+
 };
 
-class EncounterSlot
+namespace EncounterSlot
 {
-
-private:
-    static u32 calcSlot(u32 compare, QVector<Range> ranges);
-
-public:
-    static u32 hSlot(u32 result, Encounter encounterType);
-    static u32 jSlot(u32 result, Encounter encounterType);
-    static u32 kSlot(u32 result, Encounter encounterType);
+    u32 calcSlot(u32 compare, QVector<Range> ranges);
+    u32 hSlot(u32 result, Encounter encounterType);
+    u32 jSlot(u32 result, Encounter encounterType);
+    u32 kSlot(u32 result, Encounter encounterType);
 };
 
 #endif // ENCOUNTERSLOT_HPP

@@ -19,9 +19,6 @@
 
 #include "LCRNG.hpp"
 
-// LCRNG is used for Gen 3 and 4
-
-// Default constructor for LCRNG
 LCRNG::LCRNG(u32 add, u32 mult, u32 seed, u32 frames)
 {
     this->add = add;
@@ -30,40 +27,36 @@ LCRNG::LCRNG(u32 add, u32 mult, u32 seed, u32 frames)
     advanceFrames(frames);
 }
 
-// Method for advancing seed by a given number of frames
 void LCRNG::advanceFrames(u32 frames)
 {
     for (u32 i = 0; i < frames; i++)
+    {
         seed = seed * mult + add;
+    }
 }
 
-// Method for finding next 16 bit seed
 u16 LCRNG::nextUShort()
 {
     return static_cast<u16>(nextUInt() >> 16);
 }
 
-// IRNG Member
 u32 LCRNG::nextUInt()
 {
     seed = seed * mult + add;
     return seed;
 }
 
-// IRNG Member
 void LCRNG::setSeed(u32 seed)
 {
     this->seed = seed;
 }
 
-// IRNG Member
 void LCRNG::setSeed(u32 seed, u32 frames)
 {
     this->seed = seed;
     advanceFrames(frames);
 }
 
-// IRNG Member
 u32 LCRNG::getSeed()
 {
     return seed;

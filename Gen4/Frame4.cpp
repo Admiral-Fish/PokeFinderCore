@@ -19,42 +19,6 @@
 
 #include "Frame4.hpp"
 
-u32 Frame4::getInitialSeed() const
-{
-    return initialSeed;
-}
-
-void Frame4::setInitialSeed(const u32 &value)
-{
-    initialSeed = value;
-}
-
-u32 Frame4::getSeed() const
-{
-    return seed;
-}
-
-void Frame4::setSeed(const u32 &value)
-{
-    seed = value;
-}
-
-u32 Frame4::getOccidentary() const
-{
-    return occidentary;
-}
-
-void Frame4::setOccidentary(const u32 &value)
-{
-    occidentary = value;
-}
-
-void Frame4::xorFrame()
-{
-    pid ^= 0x80008000;
-    nature = pid % 25;
-}
-
 Frame4::Frame4()
 {
     tid = 12345;
@@ -112,9 +76,10 @@ void Frame4::setInheritanceHGSS(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, 
         }
 
         // Avoids repeat IV inheritance
-        for (u32 j = 0; j < 5 - cnt; j++)
-            if (ivslot <= available[j])
-                available[j] = available[j + 1];
+        for (int i = ivslot; i < 5; i++)
+        {
+            available[i] = available[i + 1];
+        }
     }
 
     hidden = ((((ivs[0] & 1) + 2 * (ivs[1] & 1) + 4 * (ivs[2] & 1) + 8 * (ivs[5] & 1) + 16 * (ivs[3] & 1) + 32 * (ivs[4] & 1)) * 15) / 63);
@@ -196,11 +161,17 @@ QString Frame4::getCall()
     u32 val = seed % 3;
 
     if (val == 0)
+    {
         return "E";
+    }
     else if (val == 1)
+    {
         return "K";
+    }
     else
+    {
         return "P";
+    }
 }
 
 QString Frame4::chatotPitch()
@@ -209,17 +180,62 @@ QString Frame4::chatotPitch()
     QString pitch;
 
     if (val < 20)
+    {
         pitch = QObject::tr("Low");
+    }
     else if (val < 40)
+    {
         pitch = QObject::tr("Mid-Low");
+    }
     else if (val < 60)
+    {
         pitch = QObject::tr("Mid");
+    }
     else if (val < 80)
+    {
         pitch = QObject::tr("Mid-High");
+    }
     else
+    {
         pitch = QObject::tr("High");
+    }
 
     pitch = pitch + " (" + QString::number(val) + ")";
-
     return pitch;
+}
+
+u32 Frame4::getInitialSeed() const
+{
+    return initialSeed;
+}
+
+void Frame4::setInitialSeed(const u32 &value)
+{
+    initialSeed = value;
+}
+
+u32 Frame4::getSeed() const
+{
+    return seed;
+}
+
+void Frame4::setSeed(const u32 &value)
+{
+    seed = value;
+}
+
+u32 Frame4::getOccidentary() const
+{
+    return occidentary;
+}
+
+void Frame4::setOccidentary(const u32 &value)
+{
+    occidentary = value;
+}
+
+void Frame4::xorFrame()
+{
+    pid ^= 0x80008000;
+    nature = pid % 25;
 }

@@ -19,7 +19,6 @@
 
 #include "Frame.hpp"
 
-// Gets gender based on gender ratio
 QString Frame::getGenderString()
 {
     switch (genderRatio)
@@ -42,33 +41,21 @@ QString Frame::getGenderString()
     }
 }
 
-// Returns string equivalent of nature
 QString Frame::getNatureString()
 {
     return Nature::getNature(nature);
 }
 
-// Returns string equivalent of hidden power
 QString Frame::getPowerString()
 {
     return Power::getPower(hidden);
 }
 
-// Returns !!! if shiny or blank if not
 QString Frame::getShinyString()
 {
     return shiny ? "!!!" : "";
 }
 
-// Change the tid/sid
-void Frame::setIDs(u16 tid, u16 sid, u16 psv)
-{
-    this->tid = tid;
-    this->sid = sid;
-    this->psv = psv;
-}
-
-// Sets IVs for either Channel method or manual input and calculates characteristics based on IVs
 void Frame::setIVsManual(u8 iv1, u8 iv2, u8 iv3, u8 iv4, u8 iv5, u8 iv6)
 {
     ivs[0] = iv1;
@@ -81,7 +68,13 @@ void Frame::setIVsManual(u8 iv1, u8 iv2, u8 iv3, u8 iv4, u8 iv5, u8 iv6)
     power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
 }
 
-// Sets IVs and calculates characteristics based on IVs
+void Frame::setIDs(u16 tid, u16 sid, u16 psv)
+{
+    this->tid = tid;
+    this->sid = sid;
+    this->psv = psv;
+}
+
 void Frame::setIVs(u32 iv1, u32 iv2)
 {
     ivs[0] = iv1 & 0x1f;
@@ -94,7 +87,6 @@ void Frame::setIVs(u32 iv1, u32 iv2)
     power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
 }
 
-// Sets PID and calculates characteristics based on PID
 void Frame::setPID(u32 pid1, u32 pid2)
 {
     pid = (pid2 << 16) | pid1;
@@ -104,7 +96,6 @@ void Frame::setPID(u32 pid1, u32 pid2)
     shiny = (pid1 ^ pid2 ^ psv) < 8;
 }
 
-// Sets PID and calculates characteristics based on PID
 void Frame::setPID(u32 pid, u32 pid1, u32 pid2)
 {
     this->pid = pid;

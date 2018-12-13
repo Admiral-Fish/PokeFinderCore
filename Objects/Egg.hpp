@@ -28,6 +28,11 @@
 class Egg
 {
 
+public:
+    void setEverstoneNature(const u32 &value);
+    u32 getSeed() const;
+    void setSeed(const u32 &value);
+
 protected:
     u16 psv;
     u16 sid;
@@ -37,11 +42,6 @@ protected:
     u32 initialFrame;
     u32 maxResults;
     u32 everstoneNature;
-
-public:
-    void setEverstoneNature(const u32 &value);
-    u32 getSeed() const;
-    void setSeed(const u32 &value);
 
 };
 

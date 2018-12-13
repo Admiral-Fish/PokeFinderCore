@@ -22,19 +22,24 @@
 
 enum Game
 {
-    Blank, // Placeholder
-    Ruby,
-    Sapphire,
-    Emerald,
-    FireRed,
-    LeafGreen,
-    Gales,
-    Colosseum,
-    Diamond,
-    Pearl,
-    Platinum,
-    HeartGold,
-    SoulSilver
+    Blank       = 0, // Placeholder
+    Ruby        = 1 << 0,
+    Sapphire    = 1 << 1,
+    RS          = Ruby | Sapphire,
+    Emerald     = 1 << 2,
+    FireRed     = 1 << 3,
+    LeafGreen   = 1 << 4,
+    FRLG        = FireRed | LeafGreen,
+    Gales       = 1 << 5,
+    Colosseum   = 1 << 6,
+    GC          = Gales | Colosseum,
+    Diamond     = 1 << 7,
+    Pearl       = 1 << 8,
+    Platinum    = 1 << 9,
+    DPPt        = Diamond | Pearl | Platinum,
+    HeartGold   = 1 << 10,
+    SoulSilver  = 1 << 11,
+    HGSS        = HeartGold | SoulSilver
 };
 
 #endif // GAME_HPP

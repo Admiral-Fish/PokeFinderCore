@@ -19,6 +19,16 @@
 
 #include "Generator.hpp"
 
+Encounter Generator::getEncounterType() const
+{
+    return encounterType;
+}
+
+void Generator::setEncounterType(const Encounter &value)
+{
+    encounterType = value;
+}
+
 Lead Generator::getLeadType() const
 {
     return leadType;
@@ -37,14 +47,4 @@ u32 Generator::getSynchNature() const
 void Generator::setSynchNature(const u32 &value)
 {
     synchNature = value;
-}
-
-Encounter Generator::getEncounterType() const
-{
-    return encounterType;
-}
-
-void Generator::setEncounterType(const Encounter &value)
-{
-    encounterType = value;
 }

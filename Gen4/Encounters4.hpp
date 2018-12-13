@@ -22,19 +22,21 @@
 
 #include <QDataStream>
 #include <Gen4/EncounterArea4.hpp>
+#include <Gen4/Profile4.hpp>
 
 class Encounters4
 {
 
 public:
-    Encounters4(Encounter type, Game game, Game dual, int time, int radio);
+    Encounters4(Encounter type, int time, const Profile4 &profile);
     QVector<EncounterArea4> getEncounters();
 
 private:
+    Profile4 profile;
     Encounter type;
-    Game game, dual; // Dual is used in DPPt
     int time; // 0: Morning, 1: Day, 2: Night
-    int radio; // 0: None, 1: Hoenn, 2: Sinnoh, For HGSS
+    // Dual is used in DPPt
+    // Radio 0: None, 1: Hoenn, 2: Sinnoh, For HGSS
 
     QByteArrayList getData() const;
     QVector<EncounterArea4> getHGSS(const QByteArray &data, int i);

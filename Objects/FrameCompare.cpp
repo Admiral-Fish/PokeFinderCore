@@ -31,7 +31,9 @@ FrameCompare::FrameCompare(const QVector<u32> &eval, const QVector<u32> &values,
 
     natures.resize(25);
     for (u32 i = 0; i < 25; i++)
+    {
         natures[static_cast<int>(Nature::getAdjustedNature(i))] = nature[static_cast<int>(i)];
+    }
 
     powers = power;
 
@@ -51,7 +53,9 @@ FrameCompare::FrameCompare(const QVector<u32> &eval, const QVector<u32> &values,
 
     natures.resize(25);
     for (u32 i = 0; i < 25; i++)
+    {
         natures[static_cast<int>(Nature::getAdjustedNature(i))] = nature[static_cast<int>(i)];
+    }
 
     powers = power;
     encounterSlots = encounter;
@@ -68,7 +72,9 @@ FrameCompare::FrameCompare(int genderIndex, int genderRatioIndex, int abilityInd
 
     natures.resize(25);
     for (u32 i = 0; i < 25; i++)
+    {
         natures[static_cast<int>(Nature::getAdjustedNature(i))] = nature[static_cast<int>(i)];
+    }
 
     shiny = onlyShiny;
     skip = false;
@@ -84,107 +90,28 @@ FrameCompare::FrameCompare(const QVector<u32> &eval, const QVector<u32> &values,
 bool FrameCompare::comparePID(const Frame &frame)
 {
     if (skip)
+    {
         return true;
+    }
 
     if (shiny && !frame.getShiny())
+    {
         return false;
+    }
 
     if (!natures[static_cast<int>(frame.getNature())])
+    {
         return false;
+    }
 
     if (ability != 0 && ability - 1 != frame.getAbility())
-        return false;
-
-    switch (genderRatio)
     {
-        case 1:
-            switch (gender)
-            {
-                case 1:
-                    if (frame.getGender() < 127)
-                        return false;
+        return false;
+    }
 
-                    break;
-                case 2:
-                    if (frame.getGender() >= 127)
-                        return false;
-
-                    break;
-                default:
-                    break;
-            }
-            break;
-        case 2:
-            switch (gender)
-            {
-                case 1:
-                    if (frame.getGender() < 191)
-                        return false;
-
-                    break;
-                case 2:
-                    if (frame.getGender() >= 191)
-                        return false;
-
-                    break;
-                default:
-                    break;
-            }
-            break;
-        case 3:
-            switch (gender)
-            {
-                case 1:
-                    if (frame.getGender() < 63)
-                        return false;
-
-                    break;
-                case 2:
-                    if (frame.getGender() >= 63)
-                        return false;
-
-                    break;
-                default:
-                    break;
-            }
-            break;
-        case 4:
-            switch (gender)
-            {
-                case 1:
-                    if (frame.getGender() < 31)
-                        return false;
-
-                    break;
-                case 2:
-                    if (frame.getGender() >= 31)
-                        return false;
-
-                    break;
-                default:
-                    break;
-            }
-            break;
-        case 5:
-            switch (gender)
-            {
-                case 2:
-                    return false;
-                default:
-                    break;
-            }
-            break;
-        case 6:
-            switch (gender)
-            {
-                case 1:
-                    return false;
-                default:
-                    break;
-            }
-            break;
-        default:
-            break;
+    if (!compareGender(frame))
+    {
+        return false;
     }
 
     return true;
@@ -193,10 +120,14 @@ bool FrameCompare::comparePID(const Frame &frame)
 bool FrameCompare::compareIVs(const Frame &frame)
 {
     if (skip)
+    {
         return true;
+    }
 
     if (!powers[static_cast<int>(frame.getHidden())])
+    {
         return false;
+    }
 
     for (int i = 0; i < 6; i++)
     {
@@ -204,19 +135,27 @@ bool FrameCompare::compareIVs(const Frame &frame)
         {
             case 1:
                 if (frame.getIV(i) != val[i])
+                {
                     return false;
+                }
                 break;
             case 2:
                 if (frame.getIV(i) < val[i])
+                {
                     return false;
+                }
                 break;
             case 3:
                 if (frame.getIV(i) > val[i])
+                {
                     return false;
+                }
                 break;
             case 4:
                 if (frame.getIV(i) == val[i])
+                {
                     return false;
+                }
                 break;
             default:
                 break;
@@ -250,13 +189,15 @@ bool FrameCompare::compareGender(const Frame &frame)
             {
                 case 1:
                     if (frame.getGender() < 127)
+                    {
                         return false;
-
+                    }
                     break;
                 case 2:
                     if (frame.getGender() >= 127)
+                    {
                         return false;
-
+                    }
                     break;
                 default:
                     break;
@@ -267,13 +208,15 @@ bool FrameCompare::compareGender(const Frame &frame)
             {
                 case 1:
                     if (frame.getGender() < 191)
+                    {
                         return false;
-
+                    }
                     break;
                 case 2:
                     if (frame.getGender() >= 191)
+                    {
                         return false;
-
+                    }
                     break;
                 default:
                     break;
@@ -284,13 +227,15 @@ bool FrameCompare::compareGender(const Frame &frame)
             {
                 case 1:
                     if (frame.getGender() < 63)
+                    {
                         return false;
-
+                    }
                     break;
                 case 2:
                     if (frame.getGender() >= 63)
+                    {
                         return false;
-
+                    }
                     break;
                 default:
                     break;
@@ -301,13 +246,15 @@ bool FrameCompare::compareGender(const Frame &frame)
             {
                 case 1:
                     if (frame.getGender() < 31)
+                    {
                         return false;
-
+                    }
                     break;
                 case 2:
                     if (frame.getGender() >= 31)
+                    {
                         return false;
-
+                    }
                     break;
                 default:
                     break;
@@ -340,135 +287,18 @@ bool FrameCompare::compareGender(const Frame &frame)
 bool FrameCompare::compareFrame(const Frame &frame)
 {
     if (skip)
-        return true;
-
-    if (shiny && !frame.getShiny())
-        return false;
-
-    if (!natures[static_cast<int>(frame.getNature())])
-        return false;
-
-    if (ability != 0 && ability - 1 != frame.getAbility())
-        return false;
-
-    switch (genderRatio)
     {
-        case 1:
-            switch (gender)
-            {
-                case 1:
-                    if (frame.getGender() < 127)
-                        return false;
-
-                    break;
-                case 2:
-                    if (frame.getGender() >= 127)
-                        return false;
-
-                    break;
-                default:
-                    break;
-            }
-            break;
-        case 2:
-            switch (gender)
-            {
-                case 1:
-                    if (frame.getGender() < 191)
-                        return false;
-
-                    break;
-                case 2:
-                    if (frame.getGender() >= 191)
-                        return false;
-
-                    break;
-                default:
-                    break;
-            }
-            break;
-        case 3:
-            switch (gender)
-            {
-                case 1:
-                    if (frame.getGender() < 63)
-                        return false;
-
-                    break;
-                case 2:
-                    if (frame.getGender() >= 63)
-                        return false;
-
-                    break;
-                default:
-                    break;
-            }
-            break;
-        case 4:
-            switch (gender)
-            {
-                case 1:
-                    if (frame.getGender() < 31)
-                        return false;
-
-                    break;
-                case 2:
-                    if (frame.getGender() >= 31)
-                        return false;
-
-                    break;
-                default:
-                    break;
-            }
-            break;
-        case 5:
-            switch (gender)
-            {
-                case 2:
-                    return false;
-                default:
-                    break;
-            }
-            break;
-        case 6:
-            switch (gender)
-            {
-                case 1:
-                    return false;
-                default:
-                    break;
-            }
-            break;
-        default:
-            break;
+        return true;
     }
 
-    if (!powers[static_cast<int>(frame.getHidden())])
-        return false;
-
-    for (int i = 0; i < 6; i++)
+    if (!comparePID(frame))
     {
-        switch (eval[i])
-        {
-            case 1:
-                if (frame.getIV(i) != val[i])
-                    return false;
-                break;
-            case 2:
-                if (frame.getIV(i) < val[i])
-                    return false;
-                break;
-            case 3:
-                if (frame.getIV(i) > val[i])
-                    return false;
-                break;
-            case 4:
-                if (frame.getIV(i) == val[i])
-                    return false;
-                break;
-            default:
-                break;
-        }
+        return false;
+    }
+
+    if (!compareIVs(frame))
+    {
+        return false;
     }
 
     return true;

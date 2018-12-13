@@ -36,31 +36,6 @@ using u8 = uint8_t;
 class Frame
 {
 
-protected:
-    u8 ivs[6];
-    u8 ability;
-    u8 encounterSlot;
-    Encounter encounterType;
-    u32 frame;
-    u16 gender;
-    u8 genderRatio;
-    u8 hidden;
-    Lead leadType;
-    Method methodType;
-    u8 nature;
-    u32 pid;
-    u8 power;
-    u16 psv;
-    bool shiny;
-    u16 sid;
-    u16 tid;
-    u8 level;
-
-    QString getFemale125();
-    QString getFemale25();
-    QString getFemale50();
-    QString getFemale75();
-
 public:
     QString getGenderString();
     QString getNatureString();
@@ -91,6 +66,31 @@ public:
     void setGenderRatio(const u8 &value);
     void setFrame(const u32 &value);
     void setLeadType(const Lead &value);
+
+protected:
+    u8 ivs[6];
+    u8 ability;
+    u8 encounterSlot;
+    Encounter encounterType;
+    u32 frame;
+    u16 gender;
+    u8 genderRatio;
+    u8 hidden;
+    Lead leadType;
+    Method methodType;
+    u8 nature;
+    u32 pid;
+    u8 power;
+    u16 psv;
+    bool shiny;
+    u16 sid;
+    u16 tid;
+    u8 level;
+
+    QString getFemale125();
+    QString getFemale25();
+    QString getFemale50();
+    QString getFemale75();
 
 };
 
