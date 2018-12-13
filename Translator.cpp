@@ -32,10 +32,14 @@ QStringList Translator::getSpecies(const QVector<int> &nums)
         ts.setCodec("UTF-8");
         QStringList input;
         while (!ts.atEnd())
+        {
             input << ts.readLine();
+        }
 
         for (const int &x : nums)
+        {
             species.append(input[x - 1]);
+        }
 
         file.close();
     }
@@ -56,10 +60,14 @@ QStringList Translator::getLocationsGen3(const QVector<int> &nums)
         ts.setCodec("UTF-8");
         QStringList input;
         while (!ts.atEnd())
+        {
             input << ts.readLine();
+        }
 
         for (const int &x : nums)
+        {
             locations.append(input[x]);
+        }
 
         file.close();
     }
@@ -95,10 +103,14 @@ QStringList Translator::getLocationsGen4(const QVector<int> &nums, Game game)
         ts.setCodec("UTF-8");
         QStringList input;
         while (!ts.atEnd())
+        {
             input << ts.readLine();
+        }
 
         for (const int &x : nums)
+        {
             locations.append(input[x]);
+        }
 
         file.close();
     }

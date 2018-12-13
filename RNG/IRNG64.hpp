@@ -20,10 +20,7 @@
 #ifndef IRNG64_HPP
 #define IRNG64_HPP
 
-#include <cstdint>
-
-using u64 = uint64_t;
-using u32 = uint32_t;
+#include <Objects/Global.hpp>
 
 class IRNG64
 {

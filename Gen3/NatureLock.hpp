@@ -39,13 +39,13 @@ class LockInfo
 
 public:
     LockInfo() = default;
-    LockInfo(u32 nature, u32 genderLower, u32 genderUpper, bool free = false);
+    LockInfo(u8 nature, u16 genderLower, u16 genderUpper, bool free = false);
     bool compare(u32 pid);
 
 private:
-    u32 genderUpper;
-    u32 genderLower;
-    u32 nature;
+    u16 genderUpper;
+    u16 genderLower;
+    u8 nature;
     bool free;
 
 };
@@ -86,7 +86,7 @@ private:
     void getCurrLock();
     u32 getPIDForward();
     u32 getPIDReverse();
-    u32 getPSVReverse();
+    u16 getPSVReverse();
     void natureLockSetupColo(int lockNum);
     void natureLockSetupGales(int lockNum);
 

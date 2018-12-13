@@ -68,14 +68,14 @@ QStringList EncounterArea::getSpecieNames() const
     return Translator::getSpecies(getUniqueSpecies());
 }
 
-Slot::Slot(int specie, u32 minLevel, u32 maxLevel)
+Slot::Slot(int specie, u16 minLevel, u16 maxLevel)
 {
     this->specie = specie;
     this->minLevel = minLevel;
     this->maxLevel = maxLevel;
 }
 
-Slot::Slot(int specie, u32 level)
+Slot::Slot(int specie, u16 level)
 {
     this->specie = specie;
     minLevel = level;

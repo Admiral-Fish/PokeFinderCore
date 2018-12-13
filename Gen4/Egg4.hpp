@@ -32,15 +32,15 @@ class Egg4 : public Egg
 public:
     Egg4();
     Egg4(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 seed);
-    void setParents(const QVector<u32> &parent1, const QVector<u32> &parent2);
+    void setParents(const QVector<u8> &parent1, const QVector<u8> &parent2);
     QVector<Frame4> generate(const FrameCompare &compare);
 
 private:
-    QVector<u32> parent1;
-    QVector<u32> parent2;
-    const u32 HABCDS[6] = { 0, 1, 2, 5, 3, 4 };
-    const u32 ABCDS[5] = { 1, 2, 5, 3, 4 };
-    const u32 ACDS[4] = { 1, 5, 3, 4 };
+    QVector<u8> parent1;
+    QVector<u8> parent2;
+    const u8 HABCDS[6] = { 0, 1, 2, 5, 3, 4 };
+    const u8 ABCDS[5] = { 1, 2, 5, 3, 4 };
+    const u8 ACDS[4] = { 1, 5, 3, 4 };
 
     QVector<Frame4> generatePID(FrameCompare compare);
     QVector<Frame4> generatePIDMasuada(FrameCompare compare);

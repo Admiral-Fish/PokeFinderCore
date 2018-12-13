@@ -70,18 +70,18 @@ QVector<Frame3> Egg3::generate(const FrameCompare &compare)
     }
 }
 
-void Egg3::setParents(const QVector<u32> &parent1, const QVector<u32> &parent2)
+void Egg3::setParents(const QVector<u8> &parent1, const QVector<u8> &parent2)
 {
     this->parent1 = parent1;
     this->parent2 = parent2;
 }
 
-void Egg3::setMinRedraw(const u32 &value)
+void Egg3::setMinRedraw(const u8 &value)
 {
     minRedraw = value;
 }
 
-void Egg3::setMaxRedraw(const u32 &value)
+void Egg3::setMaxRedraw(const u8 &value)
 {
     maxRedraw = value;
 }
@@ -91,7 +91,7 @@ void Egg3::setCompatability(const int &value)
     compatability = value;
 }
 
-void Egg3::setCalibration(const u32 &value)
+void Egg3::setCalibration(const u8 &value)
 {
     calibration = value;
 }
@@ -142,14 +142,14 @@ QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
     u32 max = maxResults - initialFrame + 1;
     for (u32 cnt = 0; cnt < max; cnt++, val++)
     {
-        for (u32 redraw = minRedraw; redraw <= maxRedraw; redraw++)
+        for (u8 redraw = minRedraw; redraw <= maxRedraw; redraw++)
         {
             if (((rngArray[cnt] * 100) / 0xFFFF) >= compatability)
             {
                 continue;
             }
 
-            u32 offset = calibration + 3 * redraw;
+            u16 offset = calibration + 3 * redraw;
 
             i = 1;
 
@@ -186,7 +186,7 @@ QVector<Frame3> Egg3::generateEmeraldPID(FrameCompare compare)
                     // generate upper
                     pid |= trng.nextUInt() & 0xFFFF0000;
                 }
-                while (pid % 0x19 != everstoneNature);
+                while (pid % 25 != everstoneNature);
 
                 if (i == 19)
                 {
@@ -227,7 +227,7 @@ QVector<Frame3> Egg3::generateEmerald(FrameCompare compare)
         rngArray[x] = rng.nextUShort();
     }
 
-    u32 inh1, inh2, inh3, par1, par2, par3;
+    u16 inh1, inh2, inh3, par1, par2, par3;
 
     u32 max = maxResults - initialFrame + 1;
     for (u32 cnt = 0; cnt < max; cnt++)
@@ -264,7 +264,7 @@ QVector<Frame3> Egg3::generateEmeraldSplit(FrameCompare compare)
         rngArray[x] = rng.nextUShort();
     }
 
-    u32 inh1, inh2, inh3, par1, par2, par3;
+    u16 inh1, inh2, inh3, par1, par2, par3;
 
     u32 max = maxResults - initialFrame + 1;
     for (u32 cnt = 0; cnt < max; cnt++)
@@ -301,7 +301,7 @@ QVector<Frame3> Egg3::generateEmeraldAlternate(FrameCompare compare)
         rngArray[x] = rng.nextUShort();
     }
 
-    u32 inh1, inh2, inh3, par1, par2, par3;
+    u16 inh1, inh2, inh3, par1, par2, par3;
 
     u32 max = maxResults - initialFrame + 1;
     for (u32 cnt = 0; cnt < max; cnt++)
@@ -371,7 +371,7 @@ QVector<Frame3> Egg3::generateUpper(QVector<Frame3> lower, FrameCompare compare)
         rngArray[x] = rng.nextUShort();
     }
 
-    u32 inh1, inh2, inh3, par1, par2, par3;
+    u16 inh1, inh2, inh3, par1, par2, par3;
 
     u32 max = maxPickup - minPickup + 1;
     for (u32 cnt = 0; cnt < max; cnt++)

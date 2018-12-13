@@ -40,7 +40,7 @@ Egg4::Egg4(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 
     frameType = method;
 }
 
-void Egg4::setParents(const QVector<u32> &parent1, const QVector<u32> &parent2)
+void Egg4::setParents(const QVector<u8> &parent1, const QVector<u8> &parent2)
 {
     this->parent1 = parent1;
     this->parent2 = parent2;
@@ -101,7 +101,7 @@ QVector<Frame4> Egg4::generatePIDMasuada(FrameCompare compare)
 
         for (int i = 0; i <= 3; i++)
         {
-            u32 val = (pid >> 16) ^ (pid & 0xFFFF);
+            u16 val = (pid >> 16) ^ (pid & 0xFFFF);
 
             if ((val ^ psv) < 8)
             {
@@ -136,7 +136,7 @@ QVector<Frame4> Egg4::generateIVsDPPt(FrameCompare compare)
         rngArray[x] = rng.nextUShort();
     }
 
-    u32 inh1, inh2, inh3, par1, par2, par3;
+    u16 inh1, inh2, inh3, par1, par2, par3;
 
     for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
@@ -175,7 +175,7 @@ QVector<Frame4> Egg4::generateIVsHGSS(FrameCompare compare)
         rngArray[x] = rng.nextUShort();
     }
 
-    u32 inh1, inh2, inh3, par1, par2, par3;
+    u16 inh1, inh2, inh3, par1, par2, par3;
 
     for (u32 cnt = 0; cnt < maxResults; cnt++)
     {

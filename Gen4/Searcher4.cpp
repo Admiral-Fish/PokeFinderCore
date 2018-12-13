@@ -27,14 +27,14 @@ Searcher4::Searcher4()
     frame.setIDs(tid, sid, psv);
 }
 
-Searcher4::Searcher4(u16 tid, u16 sid, u32 ratio, u32 minDelay, u32 maxDelay, u32 minFrame, u32 maxFrame, const FrameCompare &compare, Method method)
+Searcher4::Searcher4(u16 tid, u16 sid, u8 genderRatio, u32 minDelay, u32 maxDelay, u32 minFrame, u32 maxFrame, const FrameCompare &compare, Method method)
 {
     this->tid = tid;
     this->sid = sid;
     psv = tid ^ sid;
     this->compare = compare;
     frame.setIDs(tid, sid, psv);
-    frame.setGenderRatio(ratio);
+    frame.setGenderRatio(genderRatio);
     frameType = method;
     this->minDelay = minDelay;
     this->maxDelay = maxDelay;
@@ -55,7 +55,7 @@ void Searcher4::setEncounter(const EncounterArea4 &value)
     encounter = value;
 }
 
-QVector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::search(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
     switch (frameType)
@@ -120,7 +120,7 @@ QVector<Frame4> Searcher4::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u3
     return searchInitialSeeds(frames);
 }
 
-QVector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethod1(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
 
@@ -157,7 +157,7 @@ QVector<Frame4> Searcher4::searchMethod1(u32 hp, u32 atk, u32 def, u32 spa, u32 
     return frames;
 }
 
-QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodJ(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
 
@@ -171,7 +171,7 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u8 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
 
     for (const auto &val : seeds)
     {
@@ -194,13 +194,12 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
             }
 
             PokeRNGR testRNG(seed);
-            u32 testPID, slot = 0;
-            u32 nextRNG = seed >> 16;
-            u32 nextRNG2 = testRNG.nextUShort();
+            u32 testPID, slot, nibble;
+            u16 nextRNG = seed >> 16;
+            u16 nextRNG2 = testRNG.nextUShort();
 
             do
             {
-                u32 nibble;
                 bool skip = false;
 
                 if ((nextRNG / 0xa3e) == frame.getNature())
@@ -258,7 +257,7 @@ QVector<Frame4> Searcher4::searchMethodJ(u32 hp, u32 atk, u32 def, u32 spa, u32 
     return frames;
 }
 
-QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodJSynch(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
 
@@ -272,7 +271,7 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u8 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
 
     for (const auto &val : seeds)
     {
@@ -295,13 +294,12 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
             }
 
             PokeRNGR testRNG(seed);
-            u32 testPID, slot = 0;
-            u32 nextRNG = seed >> 16;
-            u32 nextRNG2 = testRNG.nextUShort();
+            u32 testPID, slot, nibble;
+            u16 nextRNG = seed >> 16;
+            u16 nextRNG2 = testRNG.nextUShort();
 
             do
             {
-                u32 nibble;
                 bool skip = false;
 
                 // Successful synch
@@ -399,7 +397,7 @@ QVector<Frame4> Searcher4::searchMethodJSynch(u32 hp, u32 atk, u32 def, u32 spa,
     return frames;
 }
 
-QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodJCuteCharm(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
 
@@ -413,7 +411,7 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u32 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u8 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
 
     for (const auto &val : seeds)
     {
@@ -422,7 +420,7 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
         u16 pid2 = backward->nextUShort();
         u16 pid1 = backward->nextUShort();
         u32 seed = backward->nextUInt();
-        u32 nibble;
+        u32 nibble, slot;
 
         for (int i = 0; i < 2; i++)
         {
@@ -435,8 +433,6 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
 
             if ((pid1 / 0x5556) != 0)
             {
-                u32 slot = 0;
-
                 switch (encounterType)
                 {
                     case Encounter::Grass:
@@ -473,7 +469,7 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
                         break;
                 }
 
-                u32 choppedPID = pid2 / 0xa3e;
+                u8 choppedPID = pid2 / 0xa3e;
                 for (const auto &buffer : unbiasedBuffer)
                 {
                     switch (buffer)
@@ -516,7 +512,7 @@ QVector<Frame4> Searcher4::searchMethodJCuteCharm(u32 hp, u32 atk, u32 def, u32 
     return frames;
 }
 
-QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodJSearch(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
 
@@ -530,8 +526,8 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
-    u16 adjustedThresh = encounterType == Encounter::OldRod ? 90 : encounterType == Encounter::GoodRod ? 100 : encounterType == Encounter::SuperRod ? 100 : 0;
+    u8 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u8 adjustedThresh = encounterType == Encounter::OldRod ? 90 : encounterType == Encounter::GoodRod ? 100 : encounterType == Encounter::SuperRod ? 100 : 0;
 
     for (const auto &val : seeds)
     {
@@ -551,10 +547,9 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
             }
 
             PokeRNGR testRNG(seed);
-            u32 testPID, slot = 0;
-            u32 nextRNG = seed >> 16;
-            u32 nextRNG2 = testRNG.nextUShort();
-            u32 nibble = 0;
+            u32 testPID, slot, nibble;
+            u16 nextRNG = seed >> 16;
+            u16 nextRNG2 = testRNG.nextUShort();
 
             frame.setPID(pid1, pid2);
             if (compare.comparePID(frame))
@@ -752,7 +747,7 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
                         break;
                 }
 
-                u32 choppedPID = pid2 / 0xA3E;
+                u8 choppedPID = pid2 / 0xA3E;
                 if (!skipFrame)
                 {
                     for (const auto &buffer : unbiasedBuffer)
@@ -799,7 +794,7 @@ QVector<Frame4> Searcher4::searchMethodJSearch(u32 hp, u32 atk, u32 def, u32 spa
     return frames;
 }
 
-QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodK(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
 
@@ -813,8 +808,8 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
-    u16 rock = encounter.getEncounterRate();
+    u8 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u8 rock = encounter.getEncounterRate();
 
     for (const auto &val : seeds)
     {
@@ -837,13 +832,12 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
             }
 
             PokeRNGR testRNG(seed);
-            u32 testPID, slot = 0;
-            u32 nextRNG = seed >> 16;
-            u32 nextRNG2 = testRNG.nextUShort();
+            u32 testPID, slot, nibble;
+            u16 nextRNG = seed >> 16;
+            u16 nextRNG2 = testRNG.nextUShort();
 
             do
             {
-                u32 nibble;
                 bool skip = false;
 
                 if ((nextRNG % 25) == frame.getNature())
@@ -916,7 +910,7 @@ QVector<Frame4> Searcher4::searchMethodK(u32 hp, u32 atk, u32 def, u32 spa, u32 
     return frames;
 }
 
-QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodKSynch(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
 
@@ -930,8 +924,8 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
-    u16 rock = encounter.getEncounterRate();
+    u8 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u8 rock = encounter.getEncounterRate();
 
     for (const auto &val : seeds)
     {
@@ -954,13 +948,12 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
             }
 
             PokeRNGR testRNG(seed);
-            u32 testPID, slot = 0;
-            u32 nextRNG = seed >> 16;
-            u32 nextRNG2 = testRNG.nextUShort();
+            u32 testPID, slot, nibble;
+            u16 nextRNG = seed >> 16;
+            u16 nextRNG2 = testRNG.nextUShort();
 
             do
             {
-                u32 nibble;
                 bool skip = false;
 
                 // Successful synch
@@ -1093,7 +1086,7 @@ QVector<Frame4> Searcher4::searchMethodKSynch(u32 hp, u32 atk, u32 def, u32 spa,
     return frames;
 }
 
-QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodKCuteCharm(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
 
@@ -1107,8 +1100,8 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u32 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
-    u16 rock = encounter.getEncounterRate();
+    u8 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u8 rock = encounter.getEncounterRate();
 
     for (const auto &val : seeds)
     {
@@ -1117,7 +1110,7 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
         u16 pid2 = backward->nextUShort();
         u16 pid1 = backward->nextUShort();
         u32 seed = backward->nextUInt();
-        u32 nibble;
+        u32 nibble, slot;
 
         for (int i = 0; i < 2; i++)
         {
@@ -1130,8 +1123,6 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
 
             if ((pid1 % 3) != 0)
             {
-                u32 slot = 0;
-
                 switch (encounterType)
                 {
                     case Encounter::Grass:
@@ -1183,7 +1174,7 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
                         break;
                 }
 
-                u32 choppedPID = pid2 % 25;
+                u8 choppedPID = pid2 % 25;
                 for (const auto &buffer : unbiasedBuffer)
                 {
                     switch (buffer)
@@ -1226,7 +1217,7 @@ QVector<Frame4> Searcher4::searchMethodKCuteCharm(u32 hp, u32 atk, u32 def, u32 
     return frames;
 }
 
-QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodKSuctionCups(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
 
@@ -1240,9 +1231,9 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
-    u16 adjustedThresh = encounterType == Encounter::OldRod ? 90 : encounterType == Encounter::GoodRod ? 100 : encounterType == Encounter::SuperRod ? 100 : 0;
-    u16 rock = encounter.getEncounterRate();
+    u8 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u8 adjustedThresh = encounterType == Encounter::OldRod ? 90 : encounterType == Encounter::GoodRod ? 100 : encounterType == Encounter::SuperRod ? 100 : 0;
+    u8 rock = encounter.getEncounterRate();
 
     for (const auto &val : seeds)
     {
@@ -1265,13 +1256,12 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
             }
 
             PokeRNGR testRNG(seed);
-            u32 testPID, slot = 0;
-            u32 nextRNG = seed >> 16;
-            u32 nextRNG2 = testRNG.nextUShort();
+            u32 testPID, slot, nibble;
+            u16 nextRNG = seed >> 16;
+            u16 nextRNG2 = testRNG.nextUShort();
 
             do
             {
-                u32 nibble;
                 bool skip = false;
 
                 if ((nextRNG % 25) == frame.getNature())
@@ -1349,7 +1339,7 @@ QVector<Frame4> Searcher4::searchMethodKSuctionCups(u32 hp, u32 atk, u32 def, u3
     return frames;
 }
 
-QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchMethodKSearch(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
 
@@ -1363,9 +1353,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
-    u16 adjustedThresh = encounterType == Encounter::OldRod ? 90 : encounterType == Encounter::GoodRod ? 100 : encounterType == Encounter::SuperRod ? 100 : 0;
-    u16 rock = encounter.getEncounterRate();
+    u8 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u8 adjustedThresh = encounterType == Encounter::OldRod ? 90 : encounterType == Encounter::GoodRod ? 100 : encounterType == Encounter::SuperRod ? 100 : 0;
+    u8 rock = encounter.getEncounterRate();
 
     for (const auto &val : seeds)
     {
@@ -1385,10 +1375,9 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
             }
 
             PokeRNGR testRNG(seed);
-            u32 testPID, slot = 0;
-            u32 nextRNG = seed >> 16;
-            u32 nextRNG2 = testRNG.nextUShort();
-            u32 nibble = 0;
+            u32 testPID, slot, nibble;
+            u16 nextRNG = seed >> 16;
+            u16 nextRNG2 = testRNG.nextUShort();
 
             frame.setPID(pid1, pid2);
             if (compare.comparePID(frame))
@@ -1648,7 +1637,7 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
                         break;
                 }
 
-                u32 choppedPID = pid2 % 25;
+                u8 choppedPID = pid2 % 25;
                 if (!skipFrame)
                 {
                     for (const auto &buffer : unbiasedBuffer)
@@ -1695,7 +1684,7 @@ QVector<Frame4> Searcher4::searchMethodKSearch(u32 hp, u32 atk, u32 def, u32 spa
     return frames;
 }
 
-QVector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchChainedShiny(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
 
@@ -1741,7 +1730,7 @@ QVector<Frame4> Searcher4::searchChainedShiny(u32 hp, u32 atk, u32 def, u32 spa,
     return frames;
 }
 
-QVector<Frame4> Searcher4::searchWondercardIVs(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame4> Searcher4::searchWondercardIVs(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame4> frames;
 
@@ -1782,8 +1771,8 @@ QVector<Frame4> Searcher4::searchInitialSeeds(QVector<Frame4> results)
 
         for (u32 cnt = minFrame; cnt <= maxFrame; cnt++)
         {
-            u32 hour = (test >> 16) & 0xFF;
-            u32 delay = test & 0xFFFF;
+            u8 hour = (test >> 16) & 0xFF;
+            u16 delay = test & 0xFFFF;
 
             // Check if seed matches a valid gen 4 format
             if (hour < 24 && delay >= minDelay && delay <= maxDelay)
@@ -1803,9 +1792,9 @@ QVector<Frame4> Searcher4::searchInitialSeeds(QVector<Frame4> results)
 
 u16 Searcher4::chainedPIDLow(const u16 *calls)
 {
-    return static_cast<u16>((calls[14] & 7) | ((calls[12] & 1) << 3) | ((calls[11] & 1) << 4) | ((calls[10] & 1) << 5) | ((calls[9] & 1) << 6) |
-                            ((calls[8] & 1) << 7) | ((calls[7] & 1) << 8) | ((calls[6] & 1) << 9) | ((calls[5] & 1) << 10) | ((calls[4] & 1) << 11) |
-                            ((calls[3] & 1) << 12) | ((calls[2] & 1) << 13) | ((calls[1] & 1) << 14) | ((calls[0] & 1) << 15));
+    return (calls[14] & 7) | ((calls[12] & 1) << 3) | ((calls[11] & 1) << 4) | ((calls[10] & 1) << 5) | ((calls[9] & 1) << 6) |
+           ((calls[8] & 1) << 7) | ((calls[7] & 1) << 8) | ((calls[6] & 1) << 9) | ((calls[5] & 1) << 10) | ((calls[4] & 1) << 11) |
+           ((calls[3] & 1) << 12) | ((calls[2] & 1) << 13) | ((calls[1] & 1) << 14) | ((calls[0] & 1) << 15);
 }
 
 u16 Searcher4::chainedPIDHigh(u16 high, u16 low, u16 tid, u16 sid)

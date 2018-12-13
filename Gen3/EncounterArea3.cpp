@@ -25,18 +25,18 @@ EncounterArea3::EncounterArea3(int location, u32 delay, Encounter type, const QV
     this->delay = delay;
 }
 
-u32 EncounterArea3::calcLevel(u32 index, u32 prng) const
+u8 EncounterArea3::calcLevel(u8 index, u16 prng) const
 {
     return (prng % (pokemon.at(index).getMaxLevel() - pokemon.at(index).getMinLevel() + 1)) + pokemon.at(index).getMinLevel();
 }
 
-u32 EncounterArea3::calcLevel(u32 index) const
+u8 EncounterArea3::calcLevel(u8 index) const
 {
     return pokemon.at(index).getMinLevel();
 }
 
 // Only for Rock Smash since all other encounters can be forced
-u16 EncounterArea3::getEncounterRate() const
+u8 EncounterArea3::getEncounterRate() const
 {
     switch (location)
     {
@@ -99,6 +99,7 @@ QDataStream &operator>>(QDataStream &in, EncounterArea3 &encounter)
             size = 5;
             break;
         default:
+            size = 0;
             break;
     }
 

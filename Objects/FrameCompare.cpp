@@ -19,20 +19,20 @@
 
 #include "FrameCompare.hpp"
 
-FrameCompare::FrameCompare(const QVector<u32> &eval, const QVector<u32> &values, int genderIndex, int genderRatioIndex, int abilityIndex,
+FrameCompare::FrameCompare(const QVector<u8> &eval, const QVector<u8> &values, int genderIndex, int genderRatioIndex, int abilityIndex,
                            const QVector<bool> &nature, const QVector<bool> &power, bool onlyShiny, bool skipCompare)
 {
     this->eval = eval;
     val = values;
 
-    gender = static_cast<u32>(genderIndex);
-    genderRatio = static_cast<u32>(genderRatioIndex);
-    ability = static_cast<u32>(abilityIndex);
+    gender = genderIndex;
+    genderRatio = genderRatioIndex;
+    ability = abilityIndex;
 
     natures.resize(25);
-    for (u32 i = 0; i < 25; i++)
+    for (u8 i = 0; i < 25; i++)
     {
-        natures[static_cast<int>(Nature::getAdjustedNature(i))] = nature[static_cast<int>(i)];
+        natures[Nature::getAdjustedNature(i)] = nature[i];
     }
 
     powers = power;
@@ -41,20 +41,20 @@ FrameCompare::FrameCompare(const QVector<u32> &eval, const QVector<u32> &values,
     skip = skipCompare;
 }
 
-FrameCompare::FrameCompare(const QVector<u32> &eval, const QVector<u32> &values, int genderIndex, int genderRatioIndex, int abilityIndex,
+FrameCompare::FrameCompare(const QVector<u8> &eval, const QVector<u8> &values, int genderIndex, int genderRatioIndex, int abilityIndex,
                            const QVector<bool> &nature, const QVector<bool> &power, bool onlyShiny, bool skipCompare, const QVector<bool> &encounter)
 {
     this->eval = eval;
     val = values;
 
-    gender = static_cast<u32>(genderIndex);
-    genderRatio = static_cast<u32>(genderRatioIndex);
-    ability = static_cast<u32>(abilityIndex);
+    gender = genderIndex;
+    genderRatio = genderRatioIndex;
+    ability = abilityIndex;
 
     natures.resize(25);
     for (u32 i = 0; i < 25; i++)
     {
-        natures[static_cast<int>(Nature::getAdjustedNature(i))] = nature[static_cast<int>(i)];
+        natures[Nature::getAdjustedNature(i)] = nature[i];
     }
 
     powers = power;
@@ -66,9 +66,9 @@ FrameCompare::FrameCompare(const QVector<u32> &eval, const QVector<u32> &values,
 
 FrameCompare::FrameCompare(int genderIndex, int genderRatioIndex, int abilityIndex, QVector<bool> nature, bool onlyShiny)
 {
-    gender = static_cast<u32>(genderIndex);
-    genderRatio = static_cast<u32>(genderRatioIndex);
-    ability = static_cast<u32>(abilityIndex);
+    gender = genderIndex;
+    genderRatio = genderRatioIndex;
+    ability = abilityIndex;
 
     natures.resize(25);
     for (u32 i = 0; i < 25; i++)
@@ -80,7 +80,7 @@ FrameCompare::FrameCompare(int genderIndex, int genderRatioIndex, int abilityInd
     skip = false;
 }
 
-FrameCompare::FrameCompare(const QVector<u32> &eval, const QVector<u32> &values, const QVector<bool> &power)
+FrameCompare::FrameCompare(const QVector<u8> &eval, const QVector<u8> &values, const QVector<bool> &power)
 {
     this->eval = eval;
     val = values;
@@ -99,7 +99,7 @@ bool FrameCompare::comparePID(const Frame &frame)
         return false;
     }
 
-    if (!natures[static_cast<int>(frame.getNature())])
+    if (!natures[frame.getNature()])
     {
         return false;
     }
@@ -124,7 +124,7 @@ bool FrameCompare::compareIVs(const Frame &frame)
         return true;
     }
 
-    if (!powers[static_cast<int>(frame.getHidden())])
+    if (!powers[frame.getHidden()])
     {
         return false;
     }
@@ -167,17 +167,17 @@ bool FrameCompare::compareIVs(const Frame &frame)
 
 bool FrameCompare::compareNature(const Frame &frame)
 {
-    return natures[static_cast<int>(frame.getNature())];
+    return natures[frame.getNature()];
 }
 
 bool FrameCompare::compareHiddenPower(const Frame &frame)
 {
-    return powers[static_cast<int>(frame.getHidden())];
+    return powers[frame.getHidden()];
 }
 
 bool FrameCompare::compareSlot(const Frame &frame)
 {
-    return encounterSlots[static_cast<int>(frame.getEncounterSlot())];
+    return encounterSlots[frame.getEncounterSlot()];
 }
 
 bool FrameCompare::compareGender(const Frame &frame)
@@ -304,7 +304,7 @@ bool FrameCompare::compareFrame(const Frame &frame)
     return true;
 }
 
-u32 FrameCompare::getGenderRatio()
+u8 FrameCompare::getGenderRatio()
 {
     return genderRatio;
 }

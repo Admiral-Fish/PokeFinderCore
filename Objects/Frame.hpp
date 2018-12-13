@@ -23,15 +23,11 @@
 #include <QString>
 #include <QVector>
 #include <Objects/Encounter.hpp>
+#include <Objects/Global.hpp>
 #include <Objects/Lead.hpp>
 #include <Objects/Method.hpp>
 #include <Objects/Nature.hpp>
 #include <Objects/Power.hpp>
-
-using u64 = uint64_t;
-using u32 = uint32_t;
-using u16 = uint16_t;
-using u8 = uint8_t;
 
 class Frame
 {
@@ -43,9 +39,9 @@ public:
     QString getShinyString();
     void setIVsManual(u8 iv1, u8 iv2, u8 iv3, u8 iv4, u8 iv5, u8 iv6);
     void setIDs(u16 tid, u16 sid, u16 psv);
-    void setIVs(u32 iv1, u32 iv2);
-    void setPID(u32 pid1, u32 pid2);
-    void setPID(u32 pid, u32 pid1, u32 pid2);
+    void setIVs(u16 iv1, u16 iv2);
+    void setPID(u16 pid1, u16 pid2);
+    void setPID(u32 pid, u16 pid1, u16 pid2);
     void setPID(u32 pid);
     u32 getFrame() const;
     u8 getIV(int index) const;
@@ -86,11 +82,6 @@ protected:
     u16 sid;
     u16 tid;
     u8 level;
-
-    QString getFemale125();
-    QString getFemale25();
-    QString getFemale50();
-    QString getFemale75();
 
 };
 

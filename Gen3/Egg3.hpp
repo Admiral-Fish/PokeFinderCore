@@ -32,11 +32,11 @@ public:
     Egg3();
     Egg3(u32 maxFrame, u32 initialFrame, u16 tid, u16 sid, Method method, u32 seed = 0);
     QVector<Frame3> generate(const FrameCompare &compare);
-    void setParents(const QVector<u32> &parent1, const QVector<u32> &parent2);
-    void setMinRedraw(const u32 &value);
-    void setMaxRedraw(const u32 &value);
+    void setParents(const QVector<u8> &parent1, const QVector<u8> &parent2);
+    void setMinRedraw(const u8 &value);
+    void setMaxRedraw(const u8 &value);
     void setCompatability(const int &value);
-    void setCalibration(const u32 &value);
+    void setCalibration(const u8 &value);
     void setEverstone(bool value);
     void setMinPickup(const u32 &value);
     void setMaxPickup(const u32 &value);
@@ -44,14 +44,14 @@ public:
     void setSeed(const u32 &value);
 
 private:
-    QVector<u32> parent1;
-    QVector<u32> parent2;
-    const u32 HABCDS[6] = { 0, 1, 2, 5, 3, 4 };
-    const u32 ABCDS[5] = { 1, 2, 5, 3, 4 };
-    const u32 ACDS[4] = { 1, 5, 3, 4 };
-    u32 calibration;
-    u32 minRedraw;
-    u32 maxRedraw;
+    QVector<u8> parent1;
+    QVector<u8> parent2;
+    const u8 HABCDS[6] = { 0, 1, 2, 5, 3, 4 };
+    const u8 ABCDS[5] = { 1, 2, 5, 3, 4 };
+    const u8 ACDS[4] = { 1, 5, 3, 4 };
+    u8 calibration;
+    u8 minRedraw;
+    u8 maxRedraw;
     int compatability;
     u32 minPickup;
     u32 maxPickup;

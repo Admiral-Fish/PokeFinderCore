@@ -27,11 +27,9 @@
 #include <RNG/LCRNG.hpp>
 #include <RNG/MTRNG.hpp>
 
-using u8 = uint8_t;
-
 namespace Utilities
 {
-    u32 calcGen3Seed(const QDate &time, u32 h, u32 m);
+    u16 calcGen3Seed(const QDate &time, u32 h, u32 m);
     u32 calcGen4Seed(const QDateTime &dateTime, u32 delay);
     bool shiny(u32 pid, u16 tid, u16  sid);
     QString coinFlips(u32 seed, int flips);

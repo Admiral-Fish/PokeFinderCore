@@ -159,8 +159,8 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, val1, val2;
-    u32 hunt = 0;
+    u32 pid, hunt = 0;
+    u16 pid1, pid2, val1, val2;
 
     u16 rate = encounter.getEncounterRate() * 16;
     bool rock = rate == 2880;
@@ -177,7 +177,7 @@ QVector<Frame3> Generator3::generateMethodH124(FrameCompare compare)
                 {
                     go.nextUInt();
                 }
-                if (((go.getSeed() >> 16)  % 2880) >= rate)
+                if (((go.getSeed() >> 16) % 2880) >= rate)
                 {
                     continue;
                 }
@@ -284,8 +284,8 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, val1, val2;
-    u32 hunt = 0;
+    u32 pid, hunt = 0;
+    u16 pid1, pid2, val1, val2;
 
     u16 rate = encounter.getEncounterRate() * 16;
     bool rock = rate == 2880;
@@ -302,7 +302,7 @@ QVector<Frame3> Generator3::generateMethodH124Synch(FrameCompare compare)
                 {
                     go.nextUInt();
                 }
-                if (((go.getSeed() >> 16)  % 2880) >= rate)
+                if (((go.getSeed() >> 16) % 2880) >= rate)
                 {
                     continue;
                 }
@@ -418,8 +418,8 @@ QVector<Frame3> Generator3::generateMethodH124CuteCharm(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, val1, val2;
-    u32 hunt = 0;
+    u32 pid, hunt = 0;
+    u16 pid1, pid2, val1, val2;
 
     bool (*cuteCharm)(u32);
     switch (leadType)
@@ -595,7 +595,7 @@ QVector<Frame3> Generator3::generateMethodXDColo(FrameCompare compare)
     Frame3 frame(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    u16 *rngArray = new u16[maxResults + 5];
+    auto *rngArray = new u16[maxResults + 5];
     for (u32 i = 0; i < maxResults + 5; i++)
     {
         rngArray[i] = rng->nextUShort();
@@ -625,7 +625,7 @@ QVector<Frame3> Generator3::generateMethod124(FrameCompare compare)
     Frame3 frame(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    u16 *rngArray = new u16[maxResults + 5];
+    auto *rngArray = new u16[maxResults + 5];
     for (u32 i = 0; i < maxResults + 5; i++)
     {
         rngArray[i] = rng->nextUShort();
@@ -657,7 +657,7 @@ QVector<Frame3> Generator3::generateMethod1Reverse(FrameCompare compare)
     Frame3 frame(tid, sid, psv);
     frame.setGenderRatio(compare.getGenderRatio());
 
-    u16 *rngArray = new u16[maxResults + 4];
+    auto *rngArray = new u16[maxResults + 4];
     for (u32 i = 0; i < maxResults + 4; i++)
     {
         rngArray[i] = rng->nextUShort();

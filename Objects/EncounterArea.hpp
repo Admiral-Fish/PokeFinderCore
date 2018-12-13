@@ -23,10 +23,8 @@
 #include <QFile>
 #include <QVector>
 #include <Objects/Encounter.hpp>
+#include <Objects/Global.hpp>
 #include <Translator.hpp>
-
-using u32 = uint32_t;
-using u16 = uint16_t;
 
 class Slot;
 
@@ -54,17 +52,17 @@ class Slot
 
 public:
     Slot() = default;
-    Slot(int specie, u32 minLevel, u32 maxLevel);
-    Slot(int specie, u32 level);
+    Slot(int specie, u16 minLevel, u16 maxLevel);
+    Slot(int specie, u16 level);
 
-    u32 getMinLevel() const { return minLevel; }
-    u32 getMaxLevel() const { return maxLevel; }
+    u16 getMinLevel() const { return minLevel; }
+    u16 getMaxLevel() const { return maxLevel; }
     int getSpecie() const { return specie; }
     void setSpecie(int specie) { this->specie = specie; }
 
 private:
-    u32 minLevel;
-    u32 maxLevel;
+    u16 minLevel;
+    u16 maxLevel;
     int specie;
 
 };

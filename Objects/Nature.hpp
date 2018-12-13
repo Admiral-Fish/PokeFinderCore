@@ -22,16 +22,15 @@
 
 #include <QStringList>
 #include <QTranslator>
-
-using u32 = uint32_t;
+#include <Objects/Global.hpp>
 
 namespace Nature
 {
     QStringList getNatures();
-    QString getNature(u32 nature);
+    QString getNature(u8 nature);
     QStringList getFrameNatures();
-    u32 getAdjustedNature(u32 nature);
-    u32 getReversedNature(u32 nature);
+    u8 getAdjustedNature(u8 nature);
+    u8 getReversedNature(u8 nature);
 };
 
 #endif // NATURE_HPP

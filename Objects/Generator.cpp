@@ -39,12 +39,12 @@ void Generator::setLeadType(const Lead &value)
     leadType = value;
 }
 
-u32 Generator::getSynchNature() const
+u8 Generator::getSynchNature() const
 {
     return synchNature;
 }
 
-void Generator::setSynchNature(const u32 &value)
+void Generator::setSynchNature(const u8 &value)
 {
     synchNature = value;
 }

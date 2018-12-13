@@ -22,30 +22,29 @@
 
 #include <QVector>
 #include <Objects/Encounter.hpp>
-
-using u32 = uint32_t;
+#include <Objects/Global.hpp>
 
 class Range
 {
 
 public:
     Range();
-    Range(u32 min, u32 max);
-    u32 getMax();
-    u32 getMin();
+    Range(u8 min, u8 max);
+    u8 getMax();
+    u8 getMin();
 
 private:
-    u32 max;
-    u32 min;
+    u8 max;
+    u8 min;
 
 };
 
 namespace EncounterSlot
 {
-    u32 calcSlot(u32 compare, QVector<Range> ranges);
-    u32 hSlot(u32 result, Encounter encounterType);
-    u32 jSlot(u32 result, Encounter encounterType);
-    u32 kSlot(u32 result, Encounter encounterType);
+    u8 calcSlot(u8 compare, QVector<Range> ranges);
+    u8 hSlot(u32 result, Encounter encounterType);
+    u8 jSlot(u32 result, Encounter encounterType);
+    u8 kSlot(u32 result, Encounter encounterType);
 };
 
 #endif // ENCOUNTERSLOT_HPP

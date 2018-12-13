@@ -29,9 +29,9 @@ class EncounterArea3 : public EncounterArea
 public:
     EncounterArea3() = default;
     EncounterArea3(int location, u32 delay, Encounter type, const QVector<Slot> &pokemon);
-    u32 calcLevel(u32 index, u32 prng) const;
-    u32 calcLevel(u32 index) const;
-    u16 getEncounterRate() const;
+    u8 calcLevel(u8 index, u16 prng) const;
+    u8 calcLevel(u8 index) const;
+    u8 getEncounterRate() const;
     u32 getDelay() const;
 
 private:

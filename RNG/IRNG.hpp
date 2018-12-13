@@ -20,10 +20,7 @@
 #ifndef IRNG_HPP
 #define IRNG_HPP
 
-#include <cstdint>
-
-using u32 = uint32_t;
-using u16 = uint16_t;
+#include <Objects/Global.hpp>
 
 class IRNG
 {

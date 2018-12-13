@@ -46,7 +46,7 @@ Searcher3::~Searcher3()
     delete natureLock;
 }
 
-QVector<Frame3> Searcher3::search(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame3> Searcher3::search(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     switch (frameType)
     {
@@ -135,7 +135,7 @@ void Searcher3::setEncounter(const EncounterArea3 &value)
     encounter = value;
 }
 
-QVector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame3> Searcher3::searchMethodChannel(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame3> frames;
 
@@ -151,8 +151,8 @@ QVector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa
         backward->setSeed(seed, 3);
 
         // Calculate PID
-        u32 pid2 = backward->nextUShort();
-        u32 pid1 = backward->nextUShort();
+        u16 pid2 = backward->nextUShort();
+        u16 pid1 = backward->nextUShort();
         u16 sid = backward->nextUShort();
 
         // Determine if PID needs to be XORed
@@ -173,7 +173,7 @@ QVector<Frame3> Searcher3::searchMethodChannel(u32 hp, u32 atk, u32 def, u32 spa
     return frames;
 }
 
-QVector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame3> Searcher3::searchMethodColo(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame3> frames;
 
@@ -242,7 +242,7 @@ QVector<Frame3> Searcher3::searchMethodColo(u32 hp, u32 atk, u32 def, u32 spa, u
     return frames;
 }
 
-QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame3> Searcher3::searchMethodH124(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame3> frames;
 
@@ -256,13 +256,12 @@ QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u
     u32 second = (spe | (spa << 5) | (spd << 10)) << 16;
 
     QVector<u32> seeds = cache->recoverLower16BitsIV(first, second);
-    u32 seed;
     for (const auto &val : seeds)
     {
         // Setup normal frame
         backward->setSeed(val, frameType == MethodH2 ? 1 : 0);
         frame.setPID(backward->nextUShort(), backward->nextUShort());
-        seed = backward->nextUInt();
+        u32 seed = backward->nextUInt();
 
         // Use for loop to check both normal and sister spread
         for (int i = 0; i < 2; i++)
@@ -280,8 +279,8 @@ QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u
 
             LCRNG testRNG = PokeRNGR(seed);
             u32 testPID, slot;
-            u32 nextRNG = seed >> 16;
-            u32 nextRNG2 = testRNG.nextUShort();
+            u16 nextRNG = seed >> 16;
+            u16 nextRNG2 = testRNG.nextUShort();
 
             do
             {
@@ -408,7 +407,7 @@ QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u
     // RSE rock smash is dependent on origin seed for encounter check
     if (encounterType == Encounter::RockSmash)
     {
-        u32 rate = encounter.getEncounterRate() * 16;
+        u16 rate = encounter.getEncounterRate() * 16;
 
         // 2880 means FRLG which is not dependent on origin seed for encounter check
         if (rate != 2880)
@@ -418,7 +417,9 @@ QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u
                 u32 check = frames[i].getSeed() * 0x41c64e6d + 0x6073;
 
                 if (((check >> 16) % 2880) >= rate)
+                {
                     frames.erase(frames.begin() + i);
+                }
                 else
                 {
                     frames[i].setSeed(frames[i].getSeed() * 0xeeb9eb65 + 0xa3561a1);
@@ -431,7 +432,7 @@ QVector<Frame3> Searcher3::searchMethodH124(u32 hp, u32 atk, u32 def, u32 spa, u
     return frames;
 }
 
-QVector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame3> Searcher3::searchMethodXD(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame3> frames;
 
@@ -574,7 +575,7 @@ QVector<Frame3> Searcher3::searchMethodXD(u32 hp, u32 atk, u32 def, u32 spa, u32
     return frames;
 }
 
-QVector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame3> Searcher3::searchMethodXDColo(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame3> frames;
 
@@ -609,7 +610,7 @@ QVector<Frame3> Searcher3::searchMethodXDColo(u32 hp, u32 atk, u32 def, u32 spa,
     return frames;
 }
 
-QVector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame3> Searcher3::searchMethod124(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame3> frames;
 
@@ -645,7 +646,7 @@ QVector<Frame3> Searcher3::searchMethod124(u32 hp, u32 atk, u32 def, u32 spa, u3
 }
 
 // Returns QVector of frames for Method 1 Reverse
-QVector<Frame3> Searcher3::searchMethod1Reverse(u32 hp, u32 atk, u32 def, u32 spa, u32 spd, u32 spe)
+QVector<Frame3> Searcher3::searchMethod1Reverse(u8 hp, u8 atk, u8 def, u8 spa, u8 spd, u8 spe)
 {
     QVector<Frame3> frames;
 

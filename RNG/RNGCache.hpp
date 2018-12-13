@@ -22,10 +22,8 @@
 
 #include <QHash>
 #include <QVector>
+#include <Objects/Global.hpp>
 #include <Objects/Method.hpp>
-
-using u32 = uint32_t;
-using u16 = uint16_t;
 
 class RNGCache
 {

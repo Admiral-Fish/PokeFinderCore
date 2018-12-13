@@ -23,7 +23,7 @@
  * a specific gender/nature and these preset
  * values directly impact what spreads are available */
 
-LockInfo::LockInfo(u32 nature, u32 genderLower, u32 genderUpper, bool free)
+LockInfo::LockInfo(u8 nature, u16 genderLower, u16 genderUpper, bool free)
 {
     this->nature = nature;
     this->genderLower = genderLower;
@@ -38,7 +38,7 @@ bool LockInfo::compare(u32 pid)
         return true;
     }
 
-    u32 gender = pid & 255;
+    u16 gender = pid & 255;
     return gender >= genderLower && gender <= genderUpper && nature == (pid % 25);
 }
 
@@ -166,7 +166,7 @@ bool NatureLock::firstShadowShinySkip(u32 seed)
 {
     backward->setSeed(seed, 1);
 
-    u32 psv, psvtemp;
+    u16 psv, psvtemp;
 
     // Check how many advances from shiny skip
     psv = getPSVReverse();
@@ -276,7 +276,7 @@ bool NatureLock::salamenceShinySkip(u32 seed)
 {
     backward->setSeed(seed, 1);
 
-    u32 psv, psvtemp;
+    u16 psv, psvtemp;
 
     // Check how many advances from shiny skip
     psv = getPSVReverse();
@@ -430,7 +430,7 @@ u32 NatureLock::getPIDReverse()
     return low | high;
 }
 
-u32 NatureLock::getPSVReverse()
+u16 NatureLock::getPSVReverse()
 {
     return (backward->nextUShort() ^ backward->nextUShort()) >> 3;
 }
@@ -561,7 +561,7 @@ void NatureLock::natureLockSetupGales(int lockNum)
             type = ShadowType::FirstShadow;
             break;
         case 22: // Lapras
-            lockInfo = { LockInfo(24, 127, 255), LockInfo(500, 500, 500, true), LockInfo(500, 500, 500, true), LockInfo(6, 0, 126) };
+            lockInfo = { LockInfo(24, 127, 255), LockInfo(-1, -1, -1, true), LockInfo(-1, -1, -1, true), LockInfo(6, 0, 126) };
             type = ShadowType::SecondShadow;
             break;
         case 23: // Ledyba
@@ -597,7 +597,7 @@ void NatureLock::natureLockSetupGales(int lockNum)
             type = ShadowType::SingleLock;
             break;
         case 31: // Marowak
-            lockInfo = { LockInfo(24, 127, 255), LockInfo(500, 500, 500, true), LockInfo(500, 500, 500, true), LockInfo(6, 0, 126) };
+            lockInfo = { LockInfo(24, 127, 255), LockInfo(-1, -1, -1, true), LockInfo(-1, -1, -1, true), LockInfo(6, 0, 126) };
             type = ShadowType::FirstShadow;
             break;
         case 32: // Mawile
@@ -661,7 +661,7 @@ void NatureLock::natureLockSetupGales(int lockNum)
             type = ShadowType::FirstShadow;
             break;
         case 47: // Raticate
-            lockInfo = { LockInfo(18, 127, 255), LockInfo(500, 500, 500, true), LockInfo(18, 0, 126) };
+            lockInfo = { LockInfo(18, 127, 255), LockInfo(-1, -1, -1, true), LockInfo(18, 0, 126) };
             type = ShadowType::FirstShadow;
             break;
         case 48: // Roselia
@@ -730,7 +730,7 @@ void NatureLock::natureLockSetupGales(int lockNum)
             type = ShadowType::FirstShadow;
             break;
         case 65: // Starmie
-            lockInfo = { LockInfo(18, 127, 255), LockInfo(500, 500, 500, true), LockInfo(0, 0, 126), LockInfo(6, 127, 255), LockInfo(24, 0, 255) };
+            lockInfo = { LockInfo(18, 127, 255), LockInfo(-1, -1, -1, true), LockInfo(0, 0, 126), LockInfo(6, 127, 255), LockInfo(24, 0, 255) };
             type = ShadowType::FirstShadow;
             break;
         case 66: // Swinub
@@ -759,4 +759,3 @@ void NatureLock::natureLockSetupGales(int lockNum)
             break;
     }
 }
-

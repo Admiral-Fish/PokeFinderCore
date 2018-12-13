@@ -29,12 +29,12 @@ class FrameCompare
 
 public:
     FrameCompare() = default;
-    FrameCompare(const QVector<u32> &eval, const QVector<u32> &values, int genderIndex, int genderRatioIndex, int abilityIndex,
+    FrameCompare(const QVector<u8> &eval, const QVector<u8> &values, int genderIndex, int genderRatioIndex, int abilityIndex,
                  const QVector<bool> &nature, const QVector<bool> &power, bool onlyShiny, bool skipCompare);
-    FrameCompare(const QVector<u32> &eval, const QVector<u32> &values, int genderIndex, int genderRatioIndex, int abilityIndex,
+    FrameCompare(const QVector<u8> &eval, const QVector<u8> &values, int genderIndex, int genderRatioIndex, int abilityIndex,
                  const QVector<bool> &nature, const QVector<bool> &power, bool onlyShiny, bool skipCompare, const QVector<bool> &encounter);
     FrameCompare(int genderIndex, int genderRatioIndex, int abilityIndex, QVector<bool> nature, bool onlyShiny);
-    FrameCompare(const QVector<u32> &eval, const QVector<u32> &values, const QVector<bool> &power);
+    FrameCompare(const QVector<u8> &eval, const QVector<u8> &values, const QVector<bool> &power);
     bool comparePID(const Frame &frame);
     bool compareIVs(const Frame &frame);
     bool compareNature(const Frame &frame);
@@ -42,14 +42,14 @@ public:
     bool compareSlot(const Frame &frame);
     bool compareGender(const Frame &frame);
     bool compareFrame(const Frame &frame);
-    u32 getGenderRatio();
+    u8 getGenderRatio();
 
 private:
-    QVector<u32> eval;
-    QVector<u32> val;
-    u32 gender;
-    u32 genderRatio;
-    u32 ability;
+    QVector<u8> eval;
+    QVector<u8> val;
+    u16 gender;
+    u8 genderRatio;
+    u8 ability;
     QVector<bool> natures;
     QVector<bool> powers;
     QVector<bool> encounterSlots;

@@ -33,7 +33,7 @@ Frame4::Frame4(u16 tid, u16 sid, u16 psv)
     this->psv = psv;
 }
 
-void Frame4::setInheritanceHGSS(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1, u32 inh2, u32 inh3, QVector<u32> parent1, QVector<u32> parent2)
+void Frame4::setInheritanceHGSS(u16 iv1, u16 iv2, u16 par1, u16 par2, u16 par3, u16 inh1, u16 inh2, u16 inh3, QVector<u8> parent1, QVector<u8> parent2)
 {
     ivs[0] = iv1 & 0x1f;
     ivs[1] = (iv1 >> 5) & 0x1f;
@@ -42,16 +42,16 @@ void Frame4::setInheritanceHGSS(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, 
     ivs[4] = (iv2 >> 10) & 0x1f;
     ivs[5] = iv2 & 0x1f;
 
-    u32 available[6] =  { 0, 1, 2, 3, 4, 5 };
-    u32 val[6] = { inh1, inh2, inh3, par1, par2, par3 };
+    u8 available[6] =  { 0, 1, 2, 3, 4, 5 };
+    u16 val[6] = { inh1, inh2, inh3, par1, par2, par3 };
 
-    for (u32 cnt = 0; cnt < 3; cnt++)
+    for (u8 cnt = 0; cnt < 3; cnt++)
     {
         // Decide which parent (1 or 2) from which we'll pick an IV
-        u32 par = val[3 + cnt] & 1;
+        u8 par = val[3 + cnt] & 1;
 
         // Decide which stat to pick for IV inheritance
-        u32 ivslot = available[val[cnt] % (6 - cnt)];
+        u8 ivslot = available[val[cnt] % (6 - cnt)];
 
         switch (ivslot)
         {
@@ -76,7 +76,7 @@ void Frame4::setInheritanceHGSS(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, 
         }
 
         // Avoids repeat IV inheritance
-        for (int i = ivslot; i < 5; i++)
+        for (u8 i = ivslot; i < 5; i++)
         {
             available[i] = available[i + 1];
         }
@@ -86,7 +86,7 @@ void Frame4::setInheritanceHGSS(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, 
     power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
 }
 
-void Frame4::setInheritanceDPPt(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, u32 inh1, u32 inh2, u32 inh3, QVector<u32> parent1, QVector<u32> parent2)
+void Frame4::setInheritanceDPPt(u16 iv1, u16 iv2, u16 par1, u16 par2, u16 par3, u16 inh1, u16 inh2, u16 inh3, QVector<u8> parent1, QVector<u8> parent2)
 {
     ivs[0] = iv1 & 0x1f;
     ivs[1] = (iv1 >> 5) & 0x1f;
@@ -158,25 +158,13 @@ void Frame4::setInheritanceDPPt(u32 iv1, u32 iv2, u32 par1, u32 par2, u32 par3, 
 
 QString Frame4::getCall()
 {
-    u32 val = seed % 3;
-
-    if (val == 0)
-    {
-        return "E";
-    }
-    else if (val == 1)
-    {
-        return "K";
-    }
-    else
-    {
-        return "P";
-    }
+    u8 val = seed % 3;
+    return val == 0 ? "E" : val == 1 ? "K" : "P";
 }
 
 QString Frame4::chatotPitch()
 {
-    u32 val = ((seed & 0x1FFF) * 100) >> 13;
+    u8 val = ((seed & 0x1FFF) * 100) >> 13;
     QString pitch;
 
     if (val < 20)

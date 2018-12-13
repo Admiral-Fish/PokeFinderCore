@@ -75,7 +75,7 @@ void Frame::setIDs(u16 tid, u16 sid, u16 psv)
     this->psv = psv;
 }
 
-void Frame::setIVs(u32 iv1, u32 iv2)
+void Frame::setIVs(u16 iv1, u16 iv2)
 {
     ivs[0] = iv1 & 0x1f;
     ivs[1] = (iv1 >> 5) & 0x1f;
@@ -87,7 +87,7 @@ void Frame::setIVs(u32 iv1, u32 iv2)
     power = (30 + ((((ivs[0] >> 1) & 1) + 2 * ((ivs[1] >> 1) & 1) + 4 * ((ivs[2] >> 1) & 1) + 8 * ((ivs[5] >> 1) & 1) + 16 * ((ivs[3] >> 1) & 1) + 32 * ((ivs[4] >> 1) & 1)) * 40 / 63));
 }
 
-void Frame::setPID(u32 pid1, u32 pid2)
+void Frame::setPID(u16 pid1, u16 pid2)
 {
     pid = (pid2 << 16) | pid1;
     nature = pid % 25;
@@ -96,7 +96,7 @@ void Frame::setPID(u32 pid1, u32 pid2)
     shiny = (pid1 ^ pid2 ^ psv) < 8;
 }
 
-void Frame::setPID(u32 pid, u32 pid1, u32 pid2)
+void Frame::setPID(u32 pid, u16 pid1, u16 pid2)
 {
     this->pid = pid;
     gender = pid & 255;

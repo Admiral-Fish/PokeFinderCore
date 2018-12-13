@@ -27,8 +27,7 @@
 #include <QJsonObject>
 #include <QVector>
 #include <Objects/Game.hpp>
-
-using u16 = uint16_t;
+#include <Objects/Global.hpp>
 
 class Profile
 {

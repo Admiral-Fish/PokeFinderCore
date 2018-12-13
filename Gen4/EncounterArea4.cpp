@@ -24,12 +24,12 @@ EncounterArea4::EncounterArea4(int location, Encounter type, const QVector<Slot>
 {
 }
 
-u32 EncounterArea4::calcLevel(u32 index, u32 prng) const
+u8 EncounterArea4::calcLevel(u8 index, u16 prng) const
 {
     return (prng % (pokemon.at(index).getMaxLevel() - pokemon.at(index).getMinLevel() + 1)) + pokemon.at(index).getMinLevel();
 }
 
-u32 EncounterArea4::calcLevel(u32 index) const
+u8 EncounterArea4::calcLevel(u8 index) const
 {
     return pokemon.at(index).getMinLevel();
 }

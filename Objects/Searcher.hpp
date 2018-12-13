@@ -29,9 +29,6 @@
 #include <Objects/Utilities.hpp>
 #include <RNG/LCRNG.hpp>
 
-using u32 = uint32_t;
-using u16 = uint16_t;
-
 class Searcher
 {
 
@@ -47,11 +44,11 @@ protected:
     u16 psv;
     u16 sid;
     u16 tid;
-    u32 cuteCharm;
     Encounter encounterType = Encounter::Stationary;
     Method frameType = Method::Method1;
     Lead leadType = Lead::None;
-    u32 synchNature;
+    u8 synchNature;
+    u8 cuteCharm;
 
 };
 

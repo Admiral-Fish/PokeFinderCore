@@ -38,8 +38,8 @@ public:
     void setEncounter(const EncounterArea3 &value);
 
 private:
-    u16 iv1;
-    u16 iv2;
+    u8 iv1;
+    u8 iv2;
     LCRNG *rng = nullptr;
     EncounterArea3 encounter;
 

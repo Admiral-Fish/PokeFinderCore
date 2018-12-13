@@ -107,7 +107,6 @@ QVector<Frame4> Generator4::generateMethod1(FrameCompare compare)
     for (u32 cnt = 0; cnt < maxResults; cnt++)
     {
         frame.setPID(rngArray[cnt], rngArray[1 + cnt]);
-
         frame.setIVs(rngArray[2 + cnt], rngArray[3 + cnt]);
 
         if (compare.compareFrame(frame))
@@ -129,9 +128,10 @@ QVector<Frame4> Generator4::generateMethodJ(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, hunt = 0;
+    u32 pid, hunt = 0;
+    u16 pid1, pid2;
 
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u8 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++)
     {
@@ -224,9 +224,10 @@ QVector<Frame4> Generator4::generateMethodJSynch(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, hunt = 0;
+    u32 pid, hunt = 0;
+    u16 pid1, pid2;
 
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u8 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
 
     for (u32 cnt = initialFrame; cnt < max; cnt++)
     {
@@ -326,9 +327,11 @@ QVector<Frame4> Generator4::generateMethodJCuteCharm(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, buffer = 0, hunt = 0;
+    u32 pid, hunt = 0;
+    u16 pid1, pid2;
 
-    u16 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
+    u8 buffer = 0;
+    u8 thresh = encounterType == Encounter::OldRod ? 24 : encounterType == Encounter::GoodRod ? 49 : encounterType == Encounter::SuperRod ? 74 : 0;
 
     switch (leadType)
     {
@@ -460,9 +463,10 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, hunt = 0;
-    u16 thresh = 0;
+    u32 pid, hunt = 0;
+    u16 pid1, pid2;
 
+    u8 thresh = 0;
     if (encounterType == Encounter::OldRod)
     {
         thresh = leadType == Lead::SuctionCups ? 90 : 25;
@@ -476,7 +480,7 @@ QVector<Frame4> Generator4::generateMethodK(FrameCompare compare)
         thresh = leadType == Lead::SuctionCups ? 100 : 75;
     }
 
-    u16 rate = encounter.getEncounterRate();
+    u8 rate = encounter.getEncounterRate();
 
     for (u32 cnt = initialFrame; cnt < max; cnt++)
     {
@@ -588,10 +592,11 @@ QVector<Frame4> Generator4::generateMethodKSynch(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, hunt = 0;
+    u32 pid, hunt = 0;
+    u16 pid1, pid2;
 
-    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
-    u16 rock = encounter.getEncounterRate();
+    u8 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u8 rock = encounter.getEncounterRate();
 
     for (u32 cnt = initialFrame; cnt < max; cnt++)
     {
@@ -709,10 +714,12 @@ QVector<Frame4> Generator4::generateMethodKCuteCharm(FrameCompare compare)
     frame.setGenderRatio(compare.getGenderRatio());
 
     u32 max = initialFrame + maxResults;
-    u32 pid, pid1, pid2, buffer = 0, hunt = 0;
+    u32 pid, hunt = 0;
+    u16 pid1, pid2;
 
-    u16 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
-    u16 rock = encounter.getEncounterRate();
+    u8 buffer = 0;
+    u8 thresh = encounterType == Encounter::OldRod ? 25 : encounterType == Encounter::GoodRod ? 50 : encounterType == Encounter::SuperRod ? 75 : 0;
+    u8 rock = encounter.getEncounterRate();
 
     switch (leadType)
     {
@@ -919,9 +926,9 @@ QVector<Frame4> Generator4::generateWondercardIVs(FrameCompare compare)
 
 u16 Generator4::chainedPIDLow(u16 low, u16 call1, u16 call2, u16 call3, u16 call4, u16 call5, u16 call6, u16 call7, u16 call8, u16 call9, u16 call10, u16 call11, u16 call12, u16 call13)
 {
-    return static_cast<u16>((low & 7) | (call13 & 1) << 3 | (call12 & 1) << 4 | (call11 & 1) << 5 | (call10 & 1) << 6 |
-                            (call9 & 1) << 7 | (call8 & 1) << 8 | (call7 & 1) << 9 | (call6 & 1) << 10 | (call5 & 1) << 11 |
-                            (call4 & 1) << 12 | (call3 & 1) << 13 | (call2 & 1) << 14 | (call1 & 1) << 15);
+    return (low & 7) | (call13 & 1) << 3 | (call12 & 1) << 4 | (call11 & 1) << 5 | (call10 & 1) << 6 |
+           (call9 & 1) << 7 | (call8 & 1) << 8 | (call7 & 1) << 9 | (call6 & 1) << 10 | (call5 & 1) << 11 |
+           (call4 & 1) << 12 | (call3 & 1) << 13 | (call2 & 1) << 14 | (call1 & 1) << 15;
 }
 
 u16 Generator4::chainedPIDHigh(u16 high, u16 low, u16 tid, u16 sid)

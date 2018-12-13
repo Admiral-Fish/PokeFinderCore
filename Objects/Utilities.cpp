@@ -19,10 +19,9 @@
 
 #include "Utilities.hpp"
 
-// Returns initial seed for Ruby/Sapphire live battery given date and time
-u32 Utilities::calcGen3Seed(const QDate &time, u32 h, u32 m)
+u16 Utilities::calcGen3Seed(const QDate &time, u32 h, u32 m)
 {
-    u32 d = static_cast<u32>(QDate(time.year() == 2000 ? 1999 : 2000, 12, 31).daysTo(time));
+    u32 d = QDate(time.year() == 2000 ? 1999 : 2000, 12, 31).daysTo(time);
 
     u32 seed = 1440 * d + 960 * (h / 10) + 60 * (h % 10) + 16 * (m / 10) + m % 10;
     return (seed >> 16) ^ (seed & 0xFFFF);
@@ -33,8 +32,8 @@ u32 Utilities::calcGen4Seed(const QDateTime &dateTime, u32 delay)
     QDate date = dateTime.date();
     QTime time = dateTime.time();
 
-    u32 ab = static_cast<u8>(date.month() * date.day() + time.minute() + time.second());
-    u32 cd = static_cast<u32>(time.hour());
+    u8 ab = date.month() * date.day() + time.minute() + time.second();
+    u8 cd = time.hour();
 
     return ((ab << 24) | (cd << 16)) + delay;
 }
@@ -51,7 +50,9 @@ QString Utilities::coinFlips(u32 seed, int flips)
     MersenneTwister rng(seed);
 
     for (int i = 0; i < flips; i++)
+    {
         coins.append((rng.nextUInt() & 1) == 0 ? "T" : "H");
+    }
 
     return coins.join(", ");
 }
@@ -63,27 +64,28 @@ QString Utilities::getCalls(u32 seed, int num, const HGSSRoamer &info)
     int skips = info.getSkips();
 
     if (skips > 0)
+    {
         calls += "(";
+    }
 
     PokeRNG rng(seed);
 
     for (int i = 0; i < num + skips; i++)
     {
-        u32 call = rng.nextUShort() % 3;
+        u8 call = rng.nextUShort() % 3;
 
-        if (call == 0)
-            calls += "E";
-        else if (call == 1)
-            calls += "K";
-        else
-            calls += "P";
+        calls += call == 0 ? "E" : call == 1 ? "K" : "P";
 
         if (i != (num + skips - 1))
         {
             if (skips != 0 && skips == i + 1)
+            {
                 calls += " skipped)  ";
+            }
             else
+            {
                 calls += ", ";
+            }
         }
     }
     return calls;
